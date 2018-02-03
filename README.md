@@ -6,6 +6,6 @@ cgraph allows to create, execute and differentiate computational graphs in R. Th
 
 You can install cgraph by running the following command in the R command-line:
 
-```{r eval = F}
-  devtools::install_github("triepels/cgraph")
+```
+  install.packages("http://rsquared.eu/releases/cgraph_0.8.tar.gz", repos = NULL, type = "source")
 ```
