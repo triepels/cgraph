@@ -1,0 +1,17 @@
+# Import Packages
+import(R6)
+
+# Load C files
+useDynLib(cgraph)
+
+# Export cgraph object
+export(cgraph)
+
+# Export print methods
+S3method(print, cgraph)
+S3method(print, cg.node)
+S3method(print, cg.results)
+
+# Export str methods
+S3method(str, cgraph)
+S3method(str, cg.results)
