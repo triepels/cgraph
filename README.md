@@ -12,4 +12,4 @@ You can install cgraph by running the following command in the R command-line:
 
 # More information
 
-For more information about cgraph please visit [https://www.cgraph.org/](http://cgraph.org/).
+For more information about cgraph please visit [https://www.cgraph.org/](https://www.cgraph.org/).
