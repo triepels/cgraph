@@ -1,6 +1,6 @@
 #' Array Transposition
 #'
-#' Transpose the row and columns of an array while keeping all dimensions the same.
+#' Transpose the row and columns of an array while keeping its dimensions the same.
 #'
 #' @section Usage:
 #' \preformatted{perm(a)}
