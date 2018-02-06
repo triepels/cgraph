@@ -48,7 +48,7 @@ cgraph$public_methods$c <- function(x, name = self$name())
 {
   self$expr(name = name,
     call = quote(c(x)),
-    grads = list(x = quote(array(x, dim(x)))),
+    grads = list(x = quote(array(grad, dim(x)))),
     binding = list(x = x)
   )
 }
