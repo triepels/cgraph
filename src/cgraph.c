@@ -352,7 +352,25 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
       SEXP call = getAttrib(node, install("call"));
 
-      defineVar(symbol, eval(call, values), values);
+      SEXP value = eval(call, values);
+
+      SEXP dim = getAttrib(value, R_DimSymbol);
+
+      if(isNull(dim))
+      {
+        if(strcmp(CHAR(vec2Chr(CAR(call))), "c") != 0)
+        {
+          dim = PROTECT(allocVector(INTSXP, 1));
+
+          INTEGER(dim)[0] = LENGTH(value);
+
+          setAttrib(value, R_DimSymbol, dim);
+
+          UNPROTECT(1);
+        }
+      }
+
+      defineVar(symbol, value, values);
     }
   }
 }
