@@ -154,6 +154,58 @@ cgraph$public_methods$sum <- function(x, name = self$name())
   )
 }
 
+#' Row Sums
+#'
+#' Calculate \code{rowSums(x)}.
+#'
+#' @section Usage:
+#' \preformatted{rowSums(x, name)}
+#'
+#' @section Agruments:
+#' \describe{
+#' \item{x}{character scalar or symbol, placeholder for a numeric array of two or more dimensions.}
+#' \item{name}{character scalar, name of the operation (optional).}
+#' }
+#'
+#' @return symbol, name of the operation.
+#'
+#' @name rowSums
+#' @author Ron Triepels
+cgraph$public_methods$rowSums <- function(x, name = self$name())
+{
+ self$expr(name = name,
+   call = quote(rowSums(x)),
+   grads = list(x = quote(array(grad, dim(x)))),
+   binding = list(x = x)
+ )
+}
+
+#' Column Sums
+#'
+#' Calculate \code{colSums(x)}.
+#'
+#' @section Usage:
+#' \preformatted{colSums(x, name)}
+#'
+#' @section Agruments:
+#' \describe{
+#' \item{x}{character scalar or symbol, placeholder for a numeric array of two or more dimensions.}
+#' \item{name}{character scalar, name of the operation (optional).}
+#' }
+#'
+#' @return symbol, name of the operation.
+#'
+#' @name colSums
+#' @author Ron Triepels
+cgraph$public_methods$colSums <- function(x, name = self$name())
+{
+  self$expr(name = name,
+    call = quote(colSums(x)),
+    grads = list(x = quote(t(array(grad, dim(x))))),
+    binding = list(x = x)
+  )
+}
+
 #' Arithmetic Mean
 #'
 #' Calculate \code{sum(x) / length(x)}.
@@ -182,12 +234,12 @@ cgraph$public_methods$mean <- function(x, name = self$name())
   )
 }
 
-#' Row Sums
+#' Row Means
 #'
-#' Calculate \code{rowSums(x)}.
+#' Calculate \code{rowMeans(x)}.
 #'
 #' @section Usage:
-#' \preformatted{rowSums(x, name)}
+#' \preformatted{rowMeans(x, name)}
 #'
 #' @section Agruments:
 #' \describe{
@@ -197,39 +249,39 @@ cgraph$public_methods$mean <- function(x, name = self$name())
 #'
 #' @return symbol, name of the operation.
 #'
-#' @name rowSums
+#' @name rowMeans
 #' @author Ron Triepels
-cgraph$public_methods$rowSums <- function(x, name = self$name())
-{
- self$expr(name = name,
-   call = quote(array(rowSums(x))),
-   grads = list(x = quote(array(grad, dim(x)))),
-   binding = list(x = x)
- )
-}
-
-#' Column Sums
-#'
-#' Calculate \code{colSums(x)}.
-#'
-#' @section Usage:
-#' \preformatted{colSums(x, name)}
-#'
-#' @section Agruments:
-#' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric array of two or more dimensions.}
-#' \item{name}{character scalar, name of the operation (optional).}
-#' }
-#'
-#' @return symbol, name of the operation.
-#'
-#' @name colSums
-#' @author Ron Triepels
-cgraph$public_methods$colSums <- function(x, name = self$name())
+cgraph$public_methods$rowMeans <- function(x, name = self$name())
 {
   self$expr(name = name,
-    call = quote(array(colSums(x))),
-    grads = list(x = quote(t(array(grad, dim(x))))),
+    call = quote(rowMeans(x)),
+    grads = list(x = quote(1 / nrow(x) * array(grad, dim(x)))),
+    binding = list(x = x)
+  )
+}
+
+#' Column Means
+#'
+#' Calculate \code{colMeans(x)}.
+#'
+#' @section Usage:
+#' \preformatted{colMeans(x, name)}
+#'
+#' @section Agruments:
+#' \describe{
+#' \item{x}{character scalar or symbol, placeholder for a numeric array of two or more dimensions.}
+#' \item{name}{character scalar, name of the operation (optional).}
+#' }
+#'
+#' @return symbol, name of the operation.
+#'
+#' @name colMeans
+#' @author Ron Triepels
+cgraph$public_methods$colMeans <- function(x, name = self$name())
+{
+  self$expr(name = name,
+    call = quote(colMeans(x)),
+    grads = list(x = quote(1 / ncol(x) * t(array(grad, dim(x))))),
     binding = list(x = x)
   )
 }
