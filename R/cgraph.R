@@ -31,24 +31,15 @@ cgraph <- R6Class(
 #' Initialize a new computational graph.
 #'
 #' @section Usage:
-#' \preformatted{cgraph$new(parent)}
-#'
-#' @section Agruments:
-#' \describe{
-#' \item{parent}{environment, the environment to be used as the enclosure of the graph created.}
-#' }
-#'
-#' @note Functions can be made available to a graph by making their environment the enclosure of the graph via argument \code{parent}. The enclosure of a graph should not be another \code{cgraph} object.
+#' \preformatted{cgraph$new()}
 #'
 #' @return cgraph object.
 #'
 #' @name initialize
 #' @author Ron Triepels
-cgraph$public_methods$initialize <- function(parent)
+cgraph$public_methods$initialize <- function()
 {
-  if (missing(parent)) parent <- baseenv()
-
-  grad <- new.env(parent = parent)
+  grad <- new.env(parent = as.environment("package:cgraph"))
 
   values <- new.env(parent = grad)
 

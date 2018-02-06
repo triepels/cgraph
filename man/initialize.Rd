@@ -9,19 +9,9 @@ cgraph object.
 \description{
 Initialize a new computational graph.
 }
-\note{
-Functions can be made available to a graph by making their environment the enclosure of the graph via argument \code{parent}. The enclosure of a graph should not be another \code{cgraph} object.
-}
 \section{Usage}{
 
-\preformatted{cgraph$new(parent)}
-}
-
-\section{Agruments}{
-
-\describe{
-\item{parent}{environment, the environment to be used as the enclosure of the graph created.}
-}
+\preformatted{cgraph$new()}
 }
 
 \author{
