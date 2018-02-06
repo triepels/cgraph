@@ -163,7 +163,7 @@ cgraph$public_methods$sum <- function(x, name = self$name())
 #'
 #' @section Agruments:
 #' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric array of two or more dimensions.}
+#' \item{x}{character scalar or symbol, placeholder for a numeric array.}
 #' \item{name}{character scalar, name of the operation (optional).}
 #' }
 #'
@@ -189,7 +189,7 @@ cgraph$public_methods$rowSums <- function(x, name = self$name())
 #'
 #' @section Agruments:
 #' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric array of two or more dimensions.}
+#' \item{x}{character scalar or symbol, placeholder for a numeric array.}
 #' \item{name}{character scalar, name of the operation (optional).}
 #' }
 #'
@@ -243,7 +243,7 @@ cgraph$public_methods$mean <- function(x, name = self$name())
 #'
 #' @section Agruments:
 #' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric array of two or more dimensions.}
+#' \item{x}{character scalar or symbol, placeholder for a numeric array.}
 #' \item{name}{character scalar, name of the operation (optional).}
 #' }
 #'
@@ -269,7 +269,7 @@ cgraph$public_methods$rowMeans <- function(x, name = self$name())
 #'
 #' @section Agruments:
 #' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric array of two or more dimensions.}
+#' \item{x}{character scalar or symbol, placeholder for a numeric array.}
 #' \item{name}{character scalar, name of the operation (optional).}
 #' }
 #'
