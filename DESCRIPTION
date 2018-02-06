@@ -18,4 +18,5 @@ Collate:
     'str.R'
     'transform.R'
     'trig.R'
+    'wrapper.R'
 RoxygenNote: 6.0.1

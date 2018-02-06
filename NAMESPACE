@@ -7,6 +7,9 @@ useDynLib(cgraph)
 # Export cgraph object
 export(cgraph)
 
+# Export wrapper functions
+export(perm)
+
 # Export print methods
 S3method(print, cgraph)
 S3method(print, cg.node)
