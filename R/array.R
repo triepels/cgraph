@@ -255,7 +255,7 @@ cgraph$public_methods$rowMeans <- function(x, name = self$name())
 {
   self$expr(name = name,
     call = quote(rowMeans(x)),
-    grads = list(x = quote(1 / nrow(x) * array(grad, dim(x)))),
+    grads = list(x = quote(1 / prod(dim(x)[-1]) * array(grad, dim(x)))),
     binding = list(x = x)
   )
 }
@@ -281,7 +281,7 @@ cgraph$public_methods$colMeans <- function(x, name = self$name())
 {
   self$expr(name = name,
     call = quote(colMeans(x)),
-    grads = list(x = quote(1 / ncol(x) * t(array(grad, dim(x))))),
+    grads = list(x = quote(1 / dim(x)[1] * array(grad, dim(x)))),
     binding = list(x = x)
   )
 }
