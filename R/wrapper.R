@@ -5,10 +5,7 @@
 #' @section Usage:
 #' \preformatted{perm(a)}
 #'
-#' @section Agruments:
-#' \describe{
-#' \item{a}{array, the array to be transposed.}
-#' }
+#' @param a array, the array to be transposed.
 #'
 #' @note This is a wrapper function for \code{aperm(a, replace(1:length(dim(a)), 1:2, 2:1), resize = F)}.
 #'

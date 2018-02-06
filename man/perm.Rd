@@ -6,11 +6,14 @@
 \usage{
 perm(a)
 }
+\arguments{
+\item{a}{array, the array to be transposed.}
+}
 \value{
 array, transposed array.
 }
 \description{
-Transpose the row and columns of an array while keeping all dimensions the same.
+Transpose the row and columns of an array while keeping its dimensions the same.
 }
 \note{
 This is a wrapper function for \code{aperm(a, replace(1:length(dim(a)), 1:2, 2:1), resize = F)}.
@@ -18,13 +21,6 @@ This is a wrapper function for \code{aperm(a, replace(1:length(dim(a)), 1:2, 2:1
 \section{Usage}{
 
 \preformatted{perm(a)}
-}
-
-\section{Agruments}{
-
-\describe{
-\item{a}{array, the array to be transposed.}
-}
 }
 
 \author{
