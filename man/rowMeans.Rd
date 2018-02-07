@@ -17,7 +17,7 @@ Calculate \code{rowMeans(x)}.
 \section{Agruments}{
 
 \describe{
-\item{x}{character scalar or symbol, placeholder for a numeric array of two or more dimensions.}
+\item{x}{character scalar or symbol, placeholder for a numeric array.}
 \item{name}{character scalar, name of the operation (optional).}
 }
 }
