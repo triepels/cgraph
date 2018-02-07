@@ -62,9 +62,9 @@ cgraph$public_methods$initialize <- function()
 #'
 #' @name name
 #' @author Ron Triepels
-cgraph$public_methods$name <- function(type)
+cgraph$public_methods$name <- function(type = 3)
 {
-  if (missing(type)) type <- as.integer(3) else type <- as.integer(type)
+  type <- as.integer(type)
 
   .Call("cg_gen_name", type, self)
 }
@@ -85,9 +85,9 @@ cgraph$public_methods$name <- function(type)
 #'
 #' @name count.type
 #' @author Ron Triepels
-cgraph$public_methods$count.type <- function(type)
+cgraph$public_methods$count.type <- function(type = 3)
 {
-  if (missing(type)) type <- as.integer(3) else type <- as.integer(type)
+  type <- as.integer(type)
 
   .Call("cg_count_type", type, self)
 }
@@ -115,9 +115,12 @@ cgraph$public_methods$const <- function(value, name)
 {
   type <- as.integer(0)
 
-  if (missing(value)) value <- array(0, base::c(0,0)) else value <- as.array(value)
+  if(missing(value)) value <- NULL
 
-  if (missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
+  if(!is.null(value) & !(is.numeric(value) | is.array(value)))
+    stop("value must be a numeric vector or array")
+
+  if(missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
 
   .Call("cg_add_placeholder", value, name, type, self)
 }
@@ -143,9 +146,12 @@ cgraph$public_methods$input <- function(value, name)
 {
   type <- as.integer(1)
 
-  if (missing(value)) value <- array(0, base::c(0,0)) else value <- as.array(value)
+  if(missing(value)) value <- NULL
 
-  if (missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
+  if(!is.null(value) & !(is.numeric(value) | is.array(value)))
+    stop("value must be a numeric vector or array")
+
+  if(missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
 
   .Call("cg_add_placeholder", value, name, type, self)
 }
@@ -171,9 +177,12 @@ cgraph$public_methods$parm <- function(value, name)
 {
   type <- as.integer(2)
 
-  if (missing(value)) value <- array(0, base::c(0,0)) else value <- as.array(value)
+  if(missing(value)) value <- NULL
 
-  if (missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
+  if(!is.null(value) & !(is.numeric(value) | is.array(value)))
+    stop("value must be a numeric vector or array")
+
+  if(missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
 
   .Call("cg_add_placeholder", value, name, type, self)
 }
@@ -205,9 +214,9 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 
   grads <- as.list(grads)
 
-  if (!is.environment(binding)) binding <- list2env(binding)
+  if(!is.environment(binding)) binding <- list2env(binding)
 
-  if (missing(name)) name <- .Call("cg_gen_name", as.integer(3), self) else name <- as.character(name)
+  if(missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
 
   .Call("cg_add_expression", call, grads, binding, name, self)
 }
@@ -233,11 +242,9 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 #'
 #' @name run
 #' @author Ron Triepels
-cgraph$public_methods$run <- function(name, values)
+cgraph$public_methods$run <- function(name, values = list())
 {
   name <- as.character(name)
-
-  if (missing(values)) values <- new.env(parent = self$values)
 
   if (!is.environment(values)) values <- list2env(values, parent = self$values)
 
@@ -265,13 +272,11 @@ cgraph$public_methods$run <- function(name, values)
 #'
 #' @name gradients
 #' @author Ron Triepels
-cgraph$public_methods$gradients <- function(name, values)
+cgraph$public_methods$gradients <- function(name, values = list())
 {
   grads = new.env()
 
   name <- as.character(name)
-
-  if (missing(values)) values <- new.env(parent = self$values)
 
   if (!is.environment(values)) values <- list2env(values, parent = self$values)
 
