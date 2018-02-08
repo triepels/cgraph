@@ -127,7 +127,10 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 
   setVar(install("nodes"), nodes, graph);
 
-  defineVar(symbol, value, findVar(install("values"), graph));
+  if(!isNull(value))
+  {
+    defineVar(symbol, value, findVar(install("values"), graph));
+  }
 
   return symbol;
 }
