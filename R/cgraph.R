@@ -210,6 +210,8 @@ cgraph$public_methods$parm <- function(value, name)
 #' @author Ron Triepels
 cgraph$public_methods$expr <- function(call, grads, binding, name)
 {
+  type <- as.integer(3)
+
   call <- as.call(call)
 
   grads <- as.list(grads)
