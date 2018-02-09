@@ -132,6 +132,33 @@ cgraph$public_methods$pow <- function(x, y, name = self$name())
   )
 }
 
+#' Square Root
+#'
+#' Calculate \code{sqrt(x)}.
+#'
+#' @section Usage:
+#' \preformatted{sqrt(x, name)}
+#'
+#' @section Agruments:
+#' \describe{
+#' \item{x}{character scalar or symbol, placeholder for a numeric scalar or array.}
+#' \item{name}{character scalar, name of the operation (optional).}
+#' }
+#'
+#' @return symbol, name of the operation.
+#'
+#' @name sqrt
+#' @author Ron Triepels
+cgraph$public_methods$sqrt <- function(x, name = self$name())
+{
+  self$expr(name = name,
+    call = quote(x^2),
+    grads = list(x = quote(grad * 2 * x)),
+    binding = list(x = x)
+  )
+}
+
+
 #' Exponential Function
 #'
 #' Calculate \code{exp(1)^x}.
