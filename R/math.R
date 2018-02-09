@@ -105,6 +105,33 @@ cgraph$public_methods$multiply <- function(x, y, name = self$name())
   )
 }
 
+#' Divide
+#'
+#' Calculate \code{x / y}.
+#'
+#' @section Usage:
+#' \preformatted{divide(x, y, name)}
+#'
+#' @section Agruments:
+#' \describe{
+#' \item{x}{character scalar or symbol, placeholder for a numeric scalar or array.}
+#' \item{y}{character scalar or symbol, placeholder for a numeric scalar or array.}
+#' \item{name}{character scalar, name of the operation (optional).}
+#' }
+#'
+#' @return symbol, name of the operation.
+#'
+#' @name divide
+#' @author Ron Triepels
+cgraph$public_methods$divide <- function(x, y, name = self$name())
+{
+  self$expr(name = name,
+    call = quote(x / y),
+    grads = list(x = quote(grad * 1 / y), y = quote(grad * x / y^2)),
+    binding = list(x = x, y = y)
+  )
+}
+
 #' Power
 #'
 #' Calculate \code{x^y}.
