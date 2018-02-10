@@ -1,5 +1,7 @@
 src-i386/
 src-x64/
+*.dll
+*.o
 .Rproj.user
 .Rhistory
 .RData
