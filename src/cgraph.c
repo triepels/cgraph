@@ -411,9 +411,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
     {
       SEXP node = VECTOR_ELT(nodes, INTEGER(ids)[i] - 1);
 
-      SEXP type = getAttrib(node, install("type"));
+      SEXP node_type = getAttrib(node, install("type"));
 
-      if(asInteger(type) == CGPRM || asInteger(type) == CGEXP)
+      if(asInteger(node_type) == CGPRM || asInteger(node_type) == CGEXP)
       {
         SEXP node_grads = getAttrib(node, install("grads"));
 
