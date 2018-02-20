@@ -238,6 +238,8 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 #'
 #' @note All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.
 #'
+#' In case the return value of an expression has no \code{dim} attribute attached to it, the attribute is automatically attached. The only exception to this rule is if the expression casts the results explicitly to a numeric vector by function \code{c}.
+#'
 #' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. The values of placeholders whose default values are not changed are not returned.
 #'
 #' @return cg.results object, the values of all nodes executed in the forward-pass.
@@ -269,7 +271,7 @@ cgraph$public_methods$run <- function(name, values = list())
 #'
 #' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by executing the graph using function \code{run()}. The values obtained by this function for the expressions in the graph can be supplied along values for the placeholders via argument \code{values}. In case node \code{name} is an array, a value for \code{index} must be supplied to specify which element of the array needs to be differentiated.
 #'
-#' The gradients of all parameters are returned along with the gradients of all intermediate nodes that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned.
+#' The gradients of all parameters are returned along with the gradients of all intermediate nodes that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
 #'
 #' @return cg.results object, the gradients of all nodes calculated in the backward-pass.
 #'
