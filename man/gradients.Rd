@@ -7,16 +7,16 @@
 cg.results object, the gradients of all nodes calculated in the backward-pass.
 }
 \description{
-Differentiate nodes by reverse automatic differentiation
+Differentiate nodes by reverse automatic differentiation.
 }
 \note{
-All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by executing the graph using function \code{run()}. The values obtained by this function for the expressions in the graph can be supplied along values for the placeholders via argument \code{values}.
+All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by executing the graph using function \code{run()}. The values obtained by this function for the expressions in the graph can be supplied along values for the placeholders via argument \code{values}. In case node \code{name} is an array, a value for \code{index} must be supplied to specify which element of the array needs to be differentiated.
 
 The gradients of all parameters are returned along with the gradients of all intermediate nodes that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned.
 }
 \section{Usage}{
 
-\preformatted{gradients(name, values)}
+\preformatted{gradients(name, values, index = 1)}
 }
 
 \section{Agruments}{
@@ -24,6 +24,7 @@ The gradients of all parameters are returned along with the gradients of all int
 \describe{
 \item{name}{character scalar or symbol, name of the node that needs to be differentiated.}
 \item{values}{named list or environment, values that are subsituted for the placeholders in the graph.}
+\item{index}{numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.}
 }
 }
 

@@ -255,18 +255,19 @@ cgraph$public_methods$run <- function(name, values = list())
 
 #' Calculate Gradients
 #'
-#' Differentiate nodes by reverse automatic differentiation
+#' Differentiate nodes by reverse automatic differentiation.
 #'
 #' @section Usage:
-#' \preformatted{gradients(name, values)}
+#' \preformatted{gradients(name, values, index = 1)}
 #'
 #' @section Agruments:
 #' \describe{
 #' \item{name}{character scalar or symbol, name of the node that needs to be differentiated.}
 #' \item{values}{named list or environment, values that are subsituted for the placeholders in the graph.}
+#' \item{index}{numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.}
 #' }
 #'
-#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by executing the graph using function \code{run()}. The values obtained by this function for the expressions in the graph can be supplied along values for the placeholders via argument \code{values}.
+#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by executing the graph using function \code{run()}. The values obtained by this function for the expressions in the graph can be supplied along values for the placeholders via argument \code{values}. In case node \code{name} is an array, a value for \code{index} must be supplied to specify which element of the array needs to be differentiated.
 #'
 #' The gradients of all parameters are returned along with the gradients of all intermediate nodes that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned.
 #'
@@ -274,15 +275,17 @@ cgraph$public_methods$run <- function(name, values = list())
 #'
 #' @name gradients
 #' @author Ron Triepels
-cgraph$public_methods$gradients <- function(name, values = list())
+cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 {
   grads = new.env()
 
   name <- as.character(name)
 
+  index <- as.integer(index)
+
   if (!is.environment(values)) values <- list2env(values, parent = self$values)
 
-  .Call("cg_gradients", name, values, grads, self)
+  .Call("cg_gradients", name, index, values, grads, self)
 }
 
 #' Adjacency Matrix

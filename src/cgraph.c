@@ -378,7 +378,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
   }
 }
 
-void cg_backward(SEXP ids, SEXP values, SEXP grads, SEXP graph)
+void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 {
   int n = LENGTH(ids);
 
@@ -392,16 +392,20 @@ void cg_backward(SEXP ids, SEXP values, SEXP grads, SEXP graph)
 
     SEXP root_value = eval(install(CHAR(asChar(root))), values);
 
-    root_value = coerceVector(duplicate(root_value), INTSXP);
+    SEXP root_grad = coerceVector(duplicate(root_value), INTSXP);
 
-    int m = LENGTH(root_value);
+    int m = LENGTH(root_grad);
 
-    for (int i = 0; i < m; i++)
+    if(INTEGER(index)[0] < 0 | INTEGER(index)[0] > m)
     {
-      INTEGER(root_value)[i] = 1;
+      error("invalid index");
     }
 
-    defineVar(install(CHAR(asChar(root))), root_value, grads);
+    memset(INTEGER(root_grad), 0, m * sizeof(int));
+
+    INTEGER(root_grad)[INTEGER(index)[0] - 1] = 1;
+
+    defineVar(install(CHAR(asChar(root))), root_grad, grads);
 
     for(int i = n - 2; i >= 0; i--)
     {
@@ -471,13 +475,13 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
   return values;
 }
 
-SEXP cg_gradients(SEXP name, SEXP values, SEXP grads, SEXP graph)
+SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP grads, SEXP graph)
 {
   int id = cg_node_id(asChar(name), graph);
 
   SEXP ids = cg_traverse_graph(ScalarInteger(id), graph);
 
-  cg_backward(ids, values, grads, graph);
+  cg_backward(ids, index, values, grads, graph);
 
   setAttrib(grads, install("class"), mkString("cg.results"));
 
