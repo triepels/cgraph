@@ -8,11 +8,6 @@
 #define CGPRM 2
 #define CGEXP 3
 
-SEXP vec2Chr(SEXP x)
-{
-  return coerceVector(x, CHARSXP);
-}
-
 SEXP cgraph(SEXP graph, SEXP values, SEXP grad)
 {
   SEXP nodes = PROTECT(allocVector(VECSXP, 0));
@@ -179,7 +174,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
     SEXP parent_symbol = findVar(install(CHAR(STRING_ELT(names, i))), binding);
 
-    SEXP parent = VECTOR_ELT(nodes, cg_node_id(vec2Chr(parent_symbol), graph) - 1);
+    SEXP parent = VECTOR_ELT(nodes, cg_node_id(coerceVector(parent_symbol, CHARSXP), graph) - 1);
 
 
     /* Add gradient to parent node */
@@ -361,7 +356,9 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
       if(isNull(dim))
       {
-        if(strcmp(CHAR(vec2Chr(CAR(call))), "c") != 0)
+        SEXP call_0 = coerceVector(CAR(call), CHARSXP);
+
+        if(strcmp(CHAR(call_0), "c") != 0)
         {
           dim = PROTECT(allocVector(INTSXP, 1));
 
