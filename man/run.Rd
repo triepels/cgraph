@@ -2,12 +2,12 @@
 % Please edit documentation in R/cgraph.R
 \name{run}
 \alias{run}
-\title{Execute Graph}
+\title{Evaluate a Graph}
 \value{
-cg.results object, the values of all nodes executed in the forward-pass.
+cg.results object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
 }
 \description{
-Evaluate operations in the graph.
+Evaluate node \code{name} in the graph.
 }
 \note{
 All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.

@@ -223,9 +223,9 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
   .Call("cg_add_expression", call, grads, binding, name, self)
 }
 
-#' Execute Graph
+#' Evaluate a Graph
 #'
-#' Evaluate operations in the graph.
+#' Evaluate node \code{name} in the graph.
 #'
 #' @section Usage:
 #' \preformatted{run(name, values)}
@@ -242,7 +242,7 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 #'
 #' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. The values of placeholders whose default values are not changed are not returned.
 #'
-#' @return cg.results object, the values of all nodes executed in the forward-pass.
+#' @return cg.results object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
 #'
 #' @name run
 #' @author Ron Triepels
@@ -257,7 +257,7 @@ cgraph$public_methods$run <- function(name, values = list())
 
 #' Calculate Gradients
 #'
-#' Differentiate nodes by reverse automatic differentiation.
+#' Differentiate the graph with respect to node \code{name} by reverse automatic differentiation.
 #'
 #' @section Usage:
 #' \preformatted{gradients(name, values, index = 1)}
@@ -265,15 +265,17 @@ cgraph$public_methods$run <- function(name, values = list())
 #' @section Agruments:
 #' \describe{
 #' \item{name}{character scalar or symbol, name of the node that needs to be differentiated.}
-#' \item{values}{named list or environment, values that are subsituted for the placeholders in the graph.}
+#' \item{values}{named list or environment, values that are subsituted for the expressions and placeholders in the graph.}
 #' \item{index}{numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.}
 #' }
 #'
-#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by executing the graph using function \code{run()}. The values obtained by this function for the expressions in the graph can be supplied along values for the placeholders via argument \code{values}. In case node \code{name} is an array, a value for \code{index} must be supplied to specify which element of the array needs to be differentiated.
+#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
+#'
+#' In case the value of node \code{name} is an array, \code{index} can be used to specify which element of the array needs to be differentiated.
 #'
 #' The gradients of all parameters are returned along with the gradients of all intermediate nodes that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
 #'
-#' @return cg.results object, the gradients of all nodes calculated in the backward-pass.
+#' @return cg.results object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
 #'
 #' @name gradients
 #' @author Ron Triepels
