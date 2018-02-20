@@ -396,7 +396,7 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
     int m = LENGTH(root_grad);
 
-    if(INTEGER(index)[0] < 0 | INTEGER(index)[0] > m)
+    if(INTEGER(index)[0] < 1 | INTEGER(index)[0] > m)
     {
       error("invalid index");
     }
