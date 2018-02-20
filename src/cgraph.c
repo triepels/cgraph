@@ -421,7 +421,7 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
         if(!isNull(node_grads) & !isNull(node_childeren))
         {
-          int assign = 1, m = LENGTH(node_childeren);
+          int m = LENGTH(node_childeren);
 
           SEXP node_grad = R_NilValue;
 
@@ -435,11 +435,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
             {
               defineVar(install("grad"), child_value, grad_env);
 
-              if(assign)
+              if(isNull(node_grad))
               {
                 node_grad = eval(VECTOR_ELT(node_grads, j), values);
-
-                assign = 0;
               }
               else
               {
