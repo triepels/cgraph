@@ -9,14 +9,4 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: R6
-Collate:
-    'cgraph.R'
-    'array.R'
-    'math.R'   
-    'misc.R'    
-    'print.R'
-    'str.R'
-    'transform.R'
-    'trig.R'
-    'wrapper.R'
 RoxygenNote: 6.0.1

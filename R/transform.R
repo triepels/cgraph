@@ -2,25 +2,18 @@
 #'
 #' Change the dimensions of array \code{x} to \code{dims}.
 #'
-#' @section Usage:
-#' \preformatted{reshape(x, dims, name)}
-#'
-#' @section Agruments:
-#' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric matrix.}
-#' \item{dims}{numeric scalar or vector, the dimensions of the new array.}
-#' \item{name}{character scalar, name of the operation (optional).}
-#' }
+#' @param x cg.node, placeholder for a numeric array.
+#' @param dims numeric scalar or vector, the dimensions of the new array.
+#' @param name character scalar, name of the operation (optional).
 #'
 #' @note The elements of \code{x} are rearranged column-wise.
 #'
-#' @return symbol, name of the operation.
+#' @return cg.node, node of the operation.
 #'
-#' @name reshape
 #' @author Ron Triepels
-cgraph$public_methods$reshape <- function(x, dims, name = self$name())
+cg.reshape <- function(x, dims, name = cgraph::name())
 {
-  self$expr(name = name,
+  cgraph::expr(name = name,
     call = substitute(array(x, dims), list(dims = dims)),
     grads = list(x = quote(array(grad, dim(x)))),
     binding = list(x = x)
@@ -31,22 +24,15 @@ cgraph$public_methods$reshape <- function(x, dims, name = self$name())
 #'
 #' Transform array \code{x} to a one-dimensional vector.
 #'
-#' @section Usage:
-#' \preformatted{c(x, name)}
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
 #'
-#' @section Agruments:
-#' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric array.}
-#' \item{name}{character scalar, name of the operation (optional).}
-#' }
+#' @return cg.node, node of the operation.
 #'
-#' @return symbol, name of the operation.
-#'
-#' @name c
 #' @author Ron Triepels
-cgraph$public_methods$c <- function(x, name = self$name())
+cg.c <- function(x, name = cgraph::name())
 {
-  self$expr(name = name,
+  cgraph::expr(name = name,
     call = quote(c(x)),
     grads = list(x = quote(array(grad, dim(x)))),
     binding = list(x = x)
@@ -55,24 +41,35 @@ cgraph$public_methods$c <- function(x, name = self$name())
 
 #' Matrix Transpose
 #'
-#' Calculate \code{t(x)}.
+#' Perform \code{t(x)}.
 #'
-#' @section Usage:
-#' \preformatted{t(x, name)}
+#' @param x cg.node, placeholder for a numeric matrix.
+#' @param name character scalar, name of the operation (optional).
 #'
-#' @section Agruments:
-#' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric matrix.}
-#' \item{name}{character scalar, name of the operation (optional).}
-#' }
+#' @return cg.node, node of the operation.
 #'
-#' @return symbol, name of the operation.
-#'
-#' @name t
 #' @author Ron Triepels
-cgraph$public_methods$t <- function(x, name = self$name())
+cg.t <- function(x, name = cgraph::name())
 {
-  self$expr(name = name,
+  cgraph::expr(name = name,
+    call = quote(t(x)),
+    grads = list(x = quote(t(grad))),
+    binding = list(x = x)
+  )
+}
+
+#' Matrix Transpose
+#'
+#' Perform \code{t(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric matrix.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+t.cg.node <- function(x)
+{
+  cgraph::expr(name = cgraph::name(),
     call = quote(t(x)),
     grads = list(x = quote(t(grad))),
     binding = list(x = x)

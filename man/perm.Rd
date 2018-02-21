@@ -18,11 +18,6 @@ Transpose the row and columns of an array while keeping its dimensions the same.
 \note{
 This is a wrapper function for \code{aperm(a, replace(1:length(dim(a)), 1:2, 2:1), resize = F)}.
 }
-\section{Usage}{
-
-\preformatted{perm(a)}
-}
-
 \author{
 Ron Triepels
 }

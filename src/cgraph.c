@@ -18,6 +18,8 @@ SEXP cgraph(SEXP graph, SEXP values, SEXP grad)
 
   setAttrib(graph, install("class"), mkString("cgraph"));
 
+  defineVar(install(".cg"), graph, R_GlobalEnv);
+
   UNPROTECT(1);
 
   return graph;
@@ -86,8 +88,6 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 {
   SEXP id = cg_gen_id(graph);
 
-  SEXP symbol = coerceVector(name, SYMSXP);
-
   SEXP nodes = lengthgets(findVar(install("nodes"), graph), asInteger(id));
 
   if(cg_node_exists(asChar(name), graph))
@@ -124,10 +124,12 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 
   if(!isNull(value))
   {
+    SEXP symbol = coerceVector(name, SYMSXP);
+
     defineVar(symbol, value, findVar(install("values"), graph));
   }
 
-  return symbol;
+  return name;
 }
 
 SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
@@ -135,8 +137,6 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
   int n = LENGTH(grads);
 
   SEXP id = cg_gen_id(graph);
-
-  SEXP symbol = coerceVector(name, SYMSXP);
 
   SEXP nodes = lengthgets(findVar(install("nodes"), graph), asInteger(id));
 
@@ -219,7 +219,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   UNPROTECT(1);
 
-  return symbol;
+  return name;
 }
 
 SEXP cg_count_type(SEXP type, SEXP graph)

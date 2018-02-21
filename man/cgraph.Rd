@@ -6,18 +6,9 @@
 \description{
 Generator class to create new cgraph objects.
 }
-\section{Usage}{
-
-\preformatted{cgraph}
+\details{
+\code{cgraph}
 }
-
-\section{Methods}{
-
-\describe{
-\item{\code{$new()}}{initialize a new computational graph.}
-}
-}
-
 \author{
 Ron Triepels
 }

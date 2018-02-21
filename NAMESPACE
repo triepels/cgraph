@@ -4,11 +4,45 @@ import(R6)
 # Load C files
 useDynLib(cgraph)
 
+# Export array functions
+export(`%mul%`)
+export(cg.mat.mul)
+export(cg.crossprod)
+export(cg.tcrossprod)
+export(cg.linear)
+export(cg.sum)
+export(cg.rowSums)
+export(cg.colSums)
+
+# Export array methods
+S3method(mean, cg.node)
+
 # Export cgraph object
 export(cgraph)
 
-# Export wrapper functions
-export(perm)
+# Export math functions
+export(cg.neg)
+export(cg.add)
+export(cg.sub)
+export(cg.mul)
+export(cg.div)
+export(cg.pow)
+export(cg.sqrt)
+export(cg.exp)
+export(cg.abs)
+
+# Export math methods
+S3method(`+`, cg.node)
+S3method(`-`, cg.node)
+S3method(`*`, cg.node)
+S3method(`/`, cg.node)
+S3method(`^`, cg.node)
+S3method(sqrt, cg.node)
+S3method(exp, cg.node)
+S3method(abs, cg.node)
+
+# Export misc functions
+export(cg.sigmoid)
 
 # Export print methods
 S3method(print, cgraph)
@@ -18,3 +52,33 @@ S3method(print, cg.results)
 # Export str methods
 S3method(str, cgraph)
 S3method(str, cg.results)
+
+# Export transform functions
+export(cg.reshape)
+export(cg.c)
+export(cg.t)
+
+# Export transform methods
+S3method(t, cg.node)
+
+# Export trig functions
+export(cg.sin)
+export(cg.cos)
+export(cg.tan)
+export(cg.tanh)
+
+# Export trig methods
+S3method(sin, cg.node)
+S3method(cos, cg.node)
+S3method(tan, cg.node)
+S3method(tanh, cg.node)
+
+# Export wrapper functions
+export(name)
+export(const)
+export(input)
+export(parm)
+export(expr)
+export(perm)
+
+

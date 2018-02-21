@@ -2,22 +2,33 @@
 #'
 #' Calculate \code{sin(x)}.
 #'
-#' @section Usage:
-#' \preformatted{sin(x, name)}
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
 #'
-#' @section Agruments:
-#' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric scalar or array.}
-#' \item{name}{character scalar, name of the operation (optional).}
-#' }
+#' @return cg.node, node of the operation.
 #'
-#' @return symbol, name of the operation.
-#'
-#' @name sin
 #' @author Ron Triepels
-cgraph$public_methods$sin <- function(x, name = self$name())
+cg.sin <- function(x, name = cgraph::name())
 {
-  self$expr(name = name,
+  cgraph::expr(name = name,
+    call = quote(sin(x)),
+    grads = list(x = quote(grad * cos(x))),
+    binding = list(x = x)
+  )
+}
+
+#' Sinus
+#'
+#' Calculate \code{sin(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+sin.cg.node <- function(x)
+{
+  cgraph::expr(name = cgraph::name(),
     call = quote(sin(x)),
     grads = list(x = quote(grad * cos(x))),
     binding = list(x = x)
@@ -28,22 +39,33 @@ cgraph$public_methods$sin <- function(x, name = self$name())
 #'
 #' Calculate \code{cos(x)}.
 #'
-#' @section Usage:
-#' \preformatted{cos(x, name)}
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
 #'
-#' @section Agruments:
-#' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric scalar or array.}
-#' \item{name}{character scalar, name of the operation (optional).}
-#' }
+#' @return cg.node, node of the operation.
 #'
-#' @return symbol, name of the operation.
-#'
-#' @name cos
 #' @author Ron Triepels
-cgraph$public_methods$cos <- function(x, name = self$name())
+cg.cos <- function(x, name = cgraph::name())
 {
-  self$expr(name = name,
+  cgraph::expr(name = name,
+    call = quote(cos(x)),
+    grads = list(x = quote(-grad * sin(x))),
+    binding = list(x = x)
+  )
+}
+
+#' Cosinus
+#'
+#' Calculate \code{cos(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cos.cg.node <- function(x)
+{
+  cgraph::expr(name = cgraph::name(),
     call = quote(cos(x)),
     grads = list(x = quote(-grad * sin(x))),
     binding = list(x = x)
@@ -54,22 +76,33 @@ cgraph$public_methods$cos <- function(x, name = self$name())
 #'
 #' Calculate \code{tan(x)}.
 #'
-#' @section Usage:
-#' \preformatted{tan(x, name)}
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
 #'
-#' @section Agruments:
-#' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric scalar or array.}
-#' \item{name}{character scalar, name of the operation (optional).}
-#' }
+#' @return cg.node, node of the operation.
 #'
-#' @return symbol, name of the operation.
-#'
-#' @name tan
 #' @author Ron Triepels
-cgraph$public_methods$tan <- function(x, name = self$name())
+cg.tan <- function(x, name = cgraph::name())
 {
-  self$expr(name = name,
+  cgraph::expr(name = name,
+    call = quote(tan(x)),
+    grads = list(x = quote(grad / cos(x)^2)),
+    binding = list(x = x)
+  )
+}
+
+#' Tangent
+#'
+#' Calculate \code{tan(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+tan.cg.node <- function(x)
+{
+  cgraph::expr(name = cgraph::name(),
     call = quote(tan(x)),
     grads = list(x = quote(grad / cos(x)^2)),
     binding = list(x = x)
@@ -80,22 +113,33 @@ cgraph$public_methods$tan <- function(x, name = self$name())
 #'
 #' Calculate \code{tanh(x)}.
 #'
-#' @section Usage:
-#' \preformatted{tanh(x, name)}
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
 #'
-#' @section Agruments:
-#' \describe{
-#' \item{x}{character scalar or symbol, placeholder for a numeric scalar or array.}
-#' \item{name}{character scalar, name of the operation (optional).}
-#' }
+#' @return cg.node, node of the operation.
 #'
-#' @return symbol, name of the operation.
-#'
-#' @name tanh
 #' @author Ron Triepels
-cgraph$public_methods$tanh <- function(x, name = self$name())
+cg.tanh <- function(x, name = cgraph::name())
 {
-  self$expr(name = name,
+  cgraph::expr(name = name,
+    call = quote(tanh(x)),
+    grads = list(x = quote(grad * (1 - y^2))),
+    binding = list(x = x, y = name)
+  )
+}
+
+#' Hyperbolic Tangent
+#'
+#' Calculate \code{tanh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+tanh.cg.node <- function(x)
+{
+  cgraph::expr(name = cgraph::name(),
     call = quote(tanh(x)),
     grads = list(x = quote(grad * (1 - y^2))),
     binding = list(x = x, y = name)
