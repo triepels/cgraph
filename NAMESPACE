@@ -22,9 +22,10 @@ S3method(mean, cg.node)
 export(cgraph)
 
 # Export math functions
-export(cg.neg)
 export(cg.add)
+export(cg.pos)
 export(cg.sub)
+export(cg.neg)
 export(cg.mul)
 export(cg.div)
 export(cg.pow)
