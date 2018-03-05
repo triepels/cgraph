@@ -363,6 +363,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
           dim = PROTECT(allocVector(INTSXP, 1));
 
           INTEGER(dim)[0] = LENGTH(value);
+          INTEGER(dim)[1] = 1;
 
           setAttrib(value, R_DimSymbol, dim);
 
