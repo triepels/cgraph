@@ -360,7 +360,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
         if(strcmp(CHAR(call_0), "c") != 0)
         {
-          dim = PROTECT(allocVector(INTSXP, 1));
+          dim = PROTECT(allocVector(INTSXP, 2));
 
           INTEGER(dim)[0] = LENGTH(value);
           INTEGER(dim)[1] = 1;
