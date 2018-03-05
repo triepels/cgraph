@@ -61,7 +61,7 @@ cg.cos <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 cos.cg.node <- function(x)
 {
-  cgraph::cos(x)
+  cgraph::cg.cos(x)
 }
 
 #' Tangent
@@ -94,7 +94,7 @@ cg.tan <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 tan.cg.node <- function(x)
 {
-  cgraph::tan(x)
+  cgraph::cg.tan(x)
 }
 
 #' Hyperbolic Tangent
