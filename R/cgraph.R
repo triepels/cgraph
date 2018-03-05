@@ -20,6 +20,9 @@ cgraph <- R6Class(
   )
 )
 
+# Data of current graph.
+.cg <- new.env()
+
 #' Computational Graph
 #'
 #' Initialize a new computational graph.
@@ -32,11 +35,13 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  grad <- new.env(parent = as.environment("package:cgraph"))
+  pkg.env <- as.environment("package:cgraph")
+
+  grad <- new.env(parent = pkg.env)
 
   values <- new.env(parent = grad)
 
-  .Call("cgraph", self, values, grad)
+  assign("graph", .Call("cgraph", self, values, grad), envir = pkg.env$.cg)
 }
 
 #' Generate Name

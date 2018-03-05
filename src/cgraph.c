@@ -18,8 +18,6 @@ SEXP cgraph(SEXP graph, SEXP values, SEXP grad)
 
   setAttrib(graph, install("class"), mkString("cgraph"));
 
-  defineVar(install(".cg"), graph, R_GlobalEnv);
-
   UNPROTECT(1);
 
   return graph;

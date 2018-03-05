@@ -7,12 +7,12 @@
 #' @author Ron Triepels
 name <- function()
 {
-  if(!exists(".cg"))
+  if(!exists("graph", envir = .cg))
   {
     stop("No current graph set")
   }
 
-  .cg$name()
+  .cg$graph$name()
 }
 
 #' Add Constant
@@ -29,12 +29,12 @@ name <- function()
 #' @author Ron Triepels
 const <- function(value, name)
 {
-  if(!exists(".cg"))
+  if(!exists("graph", envir = .cg))
   {
     stop("No current graph set")
   }
 
-  .cg$const(value, name)
+  .cg$graph$const(value, name)
 }
 
 #' Add Input
@@ -49,12 +49,12 @@ const <- function(value, name)
 #' @author Ron Triepels
 input <- function(value, name)
 {
-  if(!exists(".cg"))
+  if(!exists("graph", envir = .cg))
   {
     stop("No current graph set")
   }
 
-  .cg$input(value, name)
+  .cg$graph$input(value, name)
 }
 
 #' Add Parameter
@@ -69,12 +69,12 @@ input <- function(value, name)
 #' @author Ron Triepels
 parm <- function(value, name)
 {
-  if(!exists(".cg"))
+  if(!exists("graph", envir = .cg))
   {
     stop("No current graph set")
   }
 
-  .cg$parm(value, name)
+  .cg$graph$parm(value, name)
 }
 
 #' Add Expression
@@ -93,12 +93,12 @@ parm <- function(value, name)
 #' @author Ron Triepels
 expr <- function(call, grads, binding, name)
 {
-  if(!exists(".cg"))
+  if(!exists("graph", envir = .cg))
   {
     stop("No current graph set")
   }
 
-  .cg$expr(call, grads, binding, name)
+  .cg$graph$expr(call, grads, binding, name)
 }
 
 #' Array Transposition

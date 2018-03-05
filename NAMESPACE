@@ -4,6 +4,9 @@ import(R6)
 # Load C files
 useDynLib(cgraph)
 
+# Export current graph environment
+export(.cg)
+
 # Export array functions
 export(`%mul%`)
 export(cg.mat.mul)
