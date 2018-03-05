@@ -18,23 +18,34 @@ cg.add <- function(x, y, name = cgraph::name())
   )
 }
 
+#' Positive
+#'
+#' Calculate \code{x}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.pos <- function(x, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(x),
+    grads = list(x = quote(grad)),
+    binding = list(x = x)
+  )
+}
+
 `+.cg.node` <- function(x, y)
 {
   if(missing(y))
   {
-    cgraph::expr(name = cgraph::name(),
-      call = quote(x),
-      grads = list(x = quote(grad)),
-      binding = list(x = x)
-    )
+    cgraph::cg.pos(x)
   }
   else
   {
-    cgraph::expr(name = cgraph::name(),
-      call = quote(x + y),
-      grads = list(x = quote(grad), y = quote(grad)),
-      binding = list(x = x, y = y)
-    )
+    cgraph::cg.add(x, y)
   }
 }
 
@@ -81,19 +92,11 @@ cg.neg <- function(x, name = cgraph::name())
 {
   if(missing(y))
   {
-    cgraph::expr(name = cgraph::name(),
-      call = quote(-x),
-      grads = list(x = quote(-grad)),
-      binding = list(x = x)
-    )
+    cgraph::cg.neg(x)
   }
   else
   {
-    cgraph::expr(name = cgraph::name(),
-      call = quote(x - y),
-      grads = list(x = quote(grad), y = quote(-grad)),
-      binding = list(x = x, y = y)
-    )
+    cgraph::cg.sub(x, y)
   }
 }
 
@@ -119,11 +122,7 @@ cg.mul <- function(x, y, name = cgraph::name())
 
 `*.cg.node` <- function(x, y)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(x * y),
-    grads = list(x = quote(grad * y), y = quote(grad * x)),
-    binding = list(x = x, y = y)
-  )
+  cgraph::cg.mul(x, y)
 }
 
 #' Divide
@@ -148,11 +147,7 @@ cg.div <- function(x, y, name = cgraph::name())
 
 `/.cg.node` <- function(x, y)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(x / y),
-    grads = list(x = quote(grad * 1 / y), y = quote(grad * x / y^2)),
-    binding = list(x = x, y = y)
-  )
+  cgraph::cg.div(x, y)
 }
 
 #' Power
@@ -177,29 +172,7 @@ cg.pow <- function(x, y, name = cgraph::name())
 
 `^.cg.node` <- function(x, y)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(x^y),
-    grads = list(x = quote(grad * y * x^(y - 1)), y = quote(grad * x^y * log(x))),
-    binding = list(x = x, y = y)
-  )
-}
-
-#' Square Root
-#'
-#' Calculate \code{sqrt(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric scalar or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-sqrt.cg.node <- function(x)
-{
-  cgraph::expr(name = cgraph::name(),
-    call = quote(x^2),
-    grads = list(x = quote(grad * 2 * x)),
-    binding = list(x = x)
-  )
+  cgraph::cg.pow(x, y)
 }
 
 #' Square Root
@@ -215,30 +188,24 @@ sqrt.cg.node <- function(x)
 cg.sqrt <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = quote(x^2),
-    grads = list(x = quote(grad * 2 * x)),
+    call = quote(x^0.5),
+    grads = list(x = quote(grad * 0.5 * x^-1.5)),
     binding = list(x = x)
   )
 }
 
-#' Exponential Function
+#' Square Root
 #'
-#' Calculate \code{exp(1)^x}.
+#' Calculate \code{sqrt(x)}.
 #'
 #' @param x cg.node, placeholder for a numeric scalar or array.
-#'
-#' @note \code{exp(1)=e}.
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-exp.cg.node <- function(x)
+sqrt.cg.node <- function(x)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(exp(1)^x),
-    grads = list(x = quote(grad * exp(1)^x)),
-    binding = list(x = x)
-  )
+  cgraph::cg.sqrt(x)
 }
 
 #' Exponential Function
@@ -262,22 +229,20 @@ cg.exp <- function(x, name = cgraph::name())
   )
 }
 
-#' Absolute Value
+#' Exponential Function
 #'
-#' Calculate \code{abs(x)}.
+#' Calculate \code{exp(1)^x}.
 #'
 #' @param x cg.node, placeholder for a numeric scalar or array.
+#'
+#' @note \code{exp(1)=e}.
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-abs.cg.node <- function(x)
+exp.cg.node <- function(x)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(abs(x)),
-    grads = list(x = quote(grad * (x / abs(x)))),
-    binding = list(x = x)
-  )
+  cgraph::cg.exp(x)
 }
 
 #' Absolute Value
@@ -297,4 +262,18 @@ cg.abs <- function(x, name = cgraph::name())
     grads = list(x = quote(grad * (x / abs(x)))),
     binding = list(x = x)
   )
+}
+
+#' Absolute Value
+#'
+#' Calculate \code{abs(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+abs.cg.node <- function(x)
+{
+  cgraph::cg.abs(x)
 }

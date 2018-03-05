@@ -15,6 +15,7 @@ export(cg.rowSums)
 export(cg.colSums)
 
 # Export array methods
+#S3method(sum, cg.node)
 S3method(mean, cg.node)
 
 # Export cgraph object
@@ -59,6 +60,7 @@ export(cg.c)
 export(cg.t)
 
 # Export transform methods
+#S3method(c, cg.node)
 S3method(t, cg.node)
 
 # Export trig functions

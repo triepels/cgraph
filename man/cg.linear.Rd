@@ -22,7 +22,7 @@ cg.node, node of the operation.
 Calculate \code{x \%*\% y + c(z)}.
 }
 \note{
-This function is equivalent to \code{add(mat.mul(x, y), c(z))}.
+This function is equivalent to \code{x \%mul\% y + cg.c(z)}.
 }
 \author{
 Ron Triepels

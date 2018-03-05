@@ -33,14 +33,7 @@ cg.mat.mul <- function(x, y, name = cgraph::name())
 #' @author Ron Triepels
 `%mul%` <- function(x, y)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(x %*% y),
-    grads = list(
-      x = quote(tcrossprod(grad, y)),
-      y = quote(crossprod(x, grad))
-    ),
-    binding = list(x = x, y = y)
-  )
+  cgraph::cg.mat.mul(x, y)
 }
 
 #' Matrix Crossproduct
@@ -102,7 +95,7 @@ cg.tcrossprod <- function(x, y, name = cgraph::name())
 #' @param z cg.node, placeholder for a numeric vector.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note This function is equivalent to \code{add(mat.mul(x, y), c(z))}.
+#' @note This function is equivalent to \code{x \%mul\% y + cg.c(z)}.
 #'
 #' @return cg.node, node of the operation.
 #'

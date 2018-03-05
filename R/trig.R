@@ -28,11 +28,7 @@ cg.sin <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 sin.cg.node <- function(x)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(sin(x)),
-    grads = list(x = quote(grad * cos(x))),
-    binding = list(x = x)
-  )
+  cgraph::cg.sin(x)
 }
 
 #' Cosinus
@@ -65,11 +61,7 @@ cg.cos <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 cos.cg.node <- function(x)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(cos(x)),
-    grads = list(x = quote(-grad * sin(x))),
-    binding = list(x = x)
-  )
+  cgraph::cos(x)
 }
 
 #' Tangent
@@ -102,11 +94,7 @@ cg.tan <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 tan.cg.node <- function(x)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(tan(x)),
-    grads = list(x = quote(grad / cos(x)^2)),
-    binding = list(x = x)
-  )
+  cgraph::tan(x)
 }
 
 #' Hyperbolic Tangent
@@ -139,9 +127,5 @@ cg.tanh <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 tanh.cg.node <- function(x)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(tanh(x)),
-    grads = list(x = quote(grad * (1 - y^2))),
-    binding = list(x = x, y = name)
-  )
+  cgraph::cg.tanh(x)
 }
