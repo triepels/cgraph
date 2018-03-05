@@ -31,7 +31,7 @@ cgraph <- R6Class(
 #'
 #' @return cgraph object.
 #'
-#' @name cgraph.initialize
+#' @name cg.initialize
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
@@ -54,7 +54,7 @@ cgraph$public_methods$initialize <- function()
 #'
 #' @return symbol, auto-generated name for the node.
 #'
-#' @name cgraph.name
+#' @name cg.name
 #' @author Ron Triepels
 cgraph$public_methods$name <- function(type = 3)
 {
@@ -73,7 +73,7 @@ cgraph$public_methods$name <- function(type = 3)
 #'
 #' @return numeric scalar, the numer of nodes of the given type.
 #'
-#' @name cgraph.count.type
+#' @name cg.count.type
 #' @author Ron Triepels
 cgraph$public_methods$count.type <- function(type = 3)
 {
@@ -95,7 +95,7 @@ cgraph$public_methods$count.type <- function(type = 3)
 #'
 #' @return cg.node, constant node.
 #'
-#' @name cgraph.const
+#' @name cg.const
 #' @author Ron Triepels
 cgraph$public_methods$const <- function(value, name)
 {
@@ -122,7 +122,7 @@ cgraph$public_methods$const <- function(value, name)
 #'
 #' @return cg.node, input node.
 #'
-#' @name cgraph.input
+#' @name cg.input
 #' @author Ron Triepels
 cgraph$public_methods$input <- function(value, name)
 {
@@ -149,7 +149,7 @@ cgraph$public_methods$input <- function(value, name)
 #'
 #' @return cg.node, parameter node.
 #'
-#' @name cgraph.parm
+#' @name cg.parm
 #' @author Ron Triepels
 cgraph$public_methods$parm <- function(value, name)
 {
@@ -180,7 +180,7 @@ cgraph$public_methods$parm <- function(value, name)
 #'
 #' @return cg.node, expression node.
 #'
-#' @name cgraph.expr
+#' @name cg.expr
 #' @author Ron Triepels
 cgraph$public_methods$expr <- function(call, grads, binding, name)
 {
@@ -214,7 +214,7 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 #'
 #' @return cg.results object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
 #'
-#' @name cgraph.run
+#' @name cg.run
 #' @author Ron Triepels
 cgraph$public_methods$run <- function(name, values = list())
 {
@@ -243,7 +243,7 @@ cgraph$public_methods$run <- function(name, values = list())
 #'
 #' @return cg.results object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
 #'
-#' @name cgraph.gradients
+#' @name cg.gradients
 #' @author Ron Triepels
 cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 {
@@ -266,7 +266,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #'
 #' @return numeric matrix, the adjacency matrix of the graph.
 #'
-#' @name cgraph.adj.mat
+#' @name cg.adj.mat
 #' @author Ron Triepels
 cgraph$public_methods$adj.mat <- function()
 {
@@ -285,7 +285,7 @@ cgraph$public_methods$adj.mat <- function()
 #'
 #' @return none.
 #'
-#' @name cgraph.plot
+#' @name cg.plot
 #' @author Ron Triepels
 cgraph$public_methods$plot <- function(...)
 {
