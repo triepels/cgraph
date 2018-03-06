@@ -20,7 +20,7 @@ cgraph <- R6Class(
   )
 )
 
-# Data of current graph.
+# Environment of the urrent graph
 .cg <- new.env()
 
 #' Computational Graph
@@ -28,6 +28,8 @@ cgraph <- R6Class(
 #' Initialize a new computational graph.
 #'
 #' @details \code{$new()}
+#'
+#' @note The cgraph object is set as the current graph. Any placeholders or expressions that are invoked will be added to this graph. You can change the current graph by calling the \code{$active()} method on another cgraph object.
 #'
 #' @return cgraph object.
 #'
@@ -197,6 +199,25 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
   .Call("cg_add_expression", call, grads, binding, name, self)
 }
 
+#' Change active graph
+#'
+#' Set this graph to be the active graph.
+#'
+#' @details \code{$active()}
+#'
+#' @note Any placeholders or expressions that are invoked are added to the active graph. This behavior also applies to expressions that are invoked by overloaded S3 functions that do not follow the cg.<name> naming convention (such as primitive functions '+' and '-'). Moreover, only one graph can be active at a time. You can use this function to change the active graph.
+#'
+#' @return none.
+#'
+#' @name cg.active
+#' @author Ron Triepels
+cgraph$public_methods$active <- function()
+{
+  pkg.env <- as.environment("package:cgraph")
+
+  assign("graph", self, envir = pkg.env$.cg)
+}
+
 #' Evaluate a Graph
 #'
 #' Evaluate node \code{name} in the graph.
@@ -235,11 +256,11 @@ cgraph$public_methods$run <- function(name, values = list())
 #' @param values named list or environment, values that are subsituted for the expressions and placeholders in the graph.
 #' @param index numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.
 #'
-#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
+#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{$run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
 #'
-#' In case the value of node \code{name} is an array, \code{index} can be used to specify which element of the array needs to be differentiated.
+#' Currently, cgraph can only differentiate with respect to a scalar output node. In case the value of output node \code{name} is a vector or an array, \code{index} can be used to specify which element of the vector or array needs to be differentiated.
 #'
-#' The gradients of all parameters are returned along with the gradients of all intermediate nodes that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
+#' The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
 #'
 #' @return cg.results object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
 #'

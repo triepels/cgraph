@@ -12,6 +12,9 @@ Initialize a new computational graph.
 \details{
 \code{$new()}
 }
+\note{
+The cgraph object is set as the current graph. Any placeholders or expressions that are invoked will be added to this graph. You can change the current graph by calling the \code{$active()} method on another cgraph object.
+}
 \author{
 Ron Triepels
 }

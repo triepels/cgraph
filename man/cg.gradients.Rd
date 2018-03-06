@@ -20,11 +20,11 @@ Differentiate the graph with respect to node \code{name} by reverse automatic di
 \code{$gradients(name, values, index = 1)}
 }
 \note{
-All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
+All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{$run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
 
-In case the value of node \code{name} is an array, \code{index} can be used to specify which element of the array needs to be differentiated.
+Currently, cgraph can only differentiate with respect to a scalar output node. In case the value of output node \code{name} is a vector or an array, \code{index} can be used to specify which element of the vector or array needs to be differentiated.
 
-The gradients of all parameters are returned along with the gradients of all intermediate nodes that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
+The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
 }
 \author{
 Ron Triepels
