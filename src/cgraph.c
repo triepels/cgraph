@@ -170,9 +170,9 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   for(int i = 0; i < m; i++)
   {
-    SEXP parent_symbol = findVarInFrame(binding, install(CHAR(STRING_ELT(names, i))));
+    SEXP symbol = findVarInFrame(binding, install(CHAR(STRING_ELT(names, i))));
 
-    if(parent_symbol == R_UnboundValue)
+    if(symbol == R_UnboundValue)
     {
       error("cannot find '%s' in binding", CHAR(STRING_ELT(names, i)));
     }
@@ -182,9 +182,9 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   for(int i = 0; i < m; i++)
   {
-    SEXP parent_symbol = findVar(install(CHAR(STRING_ELT(names, i))), binding);
+    SEXP symbol = findVar(install(CHAR(STRING_ELT(names, i))), binding);
 
-    SEXP parent = VECTOR_ELT(nodes, cg_node_id(coerceVector(parent_symbol, CHARSXP), graph) - 1);
+    SEXP parent = VECTOR_ELT(nodes, cg_node_id(coerceVector(symbol, CHARSXP), graph) - 1);
 
     /* Add gradient to parent node */
     SEXP parent_grads = getAttrib(parent, install("grads"));
