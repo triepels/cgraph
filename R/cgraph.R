@@ -10,7 +10,6 @@ NULL
 
 cgraph <- R6Class(
   classname = "cgraph",
-  portable = F,
   class = T,
   cloneable = T,
   public = list(
