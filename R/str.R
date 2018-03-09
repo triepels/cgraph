@@ -1,6 +1,6 @@
 str.cgraph <- function(object, ...)
 {
-  max <- 99
+  max <- 100
 
   n.nodes <- length(object$nodes)
 
@@ -20,13 +20,13 @@ str.cgraph <- function(object, ...)
   }
 }
 
-str.cg.results <- function(object, ...)
+str.cg.environment <- function(object, ...)
 {
-  max <- 99
+  max <- 100
 
   n.nodes <- length(object)
 
-  cat(sprintf("<cg.results> : %d object(s)\n", n.nodes))
+  cat(sprintf("<cg.environment> : %d object(s)\n", n.nodes))
 
   if(n.nodes > 0)
   {
@@ -34,11 +34,9 @@ str.cg.results <- function(object, ...)
     {
       value = get(node, object);
 
-      type = ifelse(is.array(value), sprintf("%s array", typeof(value)), typeof(value))
-
       dim = ifelse(is.array(value), paste(dim(value), collapse = " x "), length(value))
 
-      cat(sprintf(" %s: %s (%s)\n", node, type, dim))
+      cat(sprintf(" %s: %s (%s)\n", node, typeof(value), dim))
     }
 
     if(n.nodes > max)
