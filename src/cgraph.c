@@ -16,6 +16,7 @@ SEXP cgraph(SEXP graph, SEXP values, SEXP grad)
   defineVar(install("values"), values, graph);
   defineVar(install("grad"), grad, graph);
 
+  setAttrib(values, install("class"), mkString("cg.environment"));
   setAttrib(graph, install("class"), mkString("cgraph"));
 
   UNPROTECT(1);
@@ -397,7 +398,7 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
     SEXP root_value = eval(install(CHAR(asChar(root))), values);
 
-    SEXP root_grad = coerceVector(duplicate(root_value), INTSXP);
+    SEXP root_grad = coerceVector(duplicate(root_value), REALSXP);
 
     int m = LENGTH(root_grad);
 
@@ -406,9 +407,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
       error("invalid index");
     }
 
-    memset(INTEGER(root_grad), 0, m * sizeof(int));
+    memset(REAL(root_grad), 0, m * sizeof(double));
 
-    INTEGER(root_grad)[INTEGER(index)[0] - 1] = 1;
+    REAL(root_grad)[INTEGER(index)[0] - 1] = 1;
 
     defineVar(install(CHAR(asChar(root))), root_grad, grads);
 
@@ -473,7 +474,7 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
   cg_forward(ids, values, graph);
 
-  setAttrib(values, install("class"), mkString("cg.results"));
+  setAttrib(values, install("class"), mkString("cg.environment"));
 
   return values;
 }
@@ -486,7 +487,7 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
   cg_backward(ids, index, values, grads, graph);
 
-  setAttrib(grads, install("class"), mkString("cg.results"));
+  setAttrib(grads, install("class"), mkString("cg.environment"));
 
   return grads;
 }
