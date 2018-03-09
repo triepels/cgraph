@@ -45,7 +45,14 @@ void stack_push(stack *s, int x)
 {
   if(stack_is_full(s))
   {
-    error("Stack is full");
+    s->data = realloc(s->data, 2 * s->maxSize * sizeof(int));
+
+    if(s->data == NULL)
+    {
+      error("Insufficient memory to initialize stack");
+    }
+
+    s->maxSize *= 2;
   }
 
   s->data[++s->top] = x;
