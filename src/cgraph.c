@@ -273,7 +273,7 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
 
   UNPROTECT(1);
 
-  return coerceVector(mkString(name), SYMSXP);
+  return mkString(name);
 }
 
 SEXP cg_traverse_graph(SEXP id, SEXP graph)
