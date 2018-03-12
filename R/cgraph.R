@@ -102,12 +102,18 @@ cgraph$public_methods$const <- function(value, name)
 {
   type <- as.integer(0)
 
-  if(missing(value)) value <- NULL
+  if(missing(value))
+    value <- NULL
 
   if(!is.null(value) & !(is.numeric(value) | is.array(value)))
     stop("value must be a numeric vector or array")
 
-  if(missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
+  if(missing(name))
+  {
+    name <- as.character(self$name(type))
+  }else{
+    name <- as.character(name)
+  }
 
   .Call("cg_add_placeholder", value, name, type, self)
 }
@@ -129,12 +135,18 @@ cgraph$public_methods$input <- function(value, name)
 {
   type <- as.integer(1)
 
-  if(missing(value)) value <- NULL
+  if(missing(value))
+    value <- NULL
 
   if(!is.null(value) & !(is.numeric(value) | is.array(value)))
     stop("value must be a numeric vector or array")
 
-  if(missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
+  if(missing(name))
+  {
+    name <- as.character(self$name(type))
+  }else{
+    name <- as.character(name)
+  }
 
   .Call("cg_add_placeholder", value, name, type, self)
 }
@@ -161,7 +173,12 @@ cgraph$public_methods$parm <- function(value, name)
   if(!is.null(value) & !(is.numeric(value) | is.array(value)))
     stop("value must be a numeric vector or array")
 
-  if(missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
+  if(missing(name))
+  {
+    name <- as.character(self$name(type))
+  }else{
+    name <- as.character(name)
+  }
 
   .Call("cg_add_placeholder", value, name, type, self)
 }
@@ -187,13 +204,20 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 {
   type <- as.integer(3)
 
-  if(!(is.name(call) || is.call(call))) call <- as.call(call)
+  if(!(is.name(call) || is.call(call)))
+    call <- as.call(call)
 
   grads <- as.list(grads)
 
-  if(!is.environment(binding)) binding <- list2env(binding)
+  if(!is.environment(binding))
+    binding <- list2env(binding)
 
-  if(missing(name)) name <- as.character(self$name(type)) else name <- as.character(name)
+  if(missing(name))
+  {
+    name <- as.character(self$name(type))
+  }else{
+    name <- as.character(name)
+  }
 
   .Call("cg_add_expression", call, grads, binding, name, self)
 }
@@ -240,7 +264,8 @@ cgraph$public_methods$run <- function(name, values = list())
 {
   name <- as.character(name)
 
-  if (!is.environment(values)) values <- list2env(values, parent = self$values)
+  if (!is.environment(values))
+    values <- list2env(values, parent = self$values)
 
   .Call("cg_run", name, values, self)
 }
@@ -273,7 +298,8 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 
   index <- as.integer(index)
 
-  if (!is.environment(values)) values <- list2env(values, parent = self$values)
+  if (!is.environment(values))
+    values <- list2env(values, parent = self$values)
 
   .Call("cg_gradients", name, index, values, grads, self)
 }
