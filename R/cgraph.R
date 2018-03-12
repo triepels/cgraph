@@ -42,7 +42,9 @@ cgraph$public_methods$initialize <- function()
 
   values <- new.env(parent = grad)
 
-  assign("graph", .Call("cgraph", self, values, grad), envir = pkg.env$.cg)
+  graph <- .Call("cgraph", self, values, grad, PACKAGE = "cgraph")
+
+  assign("graph", graph, envir = pkg.env$.cg)
 }
 
 #' Generate Name
@@ -61,7 +63,7 @@ cgraph$public_methods$name <- function(type = 3)
 {
   type <- as.integer(type)
 
-  .Call("cg_gen_name", type, self)
+  .Call("cg_gen_name", type, self, PACKAGE = "cgraph")
 }
 
 #' Count Nodes
@@ -80,7 +82,7 @@ cgraph$public_methods$count.type <- function(type = 3)
 {
   type <- as.integer(type)
 
-  .Call("cg_count_type", type, self)
+  .Call("cg_count_type", type, self, PACKAGE = "cgraph")
 }
 
 #' Add Constant
@@ -115,7 +117,7 @@ cgraph$public_methods$const <- function(value, name)
     name <- as.character(name)
   }
 
-  .Call("cg_add_placeholder", value, name, type, self)
+  .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
 }
 
 #' Add Input
@@ -148,7 +150,7 @@ cgraph$public_methods$input <- function(value, name)
     name <- as.character(name)
   }
 
-  .Call("cg_add_placeholder", value, name, type, self)
+  .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
 }
 
 #' Add Parameter
@@ -180,7 +182,7 @@ cgraph$public_methods$parm <- function(value, name)
     name <- as.character(name)
   }
 
-  .Call("cg_add_placeholder", value, name, type, self)
+  .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
 }
 
 #' Add Expression
@@ -219,7 +221,7 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
     name <- as.character(name)
   }
 
-  .Call("cg_add_expression", call, grads, binding, name, self)
+  .Call("cg_add_expression", call, grads, binding, name, self, PACKAGE = "cgraph")
 }
 
 #' Change active graph
@@ -267,7 +269,7 @@ cgraph$public_methods$run <- function(name, values = list())
   if (!is.environment(values))
     values <- list2env(values, parent = self$values)
 
-  .Call("cg_run", name, values, self)
+  .Call("cg_run", name, values, self, PACKAGE = "cgraph")
 }
 
 #' Calculate Gradients
@@ -301,7 +303,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
   if (!is.environment(values))
     values <- list2env(values, parent = self$values)
 
-  .Call("cg_gradients", name, index, values, grads, self)
+  .Call("cg_gradients", name, index, values, grads, self, PACKAGE = "cgraph")
 }
 
 #' Adjacency Matrix
@@ -316,7 +318,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #' @author Ron Triepels
 cgraph$public_methods$adj.mat <- function()
 {
-  .Call("cg_adj_mat", self)
+  .Call("cg_adj_mat", self, PACKAGE = "cgraph")
 }
 
 #' Plot
