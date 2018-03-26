@@ -398,7 +398,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
     SEXP root_value = eval(install(CHAR(asChar(root))), values);
 
-    SEXP root_grad = coerceVector(duplicate(root_value), REALSXP);
+    SEXP root_grad = PROTECT(duplicate(root_value));
+
+    root_grad = coerceVector(root_value, REALSXP);
 
     int m = LENGTH(root_grad);
 
@@ -463,6 +465,8 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
         }
       }
     }
+
+    UNPROTECT(1);
   }
 }
 
@@ -470,11 +474,13 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 {
   int id = cg_node_id(asChar(name), graph);
 
-  SEXP ids = cg_traverse_graph(ScalarInteger(id), graph);
+  SEXP ids = PROTECT(cg_traverse_graph(ScalarInteger(id), graph));
 
   cg_forward(ids, values, graph);
 
   setAttrib(values, install("class"), mkString("cg.environment"));
+
+  UNPROTECT(1);
 
   return values;
 }
@@ -483,11 +489,13 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP grads, SEXP graph)
 {
   int id = cg_node_id(asChar(name), graph);
 
-  SEXP ids = cg_traverse_graph(ScalarInteger(id), graph);
+  SEXP ids = PROTECT(cg_traverse_graph(ScalarInteger(id), graph));
 
   cg_backward(ids, index, values, grads, graph);
 
   setAttrib(grads, install("class"), mkString("cg.environment"));
+
+  UNPROTECT(1);
 
   return grads;
 }
