@@ -358,7 +358,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
       SEXP call = getAttrib(node, install("call"));
 
-      SEXP value = eval(call, values);
+      SEXP value = PROTECT(eval(call, values));
 
       SEXP dim = getAttrib(value, R_DimSymbol);
 
@@ -380,6 +380,8 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
       }
 
       defineVar(symbol, value, values);
+
+      UNPROTECT(1);
     }
   }
 }
@@ -445,11 +447,11 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
               if(isNull(node_grad))
               {
-                node_grad = eval(VECTOR_ELT(node_grads, j), values);
+                node_grad = PROTECT(eval(VECTOR_ELT(node_grads, j), values));
               }
               else
               {
-                SEXP grad = eval(VECTOR_ELT(node_grads, j), values);
+                SEXP grad = PROTECT(eval(VECTOR_ELT(node_grads, j), values));
 
                 int l = LENGTH(grad);
 
@@ -457,11 +459,18 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
                 {
                   REAL(node_grad)[k] += REAL(grad)[k];
                 }
+
+                UNPROTECT(1);
               }
             }
           }
 
           defineVar(install(CHAR(asChar(node))), node_grad, grads);
+
+          if(!isNull(node_grad))
+          {
+            UNPROTECT(1);
+          }
         }
       }
     }
