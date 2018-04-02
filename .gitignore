@@ -2,6 +2,7 @@ src-i386/
 src-x64/
 *.dll
 *.o
+*.so
 .Rproj.user
 .Rhistory
 .RData
