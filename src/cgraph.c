@@ -251,7 +251,7 @@ SEXP cg_count_type(SEXP type, SEXP graph)
 
 SEXP cg_gen_name(SEXP type, SEXP graph)
 {
-  char name[4];
+  char name[8];
 
   SEXP count = PROTECT(cg_count_type(type, graph));
 
