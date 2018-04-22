@@ -280,7 +280,7 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
 
-  int n = LENGTH(nodes), k = 0; int score[n];
+  int k = 0, n = LENGTH(nodes), score[n];
 
   SEXP ids = PROTECT(allocVector(INTSXP, n));
 
