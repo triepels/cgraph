@@ -210,12 +210,12 @@ sqrt.cg.node <- function(x)
 
 #' Exponential Function
 #'
-#' Calculate \code{exp(1)^x}.
+#' Calculate \code{exp(x)}.
 #'
 #' @param x cg.node, placeholder for a numeric scalar or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note \code{exp(1)=e}.
+#' @note \code{exp(x)=e^x}.
 #'
 #' @return cg.node, node of the operation.
 #'

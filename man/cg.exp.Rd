@@ -15,10 +15,10 @@ cg.exp(x, name = cgraph::name())
 cg.node, node of the operation.
 }
 \description{
-Calculate \code{exp(1)^x}.
+Calculate \code{exp(x)}.
 }
 \note{
-\code{exp(1)=e}.
+\code{exp(x)=e^x}.
 }
 \author{
 Ron Triepels
