@@ -312,9 +312,7 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
     }
     else
     {
-      stack_remove(&s);
-
-      INTEGER(ids)[k] = current;
+      INTEGER(ids)[k] = stack_pop(&s);
 
       k++;
     }
