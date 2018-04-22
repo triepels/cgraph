@@ -223,8 +223,8 @@ sqrt.cg.node <- function(x)
 cg.exp <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = quote(exp(1)^x),
-    grads = list(x = quote(grad * exp(1)^x)),
+    call = quote(exp(x)),
+    grads = list(x = quote(grad * exp(x))),
     binding = list(x = x)
   )
 }
