@@ -4,7 +4,7 @@ typedef struct {
   int *data;
 } stack;
 
-void stack_init(stack *s, int maxSize);
+stack stack_init(int maxSize);
 
 void stack_destroy(stack *s);
 

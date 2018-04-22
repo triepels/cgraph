@@ -6,9 +6,11 @@
 
 #include "stack.h"
 
-void stack_init(stack *s, int maxSize)
+stack stack_init(int maxSize)
 {
   int *data;
+
+  stack s;
 
   data = malloc(maxSize * sizeof(int));
 
@@ -17,9 +19,11 @@ void stack_init(stack *s, int maxSize)
     error("Insufficient memory to initialize stack");
   }
 
-  s->top = -1;
-  s->maxSize = maxSize;
-  s->data = data;
+  s.top = -1;
+  s.maxSize = maxSize;
+  s.data = data;
+
+  return s;
 }
 
 void stack_destroy(stack *s)
