@@ -16,7 +16,7 @@ stack stack_init(int maxSize)
 
   if(data == NULL)
   {
-    error("Insufficient memory to initialize stack");
+    error("insufficient memory to initialize stack");
   }
 
   s.top = -1;
@@ -53,7 +53,7 @@ void stack_push(stack *s, int x)
 
     if(s->data == NULL)
     {
-      error("Insufficient memory to initialize stack");
+      error("insufficient memory to initialize stack");
     }
 
     s->maxSize *= 2;
@@ -66,7 +66,7 @@ int stack_peek(stack *s)
 {
   if(stack_is_empty(s))
   {
-    error("Stack is empty");
+    error("stack is empty");
   }
 
   return s->data[s->top];
@@ -76,7 +76,7 @@ void stack_remove(stack *s)
 {
   if(stack_is_empty(s))
   {
-    error("Stack is empty");
+    error("stack is empty");
   }
 
   s->top--;
@@ -86,7 +86,7 @@ int stack_pop(stack *s)
 {
   if(stack_is_empty(s))
   {
-    error("Stack is empty");
+    error("stack is empty");
   }
 
   return s->data[s->top--];
