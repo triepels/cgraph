@@ -280,11 +280,11 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
 
-  int k = 0, n = LENGTH(nodes), score[n];
+  int k = 0, n = LENGTH(nodes), visited[n];
 
   SEXP ids = PROTECT(allocVector(INTSXP, n));
 
-  memset(score, 0, n * sizeof(int));
+  memset(visited, 0, n * sizeof(int));
 
   stack s = stack_init(n);
 
@@ -294,7 +294,7 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
   {
     int current = stack_peek(&s);
 
-    if(score[current - 1] > 1)
+    if(visited[current - 1] > 1)
     {
       stack_remove(&s);
     }
@@ -304,13 +304,13 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
 
       SEXP parents = getAttrib(node, install("parents"));
 
-      if(score[current - 1] > 0 || isNull(parents))
+      if(visited[current - 1] > 0 || isNull(parents))
       {
         stack_remove(&s);
 
         INTEGER(ids)[k] = current;
 
-        score[current - 1]++;
+        visited[current - 1]++;
 
         k++;
       }
@@ -320,14 +320,14 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
 
         for(int j = 0; j < m; j++)
         {
-          if(score[INTEGER(parents)[j] - 1] == 0)
+          if(visited[INTEGER(parents)[j] - 1] == 0)
           {
             stack_push(&s, INTEGER(parents)[j]);
           }
         }
       }
 
-      score[current - 1]++;
+      visited[current - 1]++;
     }
   }
 
