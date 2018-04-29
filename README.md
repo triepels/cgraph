@@ -1,6 +1,6 @@
 # Description
 
-cgraph allows to create, execute and differentiate computational graphs in R. The package operates by reverse accumulation.
+The cgraph package allows to create, execute and differentiate computational graphs in R. The package operates by reverse accumulation.
 
 # Install
 
