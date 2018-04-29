@@ -8,16 +8,27 @@
 #define CGPRM 2
 #define CGEXP 3
 
-SEXP cgraph(SEXP graph, SEXP values, SEXP grad)
+static SEXP NewEnv(SEXP enclos)
+{
+  SEXP env = PROTECT(allocSExp(ENVSXP));
+
+  SET_FRAME(env, R_NilValue);
+  SET_ENCLOS(env, (enclos)? enclos: R_GlobalEnv);
+  SET_HASHTAB(env, R_NilValue);
+  SET_ATTRIB(env, R_NilValue);
+
+  UNPROTECT(1);
+
+  return env;
+}
+
+SEXP cgraph(SEXP graph)
 {
   SEXP nodes = PROTECT(allocVector(VECSXP, 0));
 
   defineVar(install("nodes"), nodes, graph);
-  defineVar(install("values"), values, graph);
-  defineVar(install("grad"), grad, graph);
 
   setAttrib(graph, install("class"), mkString("cgraph"));
-  setAttrib(values, install("class"), mkString("cg.environment"));
 
   UNPROTECT(1);
 
@@ -381,8 +392,6 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
   SEXP nodes = findVar(install("nodes"), graph);
 
-  SEXP grad_env = findVar(install("grad"), graph);
-
   if(n > 0)
   {
     SEXP root = VECTOR_ELT(nodes, INTEGER(ids)[n - 1] - 1);
@@ -432,15 +441,17 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
             if(child_value != R_UnboundValue)
             {
+              SEXP grad_env = PROTECT(NewEnv(values));
+
               defineVar(install("grad"), child_value, grad_env);
 
               if(isNull(node_grad))
               {
-                node_grad = PROTECT(eval(VECTOR_ELT(node_grads, j), values));
+                node_grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
               }
               else
               {
-                SEXP grad = PROTECT(eval(VECTOR_ELT(node_grads, j), values));
+                SEXP grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
 
                 int l = LENGTH(grad);
 
@@ -451,6 +462,8 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
                 UNPROTECT(1);
               }
+
+              UNPROTECT(1);
             }
           }
 
@@ -476,8 +489,6 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
   cg_forward(ids, values, graph);
 
-  setAttrib(values, install("class"), mkString("cg.environment"));
-
   UNPROTECT(1);
 
   return values;
@@ -490,8 +501,6 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP grads, SEXP graph)
   SEXP ids = PROTECT(cg_traverse_graph(ScalarInteger(id), graph));
 
   cg_backward(ids, index, values, grads, graph);
-
-  setAttrib(grads, install("class"), mkString("cg.environment"));
 
   UNPROTECT(1);
 

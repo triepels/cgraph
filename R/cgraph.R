@@ -14,8 +14,7 @@ cgraph <- R6Class(
   cloneable = T,
   public = list(
     nodes = NULL,
-    values = NULL,
-    grad = NULL
+    values = NULL
   )
 )
 
@@ -38,11 +37,11 @@ cgraph$public_methods$initialize <- function()
 {
   pkg.env <- as.environment("package:cgraph")
 
-  grad <- new.env(parent = pkg.env)
+  self$values <- new.env(parent = pkg.env)
 
-  values <- new.env(parent = grad)
+  attr(self$values, "class", "cg.environment")
 
-  graph <- .Call("cgraph", self, values, grad, PACKAGE = "cgraph")
+  graph <- .Call("cgraph", self, PACKAGE = "cgraph")
 
   assign("graph", graph, envir = pkg.env$.cg)
 }
@@ -269,6 +268,8 @@ cgraph$public_methods$run <- function(name, values = list())
   if (!is.environment(values))
     values <- list2env(values, parent = self$values)
 
+  attr(values, "class") <- "cg.environment"
+
   .Call("cg_run", name, values, self, PACKAGE = "cgraph")
 }
 
@@ -302,6 +303,8 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 
   if (!is.environment(values))
     values <- list2env(values, parent = self$values)
+
+  attr(grads, "class") <- "cg.environment"
 
   .Call("cg_gradients", name, index, values, grads, self, PACKAGE = "cgraph")
 }
