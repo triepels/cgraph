@@ -11,7 +11,7 @@ extern SEXP cg_gen_name(SEXP, SEXP);
 extern SEXP cg_gradients(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP cg_run(SEXP, SEXP, SEXP);
 extern SEXP cg_types();
-extern SEXP cgraph(SEXP, SEXP, SEXP);
+extern SEXP cgraph(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   {"cg_add_expression",  (DL_FUNC) &cg_add_expression,  5},
@@ -22,7 +22,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_gradients",       (DL_FUNC) &cg_gradients,       5},
   {"cg_run",             (DL_FUNC) &cg_run,             3},
   {"cg_types",           (DL_FUNC) &cg_types,           0},
-  {"cgraph",             (DL_FUNC) &cgraph,             3},
+  {"cgraph",             (DL_FUNC) &cgraph,             1},
   {NULL, NULL, 0}
 };
 
