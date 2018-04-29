@@ -328,7 +328,7 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
       k++;
     }
 
-    visited[current - 1]++;
+    visited[current - 1] = 1;
   }
 
   SETLENGTH(ids, k);
