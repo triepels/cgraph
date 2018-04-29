@@ -309,23 +309,39 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
 
     SEXP parents = getAttrib(node, install("parents"));
 
-    if(visited[current - 1] == 0 && !isNull(parents))
+    if(visited[current - 1] == 0)
     {
-      int m = LENGTH(parents);
-
-      for(int j = 0; j < m; j++)
+      if(isNull(parents))
       {
-        if(visited[INTEGER(parents)[j] - 1] == 0)
+        INTEGER(ids)[k] = stack_pop(&s);
+
+        k++;
+      }
+      else
+      {
+        int m = LENGTH(parents);
+
+        for(int j = 0; j < m; j++)
         {
-          stack_push(&s, INTEGER(parents)[j]);
+          if(visited[INTEGER(parents)[j] - 1] == 0)
+          {
+            stack_push(&s, INTEGER(parents)[j]);
+          }
         }
       }
     }
     else
     {
-      INTEGER(ids)[k] = stack_pop(&s);
+      if(isNull(parents))
+      {
+        stack_remove(&s);
+      }
+      else
+      {
+        INTEGER(ids)[k] = stack_pop(&s);
 
-      k++;
+        k++;
+      }
     }
 
     visited[current - 1] = 1;
