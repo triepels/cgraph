@@ -340,6 +340,25 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
   return ids;
 }
 
+SEXP cg_set_dims(SEXP x)
+{
+  SEXP dim = getAttrib(x, R_DimSymbol);
+
+  if(isNull(dim))
+  {
+    dim = PROTECT(allocVector(INTSXP, 2));
+
+    INTEGER(dim)[0] = LENGTH(x);
+    INTEGER(dim)[1] = 1;
+
+    setAttrib(x, R_DimSymbol, dim);
+
+    UNPROTECT(1);
+  }
+
+  return x;
+}
+
 void cg_forward(SEXP ids, SEXP values, SEXP graph)
 {
   int n = LENGTH(ids);
@@ -360,23 +379,9 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
       SEXP value = PROTECT(eval(call, values));
 
-      SEXP dim = getAttrib(value, R_DimSymbol);
-
-      if(isNull(dim))
+      if(strcmp(CHAR(asChar(CAR(call))), "c") != 0)
       {
-        SEXP call_0 = coerceVector(CAR(call), CHARSXP);
-
-        if(strcmp(CHAR(call_0), "c") != 0)
-        {
-          dim = PROTECT(allocVector(INTSXP, 2));
-
-          INTEGER(dim)[0] = LENGTH(value);
-          INTEGER(dim)[1] = 1;
-
-          setAttrib(value, R_DimSymbol, dim);
-
-          UNPROTECT(1);
-        }
+        value = cg_set_dims(value);
       }
 
       defineVar(symbol, value, values);
@@ -384,6 +389,15 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
       UNPROTECT(1);
     }
   }
+}
+
+SEXP test(SEXP x)
+{
+  if(strcmp(CHAR(asChar(CAR(x))), "c") != 0)
+  {
+    printf("SUCCES");
+  }
+  return R_NilValue;
 }
 
 void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
