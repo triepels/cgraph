@@ -18,8 +18,8 @@ cgraph <- R6Class(
   )
 )
 
-# Environment of the urrent graph
-.cg <- new.env()
+# Session environment
+.session <- new.env()
 
 #' Computational Graph
 #'
@@ -35,15 +35,15 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  pkg.env <- as.environment("package:cgraph")
+  package <- as.environment("package:cgraph")
 
-  self$values <- new.env(parent = pkg.env)
+  self$values <- new.env(parent = package)
 
   attr(self$values, "class", "cg.environment")
 
   graph <- .Call("cgraph", self, PACKAGE = "cgraph")
 
-  assign("graph", graph, envir = pkg.env$.cg)
+  assign("graph", graph, envir = package$.session)
 }
 
 #' Generate Name
@@ -237,9 +237,9 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 #' @author Ron Triepels
 cgraph$public_methods$active <- function()
 {
-  pkg.env <- as.environment("package:cgraph")
+  package <- as.environment("package:cgraph")
 
-  assign("graph", self, envir = pkg.env$.cg)
+  assign("graph", self, envir = package$.session)
 }
 
 #' Evaluate a Graph
