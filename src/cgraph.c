@@ -346,7 +346,7 @@ SEXP cg_set_dims(SEXP x)
 
   if(isNull(dim))
   {
-    dim = PROTECT(allocVector(INTSXP, 2));
+    dim = PROTECT(allocVector(INTSXP, 1));
 
     INTEGER(dim)[0] = LENGTH(x);
 
