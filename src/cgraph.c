@@ -321,11 +321,11 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
       {
         int m = LENGTH(parents);
 
-        for(int j = 0; j < m; j++)
+        for(int i = 0; i < m; i++)
         {
-          if(visited[INTEGER(parents)[j] - 1] == 0)
+          if(visited[INTEGER(parents)[i] - 1] == 0)
           {
-            stack_push(&s, INTEGER(parents)[j]);
+            stack_push(&s, INTEGER(parents)[i]);
           }
         }
       }
