@@ -391,15 +391,6 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
   }
 }
 
-SEXP test(SEXP x)
-{
-  if(strcmp(CHAR(asChar(CAR(x))), "c") != 0)
-  {
-    printf("SUCCES");
-  }
-  return R_NilValue;
-}
-
 void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 {
   int n = LENGTH(ids);
