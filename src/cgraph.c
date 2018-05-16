@@ -543,7 +543,7 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
         {
           int m = LENGTH(node_childeren);
 
-          SEXP node_grad = R_NilValue;
+          SEXP grad = R_NilValue;
 
           for(int j = 0; j < m; j++)
           {
@@ -555,19 +555,19 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
             {
               defineVar(install("grad"), child_value, grad_env);
 
-              if(isNull(node_grad))
+              if(isNull(grad))
               {
-                node_grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
+                grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
               }
               else
               {
-                SEXP grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
+                SEXP child_grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
 
-                int l = LENGTH(grad);
+                int l = LENGTH(child_grad);
 
                 for(int k = 0; k < l; k++)
                 {
-                  REAL(node_grad)[k] += REAL(grad)[k];
+                  REAL(grad)[k] += REAL(child_grad)[k];
                 }
 
                 UNPROTECT(1);
@@ -575,9 +575,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
             }
           }
 
-          defineVar(install(CHAR(asChar(node))), node_grad, grads);
+          defineVar(install(CHAR(asChar(node))), grad, grads);
 
-          if(!isNull(node_grad))
+          if(!isNull(grad))
           {
             UNPROTECT(1);
           }
