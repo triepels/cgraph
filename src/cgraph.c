@@ -557,7 +557,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
               if(isNull(grad))
               {
-                grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
+                grad = eval(VECTOR_ELT(node_grads, j), grad_env);
+
+                grad = PROTECT(duplicate(grad));
               }
               else
               {
