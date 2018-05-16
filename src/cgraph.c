@@ -13,9 +13,17 @@ static SEXP NewEnv(SEXP enclos)
   SEXP env = PROTECT(allocSExp(ENVSXP));
 
   SET_FRAME(env, R_NilValue);
-  SET_ENCLOS(env, (enclos)? enclos: R_GlobalEnv);
   SET_HASHTAB(env, R_NilValue);
   SET_ATTRIB(env, R_NilValue);
+
+  if(isNull(enclos))
+  {
+    SET_ENCLOS(env, R_GlobalEnv);
+  }
+  else
+  {
+    SET_ENCLOS(env, enclos);
+  }
 
   UNPROTECT(1);
 
