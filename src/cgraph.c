@@ -496,6 +496,8 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
   if(n > 0)
   {
+    SEXP grad_env = PROTECT(NewEnv(values));
+
     SEXP root = VECTOR_ELT(nodes, INTEGER(ids)[n - 1] - 1);
 
     SEXP root_value = eval(install(CHAR(asChar(root))), values);
@@ -543,8 +545,6 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
             if(child_value != R_UnboundValue)
             {
-              SEXP grad_env = PROTECT(NewEnv(values));
-
               defineVar(install("grad"), child_value, grad_env);
 
               if(isNull(node_grad))
@@ -564,8 +564,6 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
                 UNPROTECT(1);
               }
-
-              UNPROTECT(1);
             }
           }
 
@@ -579,7 +577,7 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
       }
     }
 
-    UNPROTECT(1);
+    UNPROTECT(2);
   }
 }
 
