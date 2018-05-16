@@ -504,15 +504,15 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
   if(n > 0)
   {
+    SEXP root_grad = R_NilValue;
+
     SEXP grad_env = PROTECT(NewEnv(values));
 
     SEXP root = VECTOR_ELT(nodes, INTEGER(ids)[n - 1] - 1);
 
-    SEXP root_value = eval(install(CHAR(asChar(root))), values);
+    root_grad = PROTECT(eval(install(CHAR(asChar(root))), values));
 
-    SEXP root_grad = PROTECT(duplicate(root_value));
-
-    root_grad = coerceVector(root_grad, REALSXP);
+    root_grad = coerceVector(duplicate(root_grad), REALSXP);
 
     int m = LENGTH(root_grad);
 
@@ -557,9 +557,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
               if(isNull(grad))
               {
-                grad = eval(VECTOR_ELT(node_grads, j), grad_env);
+                grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
 
-                grad = PROTECT(duplicate(grad));
+                grad = duplicate(grad);
               }
               else
               {
