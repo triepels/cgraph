@@ -504,7 +504,7 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
     SEXP root_grad = PROTECT(duplicate(root_value));
 
-    root_grad = coerceVector(root_value, REALSXP);
+    root_grad = coerceVector(root_grad, REALSXP);
 
     int m = LENGTH(root_grad);
 
