@@ -478,8 +478,6 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
     if(asInteger(type) == CGEXP)
     {
-      SEXP symbol = coerceVector(node, SYMSXP);
-
       SEXP call = getAttrib(node, install("call"));
 
       SEXP value = PROTECT(eval(call, values));
@@ -489,7 +487,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
         value = cg_set_dims(value);
       }
 
-      defineVar(symbol, value, values);
+      defineVar(install(CHAR(asChar(node))), value, values);
 
       UNPROTECT(1);
     }
