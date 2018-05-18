@@ -69,9 +69,5 @@ cg.t <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 t.cg.node <- function(x)
 {
-  cgraph::expr(name = cgraph::name(),
-    call = quote(t(x)),
-    grads = list(x = quote(t(grad))),
-    binding = list(x = x)
-  )
+  cgraph::cg.t(x)
 }
