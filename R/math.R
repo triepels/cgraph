@@ -245,6 +245,63 @@ exp.cg.node <- function(x)
   cgraph::cg.exp(x)
 }
 
+#' Logarithmic Function
+#'
+#' Calculate \code{log(x, base)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param base cg.node, placeholder for a numeric scalar.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.log <- function(x, base, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(log(x, base)),
+    grads = list(
+      x = quote(grad / (x * log(base))),
+      base = quote(-log(x) / (base * log(base)^2))
+    ),
+    binding = list(x = x, base = base)
+  )
+}
+
+#' Logarithmic Function
+#'
+#' Calculate \code{log(x, base)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param base cg.node, placeholder for a numeric scalar.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+log.cg.node <- function(x, base)
+{
+  cgraph::cg.log(x, base)
+}
+
+#' Natual Logarithmic Function
+#'
+#' Calculate \code{log(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.ln <- function(x, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(log(x)),
+    grads = list(x = quote(grad / x)),
+    binding = list(x = x)
+  )
+}
+
 #' Absolute Value
 #'
 #' Calculate \code{abs(x)}.

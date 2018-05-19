@@ -34,6 +34,8 @@ export(cg.div)
 export(cg.pow)
 export(cg.sqrt)
 export(cg.exp)
+export(cg.log)
+export(cg.ln)
 export(cg.abs)
 
 # Export math methods
@@ -44,6 +46,7 @@ S3method(`/`, cg.node)
 S3method(`^`, cg.node)
 S3method(sqrt, cg.node)
 S3method(exp, cg.node)
+S3method(log, cg.node)
 S3method(abs, cg.node)
 
 # Export misc functions
