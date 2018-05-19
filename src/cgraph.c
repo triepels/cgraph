@@ -482,7 +482,9 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
       SEXP value = PROTECT(eval(call, values));
 
-      if(strcmp(CHAR(asChar(CAR(call))), "c") != 0)
+      const char * term0 = CHAR(asChar(CAR(call)));
+
+      if(strcmp(term0, "as.double") != 0 && strcmp(term0, "as.numeric") != 0)
       {
         value = cg_set_dims(value);
       }
