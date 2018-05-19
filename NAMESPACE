@@ -63,13 +63,11 @@ S3method(str, cg.environment)
 
 # Export transform functions
 export(cg.as.double)
-export(cg.as.integer)
 export(cg.reshape)
 export(cg.t)
 
 # Export transform methods
 S3method(as.double, cg.node)
-S3method(as.integer, cg.node)
 S3method(as.array, cg.node)
 S3method(t, cg.node)
 

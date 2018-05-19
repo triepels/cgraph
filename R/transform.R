@@ -31,40 +31,6 @@ as.double.cg.node <- function(x, name = cgraph::name(), ...)
   cgraph::cg.as.double(x, name)
 }
 
-#' Coerce to an Integer Vector
-#'
-#' Coerce \code{x} to a one-dimensional integer vector.
-#'
-#' @param x cg.node, placeholder for a numeric array.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-cg.as.integer <- function(x, name = cgraph::name())
-{
-  cgraph::expr(name = name,
-    call = quote(as.integer(x)),
-    grads = list(x = quote(array(grad, dim(x)))),
-    binding = list(x = x)
-  )
-}
-
-#' Coerce to an Integer Vector
-#'
-#' Coerce \code{x} to a one-dimensional integer vector.
-#'
-#' @param x cg.node, placeholder for a numeric array.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-as.integer.cg.node <- function(x, name = cgraph::name(), ...)
-{
-  cgraph::cg.as.integer(x, name)
-}
-
 #' Reshape Array Dimensions
 #'
 #' Change the dimensions of array \code{x} to \code{dims}.
