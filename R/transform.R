@@ -1,3 +1,70 @@
+#' Coerce to a Numeric Vector
+#'
+#' Coerce \code{x} to a one-dimensional numeric vector.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.as.double <- function(x, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(as.numeric(x)),
+    grads = list(x = quote(array(grad, dim(x)))),
+    binding = list(x = x)
+  )
+}
+
+#' Coerce to a Numeric Vector
+#'
+#' Coerce \code{x} to a one-dimensional numeric vector.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+as.double.cg.node <- function(x, name = cgraph::name(), ...)
+{
+  cgraph::cg.as.double(x, name)
+}
+
+#' Coerce to an Integer Vector
+#'
+#' Coerce \code{x} to a one-dimensional integer vector.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.as.integer <- function(x, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(as.integer(x)),
+    grads = list(x = quote(array(grad, dim(x)))),
+    binding = list(x = x)
+  )
+}
+
+#' Coerce to an Integer Vector
+#'
+#' Coerce \code{x} to a one-dimensional integer vector.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+as.integer.cg.node <- function(x, name = cgraph::name(), ...)
+{
+  cgraph::cg.as.integer(x, name)
+}
+
 #' Reshape Array Dimensions
 #'
 #' Change the dimensions of array \code{x} to \code{dims}.
@@ -18,6 +85,24 @@ cg.reshape <- function(x, dims, name = cgraph::name())
     grads = list(x = quote(array(grad, dim(x)))),
     binding = list(x = x)
   )
+}
+
+#' Coerce to an Array
+#'
+#' Coerce \code{x} to an array with dimensions \code{dims}.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#' @param dims numeric scalar or vector, the dimensions of the new array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @note This function is equivalent to function \code{cg.reshape}.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+as.array.cg.node <- function(x, dims, name = cgraph::name(), ...)
+{
+  cgraph::cg.reshape(x, dims, name)
 }
 
 #' Matrix Transpose
