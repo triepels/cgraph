@@ -88,14 +88,14 @@ cg.tcrossprod <- function(x, y, name = cgraph::name())
 
 #' Linear Transformation
 #'
-#' Calculate \code{x \%*\% y + c(z)}.
+#' Calculate \code{x \%*\% y + as.numeric(z)}.
 #'
 #' @param x cg.node, placeholder for a numeric matrix.
 #' @param y cg.node, placeholder for a numeric matrix.
 #' @param z cg.node, placeholder for a numeric vector.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note This function is equivalent to \code{x \%mul\% y + cg.c(z)}.
+#' @note This function is equivalent to \code{x \%mul\% y + as.numeric(z)}.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -103,7 +103,7 @@ cg.tcrossprod <- function(x, y, name = cgraph::name())
 cg.linear <- function(x, y, z, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = quote(x %*% y + c(z)),
+    call = quote(x %*% y + as.numeric(z)),
     grads = list(
       x = quote(tcrossprod(grad, y)),
       y = quote(crossprod(x, grad)),
