@@ -605,20 +605,26 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
   cg_forward(ids, values, graph);
 
+  setAttrib(values, install("class"), mkString("cg.environment"));
+
   UNPROTECT(1);
 
   return values;
 }
 
-SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP grads, SEXP graph)
+SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
 {
   int id = cg_node_id(asChar(name), graph);
+
+  SEXP grads = PROTECT(NewEnv(R_NilValue));
 
   SEXP ids = PROTECT(cg_traverse_graph(ScalarInteger(id), graph));
 
   cg_backward(ids, index, values, grads, graph);
 
-  UNPROTECT(1);
+  setAttrib(grads, install("class"), mkString("cg.environment"));
+
+  UNPROTECT(2);
 
   return grads;
 }

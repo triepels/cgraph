@@ -268,8 +268,6 @@ cgraph$public_methods$run <- function(name, values = list())
   if (!is.environment(values))
     values <- list2env(values, parent = self$values)
 
-  attr(values, "class") <- "cg.environment"
-
   .Call("cg_run", name, values, self, PACKAGE = "cgraph")
 }
 
@@ -295,8 +293,6 @@ cgraph$public_methods$run <- function(name, values = list())
 #' @author Ron Triepels
 cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 {
-  grads = new.env()
-
   name <- as.character(name)
 
   index <- as.integer(index)
@@ -304,9 +300,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
   if (!is.environment(values))
     values <- list2env(values, parent = self$values)
 
-  attr(grads, "class") <- "cg.environment"
-
-  .Call("cg_gradients", name, index, values, grads, self, PACKAGE = "cgraph")
+  .Call("cg_gradients", name, index, values, self, PACKAGE = "cgraph")
 }
 
 #' Adjacency Matrix
