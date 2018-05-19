@@ -19,10 +19,10 @@ cg.linear(x, y, z, name = cgraph::name())
 cg.node, node of the operation.
 }
 \description{
-Calculate \code{x \%*\% y + c(z)}.
+Calculate \code{x \%*\% y + as.numeric(z)}.
 }
 \note{
-This function is equivalent to \code{x \%mul\% y + cg.c(z)}.
+This function is equivalent to \code{x \%mul\% y + as.numeric(z)}.
 }
 \author{
 Ron Triepels
