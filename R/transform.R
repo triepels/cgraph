@@ -20,25 +20,6 @@ cg.reshape <- function(x, dims, name = cgraph::name())
   )
 }
 
-#' Transform Array to Vector
-#'
-#' Transform array \code{x} to a one-dimensional vector.
-#'
-#' @param x cg.node, placeholder for a numeric array.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-cg.c <- function(x, name = cgraph::name())
-{
-  cgraph::expr(name = name,
-    call = quote(c(x)),
-    grads = list(x = quote(array(grad, dim(x)))),
-    binding = list(x = x)
-  )
-}
-
 #' Matrix Transpose
 #'
 #' Perform \code{t(x)}.
