@@ -1,7 +1,7 @@
 Package: cgraph
 Type: Package
 Title: Computational Graphs in R
-Version: 0.8.7
+Version: 0.8.8
 Author: Ron Triepels
 Maintainer: Ron Triepels <dev@cgraph.org>
 Description: The cgraph package allows to create, execute and differentiate computational graphs in R. The package operates by reverse accumulation.
