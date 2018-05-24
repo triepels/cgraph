@@ -37,6 +37,8 @@ export(cg.exp)
 export(cg.log)
 export(cg.ln)
 export(cg.abs)
+export(cg.max)
+export(cg.min)
 
 # Export math methods
 S3method(`+`, cg.node)

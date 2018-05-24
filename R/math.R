@@ -334,3 +334,44 @@ abs.cg.node <- function(x)
 {
   cgraph::cg.abs(x)
 }
+
+#' Maxima
+#'
+#' Calculate \code{max(x, y)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param y cg.node, placeholder for a numeric scalar or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.max <- function(x, y, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(max(x, y)),
+    grads = list(x = quote(grad * (x >= y)), y = quote(grad * (x < y))),
+    binding = list(x = x, y = y)
+  )
+}
+
+#' Minima
+#'
+#' Calculate \code{min(x, y)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param y cg.node, placeholder for a numeric scalar or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.min <- function(x, y, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(min(x, y)),
+    grads = list(x = quote(grad * (x <= y)), y = quote(grad * (x > y))),
+    binding = list(x = x, y = y)
+  )
+}
+
