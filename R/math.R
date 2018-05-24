@@ -375,3 +375,42 @@ cg.min <- function(x, y, name = cgraph::name())
   )
 }
 
+#' Parallel Maxima
+#'
+#' Calculate \code{pmax(x, y)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param y cg.node, placeholder for a numeric scalar or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.pmax <- function(x, y, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(pmax(x, y)),
+    grads = list(x = quote(grad * (x >= y)), y = quote(grad * (x < y))),
+    binding = list(x = x, y = y)
+  )
+}
+
+#' Parallel Minima
+#'
+#' Calculate \code{pmin(x, y)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param y cg.node, placeholder for a numeric scalar or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.pmin <- function(x, y, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(pmin(x, y)),
+    grads = list(x = quote(grad * (x <= y)), y = quote(grad * (x > y))),
+    binding = list(x = x, y = y)
+  )
+}
