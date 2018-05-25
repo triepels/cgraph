@@ -88,6 +88,7 @@ S3method(tan, cg.node)
 S3method(tanh, cg.node)
 
 # Export wrapper functions
+export(`%:%`)
 export(name)
 export(const)
 export(input)

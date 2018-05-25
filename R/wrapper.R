@@ -1,3 +1,15 @@
+`%:%` <- function(x, value)
+{
+  x <- as.character(x)
+
+  if(!exists("graph", envir = .session))
+  {
+    stop("No current graph set")
+  }
+
+  assign(x, value, envir = .session$graph$values)
+}
+
 #' Generate Name
 #'
 #' Generate a default name for an expression.
