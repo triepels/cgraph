@@ -7,14 +7,14 @@ print.cg.node = function(x, ...)
 {
   val <- NULL
 
-  if(!exists("graph", envir = .session))
-  {
-    stop("No current graph set")
-  }
-
   tryCatch(
   {
-    val <- get(x, envir = .session$graph$run(x))
+    if(!exists("graph", envir = .cg))
+    {
+      stop("No current graph set")
+    }
+
+    val <- get(x, envir = .cg$graph$run(x))
   },
   error = function(e)
   {
@@ -22,6 +22,8 @@ print.cg.node = function(x, ...)
 
     warning(e)
   })
+
+  cat(sprintf("<cg.node: %s> '%s'\n\n", .Call("cg_types")[attr(x, "type") + 1], x))
 
   print(val)
 }
