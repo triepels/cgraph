@@ -17,9 +17,6 @@ cg.node, parameter node.
 \description{
 Add a parameter node to the current graph.
 }
-\note{
-In case \code{value} has no dimension (i.e. it has no attribute \code{dim} attached to it), the dimension of \code{value} is automatically set to the length of the vector.
-}
 \author{
 Ron Triepels
 }

@@ -17,9 +17,6 @@ Add a parameter node to the graph.
 \details{
 \code{$parm(value, name)}
 }
-\note{
-In case \code{value} has no dimension (i.e. it has no attribute \code{dim} attached to it), the dimension of \code{value} is automatically set to the length of the vector.
-}
 \author{
 Ron Triepels
 }
