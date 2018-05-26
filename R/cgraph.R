@@ -136,8 +136,6 @@ cgraph$public_methods$const <- function(value, name)
 #' @param value numeric scalar or array, default value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
 #'
-#' @note In case \code{value} has no dimension (i.e. it has no attribute \code{dim} attached to it), the dimension of \code{value} is automatically set to the length of the vector.
-#'
 #' @return cg.node, input node.
 #'
 #' @name cg.input
@@ -155,13 +153,6 @@ cgraph$public_methods$input <- function(value, name)
     if(!(is.numeric(value) | is.array(value)))
     {
       stop("value must be a numeric vector or array")
-    }
-
-    if(is.null(dim(value)))
-    {
-      dim(value) <- length(value)
-
-      warning(sprintf("the dimension of value is set equal to %d (the length of the vector)", dim(value)))
     }
   }
 
