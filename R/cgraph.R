@@ -109,18 +109,16 @@ cgraph$public_methods$const <- function(value, name)
   }
   else
   {
-    arg <- deparse(substitute(value))
-
     if(!(is.numeric(value) | is.array(value)))
     {
-      stop(sprintf("'%s' must be a numeric vector or array", arg))
+      stop("value must be a numeric vector or array")
     }
 
     if(is.null(dim(value)))
     {
       dim(value) <- length(value)
 
-      warning(sprintf("the dimension of '%s' is set equal to %d (the length of the vector)", arg, dim(value)))
+      warning(sprintf("the dimension of value is set equal to %d (the length of the vector)", dim(value)))
     }
   }
 
@@ -159,18 +157,16 @@ cgraph$public_methods$input <- function(value, name)
   }
   else
   {
-    arg <- deparse(substitute(value))
-
     if(!(is.numeric(value) | is.array(value)))
     {
-      stop(sprintf("'%s' must be a numeric vector or array", arg))
+      stop("value must be a numeric vector or array")
     }
 
     if(is.null(dim(value)))
     {
       dim(value) <- length(value)
 
-      warning(sprintf("the dimension of '%s' is set equal to %d (the length of the vector)", arg, dim(value)))
+      warning(sprintf("the dimension of value is set equal to %d (the length of the vector)", dim(value)))
     }
   }
 
@@ -209,18 +205,16 @@ cgraph$public_methods$parm <- function(value, name)
   }
   else
   {
-    arg <- deparse(substitute(value))
-
     if(!(is.numeric(value) | is.array(value)))
     {
-      stop(sprintf("'%s' must be a numeric vector or array", arg))
+      stop("value must be a numeric vector or array")
     }
 
     if(is.null(dim(value)))
     {
       dim(value) <- length(value)
 
-      warning(sprintf("the dimension of '%s' is set equal to %d (the length of the vector)", arg, dim(value)))
+      warning(sprintf("the dimension of value is set equal to %d (the length of the vector)", dim(value)))
     }
   }
 
