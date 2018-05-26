@@ -20,8 +20,6 @@ Evaluate node \code{name} in the graph.
 \note{
 All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.
 
-In case the return value of an expression has no \code{dim} attribute attached to it, the attribute is automatically attached. The only exception to this rule is if the expression casts the results explicitly to a numeric vector by function \code{as.double} or \code{as.numeric}.
-
 Only those nodes needed to compute node \code{name} are evaluated and their values are returned. The values of placeholders whose default values are not changed are not returned.
 }
 \author{
