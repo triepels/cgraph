@@ -104,15 +104,32 @@ cgraph$public_methods$const <- function(value, name)
   type <- as.integer(0)
 
   if(missing(value))
+  {
     value <- NULL
+  }
+  else
+  {
+    arg <- deparse(substitute(value))
 
-  if(!is.null(value) & !(is.numeric(value) | is.array(value)))
-    stop("value must be a numeric vector or array")
+    if(!(is.numeric(value) | is.array(value)))
+    {
+      stop(sprintf("'%s' must be a numeric vector or array", arg))
+    }
+
+    if(is.null(dim(value)))
+    {
+      dim(value) <- length(value)
+
+      warning(sprintf("the dimension of '%s' is set equal to %d (the length of the vector)", arg, dim(value)))
+    }
+  }
 
   if(missing(name))
   {
     name <- as.character(self$name(type))
-  }else{
+  }
+  else
+  {
     name <- as.character(name)
   }
 
@@ -137,15 +154,32 @@ cgraph$public_methods$input <- function(value, name)
   type <- as.integer(1)
 
   if(missing(value))
+  {
     value <- NULL
+  }
+  else
+  {
+    arg <- deparse(substitute(value))
 
-  if(!is.null(value) & !(is.numeric(value) | is.array(value)))
-    stop("value must be a numeric vector or array")
+    if(!(is.numeric(value) | is.array(value)))
+    {
+      stop(sprintf("'%s' must be a numeric vector or array", arg))
+    }
+
+    if(is.null(dim(value)))
+    {
+      dim(value) <- length(value)
+
+      warning(sprintf("the dimension of '%s' is set equal to %d (the length of the vector)", arg, dim(value)))
+    }
+  }
 
   if(missing(name))
   {
     name <- as.character(self$name(type))
-  }else{
+  }
+  else
+  {
     name <- as.character(name)
   }
 
@@ -169,15 +203,33 @@ cgraph$public_methods$parm <- function(value, name)
 {
   type <- as.integer(2)
 
-  if(missing(value)) value <- NULL
+  if(missing(value))
+  {
+    value <- NULL
+  }
+  else
+  {
+    arg <- deparse(substitute(value))
 
-  if(!is.null(value) & !(is.numeric(value) | is.array(value)))
-    stop("value must be a numeric vector or array")
+    if(!(is.numeric(value) | is.array(value)))
+    {
+      stop(sprintf("'%s' must be a numeric vector or array", arg))
+    }
+
+    if(is.null(dim(value)))
+    {
+      dim(value) <- length(value)
+
+      warning(sprintf("the dimension of '%s' is set equal to %d (the length of the vector)", arg, dim(value)))
+    }
+  }
 
   if(missing(name))
   {
     name <- as.character(self$name(type))
-  }else{
+  }
+  else
+  {
     name <- as.character(name)
   }
 
@@ -206,17 +258,23 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
   type <- as.integer(3)
 
   if(!(is.name(call) || is.call(call)))
+  {
     call <- as.call(call)
+  }
 
   grads <- as.list(grads)
 
   if(!is.environment(binding))
+  {
     binding <- list2env(binding)
+  }
 
   if(missing(name))
   {
     name <- as.character(self$name(type))
-  }else{
+  }
+  else
+  {
     name <- as.character(name)
   }
 
@@ -265,8 +323,10 @@ cgraph$public_methods$run <- function(name, values = list())
 {
   name <- as.character(name)
 
-  if (!is.environment(values))
+  if(!is.environment(values))
+  {
     values <- list2env(values, parent = self$values)
+  }
 
   .Call("cg_run", name, values, self, PACKAGE = "cgraph")
 }
@@ -297,8 +357,10 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 
   index <- as.integer(index)
 
-  if (!is.environment(values))
+  if(!is.environment(values))
+  {
     values <- list2env(values, parent = self$values)
+  }
 
   .Call("cg_gradients", name, index, values, self, PACKAGE = "cgraph")
 }
