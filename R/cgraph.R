@@ -95,8 +95,6 @@ cgraph$public_methods$count.type <- function(type = 3)
 #'
 #' @note Constant nodes are ignored when differentiating a graph.
 #'
-#' In case \code{value} has no dimension (i.e. it has no attribute \code{dim} attached to it), the dimension of \code{value} is automatically set to the length of the vector.
-#'
 #' @return cg.node, constant node.
 #'
 #' @name cg.const
@@ -114,13 +112,6 @@ cgraph$public_methods$const <- function(value, name)
     if(!(is.numeric(value) | is.array(value)))
     {
       stop("value must be a numeric vector or array")
-    }
-
-    if(is.null(dim(value)))
-    {
-      dim(value) <- length(value)
-
-      warning(sprintf("the dimension of value is set equal to %d (the length of the vector)", dim(value)))
     }
   }
 

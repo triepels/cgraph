@@ -36,8 +36,6 @@ name <- function()
 #'
 #' @note Constant nodes are ignored when differentiating a graph.
 #'
-#' In case \code{value} has no dimension (i.e. it has no attribute \code{dim} attached to it), the dimension of \code{value} is automatically set to the length of the vector.
-#'
 #' @return cg.node, constant node.
 #'
 #' @author Ron Triepels
