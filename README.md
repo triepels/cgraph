@@ -1,15 +1,19 @@
-# Description
-
 The cgraph package allows to create, execute and differentiate computational graphs in R. The package operates by reverse accumulation.
 
-# Install
+## Install
 
-You can install cgraph by running the following command in the R command-line:
+You can install cgraph by running one of the following commands in the R command-line:
 
+### Source
+
+```{r eval = F}
+  install.packages("http://cgraph.org/releases/cgraph_0.8.9.tar.gz", repos = NULL, type = "source")
 ```
-  install.packages("http://cgraph.org/releases/cgraph_0.8.8.tar.gz", repos = NULL, type = "source")
+
+### Binary
+
+```{r eval = F}
+  install.packages("http://cgraph.org/releases/cgraph_0.8.9_R_x86_64-pc-linux-gnu.tar.gz", repos = NULL)
 ```
 
-# More information
-
-For more information about cgraph please visit [https://www.cgraph.org/](https://www.cgraph.org/).
+Please note that this an early development version which may contain bugs or behave unexpectedly. If you find a bug, please report it [here](https://github.com/triepels/cgraph/issues). For more information about cgraph please visit [https://www.cgraph.org/](https://www.cgraph.org/).
