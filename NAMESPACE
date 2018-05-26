@@ -5,7 +5,7 @@ import(R6)
 useDynLib(cgraph)
 
 # Export session environment
-export(.session)
+export(.cg)
 
 # Export array functions
 export(`%mul%`)

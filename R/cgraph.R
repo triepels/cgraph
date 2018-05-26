@@ -19,7 +19,7 @@ cgraph <- R6Class(
 )
 
 # Session environment
-.session <- new.env()
+.cg <- new.env()
 
 #' Computational Graph
 #'
@@ -43,7 +43,7 @@ cgraph$public_methods$initialize <- function()
 
   graph <- .Call("cgraph", self, PACKAGE = "cgraph")
 
-  assign("graph", graph, envir = package$.session)
+  assign("graph", graph, envir = package$.cg)
 }
 
 #' Generate Name
@@ -95,6 +95,8 @@ cgraph$public_methods$count.type <- function(type = 3)
 #'
 #' @note Constant nodes are ignored when differentiating a graph.
 #'
+#' In case \code{value} has no dimension (i.e. it has no attribute \code{dim} attached to it), the dimension of \code{value} is automatically set to the length of the vector.
+#'
 #' @return cg.node, constant node.
 #'
 #' @name cg.const
@@ -143,6 +145,8 @@ cgraph$public_methods$const <- function(value, name)
 #' @param value numeric scalar or array, default value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
 #'
+#' @note In case \code{value} has no dimension (i.e. it has no attribute \code{dim} attached to it), the dimension of \code{value} is automatically set to the length of the vector.
+#'
 #' @return cg.node, input node.
 #'
 #' @name cg.input
@@ -190,6 +194,8 @@ cgraph$public_methods$input <- function(value, name)
 #'
 #' @param value numeric scalar or array, default value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
+#'
+#' @note In case \code{value} has no dimension (i.e. it has no attribute \code{dim} attached to it), the dimension of \code{value} is automatically set to the length of the vector.
 #'
 #' @return cg.node, parameter node.
 #'
@@ -291,7 +297,7 @@ cgraph$public_methods$active <- function()
 {
   package <- as.environment("package:cgraph")
 
-  assign("graph", self, envir = package$.session)
+  assign("graph", self, envir = package$.cg)
 }
 
 #' Evaluate a Graph
@@ -304,8 +310,6 @@ cgraph$public_methods$active <- function()
 #' @param values named list or environment, values that are subsituted for the placeholders in the graph.
 #'
 #' @note All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.
-#'
-#' In case the return value of an expression has no \code{dim} attribute attached to it, the attribute is automatically attached. The only exception to this rule is if the expression casts the results explicitly to a numeric vector by function \code{as.double} or \code{as.numeric}.
 #'
 #' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. The values of placeholders whose default values are not changed are not returned.
 #'
