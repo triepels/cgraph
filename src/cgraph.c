@@ -546,8 +546,6 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
         if(!isNull(node_grads) & !isNull(node_childeren))
         {
-          double * node_grad_value;
-
           int m = LENGTH(node_childeren);
 
           SEXP node_grad = R_NilValue;
@@ -567,22 +565,16 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
                 node_grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
 
                 node_grad = duplicate(node_grad);
-
-                node_grad_value = REAL(node_grad);
               }
               else
               {
                 SEXP child_grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
 
-                double * child_grad_value;
-
                 int l = LENGTH(child_grad);
-
-                child_grad_value = REAL(child_grad);
 
                 for(int k = 0; k < l; k++)
                 {
-                  node_grad_value[k] += child_grad_value[k];
+                  REAL(node_grad)[k] += REAL(child_grad)[k];
                 }
 
                 UNPROTECT(1);
