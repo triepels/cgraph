@@ -422,19 +422,26 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
     }
     else
     {
-      if(isNull(parents))
+      if(visited[current - 1] == 1)
       {
-        stack_remove(&s);
+        if(isNull(parents))
+        {
+          stack_remove(&s);
+        }
+        else
+        {
+          INTEGER(ids)[k] = stack_pop(&s);
+
+          k++;
+        }
       }
       else
       {
-        INTEGER(ids)[k] = stack_pop(&s);
-
-        k++;
+        stack_remove(&s);
       }
     }
 
-    visited[current - 1] = 1;
+    visited[current - 1] += 1;
   }
 
   SETLENGTH(ids, k);
