@@ -189,7 +189,7 @@ cg.sqrt <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(x^0.5),
-    grads = list(x = quote(grad * 0.5 * x^-1.5)),
+    grads = list(x = quote(grad * 1 / (2 * x^0.5))),
     binding = list(x = x)
   )
 }
