@@ -283,6 +283,72 @@ log.cg.node <- function(x, base)
   cgraph::cg.log(x, base)
 }
 
+#' Logarithmic Base 2 Function
+#'
+#' Calculate \code{log2(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.log2 <- function(x, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(log2(x)),
+    grads = list(x = quote(grad / (x * log(2)))),
+    binding = list(x = x)
+  )
+}
+
+#' Logarithmic Base 2 Function
+#'
+#' Calculate \code{log2(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+log2.cg.node <- function(x)
+{
+  cgraph::cg.log2(x)
+}
+
+#' Logarithmic Base 10 Function
+#'
+#' Calculate \code{log10(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.log10 <- function(x, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(log10(x)),
+    grads = list(x = quote(grad / (x * log(10)))),
+    binding = list(x = x)
+  )
+}
+
+#' Logarithmic Base 10 Function
+#'
+#' Calculate \code{log10(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+log10.cg.node <- function(x)
+{
+  cgraph::cg.log10(x)
+}
+
 #' Natual Logarithmic Function
 #'
 #' Calculate \code{log(x)}.
