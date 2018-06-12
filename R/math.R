@@ -140,7 +140,7 @@ cg.div <- function(x, y, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(x / y),
-    grads = list(x = quote(grad / y), y = quote(grad * x / y^2)),
+    grads = list(x = quote(grad / y), y = quote(-grad * x / y^2)),
     binding = list(x = x, y = y)
   )
 }
