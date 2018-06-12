@@ -22,6 +22,8 @@ cg.as.double <- function(x, name = cgraph::name())
 #' Coerce \code{x} to a one-dimensional numeric vector.
 #'
 #' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
+#' @param ... further arguments passed to or from other methods.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -60,6 +62,7 @@ cg.reshape <- function(x, dims, name = cgraph::name())
 #' @param x cg.node, placeholder for a numeric array.
 #' @param dims numeric scalar or vector, the dimensions of the new array.
 #' @param name character scalar, name of the operation (optional).
+#' @param ... further arguments passed to or from other methods.
 #'
 #' @note This function is equivalent to function \code{cg.reshape}.
 #'

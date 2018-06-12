@@ -8,6 +8,10 @@
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric array.}
+
+\item{name}{character scalar, name of the operation (optional).}
+
+\item{...}{further arguments passed to or from other methods.}
 }
 \value{
 cg.node, node of the operation.
