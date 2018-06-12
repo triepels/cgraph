@@ -262,7 +262,7 @@ cg.log <- function(x, base, name = cgraph::name())
     call = quote(log(x, base)),
     grads = list(
       x = quote(grad / (x * log(base))),
-      base = quote(-log(x) / (base * log(base)^2))
+      base = quote(-grad * log(x) / (base * log(base)^2))
     ),
     binding = list(x = x, base = base)
   )
