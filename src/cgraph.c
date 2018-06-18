@@ -435,9 +435,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
   {
     SEXP root = VECTOR_ELT(nodes, INTEGER(ids)[n - 1] - 1);
 
-    SEXP root_grad = PROTECT(eval(install(CHAR(asChar(root))), values));
+    SEXP root_grad = eval(install(CHAR(asChar(root))), values);
 
-    root_grad = coerceVector(duplicate(root_grad), REALSXP);
+    root_grad = PROTECT(duplicate(root_grad));
 
     int m = LENGTH(root_grad);
 
