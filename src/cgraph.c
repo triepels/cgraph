@@ -144,6 +144,8 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   {
     SEXP symbol = coerceVector(name, SYMSXP);
 
+    value = coerceVector(value, REALSXP);
+
     defineVar(symbol, value, findVar(install("values"), graph));
   }
 
