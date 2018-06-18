@@ -550,6 +550,60 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
   return grads;
 }
 
+SEXP cg_approx(SEXP x, SEXP y, SEXP index, SEXP values, SEXP eps, SEXP graph)
+{
+  int x_id = cg_node_id(asChar(x), graph);
+  int y_id = cg_node_id(asChar(y), graph);
+
+  SEXP nodes = findVar(install("nodes"), graph);
+
+  SEXP ids = PROTECT(cg_traverse_graph(ScalarInteger(x_id), graph));
+
+  cg_forward(ids, values, graph);
+
+  SEXP x_node = VECTOR_ELT(nodes, x_id - 1);
+  SEXP y_node = VECTOR_ELT(nodes, y_id - 1);
+
+  SEXP x_value = PROTECT(eval(install(CHAR(asChar(x_node))), values));
+  SEXP y_value = PROTECT(eval(install(CHAR(asChar(y_node))), values));
+
+  int m = LENGTH(x_value);
+
+  if(INTEGER(index)[0] < 1 || INTEGER(index)[0] > m)
+  {
+    error("invalid index");
+  }
+
+  SEXP grad = PROTECT(duplicate(y_value));
+
+  int n = LENGTH(grad);
+
+  for(int i = 0; i < n; i++)
+  {
+    REAL(y_value)[i] += REAL(eps)[0];
+
+    cg_forward(ids, values, graph);
+
+    SEXP x_value1 = PROTECT(eval(install(CHAR(asChar(x_node))), values));
+
+    REAL(y_value)[i] -= 2 * REAL(eps)[0];
+
+    cg_forward(ids, values, graph);
+
+    SEXP x_value2 = PROTECT(eval(install(CHAR(asChar(x_node))), values));
+
+    REAL(grad)[i] = (REAL(x_value1)[INTEGER(index)[0] - 1] - REAL(x_value2)[INTEGER(index)[0] - 1]) / (2 * REAL(eps)[0]);
+
+    REAL(y_value)[i] += REAL(eps)[0];
+
+    UNPROTECT(2);
+  }
+
+  UNPROTECT(4);
+
+  return grad;
+}
+
 SEXP cg_adj_mat(SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);

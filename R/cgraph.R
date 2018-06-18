@@ -338,6 +338,24 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
   .Call("cg_gradients", name, index, values, self, PACKAGE = "cgraph")
 }
 
+cgraph$public_methods$approx <- function(x, y, values = list(), index = 1, eps = 1e-4)
+{
+  x <- as.character(x)
+
+  y <- as.character(y)
+
+  index <- as.integer(index)
+
+  eps <- as.numeric(eps)
+
+  if(!is.environment(values))
+  {
+    values <- list2env(values, parent = self$values)
+  }
+
+  .Call("cg_approx", x, y, index, values, eps, self, PACKAGE = "cgraph")
+}
+
 #' Adjacency Matrix
 #'
 #' Create an adjacency matrix of the computational graph.
