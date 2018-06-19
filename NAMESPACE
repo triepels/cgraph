@@ -16,9 +16,13 @@ export(cg.linear)
 export(cg.sum)
 export(cg.rowSums)
 export(cg.colSums)
+export(cg.mean)
+export(cg.rowMeans)
+export(cg.colMeans)
+export(cg.max)
+export(cg.min)
 
 # Export array methods
-#S3method(sum, cg.node)
 S3method(mean, cg.node)
 
 # Export cgraph object
@@ -39,10 +43,6 @@ export(cg.log2)
 export(cg.log10)
 export(cg.ln)
 export(cg.abs)
-export(cg.max)
-export(cg.min)
-export(cg.pmax)
-export(cg.pmin)
 
 # Export math methods
 S3method(`+`, cg.node)
@@ -98,6 +98,7 @@ export(const)
 export(input)
 export(parm)
 export(expr)
+export(d)
 export(perm)
 
 

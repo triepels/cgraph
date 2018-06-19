@@ -413,7 +413,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
       if(strcmp(term0, "as.double") != 0 && strcmp(term0, "as.numeric") != 0)
       {
-        value = cg_set_dims(value);
+        /*value = cg_set_dims(value);*/
       }
 
       defineVar(install(CHAR(asChar(node))), value, values);

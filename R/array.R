@@ -103,7 +103,7 @@ cg.tcrossprod <- function(x, y, name = cgraph::name())
 cg.linear <- function(x, y, z, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = quote(x %*% y + as.numeric(z)),
+    call = quote(x %*% y + c(z)),
     grads = list(
       x = quote(tcrossprod(grad, y)),
       y = quote(crossprod(x, grad)),
@@ -129,7 +129,7 @@ cg.sum <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(sum(x)),
-    grads = list(x = quote(array(grad, dim(x)))),
+    grads = list(x = quote(array(grad, d(x)))),
     binding = list(x = x)
   )
 }
@@ -148,7 +148,7 @@ cg.rowSums <- function(x, name = cgraph::name())
 {
  cgraph::expr(name = name,
    call = quote(rowSums(x)),
-   grads = list(x = quote(array(grad, dim(x)))),
+   grads = list(x = quote(array(grad, d(x)))),
    binding = list(x = x)
  )
 }
@@ -167,7 +167,28 @@ cg.colSums <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(colSums(x)),
-    grads = list(x = quote(perm(array(grad, dim(x))))),
+    grads = list(x = quote(perm(array(grad, d(x))))),
+    binding = list(x = x)
+  )
+}
+
+#' Arithmetic Mean
+#'
+#' Calculate \code{sum(x) / length(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @note For computational efficiency, this function does not use the standard \code{mean} function.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.mean <- function(x, name = cgraph::name())
+{
+  cgraph::expr(name = name,
+    call = quote(sum(x) / length(x)),
+    grads = list(x = quote(1 / length(x) * array(grad, d(x)))),
     binding = list(x = x)
   )
 }
@@ -187,11 +208,7 @@ cg.colSums <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 mean.cg.node <- function(x, name = cgraph::name(), ...)
 {
-  cgraph::expr(name = name,
-    call = quote(sum(x) / length(x)),
-    grads = list(x = quote(1 / length(x) * array(grad, dim(x)))),
-    binding = list(x = x)
-  )
+  cgraph::cg.mean(x, name)
 }
 
 #' Row Means
@@ -208,7 +225,7 @@ cg.rowMeans <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(rowMeans(x)),
-    grads = list(x = quote(1 / prod(dim(x)[-1]) * array(grad, dim(x)))),
+    grads = list(x = quote(1 / prod(d(x)[-1]) * array(grad, d(x)))),
     binding = list(x = x)
   )
 }
@@ -227,87 +244,45 @@ cg.colMeans <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(colMeans(x)),
-    grads = list(x = quote(1 / dim(x)[1] * perm(array(grad, dim(x))))),
+    grads = list(x = quote(1 / d(x)[1] * perm(array(grad, d(x))))),
     binding = list(x = x)
   )
 }
 
 #' Maxima
 #'
-#' Calculate \code{max(x, y)}.
+#' Calculate \code{max(x)}.
 #'
 #' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param y cg.node, placeholder for a numeric scalar or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.max <- function(x, y, name = cgraph::name())
+cg.max <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = quote(max(x, y)),
-    grads = list(x = quote(grad * (x >= y)), y = quote(grad * (x < y))),
-    binding = list(x = x, y = y)
+    call = quote(max(x)),
+    grads = list(x = quote(c(grad) * (x == c(y)))),
+    binding = list(x = x, y = name)
   )
 }
 
 #' Minima
 #'
-#' Calculate \code{min(x, y)}.
+#' Calculate \code{min(x)}.
 #'
 #' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param y cg.node, placeholder for a numeric scalar or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.min <- function(x, y, name = cgraph::name())
+cg.min <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = quote(min(x, y)),
-    grads = list(x = quote(grad * (x <= y)), y = quote(grad * (x > y))),
-    binding = list(x = x, y = y)
-  )
-}
-
-#' Parallel Maxima
-#'
-#' Calculate \code{pmax(x, y)}.
-#'
-#' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param y cg.node, placeholder for a numeric scalar or array.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-cg.pmax <- function(x, y, name = cgraph::name())
-{
-  cgraph::expr(name = name,
-    call = quote(pmax(x, y)),
-    grads = list(x = quote(grad * (x >= y)), y = quote(grad * (x < y))),
-    binding = list(x = x, y = y)
-  )
-}
-
-#' Parallel Minima
-#'
-#' Calculate \code{pmin(x, y)}.
-#'
-#' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param y cg.node, placeholder for a numeric scalar or array.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-cg.pmin <- function(x, y, name = cgraph::name())
-{
-  cgraph::expr(name = name,
-    call = quote(pmin(x, y)),
-    grads = list(x = quote(grad * (x <= y)), y = quote(grad * (x > y))),
-    binding = list(x = x, y = y)
+    call = quote(min(x)),
+    grads = list(x = quote(c(grad) * (x == c(y)))),
+    binding = list(x = x, y = name)
   )
 }
