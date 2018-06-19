@@ -353,6 +353,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #'
 #' @return numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
 #'
+#' @name approx
 #' @author Ron Triepels
 cgraph$public_methods$approx <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
