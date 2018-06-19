@@ -17,3 +17,6 @@ nothing.
 \description{
 Assign a default value to a node in the current graph.
 }
+\author{
+Ron Triepels
+}

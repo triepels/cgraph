@@ -7,7 +7,7 @@
 #'
 #' @return nothing.
 #'
-#' @author
+#' @author Ron Triepels
 `%:%` <- function(x, value)
 {
   x <- as.character(x)
