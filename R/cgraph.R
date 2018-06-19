@@ -338,6 +338,24 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
   .Call("cg_gradients", name, index, values, self, PACKAGE = "cgraph")
 }
 
+
+#' Approximate Gradients
+#'
+#' Differentiate node \code{x} with respect to node \code{y} by numerical differentiation.
+#'
+#' @param x character scalar or symbol, name of the node.
+#' @param y character scalar or symbol, name of the node.
+#' @param values named list or environment, values that are subsituted for the expressions and placeholders in the graph.
+#' @param index numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.
+#' @param eps numeric scalar, step size. Defaults to 1e-4.
+#'
+#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{$run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
+#'
+#' The graph is differentiation by the symmetric difference quotient. This function is mainly used for testing purposes.
+#'
+#' @return numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
+#'
+#' @author Ron Triepels
 cgraph$public_methods$approx <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
   x <- as.character(x)
