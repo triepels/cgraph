@@ -4,12 +4,10 @@
 \alias{cg.max}
 \title{Maxima}
 \usage{
-cg.max(x, y, name = cgraph::name())
+cg.max(x, name = cgraph::name())
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric scalar or array.}
-
-\item{y}{cg.node, placeholder for a numeric scalar or array.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }
@@ -17,7 +15,7 @@ cg.max(x, y, name = cgraph::name())
 cg.node, node of the operation.
 }
 \description{
-Calculate \code{max(x, y)}.
+Calculate \code{max(x)}.
 }
 \author{
 Ron Triepels

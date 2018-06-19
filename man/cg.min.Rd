@@ -4,12 +4,10 @@
 \alias{cg.min}
 \title{Minima}
 \usage{
-cg.min(x, y, name = cgraph::name())
+cg.min(x, name = cgraph::name())
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric scalar or array.}
-
-\item{y}{cg.node, placeholder for a numeric scalar or array.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }
@@ -17,7 +15,7 @@ cg.min(x, y, name = cgraph::name())
 cg.node, node of the operation.
 }
 \description{
-Calculate \code{min(x, y)}.
+Calculate \code{min(x)}.
 }
 \author{
 Ron Triepels
