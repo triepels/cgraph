@@ -373,24 +373,6 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
   return ids;
 }
 
-SEXP cg_set_dims(SEXP x)
-{
-  SEXP dim = getAttrib(x, R_DimSymbol);
-
-  if(isNull(dim))
-  {
-    dim = PROTECT(allocVector(INTSXP, 1));
-
-    INTEGER(dim)[0] = LENGTH(x);
-
-    setAttrib(x, R_DimSymbol, dim);
-
-    UNPROTECT(1);
-  }
-
-  return x;
-}
-
 void cg_forward(SEXP ids, SEXP values, SEXP graph)
 {
   int n = LENGTH(ids);
@@ -408,13 +390,6 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
       SEXP call = getAttrib(node, install("call"));
 
       SEXP value = PROTECT(eval(call, values));
-
-      const char * term0 = CHAR(asChar(CAR(call)));
-
-      if(strcmp(term0, "as.double") != 0 && strcmp(term0, "as.numeric") != 0)
-      {
-        /*value = cg_set_dims(value);*/
-      }
 
       defineVar(install(CHAR(asChar(node))), value, values);
 
