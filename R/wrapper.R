@@ -1,3 +1,13 @@
+#' Assign a Value to a Node
+#'
+#' Assign a default value to a node in the current graph.
+#'
+#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param value numeric scalar or array, default value of the node.
+#'
+#' @return nothing.
+#'
+#' @author
 `%:%` <- function(x, value)
 {
   x <- as.character(x)
