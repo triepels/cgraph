@@ -129,7 +129,7 @@ cg.sum <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(sum(x)),
-    grads = list(x = quote(array(grad, d(x)))),
+    grads = list(x = quote(array(grad, `if`(is.array(x), dim(x), length(x))))),
     binding = list(x = x)
   )
 }
@@ -148,7 +148,7 @@ cg.rowSums <- function(x, name = cgraph::name())
 {
  cgraph::expr(name = name,
    call = quote(rowSums(x)),
-   grads = list(x = quote(array(grad, d(x)))),
+   grads = list(x = quote(array(grad, dim(x)))),
    binding = list(x = x)
  )
 }
@@ -167,7 +167,7 @@ cg.colSums <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(colSums(x)),
-    grads = list(x = quote(perm(array(grad, d(x))))),
+    grads = list(x = quote(aperm(array(grad, rev(dim(x)))))),
     binding = list(x = x)
   )
 }
@@ -188,7 +188,7 @@ cg.mean <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(sum(x) / length(x)),
-    grads = list(x = quote(1 / length(x) * array(grad, d(x)))),
+    grads = list(x = quote(1L / length(x) * array(grad, `if`(is.array(x), dim(x), length(x))))),
     binding = list(x = x)
   )
 }
@@ -225,7 +225,7 @@ cg.rowMeans <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(rowMeans(x)),
-    grads = list(x = quote(1 / prod(d(x)[-1]) * array(grad, d(x)))),
+    grads = list(x = quote(1L / prod(dim(x)[-1L]) * array(grad, dim(x)))),
     binding = list(x = x)
   )
 }
@@ -244,7 +244,7 @@ cg.colMeans <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(colMeans(x)),
-    grads = list(x = quote(1 / d(x)[1] * perm(array(grad, d(x))))),
+    grads = list(x = quote(1L / dim(x)[1L] * aperm(array(grad, rev(dim(x)))))),
     binding = list(x = x)
   )
 }
