@@ -117,7 +117,7 @@ cg.linear <- function(x, y, z, name = cgraph::name())
 #'
 #' Calculate \code{sum(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @note In contrast to the original \code{sum} function, this function does not accept a variable amount of arguments.
@@ -176,7 +176,7 @@ cg.colSums <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{sum(x) / length(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @note For computational efficiency, this function does not use the standard \code{mean} function.
@@ -197,7 +197,7 @@ cg.mean <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{sum(x) / length(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #' @param ... further arguments passed to or from other methods.
 #'
@@ -253,7 +253,7 @@ cg.colMeans <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{max(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -272,7 +272,7 @@ cg.max <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{min(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.

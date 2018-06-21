@@ -2,7 +2,7 @@
 #'
 #' Calculate \code{1 / (1 + exp(1)^-x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @note \code{exp(1)=e}.

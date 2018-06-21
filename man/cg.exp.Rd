@@ -7,7 +7,7 @@
 cg.exp(x, name = cgraph::name())
 }
 \arguments{
-\item{x}{cg.node, placeholder for a numeric scalar or array.}
+\item{x}{cg.node, placeholder for a numeric vector or array.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }

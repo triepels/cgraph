@@ -2,8 +2,8 @@
 #'
 #' Calculate \code{x + y}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param y cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -22,7 +22,7 @@ cg.add <- function(x, y, name = cgraph::name())
 #'
 #' Calculate \code{x}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -53,8 +53,8 @@ cg.pos <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{x - y}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param y cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -73,7 +73,7 @@ cg.sub <- function(x, y, name = cgraph::name())
 #'
 #' Calculate \code{-x}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -104,8 +104,8 @@ cg.neg <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{x * y} element-wise.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param y cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -129,8 +129,8 @@ cg.mul <- function(x, y, name = cgraph::name())
 #'
 #' Calculate \code{x / y}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param y cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -154,8 +154,8 @@ cg.div <- function(x, y, name = cgraph::name())
 #'
 #' Calculate \code{x^y}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param y cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -179,7 +179,7 @@ cg.pow <- function(x, y, name = cgraph::name())
 #'
 #' Calculate \code{sqrt(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -198,7 +198,7 @@ cg.sqrt <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{sqrt(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -212,7 +212,7 @@ sqrt.cg.node <- function(x)
 #'
 #' Calculate \code{exp(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @note \code{exp(x)=e^x}.
@@ -233,7 +233,7 @@ cg.exp <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{exp(1)^x}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #'
 #' @note \code{exp(1)=e}.
 #'
@@ -249,7 +249,7 @@ exp.cg.node <- function(x)
 #'
 #' Calculate \code{log(x, base)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param base cg.node, placeholder for a numeric scalar.
 #' @param name character scalar, name of the operation (optional).
 #'
@@ -272,7 +272,7 @@ cg.log <- function(x, base, name = cgraph::name())
 #'
 #' Calculate \code{log(x, base)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param base cg.node, placeholder for a numeric scalar.
 #'
 #' @return cg.node, node of the operation.
@@ -287,7 +287,7 @@ log.cg.node <- function(x, base)
 #'
 #' Calculate \code{log2(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -306,7 +306,7 @@ cg.log2 <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{log2(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -320,7 +320,7 @@ log2.cg.node <- function(x)
 #'
 #' Calculate \code{log10(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -339,7 +339,7 @@ cg.log10 <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{log10(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -353,7 +353,7 @@ log10.cg.node <- function(x)
 #'
 #' Calculate \code{log(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -372,7 +372,7 @@ cg.ln <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{abs(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -391,7 +391,7 @@ cg.abs <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{abs(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric scalar or array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'

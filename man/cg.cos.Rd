@@ -7,7 +7,7 @@
 cg.cos(x, name = cgraph::name())
 }
 \arguments{
-\item{x}{cg.node, placeholder for a numeric array.}
+\item{x}{cg.node, placeholder for a numeric vector or array.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }

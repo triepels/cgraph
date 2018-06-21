@@ -2,7 +2,7 @@
 #'
 #' Calculate \code{sin(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -21,7 +21,7 @@ cg.sin <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{sin(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -35,7 +35,7 @@ sin.cg.node <- function(x)
 #'
 #' Calculate \code{cos(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -54,7 +54,7 @@ cg.cos <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{cos(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -68,7 +68,7 @@ cos.cg.node <- function(x)
 #'
 #' Calculate \code{tan(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -87,7 +87,7 @@ cg.tan <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{tan(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -101,7 +101,7 @@ tan.cg.node <- function(x)
 #'
 #' Calculate \code{tanh(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
@@ -120,7 +120,7 @@ cg.tanh <- function(x, name = cgraph::name())
 #'
 #' Calculate \code{tanh(x)}.
 #'
-#' @param x cg.node, placeholder for a numeric array.
+#' @param x cg.node, placeholder for a numeric vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'

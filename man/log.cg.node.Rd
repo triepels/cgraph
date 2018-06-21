@@ -7,7 +7,7 @@
 \method{log}{cg.node}(x, base)
 }
 \arguments{
-\item{x}{cg.node, placeholder for a numeric scalar or array.}
+\item{x}{cg.node, placeholder for a numeric vector or array.}
 
 \item{base}{cg.node, placeholder for a numeric scalar.}
 }
