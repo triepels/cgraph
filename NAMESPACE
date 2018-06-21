@@ -98,7 +98,5 @@ export(const)
 export(input)
 export(parm)
 export(expr)
-export(d)
-export(perm)
 
 
