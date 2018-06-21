@@ -39,8 +39,6 @@ cgraph$public_methods$initialize <- function()
 
   self$values <- new.env(parent = package)
 
-  attr(self$values, "class", "cg.environment")
-
   graph <- .Call("cgraph", self, PACKAGE = "cgraph")
 
   assign("graph", graph, envir = package$.cg)
