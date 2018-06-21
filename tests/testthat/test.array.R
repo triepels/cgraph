@@ -60,14 +60,14 @@ test_that("Matrix [linear, rowSums, colSums]",
   expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
 })
 
-test_that("Matrix [*, rowMeans, colMeans]",
+test_that("Array [*, rowMeans, colMeans]",
 {
   # Initialize graph
   x <- cgraph$new()
 
   # Create parameters
-  a <- parm(matrix(1:4, 2, 2), name = "a")
-  b <- parm(matrix(2:5, 2, 2), name = "b")
+  a <- parm(array(1:24, 2:4), name = "a")
+  b <- parm(array(2:25, 2:4), name = "b")
 
   # Create test expression
   c <- cg.rowMeans(a) * cg.colMeans(b)
