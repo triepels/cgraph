@@ -1,25 +1,3 @@
-#' Assign a Value to a Node
-#'
-#' Assign a default value to a node in the current graph.
-#'
-#' @param x cg.node, placeholder for a numeric scalar or array.
-#' @param value numeric scalar or array, default value of the node.
-#'
-#' @return nothing.
-#'
-#' @author Ron Triepels
-`%:%` <- function(x, value)
-{
-  x <- as.character(x)
-
-  if(!exists("graph", envir = .cg))
-  {
-    stop("No current graph set")
-  }
-
-  assign(x, value, envir = .cg$graph$values)
-}
-
 #' Generate Name
 #'
 #' Generate a default name for an expression.
@@ -121,4 +99,29 @@ expr <- function(call, grads, binding, name)
   }
 
   .cg$graph$expr(call, grads, binding, name)
+}
+
+set <- function(name, value)
+{
+  if(!exists("graph", envir = .cg))
+  {
+    stop("No current graph set")
+  }
+
+  .cg$graph$set(name, value)
+}
+
+#' Assign a Value to a Node
+#'
+#' Assign a default value to a node in the current graph.
+#'
+#' @param name cg.node, placeholder for a numeric scalar or array.
+#' @param value numeric scalar or array, default value of the node.
+#'
+#' @return nothing.
+#'
+#' @author Ron Triepels
+`%:%` <- function(name, value)
+{
+  .cg$graph$set(name, value)
 }

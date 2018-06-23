@@ -252,6 +252,13 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
   .Call("cg_add_expression", call, grads, binding, name, self, PACKAGE = "cgraph")
 }
 
+cgraph$public_methods$set <- function(name, value)
+{
+  name <- as.character(name)
+
+  .Call("cg_set", name, value, self, PACKAGE = "cgraph")
+}
+
 #' Change active graph
 #'
 #' Set this graph to be the active graph.

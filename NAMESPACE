@@ -97,6 +97,7 @@ export(const)
 export(input)
 export(parm)
 export(expr)
+export(set)
 
 # Export fun functions
 export(bsum)

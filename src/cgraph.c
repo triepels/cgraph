@@ -251,6 +251,22 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
   return name;
 }
 
+SEXP cg_set(SEXP name, SEXP value, SEXP graph)
+{
+  SEXP values = findVar(install("values"), graph);
+
+  if(!cg_node_exists(asChar(name), graph))
+  {
+    error("'%s' is not defined", CHAR(asChar(name)));
+  }
+
+  value = coerceVector(value, REALSXP);
+
+  defineVar(install(CHAR(asChar(name))), value, values);
+
+  return R_NilValue;
+}
+
 SEXP cg_count_type(SEXP type, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
