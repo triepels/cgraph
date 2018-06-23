@@ -9,6 +9,13 @@ SEXP bsum(SEXP x, SEXP n)
 
   n_val = INTEGER(n);
 
+  k = LENGTH(x);
+
+  if(n_val[0] < 0 || n_val[0] > k)
+  {
+    error("invalid block size n");
+  }
+
   SEXP y = PROTECT(allocVector(REALSXP, n_val[0]));
 
   x = coerceVector(x, REALSXP);
@@ -17,8 +24,6 @@ SEXP bsum(SEXP x, SEXP n)
   y_val = REAL(y);
 
   memset(y_val, 0, n_val[0] * sizeof(double));
-
-  k = LENGTH(x);
 
   for(int i = 0; i < k; i++)
   {
