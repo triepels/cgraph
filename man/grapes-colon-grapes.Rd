@@ -4,10 +4,10 @@
 \alias{\%:\%}
 \title{Assign a Value to a Node}
 \usage{
-x \%:\% value
+name \%:\% value
 }
 \arguments{
-\item{x}{cg.node, placeholder for a numeric scalar or array.}
+\item{name}{cg.node, placeholder for a numeric scalar or array.}
 
 \item{value}{numeric scalar or array, default value of the node.}
 }
