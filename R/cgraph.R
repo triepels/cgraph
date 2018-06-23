@@ -294,6 +294,11 @@ cgraph$public_methods$run <- function(name, values = list())
 
   if(!is.environment(values))
   {
+    if(!is.list(values))
+    {
+      stop("values must be a named list or environment")
+    }
+
     values <- list2env(values, parent = self$values)
   }
 
@@ -328,6 +333,11 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 
   if(!is.environment(values))
   {
+    if(!is.list(values))
+    {
+      stop("values must be a named list or environment")
+    }
+
     values <- list2env(values, parent = self$values)
   }
 
@@ -365,6 +375,11 @@ cgraph$public_methods$approx <- function(x, y, values = list(), index = 1, eps =
 
   if(!is.environment(values))
   {
+    if(!is.list(values))
+    {
+      stop("values must be a named list or environment")
+    }
+
     values <- list2env(values, parent = self$values)
   }
 
