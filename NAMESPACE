@@ -8,12 +8,12 @@ useDynLib(cgraph)
 export(.cg)
 
 # Export array functions
-export(`%mul%`)
-export(cg.mat.mul)
+export(cg.matmul)
 export(cg.crossprod)
 export(cg.tcrossprod)
 export(cg.linear)
 export(cg.sum)
+export(cg.prod)
 export(cg.rowSums)
 export(cg.colSums)
 export(cg.mean)
@@ -21,9 +21,10 @@ export(cg.rowMeans)
 export(cg.colMeans)
 export(cg.max)
 export(cg.min)
+export(cg.pmax)
+export(cg.pmin)
 
 # Export array methods
-S3method(mean, cg.node)
 
 # Export cgraph object
 export(cgraph)
@@ -38,10 +39,9 @@ export(cg.div)
 export(cg.pow)
 export(cg.sqrt)
 export(cg.exp)
-export(cg.log)
+export(cg.ln)
 export(cg.log2)
 export(cg.log10)
-export(cg.ln)
 export(cg.abs)
 
 # Export math methods
@@ -52,7 +52,6 @@ S3method(`/`, cg.node)
 S3method(`^`, cg.node)
 S3method(sqrt, cg.node)
 S3method(exp, cg.node)
-S3method(log, cg.node)
 S3method(log2, cg.node)
 S3method(log10, cg.node)
 S3method(abs, cg.node)
@@ -99,4 +98,5 @@ export(input)
 export(parm)
 export(expr)
 
-
+# Export fun functions
+export(bsum)

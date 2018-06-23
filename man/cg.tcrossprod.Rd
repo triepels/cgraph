@@ -20,7 +20,7 @@ cg.node, node of the operation.
 Calculate \code{tcrossprod(x, y)}.
 }
 \note{
-In contrast to the original \code{tcrossprod} function, this function requires both \code{x} and \code{y} to be supplied.
+In contrast to the base \code{tcrossprod} function, this function requires both \code{x} and \code{y} to be supplied.
 }
 \author{
 Ron Triepels

@@ -13,7 +13,10 @@ cg.add <- function(x, y, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(x + y),
-    grads = list(x = quote(grad), y = quote(grad)),
+    grads = list(
+      x = quote(`if`(is.array(x), grad, bsum(grad, length(x)))),
+      y = quote(`if`(is.array(y), grad, bsum(grad, length(y))))
+    ),
     binding = list(x = x, y = y)
   )
 }
@@ -64,7 +67,10 @@ cg.sub <- function(x, y, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(x - y),
-    grads = list(x = quote(grad), y = quote(-grad)),
+    grads = list(
+      x = quote(`if`(is.array(x), grad, bsum(grad, length(x)))),
+      y = quote(`if`(is.array(y), -grad, bsum(-grad, length(y))))
+    ),
     binding = list(x = x, y = y)
   )
 }
@@ -115,7 +121,10 @@ cg.mul <- function(x, y, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(x * y),
-    grads = list(x = quote(grad * y), y = quote(grad * x)),
+    grads = list(
+      x = quote(`if`(is.array(x), grad * y, bsum(grad * y, length(x)))),
+      y = quote(`if`(is.array(y), grad * x, bsum(grad * x, length(y))))
+    ),
     binding = list(x = x, y = y)
   )
 }
@@ -140,7 +149,10 @@ cg.div <- function(x, y, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(x / y),
-    grads = list(x = quote(grad / y), y = quote(-grad * x / y^2)),
+    grads = list(
+      x = quote(`if`(is.array(x), grad / y, bsum(grad / y, length(x)))),
+      y = quote(`if`(is.array(y), -grad * x / y^2, bsum(-grad * x / y^2, length(y))))
+    ),
     binding = list(x = x, y = y)
   )
 }
@@ -165,7 +177,10 @@ cg.pow <- function(x, y, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(x^y),
-    grads = list(x = quote(grad * y * x^(y - 1)), y = quote(grad * x^y * log(x))),
+    grads = list(
+      x = quote(`if`(is.array(x), grad * y * x^(y - 1), bsum(grad * y * x^(y - 1), length(x)))),
+      y = quote(`if`(is.array(y), grad * x^y * log(x), bsum(grad * x^y * log(x), length(y))))
+    ),
     binding = list(x = x, y = y)
   )
 }
@@ -245,42 +260,23 @@ exp.cg.node <- function(x)
   cgraph::cg.exp(x)
 }
 
-#' Logarithmic Function
+#' Natual Logarithmic Function
 #'
-#' Calculate \code{log(x, base)}.
+#' Calculate \code{log(x)}.
 #'
 #' @param x cg.node, placeholder for a numeric vector or array.
-#' @param base cg.node, placeholder for a numeric scalar.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.log <- function(x, base, name = cgraph::name())
+cg.ln <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = quote(log(x, base)),
-    grads = list(
-      x = quote(grad / (x * log(base))),
-      base = quote(-grad * log(x) / (base * log(base)^2))
-    ),
-    binding = list(x = x, base = base)
+    call = quote(log(x)),
+    grads = list(x = quote(grad / x)),
+    binding = list(x = x)
   )
-}
-
-#' Logarithmic Function
-#'
-#' Calculate \code{log(x, base)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#' @param base cg.node, placeholder for a numeric scalar.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-log.cg.node <- function(x, base)
-{
-  cgraph::cg.log(x, base)
 }
 
 #' Logarithmic Base 2 Function
@@ -347,25 +343,6 @@ cg.log10 <- function(x, name = cgraph::name())
 log10.cg.node <- function(x)
 {
   cgraph::cg.log10(x)
-}
-
-#' Natual Logarithmic Function
-#'
-#' Calculate \code{log(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-cg.ln <- function(x, name = cgraph::name())
-{
-  cgraph::expr(name = name,
-    call = quote(log(x)),
-    grads = list(x = quote(grad / x)),
-    binding = list(x = x)
-  )
 }
 
 #' Absolute Value

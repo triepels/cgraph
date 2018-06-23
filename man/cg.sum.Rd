@@ -18,7 +18,7 @@ cg.node, node of the operation.
 Calculate \code{sum(x)}.
 }
 \note{
-In contrast to the original \code{sum} function, this function does not accept a variable amount of arguments.
+In contrast to the base \code{sum} function, this function only accepts a single variable.
 }
 \author{
 Ron Triepels
