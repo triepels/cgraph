@@ -101,6 +101,16 @@ expr <- function(call, grads, binding, name)
   .cg$graph$expr(call, grads, binding, name)
 }
 
+#' Change the Default Value of a Node
+#'
+#' Change the default value of a node in the current graph.
+#'
+#' @param name cg.node, name of the node whose default value is to be changed.
+#' @param value numeric vector or array, default value of the node.
+#'
+#' @return nothing.
+#'
+#' @author Ron Triepels
 set <- function(name, value)
 {
   if(!exists("graph", envir = .cg))
@@ -111,12 +121,12 @@ set <- function(name, value)
   .cg$graph$set(name, value)
 }
 
-#' Assign a Value to a Node
+#' Change the Default Value of a Node
 #'
-#' Assign a default value to a node in the current graph.
+#' Change the default value of a node in the current graph.
 #'
-#' @param name cg.node, placeholder for a numeric scalar or array.
-#' @param value numeric scalar or array, default value of the node.
+#' @param name cg.node, name of the node whose default value is to be changed.
+#' @param value numeric vector or array, default value of the node.
 #'
 #' @return nothing.
 #'
@@ -124,4 +134,86 @@ set <- function(name, value)
 `%:%` <- function(name, value)
 {
   .cg$graph$set(name, value)
+}
+
+#' Evaluate a Graph
+#'
+#' Evaluate node \code{name} in the current graph.
+#'
+#' @details \code{$run(name, values = list())}
+#'
+#' @param name character scalar or symbol, name of the node that needs to be evaluated.
+#' @param values named list or environment, values that are subsituted for the placeholders in the graph.
+#'
+#' @note All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.
+#'
+#' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. The values of placeholders whose default values are not changed are not returned.
+#'
+#' @return cg.results object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
+#'
+#' @author Ron Triepels
+run <- function(name, values = list())
+{
+  if(!exists("graph", envir = .cg))
+  {
+    stop("No current graph set")
+  }
+
+  .cg$graph$run(name, values)
+}
+
+#' Calculate Gradients
+#'
+#' Differentiate the current graph with respect to node \code{name} by reverse automatic differentiation.
+#'
+#' @details \code{$gradients(name, values, index = 1)}
+#'
+#' @param name character scalar or symbol, name of the node that needs to be differentiated.
+#' @param values named list or environment, values that are subsituted for the expressions and placeholders in the graph.
+#' @param index numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.
+#'
+#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{$run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
+#'
+#' Currently, cgraph can only differentiate with respect to a scalar output node. In case the value of output node \code{name} is a vector or an array, \code{index} can be used to specify which element of the vector or array needs to be differentiated.
+#'
+#' The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
+#'
+#' @return cg.results object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
+#'
+#' @author Ron Triepels
+gradients <- function(name, values = list(), index = 1)
+{
+  if(!exists("graph", envir = .cg))
+  {
+    stop("No current graph set")
+  }
+
+  .cg$graph$gradients(name, values, index)
+}
+
+#' Approximate Gradients
+#'
+#' Differentiate node \code{x} with respect to node \code{y} in the current graph by numerical differentiation.
+#'
+#' @param x character scalar or symbol, name of the node.
+#' @param y character scalar or symbol, name of the node.
+#' @param values named list or environment, values that are subsituted for the expressions and placeholders in the graph.
+#' @param index numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.
+#' @param eps numeric scalar, step size. Defaults to 1e-4.
+#'
+#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{$run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
+#'
+#' The graph is differentiation by the symmetric difference quotient. This function is mainly used for testing purposes.
+#'
+#' @return numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
+#'
+#' @author Ron Triepels
+approx <- function(x, y, values = list(), index = 1, eps = 1e-4)
+{
+  if(!exists("graph", envir = .cg))
+  {
+    stop("No current graph set")
+  }
+
+  .cg$graph$approx(x, y, values, index, eps)
 }

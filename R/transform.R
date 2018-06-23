@@ -41,7 +41,7 @@ as.double.cg.node <- function(x, name = cgraph::name(), ...)
 #' @param dims numeric scalar or vector, the dimensions of the new array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note The elements of \code{x} are rearranged column-wise.
+#' @note The elements of \code{x} are re-arranged column-wise.
 #'
 #' @return cg.node, node of the operation.
 #'

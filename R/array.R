@@ -185,7 +185,7 @@ cg.colSums <- function(x, name = cgraph::name())
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note For computational efficiency, this function does not use the standard \code{mean} function.
+#' @note For computational efficiency, this function does not use the base \code{mean} function.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -244,6 +244,8 @@ cg.colMeans <- function(x, name = cgraph::name())
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
+#' @note In contrast to the base \code{max} function, this function only accepts a single variable.
+#'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
@@ -262,6 +264,8 @@ cg.max <- function(x, name = cgraph::name())
 #'
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
+#'
+#' @note In contrast to the base \code{min} function, this function only accepts a single variable.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -282,6 +286,8 @@ cg.min <- function(x, name = cgraph::name())
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
+#'
+#' @note In contrast to the base \code{pmax} function, this function only accepts two variables.
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -305,6 +311,8 @@ cg.pmax <- function(x, y, name = cgraph::name())
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
+#'
+#' @note In contrast to the base \code{pmin} function, this function only accepts two variables.
 #'
 #' @return cg.node, node of the operation.
 #'

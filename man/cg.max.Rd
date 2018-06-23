@@ -17,6 +17,9 @@ cg.node, node of the operation.
 \description{
 Calculate \code{max(x)}.
 }
+\note{
+In contrast to the base \code{max} function, this function only accepts a single variable.
+}
 \author{
 Ron Triepels
 }

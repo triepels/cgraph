@@ -20,7 +20,7 @@ cg.node, node of the operation.
 Change the dimensions of array \code{x} to \code{dims}.
 }
 \note{
-The elements of \code{x} are rearranged column-wise.
+The elements of \code{x} are re-arranged column-wise.
 }
 \author{
 Ron Triepels

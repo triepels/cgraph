@@ -91,13 +91,16 @@ S3method(tan, cg.node)
 S3method(tanh, cg.node)
 
 # Export wrapper functions
-export(`%:%`)
 export(name)
 export(const)
 export(input)
 export(parm)
 export(expr)
 export(set)
+export(`%:%`)
+export(run)
+export(gradients)
+export(approx)
 
 # Export fun functions
 export(bsum)

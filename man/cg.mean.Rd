@@ -18,7 +18,7 @@ cg.node, node of the operation.
 Calculate \code{sum(x) / length(x)}.
 }
 \note{
-For computational efficiency, this function does not use the standard \code{mean} function.
+For computational efficiency, this function does not use the base \code{mean} function.
 }
 \author{
 Ron Triepels

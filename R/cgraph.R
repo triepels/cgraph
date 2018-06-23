@@ -252,6 +252,17 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
   .Call("cg_add_expression", call, grads, binding, name, self, PACKAGE = "cgraph")
 }
 
+#' Change the Default Value of a Node
+#'
+#' Change the default value of a node in the graph.
+#'
+#' @param name cg.node, name of the node whose default value is to be changed.
+#' @param value numeric vector or array, default value of the node.
+#'
+#' @return nothing.
+#'
+#' @name cg.set
+#' @author Ron Triepels
 cgraph$public_methods$set <- function(name, value)
 {
   name <- as.character(name)
@@ -354,7 +365,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 
 #' Approximate Gradients
 #'
-#' Differentiate node \code{x} with respect to node \code{y} by numerical differentiation.
+#' Differentiate node \code{x} with respect to node \code{y} in the graph by numerical differentiation.
 #'
 #' @param x character scalar or symbol, name of the node.
 #' @param y character scalar or symbol, name of the node.
@@ -362,13 +373,13 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #' @param index numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.
 #' @param eps numeric scalar, step size. Defaults to 1e-4.
 #'
-#' @note All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{$run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
+#' @note All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.
 #'
 #' The graph is differentiation by the symmetric difference quotient. This function is mainly used for testing purposes.
 #'
 #' @return numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
 #'
-#' @name approx
+#' @name cg.approx
 #' @author Ron Triepels
 cgraph$public_methods$approx <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {

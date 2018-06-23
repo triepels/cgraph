@@ -19,6 +19,9 @@ cg.node, node of the operation.
 \description{
 Calculate \code{pmax(x, y)}.
 }
+\note{
+In contrast to the base \code{pmax} function, this function only accepts two variables.
+}
 \author{
 Ron Triepels
 }
