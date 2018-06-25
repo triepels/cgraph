@@ -13,9 +13,9 @@ test_that("Scalar [+, -, sin, cos, tan, tanh]",
   c <- sin(a) + cos(b) - tan(a) + tanh(b)
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })

@@ -100,7 +100,7 @@ export(set)
 export(`%:%`)
 export(run)
 export(gradients)
-export(approx)
+export(approx.grad)
 
 # Export fun functions
 export(bsum)

@@ -541,7 +541,7 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
   return grads;
 }
 
-SEXP cg_approx(SEXP x, SEXP y, SEXP index, SEXP values, SEXP eps, SEXP graph)
+SEXP cg_approx_grad(SEXP x, SEXP y, SEXP index, SEXP values, SEXP eps, SEXP graph)
 {
   int x_id = cg_node_id(asChar(x), graph);
   int y_id = cg_node_id(asChar(y), graph);

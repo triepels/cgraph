@@ -13,11 +13,11 @@ test_that("Array [+, as.numeric]",
   c <- cg.sum(a + as.numeric(b))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Array [-, as.numeric]",
@@ -33,11 +33,11 @@ test_that("Array [-, as.numeric]",
   c <- cg.sum(a - as.numeric(b))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Array [*, as.numeric]",
@@ -53,11 +53,11 @@ test_that("Array [*, as.numeric]",
   c <- cg.sum(a * as.numeric(b))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Array [/, as.numeric]",
@@ -73,11 +73,11 @@ test_that("Array [/, as.numeric]",
   c <- cg.sum(as.numeric(b) / a)
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Array [^, as.numeric]",
@@ -93,11 +93,11 @@ test_that("Array [^, as.numeric]",
   c <- cg.sum(a ^ as.numeric(b))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Array [ln, as.numeric]",
@@ -113,11 +113,11 @@ test_that("Array [ln, as.numeric]",
   c <- cg.sum(a * cg.ln(as.numeric(b)))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Array [pmax, as.numeric]",
@@ -133,11 +133,11 @@ test_that("Array [pmax, as.numeric]",
   c <- cg.sum(cg.pmax(a, as.numeric(b)))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Array [pmin, as.numeric]",
@@ -153,11 +153,11 @@ test_that("Array [pmin, as.numeric]",
   c <- cg.sum(cg.pmin(a, as.numeric(b)))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [%*%, reshape, t]",
@@ -173,9 +173,9 @@ test_that("Scalar [%*%, reshape, t]",
   c <- cg.matmul(cg.reshape(a, c(1,4)), cg.t(cg.reshape(b, c(1,4))))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })

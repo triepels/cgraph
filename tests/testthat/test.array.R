@@ -13,11 +13,11 @@ test_that("Matrix [-, %*%, sum, prod]",
   c <- cg.prod(cg.matmul(a, b)) - cg.sum(cg.matmul(a, b))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Matrix [+, mean, crossprod, tcrossprod]",
@@ -33,11 +33,11 @@ test_that("Matrix [+, mean, crossprod, tcrossprod]",
   c <- cg.mean(cg.crossprod(a, b) + cg.tcrossprod(a, b))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Matrix [linear, rowSums, colSums]",
@@ -53,11 +53,11 @@ test_that("Matrix [linear, rowSums, colSums]",
   c <- cg.rowSums(cg.linear(a, b, cg.colSums(b)))
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Array [*, rowMeans, colMeans]",
@@ -73,11 +73,11 @@ test_that("Array [*, rowMeans, colMeans]",
   c <- cg.rowMeans(a) * cg.colMeans(b)
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Matrix [*, max, min]",
@@ -93,11 +93,11 @@ test_that("Matrix [*, max, min]",
   c <- cg.max(a) * cg.min(b)
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Matrix [*, pmax, pmin]",
@@ -113,9 +113,9 @@ test_that("Matrix [*, pmax, pmin]",
   c <- cg.pmax(a, b) * cg.pmin(a, b)
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })

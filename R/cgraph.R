@@ -379,9 +379,9 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #'
 #' @return numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
 #'
-#' @name cg.approx
+#' @name cg.approx.grad
 #' @author Ron Triepels
-cgraph$public_methods$approx <- function(x, y, values = list(), index = 1, eps = 1e-4)
+cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
   x <- as.character(x)
 
@@ -401,7 +401,7 @@ cgraph$public_methods$approx <- function(x, y, values = list(), index = 1, eps =
     values <- list2env(values, parent = self$values)
   }
 
-  .Call("cg_approx", x, y, index, values, eps, self, PACKAGE = "cgraph")
+  .Call("cg_approx_grad", x, y, index, values, eps, self, PACKAGE = "cgraph")
 }
 
 #' Adjacency Matrix

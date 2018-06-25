@@ -13,11 +13,11 @@ test_that("Scalar [+, -, /, *]",
   c <- (a + b) * (a - b) * (a / b)
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, pow, sqrt]",
@@ -33,11 +33,11 @@ test_that("Scalar [+, pow, sqrt]",
   c <- a^b + cg.sqrt(a)
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, ln, log2, log10, exp]",
@@ -53,11 +53,11 @@ test_that("Scalar [+, ln, log2, log10, exp]",
   c <- cg.ln(a) + cg.log2(b) + log10(a) + cg.exp(b)
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [-, /, abs]",
@@ -73,9 +73,9 @@ test_that("Scalar [-, /, abs]",
   c <- abs(-a / b)
 
   # Calculate gradients
-  grads <- x$gradients(c, x$run(c))
+  grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, x$approx(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, x$approx(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })

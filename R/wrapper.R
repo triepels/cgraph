@@ -208,12 +208,12 @@ gradients <- function(name, values = list(), index = 1)
 #' @return numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
 #'
 #' @author Ron Triepels
-approx <- function(x, y, values = list(), index = 1, eps = 1e-4)
+approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
   if(!exists("graph", envir = .cg))
   {
     stop("No current graph set")
   }
 
-  .cg$graph$approx(x, y, values, index, eps)
+  .cg$graph$approx.grad(x, y, values, index, eps)
 }
