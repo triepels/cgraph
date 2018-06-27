@@ -213,3 +213,20 @@ approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 
   .cg$graph$approx.grad(x, y, values, index, eps)
 }
+
+#' Plot
+#'
+#' Plot the topology of a computational graph.
+#'
+#' @param x cgraph object, computational graph that is to be plotted.
+#' @param ... additional arguments that can be passed on to the plot function of the Rgraphiz package.
+#'
+#' @note A visual representation of the computational graph might be usefull for debugging purposes. This functions requires the Rgraphviz package.
+#'
+#' @return none.
+#'
+#' @author Ron Triepels
+plot.cgraph <- function(x, ...)
+{
+  x$plot(...)
+}

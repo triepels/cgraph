@@ -102,5 +102,8 @@ export(run)
 export(gradients)
 export(approx.grad)
 
+# Export wrapper methods
+S3method(plot, cgraph)
+
 # Export fun functions
 export(bsum)
