@@ -133,6 +133,11 @@ set <- function(name, value)
 #' @author Ron Triepels
 `%:%` <- function(name, value)
 {
+  if(!exists("graph", envir = .cg))
+  {
+    stop("No active graph set")
+  }
+
   .cg$graph$set(name, value)
 }
 
