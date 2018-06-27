@@ -11,7 +11,7 @@ SEXP bsum(SEXP x, SEXP n)
 
   k = LENGTH(x);
 
-  if(n_val[0] < 0 || n_val[0] > k)
+  if(n_val[0] < 1 || n_val[0] > k)
   {
     error("invalid block size n");
   }

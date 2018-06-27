@@ -47,10 +47,10 @@ SEXP cg_types()
 {
   SEXP types = PROTECT(allocVector(STRSXP, 4));
 
-  SET_STRING_ELT(types, 0, mkChar("constant"));
-  SET_STRING_ELT(types, 1, mkChar("input"));
-  SET_STRING_ELT(types, 2, mkChar("parameter"));
-  SET_STRING_ELT(types, 3, mkChar("expression"));
+  SET_STRING_ELT(types, CGCST, mkChar("constant"));
+  SET_STRING_ELT(types, CGIPT, mkChar("input"));
+  SET_STRING_ELT(types, CGPRM, mkChar("parameter"));
+  SET_STRING_ELT(types, CGEXP, mkChar("expression"));
 
   UNPROTECT(1);
 
@@ -108,6 +108,13 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 
   SEXP nodes = lengthgets(findVar(install("nodes"), graph), asInteger(id));
 
+  name = coerceVector(name, STRSXP);
+
+  if(LENGTH(name) != 1)
+  {
+    error("only one name can be assigned");
+  }
+
   if(cg_node_exists(asChar(name), graph))
   {
     error("'%s' is already defined", CHAR(asChar(name)));
@@ -117,8 +124,6 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   {
     error("'grad' is a reserved word that cannot be used");
   }
-
-  setAttrib(name, install("id"), id);
 
   switch(asInteger(type))
   {
@@ -159,6 +164,13 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
   SEXP nodes = lengthgets(findVar(install("nodes"), graph), asInteger(id));
 
   SEXP names = getAttrib(grads, R_NamesSymbol);
+
+  name = coerceVector(name, STRSXP);
+
+  if(LENGTH(name) != 1)
+  {
+    error("only one name can be assigned");
+  }
 
   if(cg_node_exists(asChar(name), graph))
   {
@@ -206,35 +218,36 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
   {
     SEXP symbol = findVar(install(CHAR(STRING_ELT(names, i))), binding);
 
-    SEXP parent = VECTOR_ELT(nodes, cg_node_id(coerceVector(symbol, CHARSXP), graph) - 1);
+    int parent_id = cg_node_id(coerceVector(symbol, CHARSXP), graph);
+
+    SEXP parent = VECTOR_ELT(nodes, parent_id - 1);
 
     /* Add gradient to parent node */
     SEXP parent_grads = getAttrib(parent, install("grads"));
 
-    int k = LENGTH(parent_grads) + 1;
+    int k = LENGTH(parent_grads);
 
-    parent_grads = lengthgets(parent_grads, k);
+    parent_grads = lengthgets(parent_grads, k + 1);
 
-    SET_VECTOR_ELT(parent_grads, k - 1, substitute(VECTOR_ELT(grads, i), binding));
+    SET_VECTOR_ELT(parent_grads, k, substitute(VECTOR_ELT(grads, i), binding));
 
     setAttrib(parent, install("grads"), parent_grads);
 
     /* Add current id to parent node */
     SEXP parent_childeren = getAttrib(parent, install("childeren"));
 
-    int l = LENGTH(parent_childeren) + 1;
+    int l = LENGTH(parent_childeren);
 
-    parent_childeren = lengthgets(parent_childeren, l);
+    parent_childeren = lengthgets(parent_childeren, l + 1);
 
-    INTEGER(parent_childeren)[l - 1] = asInteger(id);
+    INTEGER(parent_childeren)[l] = asInteger(id);
 
     setAttrib(parent, install("childeren"), parent_childeren);
 
     /* Add parent id to the current node */
-    INTEGER(parents)[i] = asInteger(getAttrib(parent, install("id")));
+    INTEGER(parents)[i] = parent_id;
   }
 
-  setAttrib(name, install("id"), id);
   setAttrib(name, install("type"), ScalarInteger(CGEXP));
   setAttrib(name, install("call"), substitute(call, binding));
   setAttrib(name, install("grads"), allocVector(VECSXP, 0));
