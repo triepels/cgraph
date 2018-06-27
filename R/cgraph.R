@@ -269,7 +269,7 @@ cgraph$public_methods$set <- function(name, value)
 {
   name <- as.character(name)
 
-  .Call("cg_set", name, value, self, PACKAGE = "cgraph")
+  invisible(.Call("cg_set", name, value, self, PACKAGE = "cgraph"))
 }
 
 #' Change active graph
