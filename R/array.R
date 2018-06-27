@@ -92,7 +92,7 @@ cg.linear <- function(x, y, z, name = cgraph::name())
     grads = list(
       x = quote(tcrossprod(grad, y)),
       y = quote(crossprod(x, grad)),
-      z = quote(bsum(grad, length(z)))
+      z = quote(`if`(is.array(z), array(grad, dim(z)), bsum(grad, length(z))))
     ),
     binding = list(x = x, y = y, z = z)
   )
