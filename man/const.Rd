@@ -15,7 +15,7 @@ const(value, name)
 cg.node, constant node.
 }
 \description{
-Add a constant node to the current graph.
+Add a constant node to the active graph.
 }
 \note{
 Constant nodes are ignored when differentiating a graph.

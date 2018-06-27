@@ -9,7 +9,7 @@ name <- function()
 {
   if(!exists("graph", envir = .cg))
   {
-    stop("No current graph set")
+    stop("No active graph set")
   }
 
   .cg$graph$name()
@@ -17,7 +17,7 @@ name <- function()
 
 #' Add Constant
 #'
-#' Add a constant node to the current graph.
+#' Add a constant node to the active graph.
 #'
 #' @param value numeric scalar or array, default value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
@@ -31,7 +31,7 @@ const <- function(value, name)
 {
   if(!exists("graph", envir = .cg))
   {
-    stop("No current graph set")
+    stop("No active graph set")
   }
 
   .cg$graph$const(value, name)
@@ -39,7 +39,7 @@ const <- function(value, name)
 
 #' Add Input
 #'
-#' Add an input node to the current graph.
+#' Add an input node to the active graph.
 #'
 #' @param value numeric scalar or array, default value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
@@ -51,7 +51,7 @@ input <- function(value, name)
 {
   if(!exists("graph", envir = .cg))
   {
-    stop("No current graph set")
+    stop("No active graph set")
   }
 
   .cg$graph$input(value, name)
@@ -59,7 +59,7 @@ input <- function(value, name)
 
 #' Add Parameter
 #'
-#' Add a parameter node to the current graph.
+#' Add a parameter node to the active graph.
 #'
 #' @param value numeric scalar or array, default value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
@@ -71,7 +71,7 @@ parm <- function(value, name)
 {
   if(!exists("graph", envir = .cg))
   {
-    stop("No current graph set")
+    stop("No active graph set")
   }
 
   .cg$graph$parm(value, name)
@@ -79,7 +79,7 @@ parm <- function(value, name)
 
 #' Add Expression
 #'
-#' Add an expression node to the current graph.
+#' Add an expression node to the active graph.
 #'
 #' @param call expression or call, operations performed by the node.
 #' @param grads named list of expressions or calls, gradients of the inputs and parameters used in \code{call} with respect to the node.
@@ -95,7 +95,7 @@ expr <- function(call, grads, binding, name)
 {
   if(!exists("graph", envir = .cg))
   {
-    stop("No current graph set")
+    stop("No active graph set")
   }
 
   .cg$graph$expr(call, grads, binding, name)
@@ -103,7 +103,7 @@ expr <- function(call, grads, binding, name)
 
 #' Change the Default Value of a Node
 #'
-#' Change the default value of a node in the current graph.
+#' Change the default value of a node in the active graph.
 #'
 #' @param name cg.node, name of the node whose default value is to be changed.
 #' @param value numeric vector or array, default value of the node.
@@ -115,7 +115,7 @@ set <- function(name, value)
 {
   if(!exists("graph", envir = .cg))
   {
-    stop("No current graph set")
+    stop("No active graph set")
   }
 
   .cg$graph$set(name, value)
@@ -123,7 +123,7 @@ set <- function(name, value)
 
 #' Change the Default Value of a Node
 #'
-#' Change the default value of a node in the current graph.
+#' Change the default value of a node in the active graph.
 #'
 #' @param name cg.node, name of the node whose default value is to be changed.
 #' @param value numeric vector or array, default value of the node.
@@ -138,9 +138,7 @@ set <- function(name, value)
 
 #' Evaluate a Graph
 #'
-#' Evaluate node \code{name} in the current graph.
-#'
-#' @details \code{$run(name, values = list())}
+#' Evaluate node \code{name} in the active graph.
 #'
 #' @param name character scalar or symbol, name of the node that needs to be evaluated.
 #' @param values named list or environment, values that are subsituted for the placeholders in the graph.
@@ -149,14 +147,14 @@ set <- function(name, value)
 #'
 #' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. The values of placeholders whose default values are not changed are not returned.
 #'
-#' @return cg.results object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
+#' @return cg.environment object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
 #'
 #' @author Ron Triepels
 run <- function(name, values = list())
 {
   if(!exists("graph", envir = .cg))
   {
-    stop("No current graph set")
+    stop("No active graph set")
   }
 
   .cg$graph$run(name, values)
@@ -164,9 +162,7 @@ run <- function(name, values = list())
 
 #' Calculate Gradients
 #'
-#' Differentiate the current graph with respect to node \code{name} by reverse automatic differentiation.
-#'
-#' @details \code{$gradients(name, values, index = 1)}
+#' Differentiate the active graph with respect to node \code{name} by reverse automatic differentiation.
 #'
 #' @param name character scalar or symbol, name of the node that needs to be differentiated.
 #' @param values named list or environment, values that are subsituted for the expressions and placeholders in the graph.
@@ -178,14 +174,14 @@ run <- function(name, values = list())
 #'
 #' The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
 #'
-#' @return cg.results object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
+#' @return cg.environment object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
 #'
 #' @author Ron Triepels
 gradients <- function(name, values = list(), index = 1)
 {
   if(!exists("graph", envir = .cg))
   {
-    stop("No current graph set")
+    stop("No active graph set")
   }
 
   .cg$graph$gradients(name, values, index)
@@ -193,7 +189,7 @@ gradients <- function(name, values = list(), index = 1)
 
 #' Approximate Gradients
 #'
-#' Differentiate node \code{x} with respect to node \code{y} in the current graph by numerical differentiation.
+#' Differentiate node \code{x} with respect to node \code{y} in the active graph by numerical differentiation.
 #'
 #' @param x character scalar or symbol, name of the node.
 #' @param y character scalar or symbol, name of the node.
@@ -212,7 +208,7 @@ approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
   if(!exists("graph", envir = .cg))
   {
-    stop("No current graph set")
+    stop("No active graph set")
   }
 
   .cg$graph$approx.grad(x, y, values, index, eps)

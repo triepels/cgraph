@@ -15,7 +15,7 @@ parm(value, name)
 cg.node, parameter node.
 }
 \description{
-Add a parameter node to the current graph.
+Add a parameter node to the active graph.
 }
 \author{
 Ron Triepels

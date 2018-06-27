@@ -14,13 +14,10 @@ gradients(name, values = list(), index = 1)
 \item{index}{numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.}
 }
 \value{
-cg.results object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
+cg.environment object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
 }
 \description{
-Differentiate the current graph with respect to node \code{name} by reverse automatic differentiation.
-}
-\details{
-\code{$gradients(name, values, index = 1)}
+Differentiate the active graph with respect to node \code{name} by reverse automatic differentiation.
 }
 \note{
 All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{$run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.

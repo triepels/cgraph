@@ -14,6 +14,9 @@ nothing.
 \description{
 Change the default value of a node in the graph.
 }
+\details{
+\code{$set(name. value)}
+}
 \author{
 Ron Triepels
 }

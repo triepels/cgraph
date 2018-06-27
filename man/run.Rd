@@ -12,13 +12,10 @@ run(name, values = list())
 \item{values}{named list or environment, values that are subsituted for the placeholders in the graph.}
 }
 \value{
-cg.results object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
+cg.environment object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
 }
 \description{
-Evaluate node \code{name} in the current graph.
-}
-\details{
-\code{$run(name, values = list())}
+Evaluate node \code{name} in the active graph.
 }
 \note{
 All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.

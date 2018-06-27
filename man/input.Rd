@@ -15,7 +15,7 @@ input(value, name)
 cg.node, input node.
 }
 \description{
-Add an input node to the current graph.
+Add an input node to the active graph.
 }
 \author{
 Ron Triepels

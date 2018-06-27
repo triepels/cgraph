@@ -256,6 +256,8 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 #'
 #' Change the default value of a node in the graph.
 #'
+#' @details \code{$set(name. value)}
+#'
 #' @param name cg.node, name of the node whose default value is to be changed.
 #' @param value numeric vector or array, default value of the node.
 #'
@@ -302,7 +304,7 @@ cgraph$public_methods$active <- function()
 #'
 #' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. The values of placeholders whose default values are not changed are not returned.
 #'
-#' @return cg.results object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
+#' @return cg.environment object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
 #'
 #' @name cg.run
 #' @author Ron Triepels
@@ -339,7 +341,7 @@ cgraph$public_methods$run <- function(name, values = list())
 #'
 #' The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
 #'
-#' @return cg.results object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
+#' @return cg.environment object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
 #'
 #' @name cg.gradients
 #' @author Ron Triepels
@@ -366,6 +368,8 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #' Approximate Gradients
 #'
 #' Differentiate node \code{x} with respect to node \code{y} in the graph by numerical differentiation.
+#'
+#' @details \code{$approx.grad(x, y, values = list(), index = 1, eps = 1e-4)}
 #'
 #' @param x character scalar or symbol, name of the node.
 #' @param y character scalar or symbol, name of the node.

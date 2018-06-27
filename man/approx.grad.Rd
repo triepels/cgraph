@@ -21,7 +21,7 @@ approx.grad(x, y, values = list(), index = 1, eps = 1e-04)
 numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
 }
 \description{
-Differentiate node \code{x} with respect to node \code{y} in the current graph by numerical differentiation.
+Differentiate node \code{x} with respect to node \code{y} in the active graph by numerical differentiation.
 }
 \note{
 All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{$run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.

@@ -9,7 +9,7 @@
 \item{values}{named list or environment, values that are subsituted for the placeholders in the graph.}
 }
 \value{
-cg.results object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
+cg.environment object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
 }
 \description{
 Evaluate node \code{name} in the graph.

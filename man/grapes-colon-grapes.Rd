@@ -15,7 +15,7 @@ name \%:\% value
 nothing.
 }
 \description{
-Change the default value of a node in the current graph.
+Change the default value of a node in the active graph.
 }
 \author{
 Ron Triepels

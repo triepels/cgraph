@@ -11,7 +11,7 @@
 \item{index}{numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.}
 }
 \value{
-cg.results object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
+cg.environment object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
 }
 \description{
 Differentiate the graph with respect to node \code{name} by reverse automatic differentiation.

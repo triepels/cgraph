@@ -20,6 +20,9 @@ numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
 \description{
 Differentiate node \code{x} with respect to node \code{y} in the graph by numerical differentiation.
 }
+\details{
+\code{$approx.grad(x, y, values = list(), index = 1, eps = 1e-4)}
+}
 \note{
 All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.
 

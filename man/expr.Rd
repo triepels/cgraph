@@ -19,7 +19,7 @@ expr(call, grads, binding, name)
 cg.node, expression node.
 }
 \description{
-Add an expression node to the current graph.
+Add an expression node to the active graph.
 }
 \note{
 The operation that is to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation contains any inputs or parameters, then the gradient of these inputs and parameters with respect to the node should be provided via argument \code{gradients}. Also, any variables used in the these expressions or calls should be bind to the symbols of the nodes in the graph. There are two ways to bind variables. Either, \code{binding} should be a named list were the names of nodes are assigned as symbols to the named members, or \code{binding} is an environment were the names of nodes are assigned as symbols to objects within the environment.
