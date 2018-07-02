@@ -564,10 +564,23 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP index, SEXP values, SEXP eps, SEXP grap
 
   SEXP ids = PROTECT(cg_traverse_graph(ScalarInteger(x_id), graph));
 
-  cg_forward(ids, values, graph);
-
   SEXP x_node = VECTOR_ELT(nodes, x_id - 1);
   SEXP y_node = VECTOR_ELT(nodes, y_id - 1);
+
+  SEXP x_node_type = getAttrib(x_node, install("type"));
+  SEXP y_node_type = getAttrib(y_node, install("type"));
+
+  if(INTEGER(x_node_type)[0] != CGEXP)
+  {
+    error("x must be an expression");
+  }
+
+  if(INTEGER(y_node_type)[0] == CGEXP)
+  {
+    error("y cannot be an expression");
+  }
+
+  cg_forward(ids, values, graph);
 
   SEXP x_value = PROTECT(eval(install(CHAR(asChar(x_node))), values));
   SEXP y_value = PROTECT(eval(install(CHAR(asChar(y_node))), values));
