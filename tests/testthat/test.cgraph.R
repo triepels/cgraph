@@ -12,7 +12,7 @@ test_that("Duplicate Nodes",
   expect_error(parm(name = "a"))
 })
 
-test_that("Duplicate Nodes",
+test_that("Generate Existing Name",
 {
   # Initialize graph
   x <- cgraph$new()
@@ -20,8 +20,6 @@ test_that("Duplicate Nodes",
   # Create parameter
   a <- parm(name = "prm2")
 
-  b <- parm()
-
   # Create duplicate parameter
-  expect_error(parm(name = "a"))
+  expect_error(parm(), NA)
 })
