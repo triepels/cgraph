@@ -63,25 +63,6 @@ cgraph$public_methods$name <- function(type = 3)
   .Call("cg_gen_name", type, self, PACKAGE = "cgraph")
 }
 
-#' Count Nodes
-#'
-#' Count how many nodes of a specific type are added to the graph.
-#'
-#' @details \code{$count.type(type = 3)}
-#'
-#' @param type numeric scalar, type of the node. Should be either: 0 (constant), 1 (input), 2 (parameter), or 3 (expression). Defaults to 3 (expression).
-#'
-#' @return numeric scalar, the numer of nodes of the given type.
-#'
-#' @name cg.count.type
-#' @author Ron Triepels
-cgraph$public_methods$count.type <- function(type = 3)
-{
-  type <- as.integer(type)
-
-  .Call("cg_count_type", type, self, PACKAGE = "cgraph")
-}
-
 #' Add Constant
 #'
 #' Add a constant node to the graph.

@@ -271,9 +271,11 @@ SEXP cg_set(SEXP name, SEXP value, SEXP graph)
   return R_NilValue;
 }
 
-SEXP cg_count_type(SEXP type, SEXP graph)
+SEXP cg_gen_name(SEXP type, SEXP graph)
 {
-  int n, total = 0;
+  char name[16];
+
+  int n, suffix = 0;
 
   SEXP nodes = findVar(install("nodes"), graph);
 
@@ -281,40 +283,43 @@ SEXP cg_count_type(SEXP type, SEXP graph)
 
   for (int i = 0; i < n; i++)
   {
+    int current;
+
     SEXP node = VECTOR_ELT(nodes, i);
 
-    if(asInteger(getAttrib(node, install("type"))) == asInteger(type))
+    switch(asInteger(type))
     {
-      total += 1;
+      case CGCST :
+        sscanf(CHAR(asChar(node)), "cst%d", &current); break;
+      case CGIPT :
+        sscanf(CHAR(asChar(node)), "ipt%d", &current); break;
+      case CGPRM :
+        sscanf(CHAR(asChar(node)), "prm%d", &current); break;
+      case CGEXP :
+        sscanf(CHAR(asChar(node)), "exp%d", &current); break;
+      default :
+        error("invalid type");
+    }
+
+    if(current > suffix)
+    {
+      suffix = current;
     }
   }
-
-  return ScalarInteger(total);
-}
-
-SEXP cg_gen_name(SEXP type, SEXP graph)
-{
-  char name[8];
-
-  SEXP count = PROTECT(cg_count_type(type, graph));
-
-  INTEGER(count)[0] += 1;
 
   switch(asInteger(type))
   {
     case CGCST :
-      sprintf(name, "cst%d", asInteger(count)); break;
+      sprintf(name, "cst%d", suffix + 1); break;
     case CGIPT :
-      sprintf(name, "ipt%d", asInteger(count)); break;
+      sprintf(name, "ipt%d", suffix + 1); break;
     case CGPRM :
-      sprintf(name, "prm%d", asInteger(count)); break;
+      sprintf(name, "prm%d", suffix + 1); break;
     case CGEXP :
-      sprintf(name, "exp%d", asInteger(count)); break;
+      sprintf(name, "exp%d", suffix + 1); break;
     default :
       error("invalid type");
   }
-
-  UNPROTECT(1);
 
   return mkString(name);
 }
