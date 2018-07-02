@@ -108,12 +108,7 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 
   SEXP nodes = lengthgets(findVar(install("nodes"), graph), asInteger(id));
 
-  name = coerceVector(name, STRSXP);
-
-  if(LENGTH(name) != 1)
-  {
-    error("only one name can be assigned");
-  }
+  name = mkString(CHAR(STRING_ELT(name, 0)));
 
   if(cg_node_exists(asChar(name), graph))
   {
@@ -166,12 +161,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   SEXP names = getAttrib(grads, R_NamesSymbol);
 
-  name = coerceVector(name, STRSXP);
-
-  if(LENGTH(name) != 1)
-  {
-    error("only one name can be assigned");
-  }
+  name = mkString(CHAR(STRING_ELT(name, 0)));
 
   if(cg_node_exists(asChar(name), graph))
   {
