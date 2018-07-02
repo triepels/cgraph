@@ -273,9 +273,11 @@ SEXP cg_set(SEXP name, SEXP value, SEXP graph)
 
 SEXP cg_count_type(SEXP type, SEXP graph)
 {
+  int n, total = 0;
+
   SEXP nodes = findVar(install("nodes"), graph);
 
-  int total = 0; int n = LENGTH(nodes);
+  n = LENGTH(nodes);
 
   for (int i = 0; i < n; i++)
   {
