@@ -188,7 +188,11 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     setVar(install(CHAR(var)), coerceVector(value, SYMSXP), binding);
   }
 
+  SEXP parents = PROTECT(allocVector(INTSXP, m));
+
   SEXP names = getAttrib(grads, R_NamesSymbol);
+
+  n = LENGTH(nodes);
 
   m = LENGTH(grads);
 
@@ -200,15 +204,6 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     {
       error("cannot find '%s' in binding", CHAR(STRING_ELT(names, i)));
     }
-  }
-
-  SEXP parents = PROTECT(allocVector(INTSXP, m));
-
-  n = LENGTH(nodes);
-
-  for(int i = 0; i < m; i++)
-  {
-    SEXP symbol = findVar(install(CHAR(STRING_ELT(names, i))), binding);
 
     int parent_id = cg_node_id(coerceVector(symbol, CHARSXP), graph);
 
