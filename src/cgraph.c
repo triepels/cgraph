@@ -16,7 +16,7 @@ static SEXP NewEnv(SEXP enclos)
   SET_HASHTAB(env, R_NilValue);
   SET_ATTRIB(env, R_NilValue);
 
-  if(isNull(enclos))
+  if(isNull(enclos) || !isEnvironment(enclos))
   {
     SET_ENCLOS(env, R_GlobalEnv);
   }
