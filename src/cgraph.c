@@ -383,6 +383,8 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
   for(int i = 0; i < n; i++)
   {
+    SEXP value = R_NilValue;
+
     SEXP node = VECTOR_ELT(nodes, INTEGER(ids)[i] - 1);
 
     SEXP type = getAttrib(node, install("type"));
@@ -391,11 +393,20 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
     {
       SEXP call = getAttrib(node, install("call"));
 
-      SEXP value = PROTECT(eval(call, values));
+      value = PROTECT(eval(call, values));
 
       defineVar(install(CHAR(asChar(node))), value, values);
 
       UNPROTECT(1);
+    }
+    else
+    {
+      value = eval(install(CHAR(asChar(node))), values);
+    }
+
+    if(!isNumeric(value))
+    {
+      error("'%s' is not a numeric vector or array", CHAR(asChar(node)));
     }
   }
 }
