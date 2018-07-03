@@ -52,6 +52,8 @@ cgraph$public_methods$initialize <- function()
 #'
 #' @param type numeric scalar, type of the node. Should be either: 0 (constant), 1 (input), 2 (parameter), or 3 (expression). Defaults to 3 (expression).
 #'
+#' @note The auto-generated name is not guaranteed to be unique. Instead, it may alread be used by a node in the graph.
+#'
 #' @return symbol, auto-generated name for the node.
 #'
 #' @name cg.name

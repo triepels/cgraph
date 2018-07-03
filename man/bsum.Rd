@@ -12,7 +12,7 @@ bsum(x, n = 1)
 \item{n, }{numeric scalar, block size. Defaults to 1.}
 }
 \value{
-numeric vector, a \code{n}-dimensional vector, where the 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2th element of the blocks, and so on.
+numeric vector, a \code{n}-dimensional vector, where the 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2nd element of the blocks, and so on.
 }
 \description{
 Divide a numeric vector or array in consecutive blocks of \code{n} elements and sum the elements at each position in these blocks.

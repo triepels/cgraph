@@ -2,7 +2,9 @@
 #'
 #' Generate a default name for an expression.
 #'
-#' @return symbol, auto-generated name for the expression.
+#' @note The auto-generated name is not guaranteed to be unique. Instead, it may alread be used by an expression node in the active graph.
+#'
+#' @return symbol, auto-generated name for the node.
 #'
 #' @author Ron Triepels
 name <- function()
