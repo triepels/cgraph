@@ -7,6 +7,8 @@ print.cg.node = function(x, ...)
 {
   val <- NULL
 
+  types <- c("constant", "input", "parameter", "expression")
+
   tryCatch(
   {
     if(!exists("graph", envir = .cg))
@@ -23,7 +25,7 @@ print.cg.node = function(x, ...)
     warning(e)
   })
 
-  cat(sprintf("<cg.node: %s> '%s'\n\n", .Call("cg_types")[attr(x, "type") + 1], x))
+  cat(sprintf("<cg.node: %s> '%s'\n\n", types[attr(x, "type") + 1], x))
 
   print(val)
 }
