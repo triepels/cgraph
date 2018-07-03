@@ -210,11 +210,6 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
   {
     SEXP symbol = findVar(install(CHAR(STRING_ELT(names, i))), binding);
 
-    if(symbol == R_UnboundValue)
-    {
-      error("cannot find '%s' in binding", CHAR(STRING_ELT(names, i)));
-    }
-
     int parent_id = cg_node_id(coerceVector(symbol, CHARSXP), graph);
 
     SEXP parent = VECTOR_ELT(nodes, parent_id - 1);
@@ -285,7 +280,7 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
 {
   char name[32];
 
-  int n, suffix = 0;
+  int n, count = 0;
 
   SEXP nodes = findVar(install("nodes"), graph);
 
@@ -293,40 +288,24 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
 
   for (int i = 0; i < n; i++)
   {
-    int current;
-
     SEXP node = VECTOR_ELT(nodes, i);
 
-    switch(asInteger(type))
+    if(asInteger(getAttrib(node, install("type"))) == asInteger(type))
     {
-      case CGCST :
-        sscanf(CHAR(asChar(node)), "cst%d", &current); break;
-      case CGIPT :
-        sscanf(CHAR(asChar(node)), "ipt%d", &current); break;
-      case CGPRM :
-        sscanf(CHAR(asChar(node)), "prm%d", &current); break;
-      case CGEXP :
-        sscanf(CHAR(asChar(node)), "exp%d", &current); break;
-      default :
-        error("invalid type");
-    }
-
-    if(current > suffix)
-    {
-      suffix = current;
+      count += 1;
     }
   }
 
   switch(asInteger(type))
   {
     case CGCST :
-      sprintf(name, "cst%d", suffix + 1); break;
+      sprintf(name, "cst%d", count + 1); break;
     case CGIPT :
-      sprintf(name, "ipt%d", suffix + 1); break;
+      sprintf(name, "ipt%d", count + 1); break;
     case CGPRM :
-      sprintf(name, "prm%d", suffix + 1); break;
+      sprintf(name, "prm%d", count + 1); break;
     case CGEXP :
-      sprintf(name, "exp%d", suffix + 1); break;
+      sprintf(name, "exp%d", count + 1); break;
     default :
       error("invalid type");
   }
