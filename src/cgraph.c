@@ -106,9 +106,11 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 {
   SEXP id = cg_gen_id(graph);
 
-  SEXP nodes = lengthgets(findVar(install("nodes"), graph), asInteger(id));
+  SEXP nodes = findVar(install("nodes"), graph);
 
-  name = mkString(CHAR(STRING_ELT(name, 0)));
+  nodes = PROTECT(lengthgets(nodes, asInteger(id)));
+
+  name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
 
   if(cg_node_exists(asChar(name), graph))
   {
@@ -150,6 +152,8 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
     defineVar(install(CHAR(asChar(name))), value, values);
   }
 
+  UNPROTECT(2);
+
   return name;
 }
 
@@ -157,11 +161,13 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 {
   SEXP id = cg_gen_id(graph);
 
-  SEXP nodes = lengthgets(findVar(install("nodes"), graph), asInteger(id));
+  SEXP nodes = findVar(install("nodes"), graph);
 
   SEXP names = getAttrib(grads, R_NamesSymbol);
 
-  name = mkString(CHAR(STRING_ELT(name, 0)));
+  nodes = PROTECT(lengthgets(nodes, asInteger(id)));
+
+  name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
 
   if(cg_node_exists(asChar(name), graph))
   {
@@ -218,7 +224,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
     int k = LENGTH(parent_grads);
 
-    parent_grads = lengthgets(parent_grads, k + 1);
+    parent_grads = PROTECT(lengthgets(parent_grads, k + 1));
 
     SET_VECTOR_ELT(parent_grads, k, substitute(VECTOR_ELT(grads, i), binding));
 
@@ -229,7 +235,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
     int l = LENGTH(parent_childeren);
 
-    parent_childeren = lengthgets(parent_childeren, l + 1);
+    parent_childeren = PROTECT(lengthgets(parent_childeren, l + 1));
 
     INTEGER(parent_childeren)[l] = asInteger(id);
 
@@ -237,6 +243,8 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
     /* Add parent id to the current node */
     INTEGER(parents)[i] = parent_id;
+
+    UNPROTECT(2);
   }
 
   setAttrib(name, install("type"), ScalarInteger(CGEXP));
@@ -250,7 +258,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   setVar(install("nodes"), nodes, graph);
 
-  UNPROTECT(1);
+  UNPROTECT(3);
 
   return name;
 }
@@ -273,7 +281,7 @@ SEXP cg_set(SEXP name, SEXP value, SEXP graph)
 
 SEXP cg_gen_name(SEXP type, SEXP graph)
 {
-  char name[16];
+  char name[32];
 
   int n, suffix = 0;
 
