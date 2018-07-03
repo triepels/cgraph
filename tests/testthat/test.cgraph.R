@@ -12,14 +12,23 @@ test_that("Duplicate Nodes",
   expect_error(parm(name = "a"))
 })
 
-test_that("Generate Existing Name",
+test_that("Large Network",
 {
   # Initialize graph
   x <- cgraph$new()
 
-  # Create parameter
-  a <- parm(name = "prm2")
+  # Create parameters
+  a <- parm(2, name = "a")
 
-  # Create duplicate parameter
-  expect_error(parm(), NA)
+  # Generate expressions
+  for(i in 1:10000)
+  {
+    a <- cg.abs(a)
+  }
+
+  # Calculate gradients
+  grads <- gradients(a, run(a))
+
+  # Check gradients
+  expect_equivalent(grads$a, approx.grad(a, "a", eps = 1e-6), tolerance = 1e-4)
 })
