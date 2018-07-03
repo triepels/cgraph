@@ -43,20 +43,6 @@ SEXP cgraph(SEXP graph)
   return graph;
 }
 
-SEXP cg_types()
-{
-  SEXP types = PROTECT(allocVector(STRSXP, 4));
-
-  SET_STRING_ELT(types, CGCST, mkChar("constant"));
-  SET_STRING_ELT(types, CGIPT, mkChar("input"));
-  SET_STRING_ELT(types, CGPRM, mkChar("parameter"));
-  SET_STRING_ELT(types, CGEXP, mkChar("expression"));
-
-  UNPROTECT(1);
-
-  return types;
-}
-
 int cg_node_id(SEXP name, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
