@@ -57,13 +57,6 @@ SEXP cg_types()
   return types;
 }
 
-SEXP cg_gen_id(SEXP graph)
-{
-  SEXP nodes = findVar(install("nodes"), graph);
-
-  return ScalarInteger(LENGTH(nodes) + 1);
-}
-
 int cg_node_id(SEXP name, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
@@ -104,11 +97,9 @@ int cg_node_exists(SEXP name, SEXP graph)
 
 SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 {
-  SEXP id = cg_gen_id(graph);
+  int n;
 
   SEXP nodes = findVar(install("nodes"), graph);
-
-  nodes = PROTECT(lengthgets(nodes, asInteger(id)));
 
   name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
 
@@ -121,6 +112,10 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   {
     error("'grad' is a reserved word that cannot be used");
   }
+
+  n = LENGTH(nodes);
+
+  nodes = PROTECT(lengthgets(nodes, n + 1));
 
   switch(asInteger(type))
   {
@@ -139,7 +134,7 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   setAttrib(name, install("childeren"), allocVector(INTSXP, 0));
   setAttrib(name, install("class"), mkString("cg.node"));
 
-  SET_VECTOR_ELT(nodes, asInteger(id) - 1, name);
+  SET_VECTOR_ELT(nodes, n, name);
 
   setVar(install("nodes"), nodes, graph);
 
@@ -159,13 +154,9 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 
 SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
 {
-  SEXP id = cg_gen_id(graph);
+  int n, m;
 
   SEXP nodes = findVar(install("nodes"), graph);
-
-  SEXP names = getAttrib(grads, R_NamesSymbol);
-
-  nodes = PROTECT(lengthgets(nodes, asInteger(id)));
 
   name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
 
@@ -181,9 +172,9 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   SEXP vars = R_lsInternal3(binding, TRUE, FALSE);
 
-  int n = LENGTH(vars);
+  m = LENGTH(vars);
 
-  for(int i = 0; i < n; i++)
+  for(int i = 0; i < m; i++)
   {
     SEXP var = STRING_ELT(vars, i);
 
@@ -197,7 +188,9 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     setVar(install(CHAR(var)), coerceVector(value, SYMSXP), binding);
   }
 
-  int m = LENGTH(grads);
+  SEXP names = getAttrib(grads, R_NamesSymbol);
+
+  m = LENGTH(grads);
 
   for(int i = 0; i < m; i++)
   {
@@ -211,9 +204,16 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   SEXP parents = PROTECT(allocVector(INTSXP, m));
 
+  n = LENGTH(nodes);
+
   for(int i = 0; i < m; i++)
   {
     SEXP symbol = findVar(install(CHAR(STRING_ELT(names, i))), binding);
+
+    if(symbol == R_UnboundValue)
+    {
+      error("cannot find '%s' in binding", CHAR(STRING_ELT(names, i)));
+    }
 
     int parent_id = cg_node_id(coerceVector(symbol, CHARSXP), graph);
 
@@ -237,7 +237,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
     parent_childeren = PROTECT(lengthgets(parent_childeren, l + 1));
 
-    INTEGER(parent_childeren)[l] = asInteger(id);
+    INTEGER(parent_childeren)[l] = n + 1;
 
     setAttrib(parent, install("childeren"), parent_childeren);
 
@@ -247,6 +247,8 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     UNPROTECT(2);
   }
 
+  nodes = PROTECT(lengthgets(nodes, n + 1));
+
   setAttrib(name, install("type"), ScalarInteger(CGEXP));
   setAttrib(name, install("call"), substitute(call, binding));
   setAttrib(name, install("grads"), allocVector(VECSXP, 0));
@@ -254,7 +256,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
   setAttrib(name, install("childeren"), allocVector(INTSXP, 0));
   setAttrib(name, install("class"), mkString("cg.node"));
 
-  SET_VECTOR_ELT(nodes, asInteger(id) - 1, name);
+  SET_VECTOR_ELT(nodes, n, name);
 
   setVar(install("nodes"), nodes, graph);
 
