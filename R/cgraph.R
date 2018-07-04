@@ -35,13 +35,11 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  package <- as.environment("package:cgraph")
+  envir <- as.environment("package:cgraph")
 
-  self$values <- new.env(parent = package)
+  graph <- .Call("cgraph", self, new.env(parent = envir), PACKAGE = "cgraph")
 
-  graph <- .Call("cgraph", self, PACKAGE = "cgraph")
-
-  assign("graph", graph, envir = package$.cg)
+  assign("graph", graph, envir = envir$.cg)
 }
 
 #' Generate Name
@@ -252,7 +250,9 @@ cgraph$public_methods$set <- function(name, value)
 {
   name <- as.character(name)
 
-  invisible(.Call("cg_set", name, value, self, PACKAGE = "cgraph"))
+  .Call("cg_set", name, value, self, PACKAGE = "cgraph")
+
+  invisible()
 }
 
 #' Change active graph
@@ -302,7 +302,7 @@ cgraph$public_methods$run <- function(name, values = list())
       stop("values must be a named list or environment")
     }
 
-    values <- list2env(values, parent = self$values)
+    values <- list2env(values)
   }
 
   .Call("cg_run", name, values, self, PACKAGE = "cgraph")
@@ -341,7 +341,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
       stop("values must be a named list or environment")
     }
 
-    values <- list2env(values, parent = self$values)
+    values <- list2env(values)
   }
 
   .Call("cg_gradients", name, index, values, self, PACKAGE = "cgraph")
@@ -385,7 +385,7 @@ cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, 
       stop("values must be a named list or environment")
     }
 
-    values <- list2env(values, parent = self$values)
+    values <- list2env(values)
   }
 
   .Call("cg_approx_grad", x, y, index, values, eps, self, PACKAGE = "cgraph")

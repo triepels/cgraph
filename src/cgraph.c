@@ -30,11 +30,22 @@ static SEXP NewEnv(SEXP enclos)
   return env;
 }
 
-SEXP cgraph(SEXP graph)
+SEXP cgraph(SEXP graph, SEXP values)
 {
   SEXP nodes = PROTECT(allocVector(VECSXP, 0));
 
+  if(isNull(graph) || !isEnvironment(graph))
+  {
+    graph = NewEnv(R_EmptyEnv);
+  }
+
+  if(isNull(values) || !isEnvironment(values))
+  {
+    values = NewEnv(R_BaseEnv);
+  }
+
   defineVar(install("nodes"), nodes, graph);
+  defineVar(install("values"), values, graph);
 
   setAttrib(graph, install("class"), mkString("cgraph"));
 
@@ -510,6 +521,8 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
   SEXP ids = PROTECT(cg_traverse_graph(ScalarInteger(id), graph));
 
+  SET_ENCLOS(values, findVar(install("values"), graph));
+
   cg_forward(ids, values, graph);
 
   setAttrib(values, install("class"), mkString("cg.environment"));
@@ -526,6 +539,8 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
   SEXP grads = PROTECT(NewEnv(R_NilValue));
 
   SEXP ids = PROTECT(cg_traverse_graph(ScalarInteger(id), graph));
+
+  SET_ENCLOS(values, findVar(install("values"), graph));
 
   cg_backward(ids, index, values, grads, graph);
 
@@ -560,6 +575,8 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP index, SEXP values, SEXP eps, SEXP grap
   {
     error("y cannot be an expression");
   }
+
+  SET_ENCLOS(values, findVar(install("values"), graph));
 
   cg_forward(ids, values, graph);
 

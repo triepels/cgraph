@@ -12,7 +12,7 @@ extern SEXP cg_gen_name(SEXP, SEXP);
 extern SEXP cg_gradients(SEXP, SEXP, SEXP, SEXP);
 extern SEXP cg_run(SEXP, SEXP, SEXP);
 extern SEXP cg_set(SEXP, SEXP, SEXP);
-extern SEXP cgraph(SEXP);
+extern SEXP cgraph(SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   {"bsum",               (DL_FUNC) &bsum,               2},
@@ -24,7 +24,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_gradients",       (DL_FUNC) &cg_gradients,       4},
   {"cg_run",             (DL_FUNC) &cg_run,             3},
   {"cg_set",             (DL_FUNC) &cg_set,             3},
-  {"cgraph",             (DL_FUNC) &cgraph,             1},
+  {"cgraph",             (DL_FUNC) &cgraph,             2},
   {NULL, NULL, 0}
 };
 
