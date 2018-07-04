@@ -7,6 +7,19 @@ useDynLib(cgraph)
 # Export session environment
 export(.cg)
 
+# Export session functions
+export(export)
+export(name)
+export(const)
+export(input)
+export(parm)
+export(expr)
+export(set)
+export(`%:%`)
+export(run)
+export(gradients)
+export(approx.grad)
+
 # Export array functions
 export(cg.matmul)
 export(cg.crossprod)
@@ -28,6 +41,9 @@ export(cg.pmin)
 
 # Export cgraph object
 export(cgraph)
+
+# Export cgraph methods
+S3method(plot, cgraph)
 
 # Export math functions
 export(cg.add)
@@ -84,21 +100,6 @@ S3method(sin, cg.node)
 S3method(cos, cg.node)
 S3method(tan, cg.node)
 S3method(tanh, cg.node)
-
-# Export wrapper functions
-export(name)
-export(const)
-export(input)
-export(parm)
-export(expr)
-export(set)
-export(`%:%`)
-export(run)
-export(gradients)
-export(approx.grad)
-
-# Export wrapper methods
-S3method(plot, cgraph)
 
 # Export fun functions
 export(bsum)
