@@ -21,6 +21,9 @@ cg.matmul <- function(x, y, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("%*%", base::`%*%`)
+
 #' Matrix Crossproduct
 #'
 #' Calculate \code{crossprod(x, y)}.
@@ -46,6 +49,9 @@ cg.crossprod <- function(x, y, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("crossprod", base::crossprod)
+
 #' Transpose Matrix Crossproduct
 #'
 #' Calculate \code{tcrossprod(x, y)}.
@@ -70,6 +76,9 @@ cg.tcrossprod <- function(x, y, name = cgraph::name())
     binding = list(x = x, y = y)
   )
 }
+
+# Export function
+.cg$export("tcrossprod", base::tcrossprod)
 
 #' Linear Transformation
 #'
@@ -98,6 +107,12 @@ cg.linear <- function(x, y, z, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("c", base::c)
+
+# Export function
+.cg$export("length", base::length)
+
 # Export gradient
 .cg$export("linear.grad.z", function(z, grad)
 {
@@ -124,6 +139,9 @@ cg.sum <- function(x, name = cgraph::name())
     binding = list(x = x)
   )
 }
+
+# Export function
+.cg$export("sum", base::sum)
 
 # Export gradient
 .cg$export("sum.grad", function(x, grad)
@@ -152,6 +170,9 @@ cg.prod <- function(x, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("prod", base::prod)
+
 # Export gradient
 .cg$export("prod.grad", function(x, grad)
 {
@@ -177,6 +198,9 @@ cg.rowSums <- function(x, name = cgraph::name())
  )
 }
 
+# Export function
+.cg$export("rowSums", base::rowSums)
+
 # Export gradient
 .cg$export("rowSums.grad", function(x, grad)
 {
@@ -201,6 +225,9 @@ cg.colSums <- function(x, name = cgraph::name())
     binding = list(x = x)
   )
 }
+
+# Export function
+.cg$export("colSums", base::colSums)
 
 # Export gradient
 .cg$export("colSums.grad", function(x, grad)
@@ -229,6 +256,9 @@ cg.mean <- function(x, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("mean", base::mean)
+
 # Export gradient
 .cg$export("mean.grad", function(x, grad)
 {
@@ -254,6 +284,9 @@ cg.rowMeans <- function(x, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("rowMeans", base::rowMeans)
+
 # Export gradient
 .cg$export("rowMeans.grad", function(x, grad)
 {
@@ -278,6 +311,9 @@ cg.colMeans <- function(x, name = cgraph::name())
     binding = list(x = x)
   )
 }
+
+# Export function
+.cg$export("colMeans", base::colMeans)
 
 # Export gradient
 .cg$export("colMeans.grad", function(x, grad)
@@ -306,6 +342,9 @@ cg.max <- function(x, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("max", base::max)
+
 # Export gradient
 .cg$export("max.grad", function(x, y, grad)
 {
@@ -332,6 +371,9 @@ cg.min <- function(x, name = cgraph::name())
     binding = list(x = x, y = name)
   )
 }
+
+# Export function
+.cg$export("min", base::min)
 
 # Export gradient
 .cg$export("min.grad", function(x, y, grad)
@@ -363,6 +405,9 @@ cg.pmax <- function(x, y, name = cgraph::name())
     binding = list(x = x, y = y)
   )
 }
+
+# Export function
+.cg$export("pmax", base::pmax)
 
 # Export gradient
 .cg$export("pmax.grad.x", function(x, y, grad)
@@ -400,6 +445,9 @@ cg.pmin <- function(x, y, name = cgraph::name())
     binding = list(x = x, y = y)
   )
 }
+
+# Export function
+.cg$export("pmin", base::pmin)
 
 # Export gradient
 .cg$export("pmin.grad.x", function(x, y, grad)

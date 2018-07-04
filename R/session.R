@@ -2,7 +2,7 @@
 .cg <- new.env()
 
 # Function environment
-.cg$fun <- new.env()
+.cg$fun <- new.env(parent = emptyenv())
 
 # Export function
 .cg$export <- function(name, fun)

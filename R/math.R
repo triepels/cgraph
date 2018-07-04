@@ -21,6 +21,9 @@ cg.add <- function(x, y, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("+", base::`+`)
+
 # Export gradient
 .cg$export("add.grad", function(x, grad)
 {
@@ -81,6 +84,9 @@ cg.sub <- function(x, y, name = cgraph::name())
     binding = list(x = x, y = y)
   )
 }
+
+# Export function
+.cg$export("-", base::`-`)
 
 # Export gradient
 .cg$export("sub.grad.x", function(x, grad)
@@ -149,6 +155,9 @@ cg.mul <- function(x, y, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("*", base::`*`)
+
 # Export gradient
 .cg$export("mul.grad.x", function(x, y, grad)
 {
@@ -189,6 +198,9 @@ cg.div <- function(x, y, name = cgraph::name())
     binding = list(x = x, y = y)
   )
 }
+
+# Export function
+.cg$export("/", base::`/`)
 
 # Export gradient
 .cg$export("div.grad.x", function(x, y, grad)
@@ -231,6 +243,9 @@ cg.pow <- function(x, y, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("^", base::`^`)
+
 # Export gradient
 .cg$export("pow.grad.x", function(x, y, grad)
 {
@@ -267,6 +282,9 @@ cg.sqrt <- function(x, name = cgraph::name())
     binding = list(x = x)
   )
 }
+
+# Export function
+.cg$export("sqrt", base::sqrt)
 
 # Export gradient
 .cg$export("sqrt.grad", function(x, grad)
@@ -309,6 +327,9 @@ cg.exp <- function(x, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("exp", base::exp)
+
 # Export gradient
 .cg$export("exp.grad", function(x, grad)
 {
@@ -350,6 +371,9 @@ cg.ln <- function(x, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("log", base::log)
+
 # Export gradient
 .cg$export("ln.grad", function(x, grad)
 {
@@ -374,6 +398,9 @@ cg.log2 <- function(x, name = cgraph::name())
     binding = list(x = x)
   )
 }
+
+# Export function
+.cg$export("log2", base::log2)
 
 # Export gradient
 .cg$export("log2.grad", function(x, grad)
@@ -414,6 +441,9 @@ cg.log10 <- function(x, name = cgraph::name())
   )
 }
 
+# Export function
+.cg$export("log10", base::log10)
+
 # Export gradient
 .cg$export("log10.grad", function(x, grad)
 {
@@ -452,6 +482,9 @@ cg.abs <- function(x, name = cgraph::name())
     binding = list(x = x)
   )
 }
+
+# Export function
+.cg$export("abs", base::abs)
 
 # Export gradient
 .cg$export("abs.grad", function(x, grad)

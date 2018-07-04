@@ -32,9 +32,11 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  graph <- .Call("cgraph", self, new.env(parent = .cg$fun), PACKAGE = "cgraph")
+  values <- new.env(parent = .cg$fun)
 
-  assign("graph", graph, envir = .cg)
+  graph <- .Call("cgraph", self, values, PACKAGE = "cgraph")
+
+  self$active()
 }
 
 #' Generate Name
@@ -264,9 +266,7 @@ cgraph$public_methods$set <- function(name, value)
 #' @author Ron Triepels
 cgraph$public_methods$active <- function()
 {
-  package <- as.environment("package:cgraph")
-
-  assign("graph", self, envir = package$.cg)
+  assign("graph", self, envir = .cg)
 }
 
 #' Evaluate a Graph
