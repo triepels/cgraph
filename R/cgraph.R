@@ -18,9 +18,6 @@ cgraph <- R6Class(
   )
 )
 
-# Session environment
-.cg <- new.env()
-
 #' Computational Graph
 #'
 #' Initialize a new computational graph.
@@ -35,11 +32,9 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  envir <- as.environment("package:cgraph")
+  graph <- .Call("cgraph", self, new.env(parent = .cg$fun), PACKAGE = "cgraph")
 
-  graph <- .Call("cgraph", self, new.env(parent = envir), PACKAGE = "cgraph")
-
-  assign("graph", graph, envir = envir$.cg)
+  assign("graph", graph, envir = .cg)
 }
 
 #' Generate Name
@@ -423,4 +418,21 @@ cgraph$public_methods$adj.mat <- function()
 cgraph$public_methods$plot <- function(...)
 {
   Rgraphviz::plot(new("graphAM", adjMat = self$adj.mat(), edgemode = "directed"), ...)
+}
+
+#' Plot
+#'
+#' Plot the topology of a computational graph.
+#'
+#' @param x cgraph object, computational graph that is to be plotted.
+#' @param ... additional arguments that can be passed on to the plot function of the Rgraphiz package.
+#'
+#' @note A visual representation of the computational graph might be usefull for debugging purposes. This functions requires the Rgraphviz package.
+#'
+#' @return none.
+#'
+#' @author Ron Triepels
+plot.cgraph <- function(x, ...)
+{
+  x$plot(...)
 }

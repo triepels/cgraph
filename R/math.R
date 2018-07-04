@@ -14,12 +14,18 @@ cg.add <- function(x, y, name = cgraph::name())
   cgraph::expr(name = name,
     call = quote(x + y),
     grads = list(
-      x = quote(`if`(is.array(x), grad, bsum(grad, length(x)))),
-      y = quote(`if`(is.array(y), grad, bsum(grad, length(y))))
+      x = quote(add.grad(x, grad)),
+      y = quote(add.grad(y, grad))
     ),
     binding = list(x = x, y = y)
   )
 }
+
+# Export gradient
+.cg$export("add.grad", function(x, grad)
+{
+  `if`(is.array(x), grad, bsum(grad, length(x)))
+})
 
 #' Positive
 #'
@@ -40,6 +46,7 @@ cg.pos <- function(x, name = cgraph::name())
   )
 }
 
+# S3 method
 `+.cg.node` <- function(x, y)
 {
   if(missing(y))
@@ -68,12 +75,24 @@ cg.sub <- function(x, y, name = cgraph::name())
   cgraph::expr(name = name,
     call = quote(x - y),
     grads = list(
-      x = quote(`if`(is.array(x), grad, bsum(grad, length(x)))),
-      y = quote(`if`(is.array(y), -grad, bsum(-grad, length(y))))
+      x = quote(sub.grad.x(x, grad)),
+      y = quote(sub.grad.y(y, grad))
     ),
     binding = list(x = x, y = y)
   )
 }
+
+# Export gradient
+.cg$export("sub.grad.x", function(x, grad)
+{
+  `if`(is.array(x), grad, bsum(grad, length(x)))
+})
+
+# Export gradient
+.cg$export("sub.grad.y", function(y, grad)
+{
+  `if`(is.array(y), -grad, bsum(-grad, length(y)))
+})
 
 #' Negative
 #'
@@ -94,6 +113,7 @@ cg.neg <- function(x, name = cgraph::name())
   )
 }
 
+# S3 method
 `-.cg.node` <- function(x, y)
 {
   if(missing(y))
@@ -122,13 +142,26 @@ cg.mul <- function(x, y, name = cgraph::name())
   cgraph::expr(name = name,
     call = quote(x * y),
     grads = list(
-      x = quote(`if`(is.array(x), grad * y, bsum(grad * y, length(x)))),
-      y = quote(`if`(is.array(y), grad * x, bsum(grad * x, length(y))))
+      x = quote(mul.grad.x(x, y, grad)),
+      y = quote(mul.grad.y(x, y, grad))
     ),
     binding = list(x = x, y = y)
   )
 }
 
+# Export gradient
+.cg$export("mul.grad.x", function(x, y, grad)
+{
+  `if`(is.array(x), grad * y, bsum(grad * y, length(x)))
+})
+
+# Export gradient
+.cg$export("mul.grad.y", function(x, y, grad)
+{
+  `if`(is.array(y), grad * x, bsum(grad * x, length(y)))
+})
+
+# S3 method
 `*.cg.node` <- function(x, y)
 {
   cgraph::cg.mul(x, y)
@@ -150,13 +183,26 @@ cg.div <- function(x, y, name = cgraph::name())
   cgraph::expr(name = name,
     call = quote(x / y),
     grads = list(
-      x = quote(`if`(is.array(x), grad / y, bsum(grad / y, length(x)))),
-      y = quote(`if`(is.array(y), -grad * x / y^2, bsum(-grad * x / y^2, length(y))))
+      x = quote(div.grad.x(x, y, grad)),
+      y = quote(div.grad.y(x, y, grad))
     ),
     binding = list(x = x, y = y)
   )
 }
 
+# Export gradient
+.cg$export("div.grad.x", function(x, y, grad)
+{
+  `if`(is.array(x), grad / y, bsum(grad / y, length(x)))
+})
+
+# Export gradient
+.cg$export("div.grad.y", function(x, y, grad)
+{
+  `if`(is.array(y), -grad * x / y^2, bsum(-grad * x / y^2, length(y)))
+})
+
+# S3 method
 `/.cg.node` <- function(x, y)
 {
   cgraph::cg.div(x, y)
@@ -178,13 +224,26 @@ cg.pow <- function(x, y, name = cgraph::name())
   cgraph::expr(name = name,
     call = quote(x^y),
     grads = list(
-      x = quote(`if`(is.array(x), grad * y * x^(y - 1), bsum(grad * y * x^(y - 1), length(x)))),
-      y = quote(`if`(is.array(y), grad * x^y * log(x), bsum(grad * x^y * log(x), length(y))))
+      x = quote(pow.grad.x(x, y, grad)),
+      y = quote(pow.grad.y(x, y, grad))
     ),
     binding = list(x = x, y = y)
   )
 }
 
+# Export gradient
+.cg$export("pow.grad.x", function(x, y, grad)
+{
+  `if`(is.array(x), grad * y * x^(y - 1), bsum(grad * y * x^(y - 1), length(x)))
+})
+
+# Export gradient
+.cg$export("pow.grad.y", function(x, y, grad)
+{
+  `if`(is.array(y), grad * x^y * log(x), bsum(grad * x^y * log(x), length(y)))
+})
+
+# S3 method
 `^.cg.node` <- function(x, y)
 {
   cgraph::cg.pow(x, y)
@@ -203,11 +262,17 @@ cg.pow <- function(x, y, name = cgraph::name())
 cg.sqrt <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = quote(x^0.5),
-    grads = list(x = quote(grad * 1 / (2 * x^0.5))),
+    call = quote(sqrt(x)),
+    grads = list(x = quote(sqrt.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("sqrt.grad", function(x, grad)
+{
+  grad * 1 / (2 * sqrt(x))
+})
 
 #' Square Root
 #'
@@ -239,10 +304,16 @@ cg.exp <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(exp(x)),
-    grads = list(x = quote(grad * exp(x))),
+    grads = list(x = quote(exp.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("exp.grad", function(x, grad)
+{
+  grad * exp(x)
+})
 
 #' Exponential Function
 #'
@@ -274,10 +345,16 @@ cg.ln <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(log(x)),
-    grads = list(x = quote(grad / x)),
+    grads = list(x = quote(ln.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("ln.grad", function(x, grad)
+{
+  grad / x
+})
 
 #' Logarithmic Base 2 Function
 #'
@@ -293,10 +370,16 @@ cg.log2 <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(log2(x)),
-    grads = list(x = quote(grad / (x * log(2)))),
+    grads = list(x = quote(log2.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("log2.grad", function(x, grad)
+{
+  grad / (x * log(2))
+})
 
 #' Logarithmic Base 2 Function
 #'
@@ -326,10 +409,16 @@ cg.log10 <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(log10(x)),
-    grads = list(x = quote(grad / (x * log(10)))),
+    grads = list(x = quote(log10.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("log10.grad", function(x, grad)
+{
+  grad / (x * log(10))
+})
 
 #' Logarithmic Base 10 Function
 #'
@@ -359,10 +448,16 @@ cg.abs <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(abs(x)),
-    grads = list(x = quote(grad * (x / abs(x)))),
+    grads = list(x = quote(abs.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("abs.grad", function(x, grad)
+{
+  grad * (x / abs(x))
+})
 
 #' Absolute Value
 #'

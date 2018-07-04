@@ -12,10 +12,16 @@ cg.sin <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(sin(x)),
-    grads = list(x = quote(grad * cos(x))),
+    grads = list(x = quote(sin.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("sin.grad", function(x, grad)
+{
+  grad * cos(x)
+})
 
 #' Sinus
 #'
@@ -45,10 +51,16 @@ cg.cos <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(cos(x)),
-    grads = list(x = quote(-grad * sin(x))),
+    grads = list(x = quote(cos.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("cos.grad", function(x, grad)
+{
+  -grad * sin(x)
+})
 
 #' Cosinus
 #'
@@ -78,10 +90,16 @@ cg.tan <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(tan(x)),
-    grads = list(x = quote(grad / cos(x)^2)),
+    grads = list(x = quote(tan.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("tan.grad", function(x, grad)
+{
+  grad / cos(x)^2
+})
 
 #' Tangent
 #'
@@ -111,10 +129,16 @@ cg.tanh <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(tanh(x)),
-    grads = list(x = quote(grad * (1 - y^2))),
+    grads = list(x = quote(tanh.grad(y, grad))),
     binding = list(x = x, y = name)
   )
 }
+
+# Export gradient
+.cg$export("tanh.grad", function(y, grad)
+{
+  grad * (1 - y^2)
+})
 
 #' Hyperbolic Tangent
 #'

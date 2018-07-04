@@ -1,3 +1,32 @@
+# Session environment
+.cg <- new.env()
+
+# Function environment
+.cg$fun <- new.env()
+
+# Export function
+.cg$export <- function(name, fun)
+{
+  name <- as.character(name)
+
+  if(!is.function(fun))
+  {
+    stop("fun is not a valid function")
+  }
+
+  if(exists(name, envir = .cg$fun))
+  {
+    stop(sprintf("'%s' is already defined", name))
+  }
+
+  assign(name, fun, .cg$fun)
+}
+
+export <- function(name, fun)
+{
+  .cg$export(name, fun)
+}
+
 #' Generate Name
 #'
 #' Generate a default name for an expression.
@@ -219,21 +248,4 @@ approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
   }
 
   .cg$graph$approx.grad(x, y, values, index, eps)
-}
-
-#' Plot
-#'
-#' Plot the topology of a computational graph.
-#'
-#' @param x cgraph object, computational graph that is to be plotted.
-#' @param ... additional arguments that can be passed on to the plot function of the Rgraphiz package.
-#'
-#' @note A visual representation of the computational graph might be usefull for debugging purposes. This functions requires the Rgraphviz package.
-#'
-#' @return none.
-#'
-#' @author Ron Triepels
-plot.cgraph <- function(x, ...)
-{
-  x$plot(...)
 }

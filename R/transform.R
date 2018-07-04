@@ -12,10 +12,16 @@ cg.as.double <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(as.numeric(x)),
-    grads = list(x = quote(`if`(is.array(x), array(grad, dim(x)), as.numeric(grad)))),
+    grads = list(x = quote(as.double.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("as.double.grad", function(x, grad)
+{
+  `if`(is.array(x), array(grad, dim(x)), as.numeric(grad))
+})
 
 #' Coerce to a Numeric Vector
 #'
@@ -50,10 +56,16 @@ cg.reshape <- function(x, dims, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = substitute(array(x, dims), list(dims = dims)),
-    grads = list(x = quote(`if`(is.array(x), array(grad, dim(x)), as.numeric(grad)))),
+    grads = list(x = quote(reshape.grad(x, grad))),
     binding = list(x = x)
   )
 }
+
+# Export gradient
+.cg$export("reshape.grad", function(x, grad)
+{
+  `if`(is.array(x), array(grad, dim(x)), as.numeric(grad))
+})
 
 #' Coerce to an Array
 #'

@@ -14,7 +14,13 @@ cg.sigmoid <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(1 / (1 + exp(1)^-x)),
-    grads = list(x = quote(grad * y * (1 - y))),
+    grads = list(x = quote(sigmoid.grad(y, grad))),
     binding = list(x = x, y = name)
   )
 }
+
+# Export gradient
+.cg$export("sigmoid.grad", function(y, grad)
+{
+  grad * y * (1 - y)
+})
