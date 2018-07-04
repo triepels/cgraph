@@ -29,8 +29,3 @@ print.cg.node = function(x, ...)
 
   print(val)
 }
-
-print.cg.environment <- function(x, ...)
-{
-  cat("<cg.environment>")
-}

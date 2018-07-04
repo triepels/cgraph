@@ -525,8 +525,6 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
   cg_forward(ids, values, graph);
 
-  setAttrib(values, install("class"), mkString("cg.environment"));
-
   UNPROTECT(1);
 
   return values;
@@ -543,8 +541,6 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
   SET_ENCLOS(values, findVar(install("values"), graph));
 
   cg_backward(ids, index, values, grads, graph);
-
-  setAttrib(grads, install("class"), mkString("cg.environment"));
 
   UNPROTECT(2);
 
