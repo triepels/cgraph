@@ -32,7 +32,7 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  values <- new.env(parent = .cg$fun)
+  values <- new.env(parent = .cg$functions)
 
   graph <- .Call("cgraph", self, values, PACKAGE = "cgraph")
 

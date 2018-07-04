@@ -1,8 +1,11 @@
 # Session environment
 .cg <- new.env()
 
+# Active graph
+.cg$graph <- NULL
+
 # Function environment
-.cg$fun <- new.env(parent = emptyenv())
+.cg$functions <- new.env(parent = emptyenv())
 
 # Export function
 .cg$export <- function(name, fun)
@@ -14,12 +17,12 @@
     stop("fun is not a valid function")
   }
 
-  if(exists(name, envir = .cg$fun))
+  if(exists(name, envir = .cg$functions))
   {
     stop(sprintf("'%s' is already defined", name))
   }
 
-  assign(name, fun, .cg$fun)
+  assign(name, fun, .cg$functions)
 }
 
 export <- function(name, fun)
@@ -31,14 +34,14 @@ export <- function(name, fun)
 #'
 #' Generate a default name for an expression.
 #'
-#' @note The auto-generated name is not guaranteed to be unique. Instead, it may alread be used by an expression node in the active graph.
+#' @note The auto-generated name is not guaranteed to be unique. Instead, it may alread be used by an expression in the active graph.
 #'
 #' @return symbol, auto-generated name for the node.
 #'
 #' @author Ron Triepels
 name <- function()
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
@@ -60,7 +63,7 @@ name <- function()
 #' @author Ron Triepels
 const <- function(value, name)
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
@@ -80,7 +83,7 @@ const <- function(value, name)
 #' @author Ron Triepels
 input <- function(value, name)
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
@@ -100,7 +103,7 @@ input <- function(value, name)
 #' @author Ron Triepels
 parm <- function(value, name)
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
@@ -124,7 +127,7 @@ parm <- function(value, name)
 #' @author Ron Triepels
 expr <- function(call, grads, binding, name)
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
@@ -144,7 +147,7 @@ expr <- function(call, grads, binding, name)
 #' @author Ron Triepels
 set <- function(name, value)
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
@@ -164,7 +167,7 @@ set <- function(name, value)
 #' @author Ron Triepels
 `%:%` <- function(name, value)
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
@@ -188,7 +191,7 @@ set <- function(name, value)
 #' @author Ron Triepels
 run <- function(name, values = list())
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
@@ -215,7 +218,7 @@ run <- function(name, values = list())
 #' @author Ron Triepels
 gradients <- function(name, values = list(), index = 1)
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
@@ -242,7 +245,7 @@ gradients <- function(name, values = list(), index = 1)
 #' @author Ron Triepels
 approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
-  if(!exists("graph", envir = .cg))
+  if(is.null(.cg$graph))
   {
     stop("No active graph set")
   }
