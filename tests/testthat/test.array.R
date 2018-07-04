@@ -10,7 +10,7 @@ test_that("Matrix [-, %*%, sum, prod]",
   b <- parm(matrix(2:5, 2, 2), name = "b")
 
   # Create test expression
-  c <- cg.prod(cg.matmul(a, b)) - cg.sum(cg.matmul(a, b))
+  c <- cg.prod(cg.matmul(a, b)) * cg.sum(cg.matmul(a, b))
 
   # Calculate gradients
   grads <- gradients(c, run(c))

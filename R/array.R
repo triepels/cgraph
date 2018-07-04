@@ -176,7 +176,7 @@ cg.prod <- function(x, name = cgraph::name())
 # Export gradient
 .cg$export("prod.grad", function(x, grad)
 {
-  prod(x) / x
+  grad * prod(x) / x
 })
 
 #' Row Sums
