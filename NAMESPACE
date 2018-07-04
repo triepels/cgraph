@@ -4,9 +4,6 @@ import(R6)
 # Load C files
 useDynLib(cgraph)
 
-# Export session environment
-export(.cg)
-
 # Export session functions
 export(export)
 export(name)
