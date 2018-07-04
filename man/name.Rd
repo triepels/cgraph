@@ -13,7 +13,7 @@ symbol, auto-generated name for the node.
 Generate a default name for an expression.
 }
 \note{
-The auto-generated name is not guaranteed to be unique. Instead, it may alread be used by an expression node in the active graph.
+The auto-generated name is not guaranteed to be unique. Instead, it may alread be used by an expression in the active graph.
 }
 \author{
 Ron Triepels
