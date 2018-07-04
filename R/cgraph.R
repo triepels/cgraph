@@ -14,7 +14,8 @@ cgraph <- R6Class(
   cloneable = T,
   public = list(
     nodes = NULL,
-    values = NULL
+    values = NULL,
+    functions = NULL
   )
 )
 
@@ -32,9 +33,7 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  values <- new.env(parent = .cg$functions)
-
-  graph <- .Call("cgraph", self, values, PACKAGE = "cgraph")
+  graph <- .Call("cgraph", self, .cg$functions, PACKAGE = "cgraph")
 
   self$active()
 }
@@ -215,6 +214,11 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 
   if(!is.environment(binding))
   {
+    if(!is.list(binding))
+    {
+      stop("binding must be a named list or environment")
+    }
+
     binding <- list2env(binding)
   }
 
@@ -247,7 +251,21 @@ cgraph$public_methods$set <- function(name, value)
 {
   name <- as.character(name)
 
+  if(!(is.numeric(value) | is.array(value)))
+  {
+    stop("value must be a numeric vector or array")
+  }
+
   .Call("cg_set", name, value, self, PACKAGE = "cgraph")
+
+  invisible()
+}
+
+cgraph$public_methods$export <- function(name, fun)
+{
+  name <- as.character(name)
+
+  .Call("cg_export", name, fun, self, PACKAGE = "cgraph")
 
   invisible()
 }

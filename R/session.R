@@ -25,11 +25,6 @@
   assign(name, fun, .cg$functions)
 }
 
-export <- function(name, fun)
-{
-  .cg$export(name, fun)
-}
-
 #' Generate Name
 #'
 #' Generate a default name for an expression.
@@ -153,6 +148,16 @@ set <- function(name, value)
   }
 
   .cg$graph$set(name, value)
+}
+
+export <- function(name, fun)
+{
+  if(is.null(.cg$graph))
+  {
+    stop("No active graph set")
+  }
+
+  .cg$graph$export(name, fun)
 }
 
 #' Change the Default Value of a Node
