@@ -62,7 +62,6 @@ export(cg.sigmoid)
 # Export print methods
 S3method(print, cgraph)
 S3method(print, cg.node)
-S3method(print, cg.environment)
 
 # Export transform functions
 export(cg.as.double)
