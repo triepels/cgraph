@@ -22,7 +22,7 @@ cg.add <- function(x, y, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("add.grad", function(x, grad)
+export("add.grad", function(x, grad)
 {
   `if`(is.array(x), grad, bsum(grad, length(x)))
 })
@@ -83,13 +83,13 @@ cg.sub <- function(x, y, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("sub.grad.x", function(x, grad)
+export("sub.grad.x", function(x, grad)
 {
   `if`(is.array(x), grad, bsum(grad, length(x)))
 })
 
 # Export gradient
-.cg$export("sub.grad.y", function(y, grad)
+export("sub.grad.y", function(y, grad)
 {
   `if`(is.array(y), -grad, bsum(-grad, length(y)))
 })
@@ -150,13 +150,13 @@ cg.mul <- function(x, y, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("mul.grad.x", function(x, y, grad)
+export("mul.grad.x", function(x, y, grad)
 {
   `if`(is.array(x), grad * y, bsum(grad * y, length(x)))
 })
 
 # Export gradient
-.cg$export("mul.grad.y", function(x, y, grad)
+export("mul.grad.y", function(x, y, grad)
 {
   `if`(is.array(y), grad * x, bsum(grad * x, length(y)))
 })
@@ -191,13 +191,13 @@ cg.div <- function(x, y, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("div.grad.x", function(x, y, grad)
+export("div.grad.x", function(x, y, grad)
 {
   `if`(is.array(x), grad / y, bsum(grad / y, length(x)))
 })
 
 # Export gradient
-.cg$export("div.grad.y", function(x, y, grad)
+export("div.grad.y", function(x, y, grad)
 {
   `if`(is.array(y), -grad * x / y^2, bsum(-grad * x / y^2, length(y)))
 })
@@ -232,13 +232,13 @@ cg.pow <- function(x, y, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("pow.grad.x", function(x, y, grad)
+export("pow.grad.x", function(x, y, grad)
 {
   `if`(is.array(x), grad * y * x^(y - 1), bsum(grad * y * x^(y - 1), length(x)))
 })
 
 # Export gradient
-.cg$export("pow.grad.y", function(x, y, grad)
+export("pow.grad.y", function(x, y, grad)
 {
   `if`(is.array(y), grad * x^y * log(x), bsum(grad * x^y * log(x), length(y)))
 })
@@ -269,7 +269,7 @@ cg.sqrt <- function(x, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("sqrt.grad", function(x, grad)
+export("sqrt.grad", function(x, grad)
 {
   grad * 1 / (2 * sqrt(x))
 })
@@ -310,7 +310,7 @@ cg.exp <- function(x, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("exp.grad", function(x, grad)
+export("exp.grad", function(x, grad)
 {
   grad * exp(x)
 })
@@ -351,7 +351,7 @@ cg.ln <- function(x, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("ln.grad", function(x, grad)
+export("ln.grad", function(x, grad)
 {
   grad / x
 })
@@ -376,7 +376,7 @@ cg.log2 <- function(x, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("log2.grad", function(x, grad)
+export("log2.grad", function(x, grad)
 {
   grad / (x * log(2))
 })
@@ -415,7 +415,7 @@ cg.log10 <- function(x, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("log10.grad", function(x, grad)
+export("log10.grad", function(x, grad)
 {
   grad / (x * log(10))
 })
@@ -454,7 +454,7 @@ cg.abs <- function(x, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("abs.grad", function(x, grad)
+export("abs.grad", function(x, grad)
 {
   grad * (x / abs(x))
 })

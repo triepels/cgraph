@@ -3,6 +3,9 @@
 \name{export}
 \alias{export}
 \title{Export Function}
+\usage{
+export(name, fun)
+}
 \arguments{
 \item{name}{character scalar, the name to which the function is to be binded in the \code{functions} environment.}
 

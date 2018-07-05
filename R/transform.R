@@ -18,7 +18,7 @@ cg.as.double <- function(x, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("as.double.grad", function(x, grad)
+export("as.double.grad", function(x, grad)
 {
   `if`(is.array(x), array(grad, dim(x)), as.numeric(grad))
 })
@@ -62,7 +62,7 @@ cg.reshape <- function(x, dims, name = cgraph::name())
 }
 
 # Export gradient
-.cg$export("reshape.grad", function(x, grad)
+export("reshape.grad", function(x, grad)
 {
   `if`(is.array(x), array(grad, dim(x)), as.numeric(grad))
 })

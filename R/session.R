@@ -20,7 +20,7 @@
 #'
 #' @name export
 #' @keywords internal
-.cg$export <- function(name, fun)
+export <- function(name, fun)
 {
   name <- as.character(name)
 
