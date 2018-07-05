@@ -1,11 +1,11 @@
 # Session environment
-.cg <- new.env()
+session <- new.env()
 
 # Active graph
-.cg$graph <- NULL
+session$graph <- NULL
 
 # Function environment
-.cg$functions <- new.env()
+session$functions <- new.env()
 
 #' Export Function
 #'
@@ -29,12 +29,12 @@ export <- function(name, fun)
     stop("fun is not a valid function")
   }
 
-  if(exists(name, envir = .cg$functions))
+  if(exists(name, envir = session$functions))
   {
     stop(sprintf("'%s' is already defined", name))
   }
 
-  assign(name, fun, .cg$functions)
+  assign(name, fun, session$functions)
 }
 
 #' Generate Name
@@ -48,12 +48,12 @@ export <- function(name, fun)
 #' @author Ron Triepels
 name <- function()
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$name()
+  session$graph$name()
 }
 
 #' Add Constant
@@ -70,12 +70,12 @@ name <- function()
 #' @author Ron Triepels
 const <- function(value, name)
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$const(value, name)
+  session$graph$const(value, name)
 }
 
 #' Add Input
@@ -90,12 +90,12 @@ const <- function(value, name)
 #' @author Ron Triepels
 input <- function(value, name)
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$input(value, name)
+  session$graph$input(value, name)
 }
 
 #' Add Parameter
@@ -110,12 +110,12 @@ input <- function(value, name)
 #' @author Ron Triepels
 parm <- function(value, name)
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$parm(value, name)
+  session$graph$parm(value, name)
 }
 
 #' Add Expression
@@ -134,12 +134,12 @@ parm <- function(value, name)
 #' @author Ron Triepels
 expr <- function(call, grads, binding, name)
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$expr(call, grads, binding, name)
+  session$graph$expr(call, grads, binding, name)
 }
 
 #' Change the Default Value of a Node
@@ -154,12 +154,12 @@ expr <- function(call, grads, binding, name)
 #' @author Ron Triepels
 set <- function(name, value)
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$set(name, value)
+  session$graph$set(name, value)
 }
 
 #' Change the Default Value of a Node
@@ -174,12 +174,12 @@ set <- function(name, value)
 #' @author Ron Triepels
 `%:%` <- function(name, value)
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$set(name, value)
+  session$graph$set(name, value)
 }
 
 #' Evaluate a Graph
@@ -198,12 +198,12 @@ set <- function(name, value)
 #' @author Ron Triepels
 run <- function(name, values = list())
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$run(name, values)
+  session$graph$run(name, values)
 }
 
 #' Calculate Gradients
@@ -225,12 +225,12 @@ run <- function(name, values = list())
 #' @author Ron Triepels
 gradients <- function(name, values = list(), index = 1)
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$gradients(name, values, index)
+  session$graph$gradients(name, values, index)
 }
 
 #' Approximate Gradients
@@ -252,10 +252,10 @@ gradients <- function(name, values = list(), index = 1)
 #' @author Ron Triepels
 approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
-  if(is.null(.cg$graph))
+  if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  .cg$graph$approx.grad(x, y, values, index, eps)
+  session$graph$approx.grad(x, y, values, index, eps)
 }

@@ -32,7 +32,7 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  values <- new.env(parent = .cg$functions)
+  values <- new.env(parent = session$functions)
 
   graph <- .Call("cgraph", self, values, PACKAGE = "cgraph")
 
@@ -276,7 +276,7 @@ cgraph$public_methods$set <- function(name, value)
 #' @author Ron Triepels
 cgraph$public_methods$active <- function()
 {
-  assign("graph", self, envir = .cg)
+  assign("graph", self, envir = session)
 }
 
 #' Evaluate a Graph
