@@ -5,9 +5,21 @@
 .cg$graph <- NULL
 
 # Function environment
-.cg$functions <- new.env(parent = emptyenv())
+.cg$functions <- new.env()
 
-# Export function
+#' Export Function
+#'
+#' Export a function to the \code{functions} environment in the global session.
+#'
+#' @param name character scalar, the name to which the function is to be binded in the \code{functions} environment.
+#' @param fun function, the function to be exported.
+#'
+#' @return nothing
+#'
+#' @author Ron Triepels
+#'
+#' @name export
+#' @keywords internal
 .cg$export <- function(name, fun)
 {
   name <- as.character(name)
@@ -148,16 +160,6 @@ set <- function(name, value)
   }
 
   .cg$graph$set(name, value)
-}
-
-export <- function(name, fun)
-{
-  if(is.null(.cg$graph))
-  {
-    stop("No active graph set")
-  }
-
-  .cg$graph$export(name, fun)
 }
 
 #' Change the Default Value of a Node
