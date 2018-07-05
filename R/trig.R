@@ -17,9 +17,6 @@ cg.sin <- function(x, name = cgraph::name())
   )
 }
 
-# Export function
-.cg$export("sin", base::sin)
-
 # Export gradient
 .cg$export("sin.grad", function(x, grad)
 {
@@ -58,9 +55,6 @@ cg.cos <- function(x, name = cgraph::name())
     binding = list(x = x)
   )
 }
-
-# Export function
-.cg$export("cos", base::cos)
 
 # Export gradient
 .cg$export("cos.grad", function(x, grad)
@@ -101,9 +95,6 @@ cg.tan <- function(x, name = cgraph::name())
   )
 }
 
-# Export function
-.cg$export("tan", base::tan)
-
 # Export gradient
 .cg$export("tan.grad", function(x, grad)
 {
@@ -142,9 +133,6 @@ cg.tanh <- function(x, name = cgraph::name())
     binding = list(x = x, y = name)
   )
 }
-
-# Export function
-.cg$export("tanh", base::tanh)
 
 # Export gradient
 .cg$export("tanh.grad", function(y, grad)

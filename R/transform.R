@@ -17,9 +17,6 @@ cg.as.double <- function(x, name = cgraph::name())
   )
 }
 
-# Export function
-.cg$export("as.numeric", base::as.numeric)
-
 # Export gradient
 .cg$export("as.double.grad", function(x, grad)
 {
@@ -42,9 +39,6 @@ as.double.cg.node <- function(x, name = cgraph::name(), ...)
   cgraph::cg.as.double(x, name)
 }
 
-# Export function
-.cg$export("as.double", base::as.double)
-
 #' Reshape Array Dimensions
 #'
 #' Change the dimensions of array \code{x} to \code{dims}.
@@ -66,9 +60,6 @@ cg.reshape <- function(x, dims, name = cgraph::name())
     binding = list(x = x)
   )
 }
-
-# Export function
-.cg$export("array", base::array)
 
 # Export gradient
 .cg$export("reshape.grad", function(x, grad)
@@ -113,12 +104,6 @@ cg.t <- function(x, name = cgraph::name())
     binding = list(x = x)
   )
 }
-
-# Export function
-.cg$export("t", base::t)
-
-# Export function
-.cg$export("t.default", base::t.default)
 
 #' Matrix Transpose
 #'
