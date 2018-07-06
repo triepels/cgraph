@@ -11,12 +11,12 @@ print.cg.node = function(x, ...)
 
   tryCatch(
   {
-    if(!exists("graph", envir = .cg))
+    if(is.null(session$graph))
     {
       stop("No current graph set")
     }
 
-    val <- get(x, envir = .cg$graph$run(x))
+    val <- get(x, envir = session$graph$run(x))
   },
   error = function(e)
   {
