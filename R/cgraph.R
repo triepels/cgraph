@@ -14,8 +14,7 @@ cgraph <- R6Class(
   cloneable = T,
   public = list(
     nodes = NULL,
-    values = NULL,
-    functions = NULL
+    values = NULL
   )
 )
 
@@ -33,7 +32,9 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  graph <- .Call("cgraph", self, .cg$functions, PACKAGE = "cgraph")
+  values <- new.env(parent = session$functions)
+
+  graph <- .Call("cgraph", self, values, PACKAGE = "cgraph")
 
   self$active()
 }
@@ -261,15 +262,6 @@ cgraph$public_methods$set <- function(name, value)
   invisible()
 }
 
-cgraph$public_methods$export <- function(name, fun)
-{
-  name <- as.character(name)
-
-  .Call("cg_export", name, fun, self, PACKAGE = "cgraph")
-
-  invisible()
-}
-
 #' Change active graph
 #'
 #' Set this graph to be the active graph.
@@ -284,7 +276,7 @@ cgraph$public_methods$export <- function(name, fun)
 #' @author Ron Triepels
 cgraph$public_methods$active <- function()
 {
-  assign("graph", self, envir = .cg)
+  assign("graph", self, envir = session)
 }
 
 #' Evaluate a Graph

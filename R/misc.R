@@ -19,11 +19,8 @@ cg.sigmoid <- function(x, name = cgraph::name())
   )
 }
 
-# Export function
-.cg$export("(", base::t)
-
 # Export gradient
-.cg$export("sigmoid.grad", function(y, grad)
+export("sigmoid.grad", function(y, grad)
 {
   grad * y * (1 - y)
 })

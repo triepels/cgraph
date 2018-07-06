@@ -30,26 +30,26 @@ static SEXP NewEnv(SEXP enclos)
   return env;
 }
 
-SEXP cgraph(SEXP graph, SEXP envir)
+SEXP cgraph(SEXP graph, SEXP values)
 {
   SEXP nodes = PROTECT(allocVector(VECSXP, 0));
-
-  SEXP functions = PROTECT(NewEnv(envir));
-
-  SEXP values = PROTECT(NewEnv(functions));
 
   if(isNull(graph) || !isEnvironment(graph))
   {
     graph = NewEnv(R_EmptyEnv);
   }
 
+  if(isNull(values) || !isEnvironment(values))
+  {
+    values = NewEnv(R_BaseEnv);
+  }
+
   defineVar(install("nodes"), nodes, graph);
   defineVar(install("values"), values, graph);
-  defineVar(install("functions"), functions, graph);
 
   setAttrib(graph, install("class"), mkString("cgraph"));
 
-  UNPROTECT(3);
+  UNPROTECT(1);
 
   return graph;
 }
@@ -269,20 +269,6 @@ SEXP cg_set(SEXP name, SEXP value, SEXP graph)
   value = coerceVector(value, REALSXP);
 
   defineVar(install(CHAR(asChar(name))), value, values);
-
-  return R_NilValue;
-}
-
-SEXP cg_export(SEXP name, SEXP fun, SEXP graph)
-{
-  SEXP functions = findVar(install("functions"), graph);
-
-  if(!isFunction(fun))
-  {
-    error("fun is not a valid function");
-  }
-
-  defineVar(install(CHAR(asChar(name))), fun, functions);
 
   return R_NilValue;
 }
