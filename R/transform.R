@@ -5,6 +5,8 @@
 #' @param x cg.node, placeholder for a numeric array.
 #' @param name character scalar, name of the operation (optional).
 #'
+#' @note This function is identical to \code{cg.as.numeric}.
+#'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
@@ -22,6 +24,23 @@ export("as.double.grad", function(x, grad)
 {
   `if`(is.array(x), array(grad, dim(x)), as.numeric(grad))
 })
+
+#' Coerce to a Numeric Vector
+#'
+#' Coerce \code{x} to a one-dimensional numeric vector.
+#'
+#' @param x cg.node, placeholder for a numeric array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @note This function is identical to \code{cg.as.double}.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.as.numeric <- function(x, name = cgraph::name())
+{
+  cgraph::cg.as.double(x, name)
+}
 
 #' Coerce to a Numeric Vector
 #'
