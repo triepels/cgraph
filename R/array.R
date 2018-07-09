@@ -80,7 +80,7 @@ cg.tcrossprod <- function(x, y, name = cgraph::name())
 #' @param z cg.node, placeholder for a numeric vector.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note This function is equivalent to \code{x \%mul\% y + as.numeric(z)}.
+#' @note This function is equivalent to \code{cg.matmul(x, y) + as.numeric(z)}.
 #'
 #' @return cg.node, node of the operation.
 #'
