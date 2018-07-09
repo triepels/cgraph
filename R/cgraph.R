@@ -225,7 +225,7 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
   {
     if(!is.list(parms))
     {
-      stop("parms must be a named list")
+      stop("parms must be a list")
     }
   }
 
