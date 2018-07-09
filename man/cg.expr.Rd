@@ -10,7 +10,7 @@
 
 \item{binding}{named list or environment, binds the values used in the expressions or calls of \code{call} and \code{grads} to the symbols of the nodes in the graph.}
 
-\item{name}{character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.}
+\item{name}{character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
 \value{
 cg.node, expression node.

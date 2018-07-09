@@ -67,7 +67,7 @@ cgraph$public_methods$name <- function(type = 3)
 #' @details \code{$const(value, name)}
 #'
 #' @param value numeric scalar or array, default value of the node.
-#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
+#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @note Constant nodes are ignored when differentiating a graph.
 #'
@@ -93,7 +93,7 @@ cgraph$public_methods$const <- function(value, name)
 
   if(missing(name))
   {
-    name <- as.character(self$name(type))
+    name <- NULL
   }
   else
   {
@@ -110,7 +110,7 @@ cgraph$public_methods$const <- function(value, name)
 #' @details \code{$input(value, name)}
 #'
 #' @param value numeric scalar or array, default value of the node.
-#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
+#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @return cg.node, input node.
 #'
@@ -134,7 +134,7 @@ cgraph$public_methods$input <- function(value, name)
 
   if(missing(name))
   {
-    name <- as.character(self$name(type))
+    name <- NULL
   }
   else
   {
@@ -151,7 +151,7 @@ cgraph$public_methods$input <- function(value, name)
 #' @details \code{$parm(value, name)}
 #'
 #' @param value numeric scalar or array, default value of the node.
-#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
+#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @return cg.node, parameter node.
 #'
@@ -175,7 +175,7 @@ cgraph$public_methods$parm <- function(value, name)
 
   if(missing(name))
   {
-    name <- as.character(self$name(type))
+    name <- NULL
   }
   else
   {
@@ -209,7 +209,7 @@ cgraph$public_methods$get.parms <- function()
 #' @param ... numeric vectors or arrays, the default values of the parameters. Is ignored when \code{parms} is not \code{NULL}.
 #' @param parms named list, the parameters that are to be added to the graph.
 #'
-#' @note All parameters must have a name. Names can be supplied by providing named arguments to \code{...} or by naming the elements of list \code{parms}. No default value is set for parameters with value \code{NULL}.
+#' @note Parameters can be named by providing named arguments to \code{...} or by naming the elements of list \code{parms}. In case no names are provided, parameters are tried to be added to the graph under an auto-generated name. No default value is set for parameters with value \code{NULL}.
 #'
 #' @return nothing.
 #'
@@ -229,11 +229,6 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
     }
   }
 
-  if(is.null(names(parms)))
-  {
-    stop("all parameters must have a name")
-  }
-
   .Call("cg_add_parms", parms, self);
 
   invisible()
@@ -248,7 +243,7 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #' @param call expression or call, operations performed by the node.
 #' @param grads named list of expressions or calls, gradients of the inputs and parameters used in \code{call} with respect to the node.
 #' @param binding named list or environment, binds the values used in the expressions or calls of \code{call} and \code{grads} to the symbols of the nodes in the graph.
-#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
+#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @note The operation that is to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation contains any inputs or parameters, then the gradient of these inputs and parameters with respect to the node should be provided via argument \code{gradients}. Also, any variables used in the these expressions or calls should be bind to the symbols of the nodes in the graph. There are two ways to bind variables. Either, \code{binding} should be a named list were the names of nodes are assigned as symbols to the named members, or \code{binding} is an environment were the names of nodes are assigned as symbols to objects within the environment.
 #'
@@ -279,7 +274,7 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
 
   if(missing(name))
   {
-    name <- as.character(self$name(type))
+    name <- NULL
   }
   else
   {

@@ -18,7 +18,7 @@ Add parameters to the graph.
 \code{$add.parms(..., parms = NULL)}
 }
 \note{
-All parameters must have a name. Names can be supplied by providing named arguments to \code{...} or by naming the elements of list \code{parms}. No default value is set for parameters with value \code{NULL}.
+Parameters can be named by providing named arguments to \code{...} or by naming the elements of list \code{parms}. In case no names are provided, parameters are tried to be added to the graph under an auto-generated name. No default value is set for parameters with value \code{NULL}.
 }
 \author{
 Ron Triepels

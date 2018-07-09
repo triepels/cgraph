@@ -61,7 +61,7 @@ name <- function()
 #' Add a constant node to the active graph.
 #'
 #' @param value numeric scalar or array, default value of the node.
-#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
+#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @note Constant nodes are ignored when differentiating a graph.
 #'
@@ -83,7 +83,7 @@ const <- function(value, name)
 #' Add an input node to the active graph.
 #'
 #' @param value numeric scalar or array, default value of the node.
-#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
+#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @return cg.node, input node.
 #'
@@ -103,7 +103,7 @@ input <- function(value, name)
 #' Add a parameter node to the active graph.
 #'
 #' @param value numeric scalar or array, default value of the node.
-#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
+#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @return cg.node, parameter node.
 #'
@@ -125,7 +125,7 @@ parm <- function(value, name)
 #' @param call expression or call, operations performed by the node.
 #' @param grads named list of expressions or calls, gradients of the inputs and parameters used in \code{call} with respect to the node.
 #' @param binding named list or environment, binds the values used in the expressions or calls of \code{call} and \code{grads} to the symbols of the nodes in the graph.
-#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, an auto-generated name is assigned to the node.
+#' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @note The operation that is to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation contains any inputs or parameters, then the gradient of these inputs and parameters with respect to the node should be provided via argument \code{gradients}. Also, any variables used in the these expressions or calls should be bind to the symbols of the nodes in the graph. There are two ways to bind variables. Either, \code{binding} should be a named list were the names of nodes are assigned as symbols to the named members, or \code{binding} is an environment were the names of nodes are assigned as symbols to objects within the environment.
 #'
