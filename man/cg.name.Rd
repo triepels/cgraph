@@ -16,7 +16,7 @@ Generate a default name for a node.
 \code{$name(type = 3)}
 }
 \note{
-The auto-generated name is not guaranteed to be unique. Instead, it may alread be used by a node in the graph.
+The auto-generated name is not guaranteed to be unique.
 }
 \author{
 Ron Triepels
