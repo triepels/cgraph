@@ -170,15 +170,6 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
       error("invalid type");
   }
 
-  setAttrib(name, install("grads"), allocVector(VECSXP, 0));
-  setAttrib(name, install("parents"), allocVector(INTSXP, 0));
-  setAttrib(name, install("childeren"), allocVector(INTSXP, 0));
-  setAttrib(name, install("class"), mkString("cg.node"));
-
-  SET_VECTOR_ELT(nodes, n, name);
-
-  setVar(install("nodes"), nodes, graph);
-
   if(!isNull(value))
   {
     SEXP values = findVar(install("values"), graph);
@@ -187,6 +178,15 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 
     defineVar(install(CHAR(asChar(name))), value, values);
   }
+
+  setAttrib(name, install("grads"), allocVector(VECSXP, 0));
+  setAttrib(name, install("parents"), allocVector(INTSXP, 0));
+  setAttrib(name, install("childeren"), allocVector(INTSXP, 0));
+  setAttrib(name, install("class"), mkString("cg.node"));
+
+  SET_VECTOR_ELT(nodes, n, name);
+
+  setVar(install("nodes"), nodes, graph);
 
   UNPROTECT(2);
 
@@ -248,13 +248,13 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
 
     SEXP value = VECTOR_ELT(parms, i);
 
-    if(names != R_NilValue)
+    if(names == R_NilValue)
     {
-      name = PROTECT(ScalarString(STRING_ELT(names, i)));
+      name = PROTECT(cg_gen_name(ScalarInteger(CGPRM), graph));
     }
     else
     {
-      name = PROTECT(cg_gen_name(ScalarInteger(CGPRM), graph));
+      name = PROTECT(ScalarString(STRING_ELT(names, i)));
     }
 
     cg_add_placeholder(value, name, ScalarInteger(CGPRM), graph);
