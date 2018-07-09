@@ -12,7 +12,7 @@ cgraph <- R6Class(
   classname = "cgraph",
   class = T,
   cloneable = T,
-  public = list(
+  private = list(
     nodes = NULL,
     values = NULL
   )
@@ -34,7 +34,7 @@ cgraph$public_methods$initialize <- function()
 {
   values <- new.env(parent = session$functions)
 
-  graph <- .Call("cgraph", self, values, PACKAGE = "cgraph")
+  graph <- .Call("cgraph", private, values, PACKAGE = "cgraph")
 
   self$active()
 }
@@ -57,7 +57,7 @@ cgraph$public_methods$name <- function(type = 3)
 {
   type <- as.integer(type)
 
-  .Call("cg_gen_name", type, self, PACKAGE = "cgraph")
+  .Call("cg_gen_name", type, private, PACKAGE = "cgraph")
 }
 
 #' Add Constant
@@ -100,7 +100,7 @@ cgraph$public_methods$const <- function(value, name)
     name <- as.character(name)
   }
 
-  .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
+  .Call("cg_add_placeholder", value, name, type, private, PACKAGE = "cgraph")
 }
 
 #' Add Input
@@ -141,7 +141,7 @@ cgraph$public_methods$input <- function(value, name)
     name <- as.character(name)
   }
 
-  .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
+  .Call("cg_add_placeholder", value, name, type, private, PACKAGE = "cgraph")
 }
 
 #' Add Parameter
@@ -182,7 +182,7 @@ cgraph$public_methods$parm <- function(value, name)
     name <- as.character(name)
   }
 
-  .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
+  .Call("cg_add_placeholder", value, name, type, private, PACKAGE = "cgraph")
 }
 
 #' Get Parameters
@@ -229,7 +229,7 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
     }
   }
 
-  .Call("cg_add_parms", parms, self);
+  .Call("cg_add_parms", parms, private);
 
   invisible()
 }
@@ -281,7 +281,7 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
     name <- as.character(name)
   }
 
-  .Call("cg_add_expression", call, grads, binding, name, self, PACKAGE = "cgraph")
+  .Call("cg_add_expression", call, grads, binding, name, private, PACKAGE = "cgraph")
 }
 
 #' Change the Default Value of a Node
@@ -306,7 +306,7 @@ cgraph$public_methods$set <- function(name, value)
     stop("value must be a numeric vector or array")
   }
 
-  .Call("cg_set", name, value, self, PACKAGE = "cgraph")
+  .Call("cg_set", name, value, private, PACKAGE = "cgraph")
 
   invisible()
 }
@@ -359,7 +359,7 @@ cgraph$public_methods$run <- function(name, values = list())
     values <- list2env(values)
   }
 
-  .Call("cg_run", name, values, self, PACKAGE = "cgraph")
+  .Call("cg_run", name, values, private, PACKAGE = "cgraph")
 }
 
 #' Calculate Gradients
@@ -398,7 +398,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 
   index <- as.integer(index)
 
-  .Call("cg_gradients", name, index, values, self, PACKAGE = "cgraph")
+  .Call("cg_gradients", name, index, values, private, PACKAGE = "cgraph")
 }
 
 
@@ -442,7 +442,7 @@ cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, 
 
   eps <- as.numeric(eps)
 
-  .Call("cg_approx_grad", x, y, index, values, eps, self, PACKAGE = "cgraph")
+  .Call("cg_approx_grad", x, y, index, values, eps, private, PACKAGE = "cgraph")
 }
 
 #' Adjacency Matrix
@@ -476,7 +476,7 @@ cgraph$public_methods$adj.mat <- function()
 #' @author Ron Triepels
 cgraph$public_methods$plot <- function(...)
 {
-  Rgraphviz::plot(new("graphAM", adjMat = self$adj.mat(), edgemode = "directed"), ...)
+  Rgraphviz::plot(new("graphAM", adjMat = private$adj.mat(), edgemode = "directed"), ...)
 }
 
 #' Plot
