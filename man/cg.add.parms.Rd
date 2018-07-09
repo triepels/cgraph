@@ -4,19 +4,21 @@
 \alias{cg.add.parms}
 \title{Add Parameters}
 \arguments{
+\item{...}{numeric vectors or arrays, the default values of the parameters. Is ignored when \code{parms} is not \code{NULL}.}
+
 \item{parms}{named list, the parameters that are to be added to the graph.}
 }
 \value{
 nothing.
 }
 \description{
-Add a list of parameters with default values to the graph.
+Add parameters to the graph.
 }
 \details{
-\code{$add.parms(parms)}
+\code{$add.parms(..., parms = NULL)}
 }
 \note{
-The names of the list elements are taken to be the parameter names.
+All parameters must have a name. Names can be supplied by providing named arguments to \code{...} or by naming the elements of list \code{parms}. No default value is set for parameters with value \code{NULL}.
 }
 \author{
 Ron Triepels

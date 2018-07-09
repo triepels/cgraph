@@ -202,23 +202,36 @@ cgraph$public_methods$get.parms <- function()
 
 #' Add Parameters
 #'
-#' Add a list of parameters with default values to the graph.
+#' Add parameters to the graph.
 #'
-#' @details \code{$add.parms(parms)}
+#' @details \code{$add.parms(..., parms = NULL)}
 #'
+#' @param ... numeric vectors or arrays, the default values of the parameters. Is ignored when \code{parms} is not \code{NULL}.
 #' @param parms named list, the parameters that are to be added to the graph.
 #'
-#' @note The names of the list elements are taken to be the parameter names.
+#' @note All parameters must have a name. Names can be supplied by providing named arguments to \code{...} or by naming the elements of list \code{parms}. No default value is set for parameters with value \code{NULL}.
 #'
 #' @return nothing.
 #'
 #' @name cg.add.parms
 #' @author Ron Triepels
-cgraph$public_methods$add.parms <- function(parms)
+cgraph$public_methods$add.parms <- function(..., parms = NULL)
 {
-  if(!is.list(parms) | is.null(names(parms)))
+  if(is.null(parms))
   {
-    stop("parms must be a named list");
+    parms <- list(...)
+  }
+  else
+  {
+    if(!is.list(parms))
+    {
+      stop("parms must be a named list")
+    }
+  }
+
+  if(is.null(names(parms)))
+  {
+    stop("all parameters must have a name")
   }
 
   .Call("cg_add_parms", parms, self);

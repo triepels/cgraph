@@ -202,9 +202,11 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
   {
     SEXP value = VECTOR_ELT(parms, i);
 
-    SEXP name = ScalarString(STRING_ELT(names, i));
+    SEXP name = PROTECT(ScalarString(STRING_ELT(names, i)));
 
     cg_add_placeholder(value, name, ScalarInteger(CGPRM), graph);
+
+    UNPROTECT(1);
   }
 
   return R_NilValue;
