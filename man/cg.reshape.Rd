@@ -4,12 +4,12 @@
 \alias{cg.reshape}
 \title{Reshape Array Dimensions}
 \usage{
-cg.reshape(x, dims, name = cgraph::name())
+cg.reshape(x, dim, name = cgraph::name())
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric array.}
 
-\item{dims}{numeric scalar or vector, the dimensions of the new array.}
+\item{dim}{numeric scalar or vector, the dimensions of the new array.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }

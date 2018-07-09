@@ -63,7 +63,7 @@ cg.as.numeric <- function(x, name = cgraph::name())
 #' Change the dimensions of array \code{x} to \code{dims}.
 #'
 #' @param x cg.node, placeholder for a numeric array.
-#' @param dims numeric scalar or vector, the dimensions of the new array.
+#' @param dim numeric scalar or vector, the dimensions of the new array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @note The elements of \code{x} are re-arranged column-wise.
@@ -71,10 +71,10 @@ cg.as.numeric <- function(x, name = cgraph::name())
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.reshape <- function(x, dims, name = cgraph::name())
+cg.reshape <- function(x, dim, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = substitute(array(x, dims), list(dims = dims)),
+    call = substitute(array(x, dims), list(dim = dim)),
     grads = list(x = quote(reshape.grad(x, grad))),
     binding = list(x = x)
   )

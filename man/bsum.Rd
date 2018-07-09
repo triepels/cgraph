@@ -7,7 +7,7 @@
 bsum(x, n = 1)
 }
 \arguments{
-\item{x, }{numeric vector or array, the object that is to be summarized.}
+\item{x, }{numeric vector or array, the object that is to be summed.}
 
 \item{n, }{numeric scalar, block size. Defaults to 1.}
 }

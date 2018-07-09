@@ -22,7 +22,7 @@ cg.node, node of the operation.
 Calculate \code{x \%*\% y + as.numeric(z)}.
 }
 \note{
-This function is equivalent to \code{x \%mul\% y + as.numeric(z)}.
+This function is equivalent to \code{cg.matmul(x, y) + as.numeric(z)}.
 }
 \author{
 Ron Triepels
