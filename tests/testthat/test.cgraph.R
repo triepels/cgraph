@@ -24,12 +24,57 @@ test_that("Invalid Node Scope",
   expect_error(run(a))
 })
 
-test_that("Large Network",
+test_that("Expression with Equivalent Inputs",
 {
   # Initialize graph
   x <- cgraph$new()
 
   # Create parameters
+  a <- parm(2, name = "a")
+
+  # Create test expression
+  b <- (a + a) + (a - a) + (a * a) + (a / a)
+
+  # Calculate gradients
+  grads <- gradients(b, run(b))
+
+  # Check gradients
+  expect_equivalent(grads$a, approx.grad(b, a), tolerance = 1e-4)
+})
+
+
+test_that("Network with Multiple Outputs",
+{
+  # Initialize graph
+  x <- cgraph$new()
+
+  # Create parameters
+  a <- parm(2, name = "a")
+  b <- const(4, name = "b")
+
+  # Create test expression
+  c <- a * b
+  d <- a / b
+
+  # Calculate gradients
+  grads <- gradients(c, run(c))
+
+  # Check gradients
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+
+  # Calculate gradients
+  grads <- gradients(d, run(d))
+
+  # Check gradients
+  expect_equivalent(grads$a, approx.grad(d, a), tolerance = 1e-4)
+})
+
+test_that("Large Network",
+{
+  # Initialize graph
+  x <- cgraph$new()
+
+  # Create parameter
   a <- parm(2, name = "a")
 
   # Generate expressions
