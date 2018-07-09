@@ -54,6 +54,43 @@ SEXP cgraph(SEXP graph, SEXP values)
   return graph;
 }
 
+SEXP cg_gen_name(SEXP type, SEXP graph)
+{
+  char name[32];
+
+  int n, count = 0;
+
+  SEXP nodes = findVar(install("nodes"), graph);
+
+  n = LENGTH(nodes);
+
+  for (int i = 0; i < n; i++)
+  {
+    SEXP node = VECTOR_ELT(nodes, i);
+
+    if(asInteger(getAttrib(node, install("type"))) == asInteger(type))
+    {
+      count += 1;
+    }
+  }
+
+  switch(asInteger(type))
+  {
+    case CGCST :
+      sprintf(name, "cst%d", count + 1); break;
+    case CGIPT :
+      sprintf(name, "ipt%d", count + 1); break;
+    case CGPRM :
+      sprintf(name, "prm%d", count + 1); break;
+    case CGEXP :
+      sprintf(name, "exp%d", count + 1); break;
+    default :
+      error("invalid type");
+  }
+
+  return mkString(name);
+}
+
 int cg_node_id(SEXP name, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
@@ -98,7 +135,14 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 
   SEXP nodes = findVar(install("nodes"), graph);
 
-  name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
+  if(name == R_NilValue)
+  {
+    name = PROTECT(cg_gen_name(type, graph));
+  }
+  else
+  {
+    name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
+  }
 
   if(cg_node_exists(asChar(name), graph))
   {
@@ -200,9 +244,18 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
 
   for(int i = 0; i < n; i++)
   {
+    SEXP name = R_NilValue;
+
     SEXP value = VECTOR_ELT(parms, i);
 
-    SEXP name = PROTECT(ScalarString(STRING_ELT(names, i)));
+    if(names != R_NilValue)
+    {
+      name = PROTECT(ScalarString(STRING_ELT(names, i)));
+    }
+    else
+    {
+      name = PROTECT(cg_gen_name(ScalarInteger(CGPRM), graph));
+    }
 
     cg_add_placeholder(value, name, ScalarInteger(CGPRM), graph);
 
@@ -218,7 +271,14 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   SEXP nodes = findVar(install("nodes"), graph);
 
-  name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
+  if(name == R_NilValue)
+  {
+    name = PROTECT(cg_gen_name(ScalarInteger(CGEXP), graph));
+  }
+  else
+  {
+    name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
+  }
 
   if(cg_node_exists(asChar(name), graph))
   {
@@ -334,43 +394,6 @@ SEXP cg_set(SEXP name, SEXP value, SEXP graph)
   defineVar(install(CHAR(asChar(name))), value, values);
 
   return R_NilValue;
-}
-
-SEXP cg_gen_name(SEXP type, SEXP graph)
-{
-  char name[32];
-
-  int n, count = 0;
-
-  SEXP nodes = findVar(install("nodes"), graph);
-
-  n = LENGTH(nodes);
-
-  for (int i = 0; i < n; i++)
-  {
-    SEXP node = VECTOR_ELT(nodes, i);
-
-    if(asInteger(getAttrib(node, install("type"))) == asInteger(type))
-    {
-      count += 1;
-    }
-  }
-
-  switch(asInteger(type))
-  {
-    case CGCST :
-      sprintf(name, "cst%d", count + 1); break;
-    case CGIPT :
-      sprintf(name, "ipt%d", count + 1); break;
-    case CGPRM :
-      sprintf(name, "prm%d", count + 1); break;
-    case CGEXP :
-      sprintf(name, "exp%d", count + 1); break;
-    default :
-      error("invalid type");
-  }
-
-  return mkString(name);
 }
 
 SEXP cg_traverse_graph(SEXP id, SEXP graph)
