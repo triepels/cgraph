@@ -74,7 +74,7 @@ cg.as.numeric <- function(x, name = cgraph::name())
 cg.reshape <- function(x, dim, name = cgraph::name())
 {
   cgraph::expr(name = name,
-    call = substitute(array(x, dims), list(dim = dim)),
+    call = substitute(array(x, dim), list(dim = dim)),
     grads = list(x = quote(reshape.grad(x, grad))),
     binding = list(x = x)
   )
