@@ -2,7 +2,7 @@
 #'
 #' Divide a numeric vector or array in consecutive blocks of \code{n} elements and sum the elements at each position in these blocks.
 #'
-#' @param x, numeric vector or array, the object that is to be summarized.
+#' @param x, numeric vector or array, the object that is to be summed.
 #' @param n, numeric scalar, block size. Defaults to 1.
 #'
 #' @note If \code{x} is an array and \code{n} is equal to the size of \code{x}'s first dimension, then \code{bsum} behaves as \code{rowSums}.
