@@ -386,8 +386,6 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 {
   name <- as.character(name)
 
-  index <- as.integer(index)
-
   if(!is.environment(values))
   {
     if(!is.list(values))
@@ -397,6 +395,8 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 
     values <- list2env(values)
   }
+
+  index <- as.integer(index)
 
   .Call("cg_gradients", name, index, values, self, PACKAGE = "cgraph")
 }
@@ -428,10 +428,6 @@ cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, 
 
   y <- as.character(y)
 
-  index <- as.integer(index)
-
-  eps <- as.numeric(eps)
-
   if(!is.environment(values))
   {
     if(!is.list(values))
@@ -441,6 +437,10 @@ cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, 
 
     values <- list2env(values)
   }
+
+  index <- as.integer(index)
+
+  eps <- as.numeric(eps)
 
   .Call("cg_approx_grad", x, y, index, values, eps, self, PACKAGE = "cgraph")
 }
