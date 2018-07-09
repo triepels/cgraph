@@ -149,6 +149,67 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   return name;
 }
 
+SEXP cg_get_parms(SEXP graph)
+{
+  SEXP nodes = findVar(install("nodes"), graph);
+
+  SEXP values = findVar(install("values"), graph);
+
+  int k = 0, n = LENGTH(nodes);
+
+  SEXP parms = PROTECT(allocVector(VECSXP, n));
+
+  SEXP names = PROTECT(allocVector(STRSXP, n));
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP node = VECTOR_ELT(nodes, i);
+
+    SEXP type = getAttrib(node, install("type"));
+
+    if(asInteger(type) == CGPRM)
+    {
+      SEXP value = findVarInFrame(values, install(CHAR(asChar(node))));
+
+      if(value != R_UnboundValue)
+      {
+        SET_VECTOR_ELT(parms, k, value);
+      }
+
+      SET_STRING_ELT(names, k, asChar(node));
+
+      k++;
+    }
+  }
+
+  SETLENGTH(parms, k);
+  SETLENGTH(names, k);
+
+  setAttrib(parms, R_NamesSymbol, names);
+
+  UNPROTECT(2);
+
+  return(parms);
+}
+
+SEXP cg_add_parms(SEXP parms, SEXP graph)
+{
+  int n = LENGTH(parms);
+
+  SEXP names = getAttrib(parms, R_NamesSymbol);
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP value = VECTOR_ELT(parms, i);
+
+    SEXP name = ScalarString(STRING_ELT(names, i));
+
+    cg_add_placeholder(value, name, ScalarInteger(CGPRM), graph);
+  }
+
+  return R_NilValue;
+}
+
 SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
 {
   int n, m;

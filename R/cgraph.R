@@ -185,6 +185,47 @@ cgraph$public_methods$parm <- function(value, name)
   .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
 }
 
+#' Get Parameters
+#'
+#' List the parameters and their default values of the graph.
+#'
+#' @details \code{$get.parms()}
+#'
+#' @return named list, parameters of the graph.
+#'
+#' @name cg.get.parms
+#' @author Ron Triepels
+cgraph$public_methods$get.parms <- function()
+{
+  .Call("cg_get_parms", self);
+}
+
+#' Add Parameters
+#'
+#' Add a list of parameters with default values to the graph.
+#'
+#' @details \code{$add.parms(parms)}
+#'
+#' @param parms named list, the parameters that are to be added to the graph.
+#'
+#' @note The names of the list elements are taken to be the parameter names.
+#'
+#' @return nothing.
+#'
+#' @name cg.add.parms
+#' @author Ron Triepels
+cgraph$public_methods$add.parms <- function(parms)
+{
+  if(!is.list(parms) | is.null(names(parms)))
+  {
+    stop("parms must be a named list");
+  }
+
+  .Call("cg_add_parms", parms, self);
+
+  invisible()
+}
+
 #' Add Expression
 #'
 #' Add an expression node to the graph.
