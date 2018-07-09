@@ -31,13 +31,12 @@ export("as.double.grad", function(x, grad)
 #'
 #' @param x cg.node, placeholder for a numeric array.
 #' @param name character scalar, name of the operation (optional).
-#'
-#' @note This function is identical to \code{cg.as.double}.
+#' @param ... further arguments passed to or from other methods.
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.as.numeric <- function(x, name = cgraph::name())
+as.double.cg.node <- function(x, name = cgraph::name(), ...)
 {
   cgraph::cg.as.double(x, name)
 }
@@ -48,12 +47,13 @@ cg.as.numeric <- function(x, name = cgraph::name())
 #'
 #' @param x cg.node, placeholder for a numeric array.
 #' @param name character scalar, name of the operation (optional).
-#' @param ... further arguments passed to or from other methods.
+#'
+#' @note This function is identical to \code{cg.as.double}.
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-as.double.cg.node <- function(x, name = cgraph::name(), ...)
+cg.as.numeric <- function(x, name = cgraph::name())
 {
   cgraph::cg.as.double(x, name)
 }
