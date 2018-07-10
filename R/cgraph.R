@@ -197,7 +197,7 @@ cgraph$public_methods$parm <- function(value, name)
 #' @author Ron Triepels
 cgraph$public_methods$get.parms <- function()
 {
-  .Call("cg_get_parms", self);
+  .Call("cg_get_parms", private);
 }
 
 #' Add Parameters
@@ -457,7 +457,7 @@ cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, 
 #' @author Ron Triepels
 cgraph$public_methods$adj.mat <- function()
 {
-  .Call("cg_adj_mat", self, PACKAGE = "cgraph")
+  .Call("cg_adj_mat", private, PACKAGE = "cgraph")
 }
 
 #' Plot
@@ -476,7 +476,7 @@ cgraph$public_methods$adj.mat <- function()
 #' @author Ron Triepels
 cgraph$public_methods$plot <- function(...)
 {
-  Rgraphviz::plot(new("graphAM", adjMat = private$adj.mat(), edgemode = "directed"), ...)
+  Rgraphviz::plot(new("graphAM", adjMat = self$adj.mat(), edgemode = "directed"), ...)
 }
 
 #' Plot
