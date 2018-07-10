@@ -199,7 +199,7 @@ cgraph$public_methods$parm <- function(value, name)
 #' @author Ron Triepels
 cgraph$public_methods$get.parms <- function()
 {
-  .Call("cg_get_parms", self);
+  .Call("cg_get_parms", private$graph);
 }
 
 #' Add Parameters
@@ -231,9 +231,7 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
     }
   }
 
-  .Call("cg_add_parms", parms, self);
-
-  invisible()
+  invisible(.Call("cg_add_parms", parms, private$graph))
 }
 
 #' Add Expression
