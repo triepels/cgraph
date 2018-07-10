@@ -17,9 +17,6 @@ cg.node, node of the operation.
 \description{
 Calculate \code{1 / (1 + exp(-x))}.
 }
-\note{
-\code{exp(1)=e}.
-}
 \author{
 Ron Triepels
 }
