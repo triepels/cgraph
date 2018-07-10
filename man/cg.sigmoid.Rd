@@ -15,7 +15,7 @@ cg.sigmoid(x, name = cgraph::name())
 cg.node, node of the operation.
 }
 \description{
-Calculate \code{1 / (1 + exp(1)^-x)}.
+Calculate \code{1 / (1 + exp(-x))}.
 }
 \note{
 \code{exp(1)=e}.
