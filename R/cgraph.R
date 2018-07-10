@@ -209,7 +209,7 @@ cgraph$public_methods$get.parms <- function()
 #' @param ... numeric vectors or arrays, the default values of the parameters. Is ignored when \code{parms} is not \code{NULL}.
 #' @param parms named list, the parameters that are to be added to the graph.
 #'
-#' @note Parameters can be named by providing named arguments to \code{...} or by naming the elements of list \code{parms}. In case no names are provided, parameters are tried to be added to the graph under an auto-generated name. No default value is set for parameters with value \code{NULL}.
+#' @note Parameters can be named by providing named arguments to \code{...} or by naming the elements of \code{parms}. In case no names are provided, parameters are tried to be added to the graph under an auto-generated name. No default value is set for parameters with value \code{NULL}.
 #'
 #' @return nothing.
 #'
