@@ -142,46 +142,6 @@ expr <- function(call, grads, binding, name)
   session$graph$expr(call, grads, binding, name)
 }
 
-#' Change the Default Value of a Node
-#'
-#' Change the default value of a node in the active graph.
-#'
-#' @param name cg.node, name of the node whose default value is to be changed.
-#' @param value numeric vector or array, default value of the node.
-#'
-#' @return nothing.
-#'
-#' @author Ron Triepels
-set <- function(name, value)
-{
-  if(is.null(session$graph))
-  {
-    stop("No active graph set")
-  }
-
-  session$graph$set(name, value)
-}
-
-#' Change the Default Value of a Node
-#'
-#' Change the default value of a node in the active graph.
-#'
-#' @param name cg.node, name of the node whose default value is to be changed.
-#' @param value numeric vector or array, default value of the node.
-#'
-#' @return nothing.
-#'
-#' @author Ron Triepels
-`%:%` <- function(name, value)
-{
-  if(is.null(session$graph))
-  {
-    stop("No active graph set")
-  }
-
-  session$graph$set(name, value)
-}
-
 #' Evaluate a Graph
 #'
 #' Evaluate node \code{name} in the active graph.

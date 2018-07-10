@@ -286,33 +286,6 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
   .Call("cg_add_expression", call, grads, binding, name, private$graph, PACKAGE = "cgraph")
 }
 
-#' Change the Default Value of a Node
-#'
-#' Change the default value of a node in the graph.
-#'
-#' @details \code{$set(name. value)}
-#'
-#' @param name cg.node, name of the node whose default value is to be changed.
-#' @param value numeric vector or array, default value of the node.
-#'
-#' @return nothing.
-#'
-#' @name cg.set
-#' @author Ron Triepels
-cgraph$public_methods$set <- function(name, value)
-{
-  name <- as.character(name)
-
-  if(!(is.numeric(value) | is.array(value)))
-  {
-    stop("value must be a numeric vector or array")
-  }
-
-  .Call("cg_set", name, value, self, PACKAGE = "cgraph")
-
-  invisible()
-}
-
 #' Change active graph
 #'
 #' Set this graph to be the active graph.
