@@ -271,6 +271,8 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   SEXP nodes = findVar(install("nodes"), graph);
 
+  n = LENGTH(nodes);
+
   if(name == R_NilValue)
   {
     name = PROTECT(cg_gen_name(ScalarInteger(CGEXP), graph));
@@ -308,9 +310,11 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     setVar(install(CHAR(var)), coerceVector(value, SYMSXP), binding);
   }
 
-  SEXP names = getAttrib(grads, R_NamesSymbol);
-
   m = LENGTH(grads);
+
+  SEXP parents = PROTECT(allocVector(INTSXP, m));
+
+  SEXP names = getAttrib(grads, R_NamesSymbol);
 
   for(int i = 0; i < m; i++)
   {
@@ -320,24 +324,21 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     {
       error("cannot find '%s' in binding", CHAR(STRING_ELT(names, i)));
     }
+
+    INTEGER(parents)[i] = cg_node_id(asChar(symbol), graph);
   }
-
-  SEXP parents = PROTECT(allocVector(INTSXP, m));
-
-  n = LENGTH(nodes);
 
   for(int i = 0; i < m; i++)
   {
-    SEXP symbol = findVar(install(CHAR(STRING_ELT(names, i))), binding);
+    int k;
 
-    int parent_id = cg_node_id(coerceVector(symbol, CHARSXP), graph);
+    SEXP parent = VECTOR_ELT(nodes, INTEGER(parents)[i] - 1);
 
-    SEXP parent = VECTOR_ELT(nodes, parent_id - 1);
 
     /* Add gradient to parent node */
     SEXP parent_grads = getAttrib(parent, install("grads"));
 
-    int k = LENGTH(parent_grads);
+    k = LENGTH(parent_grads);
 
     parent_grads = PROTECT(lengthgets(parent_grads, k + 1));
 
@@ -345,19 +346,18 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
     setAttrib(parent, install("grads"), parent_grads);
 
+
     /* Add current id to parent node */
     SEXP parent_childeren = getAttrib(parent, install("childeren"));
 
-    int l = LENGTH(parent_childeren);
+    k = LENGTH(parent_childeren);
 
-    parent_childeren = PROTECT(lengthgets(parent_childeren, l + 1));
+    parent_childeren = PROTECT(lengthgets(parent_childeren, k + 1));
 
-    INTEGER(parent_childeren)[l] = n + 1;
+    INTEGER(parent_childeren)[k] = n + 1;
 
     setAttrib(parent, install("childeren"), parent_childeren);
 
-    /* Add parent id to the current node */
-    INTEGER(parents)[i] = parent_id;
 
     UNPROTECT(2);
   }
