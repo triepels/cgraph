@@ -147,15 +147,15 @@ cg.prod <- function(x, name = cgraph::name())
 {
   cgraph::expr(name = name,
     call = quote(prod(x)),
-    grads = list(x = quote(prod.grad(x, grad))),
-    binding = list(x = x)
+    grads = list(x = quote(prod.grad(x, y, grad))),
+    binding = list(x = x, y = name)
   )
 }
 
 # Export gradient
-export("prod.grad", function(x, grad)
+export("prod.grad", function(x, y, grad)
 {
-  grad * prod(x) / x
+  grad * y / x
 })
 
 #' Row Sums
