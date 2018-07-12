@@ -58,13 +58,11 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
 {
   char name[32];
 
-  int n, count = 0;
+  int count = 0;
 
   SEXP nodes = findVar(install("nodes"), graph);
 
-  n = LENGTH(nodes);
-
-  for (int i = 0; i < n; i++)
+  for (int i = 0; i < LENGTH(nodes); i++)
   {
     SEXP node = VECTOR_ELT(nodes, i);
 
@@ -95,9 +93,7 @@ int cg_node_id(SEXP name, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
 
-  int n = LENGTH(nodes) - 1;
-
-  for(int i = n; i >= 0; i--)
+  for(int i = LENGTH(nodes) - 1; i >= 0; i--)
   {
     SEXP node = VECTOR_ELT(nodes, i);
 
@@ -114,9 +110,7 @@ int cg_node_exists(SEXP name, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
 
-  int n = LENGTH(nodes);
-
-  for(int i = 0; i < n; i++)
+  for(int i = 0; i < LENGTH(nodes); i++)
   {
     SEXP node = VECTOR_ELT(nodes, i);
 
@@ -131,9 +125,9 @@ int cg_node_exists(SEXP name, SEXP graph)
 
 SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 {
-  int n;
-
   SEXP nodes = findVar(install("nodes"), graph);
+
+  int n = LENGTH(nodes);
 
   if(name == R_NilValue)
   {
@@ -153,8 +147,6 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   {
     error("'grad' is a reserved word that cannot be used");
   }
-
-  n = LENGTH(nodes);
 
   nodes = PROTECT(lengthgets(nodes, n + 1));
 
@@ -199,7 +191,7 @@ SEXP cg_get_parms(SEXP graph)
 
   SEXP values = findVar(install("values"), graph);
 
-  int k = 0, n = LENGTH(nodes);
+  int n = LENGTH(nodes), l = 0;
 
   SEXP parms = PROTECT(allocVector(VECSXP, n));
 
@@ -217,17 +209,17 @@ SEXP cg_get_parms(SEXP graph)
 
       if(value != R_UnboundValue)
       {
-        SET_VECTOR_ELT(parms, k, value);
+        SET_VECTOR_ELT(parms, l, value);
       }
 
-      SET_STRING_ELT(names, k, asChar(node));
+      SET_STRING_ELT(names, l, asChar(node));
 
-      k++;
+      l++;
     }
   }
 
-  SETLENGTH(parms, k);
-  SETLENGTH(names, k);
+  SETLENGTH(parms, l);
+  SETLENGTH(names, l);
 
   setAttrib(parms, R_NamesSymbol, names);
 
@@ -238,11 +230,9 @@ SEXP cg_get_parms(SEXP graph)
 
 SEXP cg_add_parms(SEXP parms, SEXP graph)
 {
-  int n = LENGTH(parms);
-
   SEXP names = getAttrib(parms, R_NamesSymbol);
 
-  for(int i = 0; i < n; i++)
+  for(int i = 0; i < LENGTH(parms); i++)
   {
     SEXP name = R_NilValue;
 
@@ -267,11 +257,9 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
 
 SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
 {
-  int n, m;
-
   SEXP nodes = findVar(install("nodes"), graph);
 
-  n = LENGTH(nodes);
+  int n = LENGTH(nodes), g;
 
   if(name == R_NilValue)
   {
@@ -294,9 +282,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   SEXP vars = R_lsInternal3(binding, TRUE, FALSE);
 
-  m = LENGTH(vars);
-
-  for(int i = 0; i < m; i++)
+  for(int i = 0; i < LENGTH(vars); i++)
   {
     SEXP var = STRING_ELT(vars, i);
 
@@ -310,13 +296,13 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     setVar(install(CHAR(var)), coerceVector(value, SYMSXP), binding);
   }
 
-  m = LENGTH(grads);
+  g = LENGTH(grads);
 
-  SEXP parents = PROTECT(allocVector(INTSXP, m));
+  SEXP parents = PROTECT(allocVector(INTSXP, g));
 
   SEXP names = getAttrib(grads, R_NamesSymbol);
 
-  for(int i = 0; i < m; i++)
+  for(int i = 0; i < g; i++)
   {
     SEXP symbol = findVarInFrame(binding, install(CHAR(STRING_ELT(names, i))));
 
@@ -328,9 +314,9 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     INTEGER(parents)[i] = cg_node_id(asChar(symbol), graph);
   }
 
-  for(int i = 0; i < m; i++)
+  for(int i = 0; i < g; i++)
   {
-    int k;
+    int h, c;
 
     SEXP parent = VECTOR_ELT(nodes, INTEGER(parents)[i] - 1);
 
@@ -338,11 +324,11 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     /* Add gradient to parent node */
     SEXP parent_grads = getAttrib(parent, install("grads"));
 
-    k = LENGTH(parent_grads);
+    h = LENGTH(parent_grads);
 
-    parent_grads = PROTECT(lengthgets(parent_grads, k + 1));
+    parent_grads = PROTECT(lengthgets(parent_grads, h + 1));
 
-    SET_VECTOR_ELT(parent_grads, k, substitute(VECTOR_ELT(grads, i), binding));
+    SET_VECTOR_ELT(parent_grads, h, substitute(VECTOR_ELT(grads, i), binding));
 
     setAttrib(parent, install("grads"), parent_grads);
 
@@ -350,11 +336,11 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     /* Add current id to parent node */
     SEXP parent_childeren = getAttrib(parent, install("childeren"));
 
-    k = LENGTH(parent_childeren);
+    c = LENGTH(parent_childeren);
 
-    parent_childeren = PROTECT(lengthgets(parent_childeren, k + 1));
+    parent_childeren = PROTECT(lengthgets(parent_childeren, c + 1));
 
-    INTEGER(parent_childeren)[k] = n + 1;
+    INTEGER(parent_childeren)[c] = n + 1;
 
     setAttrib(parent, install("childeren"), parent_childeren);
 
@@ -384,7 +370,7 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
 
-  int k = 0, n = LENGTH(nodes), visited[n];
+  int l = 0, n = LENGTH(nodes), visited[n];
 
   SEXP ids = PROTECT(allocVector(INTSXP, n));
 
@@ -406,9 +392,9 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
     {
       if(isNull(parents))
       {
-        INTEGER(ids)[k] = stack_pop(&s);
+        INTEGER(ids)[l] = stack_pop(&s);
 
-        k++;
+        l++;
       }
       else
       {
@@ -433,9 +419,9 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
         }
         else
         {
-          INTEGER(ids)[k] = stack_pop(&s);
+          INTEGER(ids)[l] = stack_pop(&s);
 
-          k++;
+          l++;
         }
       }
       else
@@ -447,7 +433,7 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
     visited[current - 1] += 1;
   }
 
-  SETLENGTH(ids, k);
+  SETLENGTH(ids, l);
 
   stack_destroy(&s);
 
@@ -458,11 +444,9 @@ SEXP cg_traverse_graph(SEXP id, SEXP graph)
 
 void cg_forward(SEXP ids, SEXP values, SEXP graph)
 {
-  int n = LENGTH(ids);
-
   SEXP nodes = findVar(install("nodes"), graph);
 
-  for(int i = 0; i < n; i++)
+  for(int i = 0; i < LENGTH(ids); i++)
   {
     SEXP node = VECTOR_ELT(nodes, INTEGER(ids)[i] - 1);
 
@@ -506,14 +490,14 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
     root_grad = PROTECT(duplicate(root_grad));
 
-    int m = LENGTH(root_grad);
+    int g = LENGTH(root_grad);
 
-    if(INTEGER(index)[0] < 1 || INTEGER(index)[0] > m)
+    if(INTEGER(index)[0] < 1 || INTEGER(index)[0] > g)
     {
       error("invalid index");
     }
 
-    memset(REAL(root_grad), 0, m * sizeof(double));
+    memset(REAL(root_grad), 0, g * sizeof(double));
 
     REAL(root_grad)[INTEGER(index)[0] - 1] = 1;
 
@@ -533,11 +517,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
         if(!isNull(node_grads) & !isNull(node_childeren))
         {
-          int m = LENGTH(node_childeren);
-
           SEXP node_grad = R_NilValue;
 
-          for(int j = 0; j < m; j++)
+          for(int j = 0; j < LENGTH(node_childeren); j++)
           {
             SEXP child = VECTOR_ELT(nodes, INTEGER(node_childeren)[j] - 1);
 
@@ -557,9 +539,7 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
               {
                 SEXP child_grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
 
-                int l = LENGTH(child_grad);
-
-                for(int k = 0; k < l; k++)
+                for(int k = 0; k < LENGTH(child_grad); k++)
                 {
                   REAL(node_grad)[k] += REAL(child_grad)[k];
                 }
@@ -649,18 +629,14 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP index, SEXP values, SEXP eps, SEXP grap
   SEXP x_value = PROTECT(eval(install(CHAR(asChar(x_node))), values));
   SEXP y_value = PROTECT(eval(install(CHAR(asChar(y_node))), values));
 
-  int m = LENGTH(x_value);
-
-  if(INTEGER(index)[0] < 1 || INTEGER(index)[0] > m)
+  if(INTEGER(index)[0] < 1 || INTEGER(index)[0] > LENGTH(x_value))
   {
     error("invalid index");
   }
 
   SEXP grad = PROTECT(duplicate(y_value));
 
-  int n = LENGTH(grad);
-
-  for(int i = 0; i < n; i++)
+  for(int i = 0; i < LENGTH(grad); i++)
   {
     REAL(y_value)[i] += REAL(eps)[0];
 
@@ -706,9 +682,7 @@ SEXP cg_adj_mat(SEXP graph)
 
     if(!isNull(childeren))
     {
-      int m = LENGTH(childeren);
-
-      for (int j = 0; j < m; j++)
+      for (int j = 0; j < LENGTH(childeren); j++)
       {
         INTEGER(mat)[i + n * (INTEGER(childeren)[j] - 1)] = 1;
       }
