@@ -316,15 +316,13 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   for(int i = 0; i < g; i++)
   {
-    int h, c;
-
     SEXP parent = VECTOR_ELT(nodes, INTEGER(parents)[i] - 1);
 
 
     /* Add gradient to parent node */
     SEXP parent_grads = getAttrib(parent, install("grads"));
 
-    h = LENGTH(parent_grads);
+    int h = LENGTH(parent_grads);
 
     parent_grads = PROTECT(lengthgets(parent_grads, h + 1));
 
@@ -336,7 +334,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     /* Add current id to parent node */
     SEXP parent_childeren = getAttrib(parent, install("childeren"));
 
-    c = LENGTH(parent_childeren);
+    int c = LENGTH(parent_childeren);
 
     parent_childeren = PROTECT(lengthgets(parent_childeren, c + 1));
 
