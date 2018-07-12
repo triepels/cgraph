@@ -1,7 +1,7 @@
 Package: cgraph
 Type: Package
 Title: Computational Graphs in R
-Version: 0.8.15
+Version: 0.8.16
 Author: Ron Triepels
 Maintainer: Ron Triepels <dev@cgraph.org>
 Description: The cgraph package allows to create, evaluate, and differentiate computational graphs in R. A computational graph is a graph representation of a multivariate function decomposed by its (elementary) operations. Nodes in the graph represent arrays while edges represent dependencies among the arrays. One of the advantages of expressing a function as a computational graph is that this enables to differentiate the function by automatic differentiation. The cgraph package supports various functions including basic arithmetic, trigonometry functions, and linear algebra functions. It differentiates computational graphs by reverse automatic differentiation. The flexible architecture of the package makes it applicable to solve a variety of problems including local sensitivity analysis, gradient-based optimization, and machine learning.
