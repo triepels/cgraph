@@ -41,7 +41,7 @@ export <- function(name, fun)
 #'
 #' Generate a default name for an expression.
 #'
-#' @note The auto-generated name is not guaranteed to be unique. Instead, it may alread be used by an expression in the active graph.
+#' @note The auto-generated name is not guaranteed to be unique.
 #'
 #' @return symbol, auto-generated name for the node.
 #'

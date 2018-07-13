@@ -331,7 +331,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
     setAttrib(parent, install("grads"), parent_grads);
 
 
-    /* Add current id to parent node */
+    /* Add child to parent node */
     SEXP parent_childeren = getAttrib(parent, install("childeren"));
 
     int c = LENGTH(parent_childeren);
