@@ -15,7 +15,7 @@
 \item{eps}{numeric scalar, step size. Defaults to 1e-4.}
 }
 \value{
-numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
+numeric vector or array, the derivative of \code{x} with respect to \code{y}.
 }
 \description{
 Differentiate node \code{x} with respect to node \code{y} in the graph by numerical differentiation.

@@ -18,7 +18,7 @@ approx.grad(x, y, values = list(), index = 1, eps = 1e-04)
 \item{eps}{numeric scalar, step size. Defaults to 1e-4.}
 }
 \value{
-numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
+numeric vector or array, the derivative of \code{x} with respect to \code{y}.
 }
 \description{
 Differentiate node \code{x} with respect to node \code{y} in the active graph by numerical differentiation.

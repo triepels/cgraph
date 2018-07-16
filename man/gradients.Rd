@@ -14,7 +14,7 @@ gradients(name, values = list(), index = 1)
 \item{index}{numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.}
 }
 \value{
-cg.environment object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
+environment, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
 }
 \description{
 Differentiate the active graph with respect to node \code{name} by reverse automatic differentiation.
@@ -24,7 +24,7 @@ All placeholders and expressions required to compute node \code{name} must have 
 
 Currently, cgraph can only differentiate with respect to a scalar output node. In case the value of output node \code{name} is a vector or an array, \code{index} can be used to specify which element of the vector or array needs to be differentiated.
 
-The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
+The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are calculated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
 }
 \author{
 Ron Triepels

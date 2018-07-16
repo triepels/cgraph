@@ -26,7 +26,7 @@ cgraph <- R6Class(
 #'
 #' @details \code{$new()}
 #'
-#' @note The cgraph object is set as the current graph. Any placeholders or expressions that are invoked will be added to this graph. You can change the current graph by calling the \code{$active()} method on another cgraph object.
+#' @note The cgraph object is set to be the active graph. Any placeholders or expressions that are created by wrapper function \code{const}, \code{input}, or \code{parm} will be added to this graph unless the active graph is changed. You can change the current graph by calling the \code{$active()} method on another cgraph object.
 #'
 #' @return cgraph object.
 #'
@@ -245,7 +245,7 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #' @param binding named list or environment, binds the values used in the expressions or calls of \code{call} and \code{grads} to the symbols of the nodes in the graph.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
-#' @note The operation that is to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation contains any inputs or parameters, then the gradient of these inputs and parameters with respect to the node should be provided via argument \code{gradients}. Also, any variables used in the these expressions or calls should be bind to the symbols of the nodes in the graph. There are two ways to bind variables. Either, \code{binding} should be a named list were the names of nodes are assigned as symbols to the named members, or \code{binding} is an environment were the names of nodes are assigned as symbols to objects within the environment.
+#' @note The operation that is to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation contains any inputs or parameters, then the gradient of these inputs and parameters with respect to the node should be provided via argument \code{gradients}. Also, any variables used in the these expressions or calls should be bind to the symbols of the nodes in the graph. There are two ways to bind variables. Either, \code{binding} is a named list were the names of nodes are assigned as symbols to the named members, or \code{binding} is an environment were the names of nodes are assigned as symbols to objects within the environment.
 #'
 #' @return cg.node, expression node.
 #'
@@ -314,7 +314,7 @@ cgraph$public_methods$active <- function()
 #'
 #' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. The values of placeholders whose default values are not changed are not returned.
 #'
-#' @return cg.environment object, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
+#' @return environment, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
 #'
 #' @name cg.run
 #' @author Ron Triepels
@@ -349,9 +349,9 @@ cgraph$public_methods$run <- function(name, values = list())
 #'
 #' Currently, cgraph can only differentiate with respect to a scalar output node. In case the value of output node \code{name} is a vector or an array, \code{index} can be used to specify which element of the vector or array needs to be differentiated.
 #'
-#' The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are differentiated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
+#' The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are calulated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
 #'
-#' @return cg.environment object, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
+#' @return environment, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
 #'
 #' @name cg.gradients
 #' @author Ron Triepels
@@ -391,7 +391,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #'
 #' The graph is differentiation by the symmetric difference quotient. This function is mainly used for testing purposes.
 #'
-#' @return numeric scalar or array, the derivative of \code{x} with respect to \code{y}.
+#' @return numeric vector or array, the derivative of \code{x} with respect to \code{y}.
 #'
 #' @name cg.approx.grad
 #' @author Ron Triepels
