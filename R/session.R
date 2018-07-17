@@ -63,7 +63,7 @@ name <- function()
 #' @param value numeric scalar or array, default value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
-#' @note Constant nodes are ignored when differentiating a graph.
+#' @note Name cannot be 'grad' as this is a reserved word. Constant nodes are ignored when differentiating a graph.
 #'
 #' @return cg.node, constant node.
 #'
@@ -85,6 +85,8 @@ const <- function(value, name)
 #' @param value numeric scalar or array, default value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
+#' @note Name cannot be 'grad' as this is a reserved word.
+#'
 #' @return cg.node, input node.
 #'
 #' @author Ron Triepels
@@ -104,6 +106,8 @@ input <- function(value, name)
 #'
 #' @param value numeric scalar or array, default value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
+#'
+#' @note Name cannot be 'grad' as this is a reserved word.
 #'
 #' @return cg.node, parameter node.
 #'
@@ -128,6 +132,8 @@ parm <- function(value, name)
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @note The operation that is to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation contains any inputs or parameters, then the gradient of these inputs and parameters with respect to the node should be provided via argument \code{gradients}. Also, any variables used in the these expressions or calls should be bind to the symbols of the nodes in the graph. There are two ways to bind variables. Either, \code{binding} is a named list were the names of nodes are assigned as symbols to the named members, or \code{binding} is an environment were the names of nodes are assigned as symbols to objects within the environment.
+#'
+#' Name cannot be 'grad' as this is a reserved word.
 #'
 #' @return cg.node, expression node.
 #'

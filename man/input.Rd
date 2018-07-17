@@ -17,6 +17,9 @@ cg.node, input node.
 \description{
 Add an input node to the active graph.
 }
+\note{
+Name cannot be 'grad' as this is a reserved word.
+}
 \author{
 Ron Triepels
 }

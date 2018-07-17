@@ -18,7 +18,7 @@ Add a constant node to the graph.
 \code{$const(value, name)}
 }
 \note{
-Constant nodes are ignored when differentiating a graph.
+Name cannot be 'grad' as this is a reserved word. Constant nodes are ignored when differentiating a graph.
 }
 \author{
 Ron Triepels

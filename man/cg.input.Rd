@@ -17,6 +17,9 @@ Add an input node to the graph.
 \details{
 \code{$input(value, name)}
 }
+\note{
+Name cannot be 'grad' as this is a reserved word.
+}
 \author{
 Ron Triepels
 }
