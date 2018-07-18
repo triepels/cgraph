@@ -7,8 +7,6 @@ print.cg.node = function(x, ...)
 {
   val <- NULL
 
-  types <- c("constant", "input", "parameter", "expression")
-
   tryCatch(
   {
     if(is.null(session$graph))
@@ -25,7 +23,7 @@ print.cg.node = function(x, ...)
     warning(e)
   })
 
-  cat(sprintf("<cg.node: %s> '%s'\n\n", types[attr(x, "type") + 1], x))
+  cat(sprintf("<cg.node: %s>\n\n", x))
 
   print(val)
 }
