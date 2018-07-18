@@ -138,14 +138,14 @@ parm <- function(value, name)
 #' @return cg.node, expression node.
 #'
 #' @author Ron Triepels
-expr <- function(call, grads, binding, name)
+opr <- function(call, grads, binding, name)
 {
   if(is.null(session$graph))
   {
     stop("No active graph set")
   }
 
-  session$graph$expr(call, grads, binding, name)
+  session$graph$opr(call, grads, binding, name)
 }
 
 #' Evaluate a Graph

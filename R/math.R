@@ -11,7 +11,7 @@
 #' @author Ron Triepels
 cg.add <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(x + y),
     grads = list(
       x = quote(add.grad(x, grad)),
@@ -39,7 +39,7 @@ export("add.grad", function(x, grad)
 #' @author Ron Triepels
 cg.pos <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(x),
     grads = list(x = quote(grad)),
     binding = list(x = x)
@@ -72,7 +72,7 @@ cg.pos <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 cg.sub <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(x - y),
     grads = list(
       x = quote(sub.grad.x(x, grad)),
@@ -106,7 +106,7 @@ export("sub.grad.y", function(y, grad)
 #' @author Ron Triepels
 cg.neg <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(-x),
     grads = list(x = quote(-grad)),
     binding = list(x = x)
@@ -139,7 +139,7 @@ cg.neg <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 cg.mul <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(x * y),
     grads = list(
       x = quote(mul.grad.x(x, y, grad)),
@@ -180,7 +180,7 @@ export("mul.grad.y", function(x, y, grad)
 #' @author Ron Triepels
 cg.div <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(x / y),
     grads = list(
       x = quote(div.grad.x(x, y, grad)),
@@ -221,7 +221,7 @@ export("div.grad.y", function(x, y, grad)
 #' @author Ron Triepels
 cg.pow <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(x^y),
     grads = list(
       x = quote(pow.grad.x(x, y, grad)),
@@ -261,7 +261,7 @@ export("pow.grad.y", function(x, y, grad)
 #' @author Ron Triepels
 cg.sqrt <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(sqrt(x)),
     grads = list(x = quote(sqrt.grad(x, grad))),
     binding = list(x = x)
@@ -302,7 +302,7 @@ sqrt.cg.node <- function(x)
 #' @author Ron Triepels
 cg.exp <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(exp(x)),
     grads = list(x = quote(exp.grad(x, grad))),
     binding = list(x = x)
@@ -343,7 +343,7 @@ exp.cg.node <- function(x)
 #' @author Ron Triepels
 cg.ln <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(log(x)),
     grads = list(x = quote(ln.grad(x, grad))),
     binding = list(x = x)
@@ -368,7 +368,7 @@ export("ln.grad", function(x, grad)
 #' @author Ron Triepels
 cg.log2 <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(log2(x)),
     grads = list(x = quote(log2.grad(x, grad))),
     binding = list(x = x)
@@ -407,7 +407,7 @@ log2.cg.node <- function(x)
 #' @author Ron Triepels
 cg.log10 <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(log10(x)),
     grads = list(x = quote(log10.grad(x, grad))),
     binding = list(x = x)
@@ -446,7 +446,7 @@ log10.cg.node <- function(x)
 #' @author Ron Triepels
 cg.abs <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(abs(x)),
     grads = list(x = quote(abs.grad(x, grad))),
     binding = list(x = x)

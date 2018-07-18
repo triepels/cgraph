@@ -11,7 +11,7 @@
 #' @author Ron Triepels
 cg.matmul <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(x %*% y),
     grads = list(
       x = quote(tcrossprod(grad, y)),
@@ -36,7 +36,7 @@ cg.matmul <- function(x, y, name = cgraph::name())
 #' @author Ron Triepels
 cg.crossprod <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(crossprod(x, y)),
     grads = list(
       x = quote(y %*% grad),
@@ -61,7 +61,7 @@ cg.crossprod <- function(x, y, name = cgraph::name())
 #' @author Ron Triepels
 cg.tcrossprod <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(tcrossprod(x, y)),
     grads = list(
       x = quote(grad %*% y),
@@ -87,7 +87,7 @@ cg.tcrossprod <- function(x, y, name = cgraph::name())
 #' @author Ron Triepels
 cg.linear <- function(x, y, z, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(x %*% y + c(z)),
     grads = list(
       x = quote(tcrossprod(grad, y)),
@@ -118,7 +118,7 @@ export("linear.grad.z", function(z, grad)
 #' @author Ron Triepels
 cg.sum <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(sum(x)),
     grads = list(x = quote(sum.grad(x, grad))),
     binding = list(x = x)
@@ -145,7 +145,7 @@ export("sum.grad", function(x, grad)
 #' @author Ron Triepels
 cg.prod <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(prod(x)),
     grads = list(x = quote(prod.grad(x, y, grad))),
     binding = list(x = x, y = name)
@@ -170,7 +170,7 @@ export("prod.grad", function(x, y, grad)
 #' @author Ron Triepels
 cg.rowSums <- function(x, name = cgraph::name())
 {
- cgraph::expr(name = name,
+ cgraph::opr(name = name,
    call = quote(rowSums(x)),
    grads = list(x = quote(rowSums.grad(x, grad))),
    binding = list(x = x)
@@ -195,7 +195,7 @@ export("rowSums.grad", function(x, grad)
 #' @author Ron Triepels
 cg.colSums <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(colSums(x)),
     grads = list(x = quote(colSums.grad(x, grad))),
     binding = list(x = x)
@@ -222,7 +222,7 @@ export("colSums.grad", function(x, grad)
 #' @author Ron Triepels
 cg.mean <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(sum(x) / length(x)),
     grads = list(x = quote(mean.grad(x, grad))),
     binding = list(x = x)
@@ -247,7 +247,7 @@ export("mean.grad", function(x, grad)
 #' @author Ron Triepels
 cg.rowMeans <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(rowMeans(x)),
     grads = list(x = quote(rowMeans.grad(x, grad))),
     binding = list(x = x)
@@ -272,7 +272,7 @@ export("rowMeans.grad", function(x, grad)
 #' @author Ron Triepels
 cg.colMeans <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(colMeans(x)),
     grads = list(x = quote(colMeans.grad(x, grad))),
     binding = list(x = x)
@@ -299,7 +299,7 @@ export("colMeans.grad", function(x, grad)
 #' @author Ron Triepels
 cg.max <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(max(x)),
     grads = list(x = quote(max.grad(x, y, grad))),
     binding = list(x = x, y = name)
@@ -326,7 +326,7 @@ export("max.grad", function(x, y, grad)
 #' @author Ron Triepels
 cg.min <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(min(x)),
     grads = list(x = quote(min.grad(x, y, grad))),
     binding = list(x = x, y = name)
@@ -354,7 +354,7 @@ export("min.grad", function(x, y, grad)
 #' @author Ron Triepels
 cg.pmax <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(pmax(x, y)),
     grads = list(
       x = quote(pmax.grad.x(x, y, grad)),
@@ -391,7 +391,7 @@ export("pmax.grad.y", function(x, y, grad)
 #' @author Ron Triepels
 cg.pmin <- function(x, y, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(pmin(x, y)),
     grads = list(
       x = quote(pmin.grad.x(x, y, grad)),

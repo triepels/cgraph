@@ -12,7 +12,7 @@
 #' @author Ron Triepels
 cg.as.double <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(as.numeric(x)),
     grads = list(x = quote(as.double.grad(x, grad))),
     binding = list(x = x)
@@ -73,7 +73,7 @@ cg.as.numeric <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 cg.reshape <- function(x, dim, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = substitute(array(x, dim), list(dim = dim)),
     grads = list(x = quote(reshape.grad(x, grad))),
     binding = list(x = x)
@@ -117,7 +117,7 @@ as.array.cg.node <- function(x, dims, name = cgraph::name(), ...)
 #' @author Ron Triepels
 cg.t <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(t(x)),
     grads = list(x = quote(t(grad))),
     binding = list(x = x)

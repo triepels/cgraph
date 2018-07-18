@@ -6,7 +6,7 @@
 #define CGCST 0
 #define CGIPT 1
 #define CGPRM 2
-#define CGEXP 3
+#define CGOPR 3
 
 static SEXP NewEnv(SEXP enclos)
 {
@@ -80,8 +80,8 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
       sprintf(name, "ipt%d", count + 1); break;
     case CGPRM :
       sprintf(name, "prm%d", count + 1); break;
-    case CGEXP :
-      sprintf(name, "exp%d", count + 1); break;
+    case CGOPR :
+      sprintf(name, "opr%d", count + 1); break;
     default :
       error("invalid type");
   }
@@ -255,7 +255,7 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
   return R_NilValue;
 }
 
-SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
+SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
 {
   SEXP nodes = findVar(install("nodes"), graph);
 
@@ -263,7 +263,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   if(name == R_NilValue)
   {
-    name = PROTECT(cg_gen_name(ScalarInteger(CGEXP), graph));
+    name = PROTECT(cg_gen_name(ScalarInteger(CGOPR), graph));
   }
   else
   {
@@ -348,7 +348,7 @@ SEXP cg_add_expression(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP grap
 
   nodes = PROTECT(lengthgets(nodes, n + 1));
 
-  setAttrib(name, install("type"), ScalarInteger(CGEXP));
+  setAttrib(name, install("type"), ScalarInteger(CGOPR));
   setAttrib(name, install("call"), substitute(call, binding));
   setAttrib(name, install("grads"), allocVector(VECSXP, 0));
   setAttrib(name, install("parents"), parents);
@@ -450,7 +450,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
     SEXP type = getAttrib(node, install("type"));
 
-    if(asInteger(type) == CGEXP)
+    if(asInteger(type) == CGOPR)
     {
       SEXP call = getAttrib(node, install("call"));
 
@@ -507,7 +507,7 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 
       SEXP node_type = getAttrib(node, install("type"));
 
-      if(asInteger(node_type) == CGPRM || asInteger(node_type) == CGEXP)
+      if(asInteger(node_type) == CGPRM || asInteger(node_type) == CGOPR)
       {
         SEXP node_grads = getAttrib(node, install("grads"));
 
@@ -610,14 +610,14 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP index, SEXP values, SEXP eps, SEXP grap
   SEXP x_node_type = getAttrib(x_node, install("type"));
   SEXP y_node_type = getAttrib(y_node, install("type"));
 
-  if(INTEGER(x_node_type)[0] != CGEXP)
+  if(INTEGER(x_node_type)[0] != CGOPR)
   {
-    error("x must be an expression");
+    error("x must be an operation node");
   }
 
-  if(INTEGER(y_node_type)[0] == CGEXP)
+  if(INTEGER(y_node_type)[0] == CGOPR)
   {
-    error("y cannot be an expression");
+    error("y cannot be an operation node");
   }
 
   SET_ENCLOS(values, findVar(install("values"), graph));

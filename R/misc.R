@@ -10,7 +10,7 @@
 #' @author Ron Triepels
 cg.sigmoid <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(1 / (1 + exp(-x))),
     grads = list(x = quote(sigmoid.grad(y, grad))),
     binding = list(x = x, y = name)

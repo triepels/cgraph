@@ -10,7 +10,7 @@
 #' @author Ron Triepels
 cg.sin <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(sin(x)),
     grads = list(x = quote(sin.grad(x, grad))),
     binding = list(x = x)
@@ -49,7 +49,7 @@ sin.cg.node <- function(x)
 #' @author Ron Triepels
 cg.cos <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(cos(x)),
     grads = list(x = quote(cos.grad(x, grad))),
     binding = list(x = x)
@@ -88,7 +88,7 @@ cos.cg.node <- function(x)
 #' @author Ron Triepels
 cg.tan <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(tan(x)),
     grads = list(x = quote(tan.grad(x, grad))),
     binding = list(x = x)
@@ -127,7 +127,7 @@ tan.cg.node <- function(x)
 #' @author Ron Triepels
 cg.tanh <- function(x, name = cgraph::name())
 {
-  cgraph::expr(name = name,
+  cgraph::opr(name = name,
     call = quote(tanh(x)),
     grads = list(x = quote(tanh.grad(y, grad))),
     binding = list(x = x, y = name)

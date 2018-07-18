@@ -26,7 +26,7 @@ cgraph <- R6Class(
 #'
 #' @details \code{$new()}
 #'
-#' @note The cgraph object is set to be the active graph. Any placeholders or expressions that are created by wrapper function \code{const}, \code{input}, or \code{parm} will be added to this graph unless the active graph is changed. You can change the current graph by calling the \code{$active()} method on another cgraph object.
+#' @note The cgraph object is set to be the active graph. Any nodes that are created by wrapper function \code{const}, \code{input}, or \code{parm} will be added to this graph unless the active graph is changed. You can change the current graph by calling the \code{$active()} method on another cgraph object.
 #'
 #' @return cgraph object.
 #'
@@ -47,7 +47,7 @@ cgraph$public_methods$initialize <- function()
 #'
 #' @details \code{$name(type = 3)}
 #'
-#' @param type numeric scalar, type of the node. Should be either: 0 (constant), 1 (input), 2 (parameter), or 3 (expression). Defaults to 3 (expression).
+#' @param type numeric scalar, type of the node. Should be either: 0 (constant), 1 (input), 2 (parameter), or 3 (operation). Defaults to 3 (operation).
 #'
 #' @note The auto-generated name is not guaranteed to be unique.
 #'
@@ -238,9 +238,9 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
   invisible(.Call("cg_add_parms", parms, private$graph))
 }
 
-#' Add Expression
+#' Add Operation
 #'
-#' Add an expression node to the graph.
+#' Add an operation node to the graph.
 #'
 #' @details \code{$expr(call, grads, binding, name)}
 #'
@@ -255,9 +255,9 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #'
 #' @return cg.node, expression node.
 #'
-#' @name cg.expr
+#' @name cg.opr
 #' @author Ron Triepels
-cgraph$public_methods$expr <- function(call, grads, binding, name)
+cgraph$public_methods$opr <- function(call, grads, binding, name)
 {
   type <- as.integer(3)
 
@@ -287,7 +287,7 @@ cgraph$public_methods$expr <- function(call, grads, binding, name)
     name <- as.character(name)
   }
 
-  .Call("cg_add_expression", call, grads, binding, name, private$graph, PACKAGE = "cgraph")
+  .Call("cg_add_operation", call, grads, binding, name, private$graph, PACKAGE = "cgraph")
 }
 
 #' Change active graph
