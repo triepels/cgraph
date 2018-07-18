@@ -10,13 +10,13 @@
 none.
 }
 \description{
-Plot the topology of the computational graph.
+Plot the topology of the graph.
 }
 \details{
 \code{$plot(...)}
 }
 \note{
-A visual representation of the computational graph might be usefull for debugging purposes. This functions requires the Rgraphviz package.
+A visual representation of the graph might be usefull for debugging purposes. This functions requires the Rgraphviz package.
 }
 \author{
 Ron Triepels

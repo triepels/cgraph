@@ -7,7 +7,7 @@
 numeric matrix, the adjacency matrix of the graph.
 }
 \description{
-Create an adjacency matrix of the computational graph.
+Retrieve the adjacency matrix of the graph.
 }
 \details{
 \code{$adj.mat()}

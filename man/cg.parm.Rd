@@ -12,15 +12,15 @@
 cg.node, parameter.
 }
 \description{
-Add a parameter to the graph.
+Add a parameter node to the graph.
 }
 \details{
 \code{$parm(value, name)}
 }
 \note{
-Parameters are assumed to be subject to some optimization process and their value may change over time.
+Parameters are assumed to be subject to some optimization process. Their value might change over time.
 
-Name cannot be \code{grad} as this is a reserved word.
+The name of the parameter node cannot be 'grad' as this is a reserved word.
 }
 \author{
 Ron Triepels

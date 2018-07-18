@@ -2,14 +2,14 @@
 % Please edit documentation in R/cgraph.R
 \name{cg.run}
 \alias{cg.run}
-\title{Evaluate a Graph}
+\title{Evaluate the Graph}
 \arguments{
-\item{name}{character scalar or symbol, name of the node that needs to be evaluated.}
+\item{name}{character scalar or symbol, name of the node that is evaluated.}
 
-\item{values}{named list or environment, values that are subsituted for the placeholders in the graph.}
+\item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
 }
 \value{
-environment, the value of node \code{name} including the values of all ancestors of node \code{name} that are evaluated in the forward-pass.
+environment, the value of node \code{name} including the values of all ancestors of \code{name}.
 }
 \description{
 Evaluate node \code{name} in the graph.
@@ -18,9 +18,9 @@ Evaluate node \code{name} in the graph.
 \code{$run(name, values = list())}
 }
 \note{
-All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.
+All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
 
-Only those nodes needed to compute node \code{name} are evaluated and their values are returned. The values of placeholders whose default values are not changed are not returned.
+Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of nodes that have not changed or are not evaluated are not returned.
 }
 \author{
 Ron Triepels

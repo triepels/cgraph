@@ -6,27 +6,27 @@
 \arguments{
 \item{call}{expression or call, operations performed by the node.}
 
-\item{grads}{named list of expressions or calls, gradients of the inputs and parameters used in \code{call} with respect to the node.}
+\item{grads}{named list of expressions or calls, gradients of the input nodes that are consumed by the operation in argument \code{call}.}
 
-\item{binding}{named list or environment, binds the values used in the expressions or calls of \code{call} and \code{grads} to the symbols of the nodes in the graph.}
+\item{binding}{named list or environment, binds the varaibles used in the expressions or calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.}
 
-\item{name}{character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
+\item{name}{character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
 \value{
-cg.node, expression node.
+cg.node, operation.
 }
 \description{
-Add an operation to the graph.
+Add an operation node to the graph.
 }
 \details{
 \code{$expr(call, grads, binding, name)}
 }
 \note{
-The operation to be performed by the node should be provided as an expression or call to \code{call}. If this operation depends on any inputs, then the gradients of the node with respect to these inputs should be supplied as an expression or call to \code{gradients}. These gradients must be a function of each input's gradient. The special reserved word \code{grad} evaluates to this gradient at run-time and can be used in the expression and call of each input's gradient as placeholder.
+The operation to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation consumes any other nodes in the graph, then the gradients of the current node with respect to these input nodes should be supplied as an expression or call to argument \code{gradients}. These gradients must be a function of each input's gradient. The special reserved word \code{grad} evaluates to this gradient at run-time and can be used in the expression and call of each input's gradient as placeholder.
 
-Any inputs in the expressions or calls of the node (both supplied to \code{call} and \code{gradients}) should be bind to the symbols of the nodes in the graph. This can be done by supplying the names of the inputs and the corresponding nodes in the graph to which the inputs should bind to \code{binding}. At run-time, the symbols of the nodes in the graph are substituted for the inputs in the expressions or calls.
+Any variabes used in the expressions or calls of the node (both supplied to argument \code{call} and \code{gradients}) should be bind to the symbols of the nodes in the graph. This can be done by supplying the names of the variables and the corresponding nodes to which the variables should bind to \code{binding}. At run-time, the symbols of the nodes are substituted for the variables in the expressions or calls.
 
-The name of the node cannot be \code{grad} as this is a reserved word.
+The name of the operation node cannot be 'grad' as this is a reserved word.
 }
 \author{
 Ron Triepels

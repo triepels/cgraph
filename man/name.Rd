@@ -4,13 +4,16 @@
 \alias{name}
 \title{Generate Name}
 \usage{
-name()
+name(type = 3)
+}
+\arguments{
+\item{type}{numeric scalar, type of the node. Should be either: 0 (constant), 1 (input), 2 (parameter), or 3 (operation). Defaults to 3 (operation).}
 }
 \value{
 symbol, auto-generated name for the node.
 }
 \description{
-Generate a default name for an expression.
+Generate a default name for a node.
 }
 \note{
 The auto-generated name is not guaranteed to be unique.

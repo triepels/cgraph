@@ -8,9 +8,9 @@
 
 \item{y}{character scalar or symbol, name of the node.}
 
-\item{values}{named list or environment, values that are subsituted for the expressions and placeholders in the graph.}
+\item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
 
-\item{index}{numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.}
+\item{index}{numeric scalar, index of the target node that is differentiated. Defaults to the first element.}
 
 \item{eps}{numeric scalar, step size. Defaults to 1e-4.}
 }
@@ -18,15 +18,17 @@
 numeric vector or array, the derivative of \code{x} with respect to \code{y}.
 }
 \description{
-Differentiate node \code{x} with respect to node \code{y} in the graph by numerical differentiation.
+Differentiate node \code{x} with respect to node \code{y} by numerical differentiation.
 }
 \details{
 \code{$approx.grad(x, y, values = list(), index = 1, eps = 1e-4)}
 }
 \note{
-All placeholders required to compute node \code{name} must have a value. Placeholders can be assigned a default value when they are created. Alternatively, argument \code{values} can be used to substitute values for placeholders that do not have a default value or to fix the values of nodes.
+All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating node \code{name} in the graph using function \code{$run()}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
 
-The graph is differentiation by the symmetric difference quotient. This function is mainly used for testing purposes.
+The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The caluclated gradient has the same shape as the value of node \code{y}.
+
+Numerical differentiation is subject to estimation error and can be very slow. Therefore, this function should only be used for testing purposes.
 }
 \author{
 Ron Triepels

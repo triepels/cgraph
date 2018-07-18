@@ -7,18 +7,20 @@
 parm(value, name)
 }
 \arguments{
-\item{value}{numeric scalar or array, default value of the node.}
+\item{value}{numeric scalar or array, value of the node.}
 
 \item{name}{character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
 \value{
-cg.node, parameter node.
+cg.node, parameter.
 }
 \description{
 Add a parameter node to the active graph.
 }
 \note{
-The name of the node cannot be \code{grad} as this is a reserved word.
+Parameters are assumed to be subject to some optimization process. Their value might change over time.
+
+The name of the parameter node cannot be 'grad' as this is a reserved word.
 }
 \author{
 Ron Triepels

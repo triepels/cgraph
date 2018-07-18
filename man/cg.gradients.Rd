@@ -4,14 +4,14 @@
 \alias{cg.gradients}
 \title{Calculate Gradients}
 \arguments{
-\item{name}{character scalar or symbol, name of the node that needs to be differentiated.}
+\item{name}{character scalar or symbol, name of the node that is differentiated.}
 
-\item{values}{named list or environment, values that are subsituted for the expressions and placeholders in the graph.}
+\item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
 
-\item{index}{numeric scalar, index of the target node that needs to be differentiated. Defaults to the first element.}
+\item{index}{numeric scalar, index of the target node that is differentiated. Defaults to the first element.}
 }
 \value{
-environment, the gradients of all nodes evaluated in the backward-pass with respect to node \code{name}.
+environment, the gradients of all nodes with respect to target node \code{name}.
 }
 \description{
 Differentiate the graph with respect to node \code{name} by reverse automatic differentiation.
@@ -20,11 +20,11 @@ Differentiate the graph with respect to node \code{name} by reverse automatic di
 \code{$gradients(name, values, index = 1)}
 }
 \note{
-All placeholders and expressions required to compute node \code{name} must have a value. By default, expression nodes are unevaluated. The values of these nodes can be obtained by evaluating the graph using function \code{$run()}. The values obtained by this function for the expression nodes can be supplied along values for the placeholders via argument \code{values}.
+All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating node \code{name} in the graph using function \code{$run()}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
 
-Currently, cgraph can only differentiate with respect to a scalar output node. In case the value of output node \code{name} is a vector or an array, \code{index} can be used to specify which element of the vector or array needs to be differentiated.
+Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is to be differentiated.
 
-The gradients of all parameters are returned along with the gradients of all ancestor nodes of node \code{name} that are calulated in the backward-pass. Constant nodes are not differentiated and their gradients are not returned. Moreover, the gradients of parameters have the same shape as the parameters themselves.
+The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the values of the nodes.
 }
 \author{
 Ron Triepels

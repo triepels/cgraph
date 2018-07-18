@@ -6,13 +6,13 @@
 \arguments{
 \item{value}{numeric scalar or array, value of the node.}
 
-\item{name}{character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
+\item{name}{character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
 \value{
 cg.node, constant.
 }
 \description{
-Add a constant to the graph.
+Add a constant node to the graph.
 }
 \details{
 \code{$const(value, name)}
@@ -20,7 +20,7 @@ Add a constant to the graph.
 \note{
 Constants are ignored when differentiating a graph. The intended use of constants is that they are given a fixed value. However, it is still possible to change the value of constants when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
 
-Name cannot be \code{grad} as this is a reserved word.
+The name of the constant node cannot be 'grad' as this is a reserved word.
 }
 \author{
 Ron Triepels

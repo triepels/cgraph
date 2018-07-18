@@ -2,12 +2,12 @@
 % Please edit documentation in R/cgraph.R
 \name{cg.active}
 \alias{cg.active}
-\title{Change active graph}
+\title{Change Active Graph}
 \value{
 none.
 }
 \description{
-Set this graph to be the active graph.
+Set the graph to be the active graph.
 }
 \details{
 \code{$active()}

@@ -15,10 +15,10 @@
 none.
 }
 \description{
-Plot the topology of a computational graph.
+Plot the topology of a graph.
 }
 \note{
-A visual representation of the computational graph might be usefull for debugging purposes. This functions requires the Rgraphviz package.
+A visual representation of the graph might be usefull for debugging purposes. This functions requires the Rgraphviz package.
 }
 \author{
 Ron Triepels
