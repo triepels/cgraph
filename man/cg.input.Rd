@@ -4,12 +4,12 @@
 \alias{cg.input}
 \title{Add Input}
 \arguments{
-\item{value}{numeric scalar or array, default value of the node.}
+\item{value}{numeric scalar or array, value of the node.}
 
 \item{name}{character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
 \value{
-cg.node, input node.
+cg.node, input.
 }
 \description{
 Add an input to the graph.
@@ -18,9 +18,9 @@ Add an input to the graph.
 \code{$input(value, name)}
 }
 \note{
-Inputs behave similarly as constants. However, the intended use of inputs is that they are not given a fixed value but behave as a placeholder for any input supplied to the graph. Values can be supplied for inputs when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
+The intended use of inputs is that they are not given a fixed value but behave as a placeholder. Values can be supplied for inputs when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
 
-Name cannot be 'grad' as this is a reserved word.
+Name cannot be \code{grad} as this is a reserved word.
 }
 \author{
 Ron Triepels

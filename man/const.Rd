@@ -18,7 +18,7 @@ cg.node, constant node.
 Add a constant node to the active graph.
 }
 \note{
-Name cannot be 'grad' as this is a reserved word. Constant nodes are ignored when differentiating a graph.
+The name of the node cannot be \code{grad} as this is a reserved word. Constant nodes are ignored when differentiating a graph.
 }
 \author{
 Ron Triepels

@@ -7,7 +7,7 @@
 named list, parameters of the graph.
 }
 \description{
-List the parameters and their default values of the graph.
+List all parameters and their default values.
 }
 \details{
 \code{$get.parms()}

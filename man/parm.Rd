@@ -18,7 +18,7 @@ cg.node, parameter node.
 Add a parameter node to the active graph.
 }
 \note{
-Name cannot be 'grad' as this is a reserved word.
+The name of the node cannot be \code{grad} as this is a reserved word.
 }
 \author{
 Ron Triepels
