@@ -64,16 +64,18 @@ cgraph$public_methods$name <- function(type = 3)
 
 #' Add Constant
 #'
-#' Add a constant node to the graph.
+#' Add a constant to the graph.
 #'
 #' @details \code{$const(value, name)}
 #'
-#' @param value numeric scalar or array, default value of the node.
+#' @param value numeric scalar or array, value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
-#' @note Name cannot be 'grad' as this is a reserved word. Constant nodes are ignored when differentiating a graph.
+#' @note Constants are ignored when differentiating a graph. The intended use of constants is that they are given a fixed value. However, it is still possible to change the value of constants when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
 #'
-#' @return cg.node, constant node.
+#' Name cannot be 'grad' as this is a reserved word.
+#'
+#' @return cg.node, constant.
 #'
 #' @name cg.const
 #' @author Ron Triepels
@@ -107,16 +109,18 @@ cgraph$public_methods$const <- function(value, name)
 
 #' Add Input
 #'
-#' Add an input node to the graph.
+#' Add an input to the graph.
 #'
 #' @details \code{$input(value, name)}
 #'
-#' @param value numeric scalar or array, default value of the node.
+#' @param value numeric scalar or array, value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
-#' @note Name cannot be 'grad' as this is a reserved word.
+#' @note The intended use of inputs is that they are not given a fixed value but behave as a placeholder. Values can be supplied for inputs when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
 #'
-#' @return cg.node, input node.
+#' Name cannot be 'grad' as this is a reserved word.
+#'
+#' @return cg.node, input.
 #'
 #' @name cg.input
 #' @author Ron Triepels
@@ -150,16 +154,18 @@ cgraph$public_methods$input <- function(value, name)
 
 #' Add Parameter
 #'
-#' Add a parameter node to the graph.
+#' Add a parameter to the graph.
 #'
 #' @details \code{$parm(value, name)}
 #'
-#' @param value numeric scalar or array, default value of the node.
+#' @param value numeric scalar or array, value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
-#' @note Name cannot be 'grad' as this is a reserved word.
+#' @note Parameters are assumed to be subject to some optimization process and their value may change over time.
 #'
-#' @return cg.node, parameter node.
+#' Name cannot be 'grad' as this is a reserved word.
+#'
+#' @return cg.node, parameter.
 #'
 #' @name cg.parm
 #' @author Ron Triepels
@@ -193,7 +199,7 @@ cgraph$public_methods$parm <- function(value, name)
 
 #' Get Parameters
 #'
-#' List the parameters and their default values of the graph.
+#' List all parameters and their default values.
 #'
 #' @details \code{$get.parms()}
 #'
@@ -240,7 +246,7 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 
 #' Add Operation
 #'
-#' Add an operation node to the graph.
+#' Add an operation to the graph.
 #'
 #' @details \code{$expr(call, grads, binding, name)}
 #'
@@ -249,7 +255,7 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #' @param binding named list or environment, binds the values used in the expressions or calls of \code{call} and \code{grads} to the symbols of the nodes in the graph.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
-#' @note The operation that is to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation contains any inputs or parameters, then the gradient of these inputs and parameters with respect to the node should be provided via argument \code{gradients}. Also, any variables used in the these expressions or calls should be bind to the symbols of the nodes in the graph. There are two ways to bind variables. Either, \code{binding} is a named list were the names of nodes are assigned as symbols to the named members, or \code{binding} is an environment were the names of nodes are assigned as symbols to objects within the environment.
+#' @note The operation that is to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation consumes any other nodes, then the gradient of these inputs and parameters with respect to the node should be provided via argument \code{gradients}. Also, any variables used in the these expressions or calls should be bind to the symbols of the nodes in the graph. There are two ways to bind variables. Either, \code{binding} is a named list were the names of nodes are assigned as symbols to the named members, or \code{binding} is an environment were the names of nodes are assigned as symbols to objects within the environment.
 #'
 #' Name cannot be 'grad' as this is a reserved word.
 #'

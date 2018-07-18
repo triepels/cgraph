@@ -12,13 +12,15 @@
 cg.node, constant node.
 }
 \description{
-Add a constant node to the graph.
+Add a constant to the graph.
 }
 \details{
 \code{$const(value, name)}
 }
 \note{
-Name cannot be 'grad' as this is a reserved word. Constant nodes are ignored when differentiating a graph.
+Constants are ignored when differentiating a graph. The intended use of constants is that they are given a fixed value. However, it is still possible to change the value of constants when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
+
+Name cannot be 'grad' as this is a reserved word.
 }
 \author{
 Ron Triepels

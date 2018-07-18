@@ -12,12 +12,14 @@
 cg.node, input node.
 }
 \description{
-Add an input node to the graph.
+Add an input to the graph.
 }
 \details{
 \code{$input(value, name)}
 }
 \note{
+Inputs behave similarly as constants. However, the intended use of inputs is that they are not given a fixed value but behave as a placeholder for any input supplied to the graph. Values can be supplied for inputs when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
+
 Name cannot be 'grad' as this is a reserved word.
 }
 \author{
