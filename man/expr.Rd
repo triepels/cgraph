@@ -11,7 +11,7 @@ expr(call, grads, binding, name)
 
 \item{grads}{named list of expressions or calls, gradients of the inputs and parameters used in \code{call} with respect to the node.}
 
-\item{binding}{named list or environment, binds the values used in the expressions or calls of \code{call} and \code{grads} to the symbols of the nodes in the graph.}
+\item{binding}{named list or environment, binds variables in the expressions or calls of \code{call} and \code{grads} to the symbols of the nodes in the graph.}
 
 \item{name}{character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
@@ -22,9 +22,11 @@ cg.node, expression node.
 Add an expression node to the active graph.
 }
 \note{
-The operation that is to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation contains any inputs or parameters, then the gradient of these inputs and parameters with respect to the node should be provided via argument \code{gradients}. Also, any variables used in the these expressions or calls should be bind to the symbols of the nodes in the graph. There are two ways to bind variables. Either, \code{binding} is a named list were the names of nodes are assigned as symbols to the named members, or \code{binding} is an environment were the names of nodes are assigned as symbols to objects within the environment.
+The operation to be performed by the node should be provided as an expression or call to \code{call}. If this operation depends on any input, then the gradients of the node with respect to these inputs should be supplied as an expression or call to \code{gradients}. These gradients must be a function of each input's gradient. The special reserved word \code{grad} evaluates to this gradient at run-time and can be used in the expression and call of each input's gradient as placeholder.
 
-Name cannot be 'grad' as this is a reserved word.
+Any inputs in the expressions or calls (both supplied to \code{call} and \code{gradients}) should be bind to the symbols of the nodes in the graph. This can be done by supplying the names of the inputs and the corresponding symbols of the nodes in the graph to \code{binding}. At run-time, these symbols are substituted for the inputs in the expressions or calls.
+
+The name of the node cannot be \code{grad} as this is a reserved word.
 }
 \author{
 Ron Triepels
