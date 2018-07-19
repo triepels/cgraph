@@ -295,8 +295,6 @@ sqrt.cg.node <- function(x)
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note \code{exp(x)=e^x}.
-#'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
@@ -320,8 +318,6 @@ export("exp.grad", function(x, grad)
 #' Calculate \code{exp(1)^x}.
 #'
 #' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @note \code{exp(1)=e}.
 #'
 #' @return cg.node, node of the operation.
 #'
