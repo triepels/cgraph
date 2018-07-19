@@ -4,39 +4,6 @@ session <- new.env()
 # Active graph
 session$graph <- NULL
 
-# Function environment
-session$functions <- new.env()
-
-#' Export Function
-#'
-#' Export a function to the \code{functions} environment in the global session.
-#'
-#' @param name character scalar, the name to which the function is bind in the \code{functions} environment.
-#' @param fun function, the function that is exported.
-#'
-#' @return nothing
-#'
-#' @author Ron Triepels
-#'
-#' @name export
-#' @keywords internal
-export <- function(name, fun)
-{
-  name <- as.character(name)
-
-  if(!is.function(fun))
-  {
-    stop("fun is not a valid function")
-  }
-
-  if(exists(name, envir = session$functions))
-  {
-    stop(sprintf("'%s' is already defined", name))
-  }
-
-  assign(name, fun, session$functions)
-}
-
 #' Generate Name
 #'
 #' Generate a default name for a node.

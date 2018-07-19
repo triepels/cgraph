@@ -14,13 +14,23 @@ cg.as.double <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(as.numeric(x)),
-    grads = list(x = quote(as.double.grad(x, grad))),
+    grads = list(x = quote(cg.as.double.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("as.double.grad", function(x, grad)
+#' Coerce to a Numeric Vector Gradient
+#'
+#' Calculate the gradient of \code{as.numeric(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.as.double.grad <- function(x, grad)
 {
   if(is.array(x))
   {
@@ -30,7 +40,7 @@ export("as.double.grad", function(x, grad)
   {
     as.numeric(grad)
   }
-})
+}
 
 #' Coerce to a Numeric Vector
 #'
@@ -82,13 +92,23 @@ cg.reshape <- function(x, dim, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = substitute(array(x, dim), list(dim = dim)),
-    grads = list(x = quote(reshape.grad(x, grad))),
+    grads = list(x = quote(cg.reshape.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("reshape.grad", function(x, grad)
+#' Reshape Array Dimensions Gradient
+#'
+#' Calculate the gradient of \code{array(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.reshape.grad <- function(x, grad)
 {
   if(is.array(x))
   {
@@ -98,7 +118,7 @@ export("reshape.grad", function(x, grad)
   {
     bsum(grad, length(x))
   }
-})
+}
 
 #' Coerce to an Array
 #'

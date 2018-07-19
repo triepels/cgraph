@@ -10,6 +10,7 @@
 #' @return numeric vector, a \code{n}-dimensional vector, where the 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2nd element of the blocks, and so on.
 #'
 #' @author Ron Triepels
+#' @keywords internal
 bsum <- function(x, n = 1)
 {
   n <- as.integer(n)

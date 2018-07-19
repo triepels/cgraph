@@ -59,7 +59,7 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  values <- new.env(parent = session$functions)
+  values <- new.env(parent = asNamespace("cgraph"))
 
   .Call("cgraph", self, values, PACKAGE = "cgraph")
 

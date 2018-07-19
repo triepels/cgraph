@@ -12,16 +12,26 @@ cg.sin <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(sin(x)),
-    grads = list(x = quote(sin.grad(x, grad))),
+    grads = list(x = quote(cg.sin.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("sin.grad", function(x, grad)
+#' Sinus Gradient
+#'
+#' Calculate the gradient of \code{sin(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.sin.grad <- function(x, grad)
 {
   grad * cos(x)
-})
+}
 
 #' Sinus
 #'
@@ -51,16 +61,26 @@ cg.cos <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(cos(x)),
-    grads = list(x = quote(cos.grad(x, grad))),
+    grads = list(x = quote(cg.cos.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("cos.grad", function(x, grad)
+#' Cosinus Gradient
+#'
+#' Calculate the gradient of \code{cos(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.cos.grad <- function(x, grad)
 {
   -grad * sin(x)
-})
+}
 
 #' Cosinus
 #'
@@ -90,16 +110,26 @@ cg.tan <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(tan(x)),
-    grads = list(x = quote(tan.grad(x, grad))),
+    grads = list(x = quote(cg.tan.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("tan.grad", function(x, grad)
+#' Tangent Gradient
+#'
+#' Calculate the gradient of \code{tan(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.tan.grad <- function(x, grad)
 {
   grad / cos(x)^2
-})
+}
 
 #' Tangent
 #'
@@ -129,16 +159,26 @@ cg.tanh <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(tanh(x)),
-    grads = list(x = quote(tanh.grad(y, grad))),
+    grads = list(x = quote(cg.tanh.grad(y, grad))),
     binding = list(x = x, y = name)
   )
 }
 
-# Export gradient
-export("tanh.grad", function(y, grad)
+#' Hyperbolic Tangent Gradient
+#'
+#' Calculate the gradient of \code{tanh(x)} with respect to \code{x}.
+#'
+#' @param y numeric vector or array, value of \code{tanh(x)}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.tanh.grad <- function(y, grad)
 {
   grad * (1 - y^2)
-})
+}
 
 #' Hyperbolic Tangent
 #'

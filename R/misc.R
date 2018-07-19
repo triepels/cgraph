@@ -12,13 +12,23 @@ cg.sigmoid <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(1 / (1 + exp(-x))),
-    grads = list(x = quote(sigmoid.grad(y, grad))),
+    grads = list(x = quote(cg.sigmoid.grad(y, grad))),
     binding = list(x = x, y = name)
   )
 }
 
-# Export gradient
-export("sigmoid.grad", function(y, grad)
+#' Sigmoid Gradient
+#'
+#' Calculate the gradient of \code{1 / (1 + exp(-x))} with respect to \code{x}.
+#'
+#' @param y numeric vector or array, value of \code{1 / (1 + exp(-x))}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.sigmoid.grad <- function(y, grad)
 {
   grad * y * (1 - y)
-})
+}

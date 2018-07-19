@@ -92,14 +92,24 @@ cg.linear <- function(x, y, z, name = cgraph::name())
     grads = list(
       x = quote(tcrossprod(grad, y)),
       y = quote(crossprod(x, grad)),
-      z = quote(linear.grad.z(z, grad))
+      z = quote(cg.linear.grad.z(z, grad))
     ),
     binding = list(x = x, y = y, z = z)
   )
 }
 
-# Export gradient
-export("linear.grad.z", function(z, grad)
+#' Linear Transformation Gradient
+#'
+#' Calculate the gradient of \code{x \%*\% y + as.numeric(z)} with respect to \code{z}.
+#'
+#' @param z numeric vector or array, value of \code{z}.
+#' @param grad numeric vector or array, gradient of \code{z}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.linear.grad.z <- function(z, grad)
 {
   if(is.array(z))
   {
@@ -109,7 +119,7 @@ export("linear.grad.z", function(z, grad)
   {
     bsum(grad, length(z))
   }
-})
+}
 
 #' Sum of Vector Elements
 #'
@@ -127,13 +137,23 @@ cg.sum <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(sum(x)),
-    grads = list(x = quote(sum.grad(x, grad))),
+    grads = list(x = quote(cg.sum.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("sum.grad", function(x, grad)
+#' Sum of Vector Elements Gradient
+#'
+#' Calculate the gradient of \code{sum(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.sum.grad <- function(x, grad)
 {
   if(is.array(x))
   {
@@ -143,7 +163,7 @@ export("sum.grad", function(x, grad)
   {
     rep(grad, length(x))
   }
-})
+}
 
 #' Product of Vector Elements
 #'
@@ -161,16 +181,27 @@ cg.prod <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(prod(x)),
-    grads = list(x = quote(prod.grad(x, y, grad))),
+    grads = list(x = quote(cg.prod.grad(x, y, grad))),
     binding = list(x = x, y = name)
   )
 }
 
-# Export gradient
-export("prod.grad", function(x, y, grad)
+#' Product of Vector Elements Gradient
+#'
+#' Calculate the gradient of \code{prod(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{prod(x)}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.prod.grad <- function(x, y, grad)
 {
   grad * y / x
-})
+}
 
 #' Row Sums
 #'
@@ -186,16 +217,26 @@ cg.rowSums <- function(x, name = cgraph::name())
 {
  cgraph::opr(name = name,
    call = quote(rowSums(x)),
-   grads = list(x = quote(rowSums.grad(x, grad))),
+   grads = list(x = quote(cg.rowSums.grad(x, grad))),
    binding = list(x = x)
  )
 }
 
-# Export gradient
-export("rowSums.grad", function(x, grad)
+#' Row Sums Gradient
+#'
+#' Calculate the gradient of \code{rowSums(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.rowSums.grad <- function(x, grad)
 {
   array(grad, dim(x))
-})
+}
 
 #' Column Sums
 #'
@@ -211,16 +252,26 @@ cg.colSums <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(colSums(x)),
-    grads = list(x = quote(colSums.grad(x, grad))),
+    grads = list(x = quote(cg.colSums.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("colSums.grad", function(x, grad)
+#' Column Sums Gradient
+#'
+#' Calculate the gradient of \code{colSums(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.colSums.grad <- function(x, grad)
 {
   aperm(array(grad, rev(dim(x))))
-})
+}
 
 #' Arithmetic Mean
 #'
@@ -238,13 +289,23 @@ cg.mean <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(sum(x) / length(x)),
-    grads = list(x = quote(mean.grad(x, grad))),
+    grads = list(x = quote(cg.mean.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("mean.grad", function(x, grad)
+#' Arithmetic Mean Gradient
+#'
+#' Calculate the gradient of \code{sum(x) / length(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.mean.grad <- function(x, grad)
 {
   if(is.array(x))
   {
@@ -254,7 +315,7 @@ export("mean.grad", function(x, grad)
   {
     1 / length(x) * rep(grad, length(x))
   }
-})
+}
 
 #' Row Means
 #'
@@ -270,16 +331,26 @@ cg.rowMeans <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(rowMeans(x)),
-    grads = list(x = quote(rowMeans.grad(x, grad))),
+    grads = list(x = quote(cg.rowMeans.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("rowMeans.grad", function(x, grad)
+#' Row Means Gradient
+#'
+#' Calculate the gradient of \code{rowMeans(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.rowMeans.grad <- function(x, grad)
 {
   1 / prod(dim(x)[-1]) * array(grad, dim(x))
-})
+}
 
 #' Column Means
 #'
@@ -295,16 +366,26 @@ cg.colMeans <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(colMeans(x)),
-    grads = list(x = quote(colMeans.grad(x, grad))),
+    grads = list(x = quote(cg.colMeans.grad(x, grad))),
     binding = list(x = x)
   )
 }
 
-# Export gradient
-export("colMeans.grad", function(x, grad)
+#' Column Means Gradient
+#'
+#' Calculate the gradient of \code{colMeans(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.colMeans.grad <- function(x, grad)
 {
   1 / dim(x)[1] * aperm(array(grad, rev(dim(x))))
-})
+}
 
 #' Maxima
 #'
@@ -322,16 +403,27 @@ cg.max <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(max(x)),
-    grads = list(x = quote(max.grad(x, y, grad))),
+    grads = list(x = quote(cg.max.grad(x, y, grad))),
     binding = list(x = x, y = name)
   )
 }
 
-# Export gradient
-export("max.grad", function(x, y, grad)
+#' Maxima Gradient
+#'
+#' Calculate the gradient of \code{max(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{max(x)}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.max.grad <- function(x, y, grad)
 {
   c(grad) * (x == c(y))
-})
+}
 
 #' Minima
 #'
@@ -349,16 +441,27 @@ cg.min <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(min(x)),
-    grads = list(x = quote(min.grad(x, y, grad))),
+    grads = list(x = quote(cg.min.grad(x, y, grad))),
     binding = list(x = x, y = name)
   )
 }
 
-# Export gradient
-export("min.grad", function(x, y, grad)
+#' Minima Gradient
+#'
+#' Calculate the gradient of \code{min(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{min(y)}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.min.grad <- function(x, y, grad)
 {
   c(grad) * (x == c(y))
-})
+}
 
 #' Parallel Maxima
 #'
@@ -378,15 +481,26 @@ cg.pmax <- function(x, y, name = cgraph::name())
   cgraph::opr(name = name,
     call = quote(pmax(x, y)),
     grads = list(
-      x = quote(pmax.grad.x(x, y, grad)),
-      y = quote(pmax.grad.y(x, y, grad))
+      x = quote(cg.pmax.grad.x(x, y, grad)),
+      y = quote(cg.pmax.grad.y(x, y, grad))
     ),
     binding = list(x = x, y = y)
   )
 }
 
-# Export gradient
-export("pmax.grad.x", function(x, y, grad)
+#' Parallel Maxima Gradient
+#'
+#' Calculate the gradient of \code{pmax(x, y)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.pmax.grad.x <- function(x, y, grad)
 {
   if(is.array(x))
   {
@@ -396,10 +510,21 @@ export("pmax.grad.x", function(x, y, grad)
   {
     bsum(grad * (x >= y), length(x))
   }
-})
+}
 
-# Export gradient
-export("pmax.grad.y", function(x, y, grad)
+#' Parallel Maxima Gradient
+#'
+#' Calculate the gradient of \code{pmax(x, y)} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param grad numeric vector or array, gradient of \code{y}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.pmax.grad.y <- function(x, y, grad)
 {
   if(is.array(y))
   {
@@ -409,7 +534,7 @@ export("pmax.grad.y", function(x, y, grad)
   {
     bsum(grad * (x < y), length(y))
   }
-})
+}
 
 #' Parallel Minima
 #'
@@ -429,15 +554,26 @@ cg.pmin <- function(x, y, name = cgraph::name())
   cgraph::opr(name = name,
     call = quote(pmin(x, y)),
     grads = list(
-      x = quote(pmin.grad.x(x, y, grad)),
-      y = quote(pmin.grad.y(x, y, grad))
+      x = quote(cg.pmin.grad.x(x, y, grad)),
+      y = quote(cg.pmin.grad.y(x, y, grad))
     ),
     binding = list(x = x, y = y)
   )
 }
 
-# Export gradient
-export("pmin.grad.x", function(x, y, grad)
+#' Parallel Minima Gradient
+#'
+#' Calculate the gradient of \code{pmin(x, y)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.pmin.grad.x <- function(x, y, grad)
 {
   if(is.array(x))
   {
@@ -447,10 +583,21 @@ export("pmin.grad.x", function(x, y, grad)
   {
     bsum(grad * (x <= y), length(x))
   }
-})
+}
 
-# Export gradient
-export("pmin.grad.y", function(x, y, grad)
+#' Parallel Minima Gradient
+#'
+#' Calculate the gradient of \code{pmin(x, y)} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param grad numeric vector or array, gradient of \code{y}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.pmin.grad.y <- function(x, y, grad)
 {
   if(is.array(y))
   {
@@ -460,4 +607,4 @@ export("pmin.grad.y", function(x, y, grad)
   {
     bsum(grad * (x > y), length(y))
   }
-})
+}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/math.R
 \name{cg.ln}
 \alias{cg.ln}
-\title{Natual Logarithmic Function}
+\title{Natural Logarithmic Function}
 \usage{
 cg.ln(x, name = cgraph::name())
 }
