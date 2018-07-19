@@ -7,9 +7,9 @@
 export(name, fun)
 }
 \arguments{
-\item{name}{character scalar, the name to which the function is to be binded in the \code{functions} environment.}
+\item{name}{character scalar, the name to which the function is bind in the \code{functions} environment.}
 
-\item{fun}{function, the function to be exported.}
+\item{fun}{function, the function that is exported.}
 }
 \value{
 nothing

@@ -7,7 +7,7 @@
 cg.reshape(x, dim, name = cgraph::name())
 }
 \arguments{
-\item{x}{cg.node, placeholder for a numeric array.}
+\item{x}{cg.node, placeholder for a numeric vector or array.}
 
 \item{dim}{numeric scalar or vector, the dimensions of the new array.}
 

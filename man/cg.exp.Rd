@@ -17,9 +17,6 @@ cg.node, node of the operation.
 \description{
 Calculate \code{exp(x)}.
 }
-\note{
-\code{exp(x)=e^x}.
-}
 \author{
 Ron Triepels
 }
