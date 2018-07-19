@@ -98,3 +98,4 @@ S3method(tanh, cg.node)
 
 # Export fun functions
 export(bsum)
+export(array0)

@@ -179,3 +179,21 @@ test_that("Scalar [%*%, reshape, t]",
   expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
   expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
+
+test_that("Array [sum, reshape]",
+{
+  # Initialize graph
+  x <- cgraph$new()
+
+  # Create parameters
+  a <- parm(array(1:10, c(5,2)), name = "a")
+
+  # Create test expression
+  b <- cg.sum(cg.reshape(a, c(4, 2)))
+
+  # Calculate gradients
+  grads <- gradients(b, run(b))
+
+  # Check gradients
+  expect_equivalent(grads$a, approx.grad(b, a), tolerance = 1e-4)
+})
