@@ -30,8 +30,6 @@ export("as.double.grad", function(x, grad)
   {
     as.numeric(grad)
   }
-
-  #`if`(is.array(x), array(grad, dim(x)), as.numeric(grad))
 })
 
 #' Coerce to a Numeric Vector
@@ -100,7 +98,6 @@ export("reshape.grad", function(x, grad)
   {
     bsum(grad, length(x))
   }
-  #`if`(is.array(x), array(bsum(grad, length(x)), dim(x)), bsum(grad, length(x)))
 })
 
 #' Coerce to an Array

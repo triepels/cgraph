@@ -109,8 +109,6 @@ export("linear.grad.z", function(z, grad)
   {
     bsum(grad, length(z))
   }
-
-  #`if`(is.array(z), array(rowSums(grad), dim(z)), bsum(grad, length(z)))
 })
 
 #' Sum of Vector Elements
@@ -143,10 +141,8 @@ export("sum.grad", function(x, grad)
   }
   else
   {
-    rep_len(grad, length(x))
+    rep(grad, length(x))
   }
-
-  #`if`(is.array(x), array(grad, dim(x)), rep_len(grad, length(x)))
 })
 
 #' Product of Vector Elements
@@ -256,10 +252,8 @@ export("mean.grad", function(x, grad)
   }
   else
   {
-    1 / length(x) * rep_len(grad, length(x))
+    1 / length(x) * rep(grad, length(x))
   }
-
-  #1 / length(x) * `if`(is.array(x), array(grad, dim(x)), rep_len(grad, length(x)))
 })
 
 #' Row Means
@@ -402,8 +396,6 @@ export("pmax.grad.x", function(x, y, grad)
   {
     bsum(grad * (x >= y), length(x))
   }
-
-  #`if`(is.array(x), grad * (x >= y), bsum(grad * (x >= y), length(x)))
 })
 
 # Export gradient
@@ -417,8 +409,6 @@ export("pmax.grad.y", function(x, y, grad)
   {
     bsum(grad * (x < y), length(y))
   }
-
-  #`if`(is.array(y), grad * (x < y), bsum(grad * (x < y), length(y)))
 })
 
 #' Parallel Minima
@@ -457,8 +447,6 @@ export("pmin.grad.x", function(x, y, grad)
   {
     bsum(grad * (x <= y), length(x))
   }
-
-  #`if`(is.array(x), grad * (x <= y), bsum(grad * (x <= y), length(x)))
 })
 
 # Export gradient
@@ -472,6 +460,4 @@ export("pmin.grad.y", function(x, y, grad)
   {
     bsum(grad * (x > y), length(y))
   }
-
-  #`if`(is.array(y), grad * (x > y), bsum(grad * (x > y), length(y)))
 })

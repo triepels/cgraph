@@ -32,8 +32,6 @@ export("add.grad", function(x, grad)
   {
     bsum(grad, length(x))
   }
-
-  #`if`(is.array(x), grad, bsum(grad, length(x)))
 })
 
 #' Positive
@@ -102,8 +100,6 @@ export("sub.grad", function(x, grad)
   {
     bsum(-grad, length(x))
   }
-
-  #`if`(is.array(y), -grad, bsum(-grad, length(y)))
 })
 
 #' Negative
@@ -172,8 +168,6 @@ export("mul.grad.x", function(x, y, grad)
   {
     bsum(grad * y, length(x))
   }
-
-  #`if`(is.array(x), grad * y, bsum(grad * y, length(x)))
 })
 
 # Export gradient
@@ -187,8 +181,6 @@ export("mul.grad.y", function(x, y, grad)
   {
     bsum(grad * x, length(y))
   }
-
-  #`if`(is.array(y), grad * x, bsum(grad * x, length(y)))
 })
 
 # S3 method
@@ -231,8 +223,6 @@ export("div.grad.x", function(x, y, grad)
   {
     bsum(grad / y, length(x))
   }
-
-  #`if`(is.array(x), grad / y, bsum(grad / y, length(x)))
 })
 
 # Export gradient
@@ -246,8 +236,6 @@ export("div.grad.y", function(x, y, grad)
   {
     bsum(-grad * x / y^2, length(y))
   }
-
-  #`if`(is.array(y), -grad * x / y^2, bsum(-grad * x / y^2, length(y)))
 })
 
 # S3 method
@@ -290,8 +278,6 @@ export("pow.grad.x", function(x, y, grad)
   {
     bsum(grad * y * x^(y - 1), length(x))
   }
-
-  #`if`(is.array(x), grad * y * x^(y - 1), bsum(grad * y * x^(y - 1), length(x)))
 })
 
 # Export gradient
@@ -305,8 +291,6 @@ export("pow.grad.y", function(x, y, grad)
   {
     bsum(grad * x^y * log(x), length(y))
   }
-
-  #`if`(is.array(y), grad * x^y * log(x), bsum(grad * x^y * log(x), length(y)))
 })
 
 # S3 method
