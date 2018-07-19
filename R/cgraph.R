@@ -29,8 +29,6 @@
 #' \item{$plot}{plot the topology of the graph, see \link[cgraph]{cg.plot}.}
 #' }
 #'
-#' @note There are wrapper functions available that call some of the listed methods above on the current active graph.
-#'
 #' @name cgraph
 #' @author Ron Triepels
 NULL

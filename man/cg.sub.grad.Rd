@@ -17,9 +17,6 @@ numeric vector or array, gradient of the operation.
 \description{
 Calculate the gradient of \code{x - y} with respect to \code{y}.
 }
-\note{
-The gradient of \code{x - y} with respect to \code{x} can be calculated by \link[cgraph]{add.grad}.
-}
 \author{
 Ron Triepels
 }

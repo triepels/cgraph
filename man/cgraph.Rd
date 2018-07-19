@@ -6,9 +6,6 @@
 \description{
 This class facilitates the construction, evaluation, and differentiation of computaiontal graphs in R.
 }
-\note{
-There are wrapper functions available that call some of the listed methods above on the current active graph.
-}
 \section{Usage}{
 
 \preformatted{x <- cgraph$new()}

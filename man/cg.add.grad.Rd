@@ -17,9 +17,6 @@ numeric vector or array, gradient of the operation.
 \description{
 Calculate the gradient of \code{x + y} with respect to \code{x}.
 }
-\note{
-The gradient of \code{x + y} with respect to \code{y} can be calculated by evaluating the function at \code{y}.
-}
 \author{
 Ron Triepels
 }

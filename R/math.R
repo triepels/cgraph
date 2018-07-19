@@ -28,8 +28,6 @@ cg.add <- function(x, y, name = cgraph::name())
 #' @param x numeric vector or array, value of \code{x}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
-#' @note The gradient of \code{x + y} with respect to \code{y} can be calculated by evaluating the function at \code{y}.
-#'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
@@ -107,8 +105,6 @@ cg.sub <- function(x, y, name = cgraph::name())
 #'
 #' @param x numeric vector or array, value of \code{y}.
 #' @param grad numeric vector or array, gradient of \code{y}.
-#'
-#' @note The gradient of \code{x - y} with respect to \code{x} can be calculated by \link[cgraph]{add.grad}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'

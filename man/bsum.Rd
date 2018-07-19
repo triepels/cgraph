@@ -23,3 +23,4 @@ If \code{x} is an array and \code{n} is equal to the size of \code{x}'s first di
 \author{
 Ron Triepels
 }
+\keyword{internal}
