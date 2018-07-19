@@ -196,6 +196,6 @@ test_that("Mixed [sum, reshape]",
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(b, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(b, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
