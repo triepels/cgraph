@@ -190,11 +190,12 @@ test_that("Mixed [sum, reshape]",
   b <- parm(1:3, name = "b")
 
   # Create test expression
-  b <- cg.sum(cg.reshape(a, c(4, 2)) * cg.reshape(b, c(4, 2)))
+  c <- cg.sum(cg.reshape(a, c(4, 2)) * cg.reshape(b, c(4, 2)))
 
   # Calculate gradients
-  grads <- gradients(b, run(b))
+  grads <- gradients(c, run(c))
 
   # Check gradients
   expect_equivalent(grads$a, approx.grad(b, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(b, b), tolerance = 1e-4)
 })
