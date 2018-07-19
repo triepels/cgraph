@@ -11,8 +11,8 @@ session$functions <- new.env()
 #'
 #' Export a function to the \code{functions} environment in the global session.
 #'
-#' @param name character scalar, the name to which the function is to be binded in the \code{functions} environment.
-#' @param fun function, the function to be exported.
+#' @param name character scalar, the name to which the function is bind in the \code{functions} environment.
+#' @param fun function, the function that is exported.
 #'
 #' @return nothing
 #'
