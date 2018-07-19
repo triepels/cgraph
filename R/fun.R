@@ -2,8 +2,8 @@
 #'
 #' Divide a vector or array in consecutive blocks of \code{n} elements and sum the elements at each position in these blocks.
 #'
-#' @param x, vector or array, the object that is summed.
-#' @param n, integer scalar, block size. Defaults to 1.
+#' @param x, numeric vector or array, the object that is summed.
+#' @param n, numeric scalar, block size. Defaults to 1.
 #'
 #' @note If \code{x} is an array and \code{n} is equal to the size of \code{x}'s first dimension, then \link[cgraph]{bsum} behaves as \link[base]{rowSums}.
 #'
