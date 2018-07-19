@@ -180,16 +180,17 @@ test_that("Scalar [%*%, reshape, t]",
   expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
-test_that("Array [sum, reshape]",
+test_that("Mixed [sum, reshape]",
 {
   # Initialize graph
   x <- cgraph$new()
 
   # Create parameters
   a <- parm(array(1:10, c(5,2)), name = "a")
+  b <- parm(1:3, name = "b")
 
   # Create test expression
-  b <- cg.sum(cg.reshape(a, c(4, 2)))
+  b <- cg.sum(cg.reshape(a, c(4, 2)) * cg.reshape(b, c(4, 2)))
 
   # Calculate gradients
   grads <- gradients(b, run(b))

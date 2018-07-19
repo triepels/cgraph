@@ -83,7 +83,7 @@ cg.reshape <- function(x, dim, name = cgraph::name())
 # Export gradient
 export("reshape.grad", function(x, grad)
 {
-  `if`(is.array(x), array0(grad, dim(x)), as.numeric(grad))
+  `if`(is.array(x), array(bsum(grad, length(x)), dim(x)), bsum(grad, length(x)))
 })
 
 #' Coerce to an Array

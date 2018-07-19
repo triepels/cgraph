@@ -3,7 +3,6 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 
-extern SEXP array0(SEXP, SEXP, SEXP);
 extern SEXP bsum(SEXP, SEXP);
 extern SEXP cgraph(SEXP, SEXP);
 extern SEXP cg_add_operation(SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -17,7 +16,6 @@ extern SEXP cg_gradients(SEXP, SEXP, SEXP, SEXP);
 extern SEXP cg_run(SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-  {"array0",             (DL_FUNC) &array0,             3},
   {"bsum",               (DL_FUNC) &bsum,               2},
   {"cgraph",             (DL_FUNC) &cgraph,             2},
   {"cg_add_operation",   (DL_FUNC) &cg_add_operation,   5},
