@@ -113,7 +113,7 @@ input <- function(value, name)
 #' @param value numeric scalar or array, value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
-#' @note Parameters are assumed to be subject to some optimization process. Their value might change over time.
+#' @note Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
 #'
 #' The name of the parameter node cannot be 'grad' as this is a reserved word.
 #'
@@ -136,7 +136,7 @@ parm <- function(value, name)
 #'
 #' @param call expression or call, operations performed by the node.
 #' @param grads named list of expressions or calls, gradients of the input nodes that are consumed by the operation in argument \code{call}.
-#' @param binding named list or environment, binds the varaibles used in the expressions or calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.
+#' @param binding named list or environment, binds the variables used in the expressions or calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.
 #' @param name character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @note The operation to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation consumes any other nodes in the graph, then the gradients of the current node with respect to these input nodes should be supplied as an expression or call to argument \code{gradients}. These gradients must be a function of each input's gradient. The special reserved word \code{grad} evaluates to this gradient at run-time and can be used in the expression and call of each input's gradient as placeholder.
@@ -190,11 +190,11 @@ run <- function(name, values = list())
 #' @param values named list or environment, values that are subsituted for the nodes in the graph.
 #' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
 #'
-#' @note All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating node \code{name} in the graph using function \code{$run()}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
+#' @note All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating node \code{name} in the graph using function \link[cgraph]{run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
 #'
 #' Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is to be differentiated.
 #'
-#' The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the values of the nodes.
+#' The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the nodes.
 #'
 #' @return environment, the gradients of all nodes with respect to target node \code{name}.
 #'

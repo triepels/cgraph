@@ -8,7 +8,7 @@
 
 \item{grads}{named list of expressions or calls, gradients of the input nodes that are consumed by the operation in argument \code{call}.}
 
-\item{binding}{named list or environment, binds the varaibles used in the expressions or calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.}
+\item{binding}{named list or environment, binds the variables used in the expressions or calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.}
 
 \item{name}{character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }

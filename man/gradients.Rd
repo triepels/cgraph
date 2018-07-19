@@ -20,11 +20,11 @@ environment, the gradients of all nodes with respect to target node \code{name}.
 Differentiate the active graph with respect to node \code{name} by reverse automatic differentiation.
 }
 \note{
-All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating node \code{name} in the graph using function \code{$run()}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
+All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating node \code{name} in the graph using function \link[cgraph]{run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
 
 Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is to be differentiated.
 
-The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the values of the nodes.
+The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the nodes.
 }
 \author{
 Ron Triepels

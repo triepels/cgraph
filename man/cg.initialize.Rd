@@ -7,13 +7,13 @@
 cgraph object.
 }
 \description{
-Initialize a new computational graph.
+Initialize a computational graph.
 }
 \details{
 \code{$new()}
 }
 \note{
-The cgraph object is set to be the active graph. Any nodes that are created by wrapper function \code{const}, \code{input}, or \code{parm} will be added to this graph unless the active graph is changed. You can change the current graph by calling the \code{$active()} method on another cgraph object.
+The cgraph object is set to be the active graph. Any nodes that are created by wrapper function \code{const}, \code{input}, or \code{parm} will be added to this graph unless the active graph is changed. You can change the current graph by calling the \link[cgraph]{cg.active} method on another cgraph object.
 }
 \author{
 Ron Triepels

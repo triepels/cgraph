@@ -2,13 +2,46 @@
 % Please edit documentation in R/cgraph.R
 \name{cgraph}
 \alias{cgraph}
-\title{Computational Graph Class Generator}
+\title{Computational Graph}
 \description{
-Generator class to create new cgraph objects.
+This class facilitates the construction, evaluation, and differentiation of computaiontal graphs in R.
 }
-\details{
-\code{cgraph}
+\note{
+There are wrapper functions available that call some of the listed methods above on the current active graph.
 }
+\section{Usage}{
+
+\preformatted{x <- cgraph$new()}
+}
+
+\section{Members}{
+
+\describe{
+\item{nodes}{list, symbolic representation of the nodes.}
+\item{values}{environment, values of the nodes.}
+}
+}
+
+\section{Methods}{
+
+\describe{
+\item{$initialize}{initialize a computational graph, see \link[cgraph]{cg.initialize}.}
+\item{$name}{generate a default name for a node, see \link[cgraph]{cg.name}.}
+\item{$const}{add a constant node to the graph, see \link[cgraph]{cg.const}.}
+\item{$input}{add an input node to the graph, see \link[cgraph]{cg.input}.}
+\item{$parm}{add a parameter node to the graph, see \link[cgraph]{cg.parm}.}
+\item{$get.parms}{list all parameters and their values, see \link[cgraph]{cg.get.parms}.}
+\item{$add.parms}{add parameters to the graph, see \link[cgraph]{cg.add.parms}.}
+\item{$opr}{add an operation node to the graph, see \link[cgraph]{cg.opr}.}
+\item{$active}{set the graph to be the active graph, see \link[cgraph]{cg.active}.}
+\item{$run}{evaluate a node in the graph, see \link[cgraph]{cg.run}.}
+\item{$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg.gradients}.}
+\item{$approx.grad}{differentiate the graph by numerical differentiation, see \link[cgraph]{cg.approx.grad}.}
+\item{$adj.mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg.adj.mat}.}
+\item{$plot}{plot the topology of the graph, see \link[cgraph]{cg.plot}.}
+}
+}
+
 \author{
 Ron Triepels
 }

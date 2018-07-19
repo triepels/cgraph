@@ -18,7 +18,7 @@ cg.node, parameter.
 Add a parameter node to the active graph.
 }
 \note{
-Parameters are assumed to be subject to some optimization process. Their value might change over time.
+Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
 
 The name of the parameter node cannot be 'grad' as this is a reserved word.
 }

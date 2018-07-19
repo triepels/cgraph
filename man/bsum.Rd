@@ -7,7 +7,7 @@
 bsum(x, n = 1)
 }
 \arguments{
-\item{x, }{numeric vector or array, the object that is to be summed.}
+\item{x, }{numeric vector or array, the object that is summed.}
 
 \item{n, }{numeric scalar, block size. Defaults to 1.}
 }
@@ -18,7 +18,7 @@ numeric vector, a \code{n}-dimensional vector, where the 1th element of the vect
 Divide a numeric vector or array in consecutive blocks of \code{n} elements and sum the elements at each position in these blocks.
 }
 \note{
-If \code{x} is an array and \code{n} is equal to the size of \code{x}'s first dimension, then \code{bsum} behaves as \code{rowSums}.
+If \code{x} is an array and \code{n} is equal to the size of \code{x}'s first dimension, then \link[cgraph]{bsum} behaves as \link[base]{rowSums}.
 }
 \author{
 Ron Triepels
