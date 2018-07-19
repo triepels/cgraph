@@ -101,7 +101,16 @@ cg.linear <- function(x, y, z, name = cgraph::name())
 # Export gradient
 export("linear.grad.z", function(z, grad)
 {
-  `if`(is.array(z), array(rowSums(grad), dim(z)), bsum(grad, length(z)))
+  if(is.array(z))
+  {
+    array(rowSums(grad), dim(z))
+  }
+  else
+  {
+    bsum(grad, length(z))
+  }
+
+  #`if`(is.array(z), array(rowSums(grad), dim(z)), bsum(grad, length(z)))
 })
 
 #' Sum of Vector Elements
@@ -136,6 +145,7 @@ export("sum.grad", function(x, grad)
   {
     rep_len(grad, length(x))
   }
+
   #`if`(is.array(x), array(grad, dim(x)), rep_len(grad, length(x)))
 })
 
