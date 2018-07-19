@@ -32,6 +32,7 @@ export("add.grad", function(x, grad)
   {
     bsum(grad, length(x))
   }
+
   #`if`(is.array(x), grad, bsum(grad, length(x)))
 })
 
@@ -83,37 +84,23 @@ cg.sub <- function(x, y, name = cgraph::name())
   cgraph::opr(name = name,
     call = quote(x - y),
     grads = list(
-      x = quote(sub.grad.x(x, grad)),
-      y = quote(sub.grad.y(y, grad))
+      x = quote(add.grad(x, grad)),
+      y = quote(sub.grad(y, grad))
     ),
     binding = list(x = x, y = y)
   )
 }
 
 # Export gradient
-export("sub.grad.x", function(x, grad)
+export("sub.grad", function(x, grad)
 {
   if(is.array(x))
-  {
-    grad
-  }
-  else
-  {
-    bsum(grad, length(x))
-  }
-  #`if`(is.array(x), grad, bsum(grad, length(x)))
-})
-
-# Export gradient
-export("sub.grad.y", function(y, grad)
-{
-  if(is.array(y))
   {
     -grad
   }
   else
   {
-    bsum(-grad, length(y))
+    bsum(-grad, length(x))
   }
 
   #`if`(is.array(y), -grad, bsum(-grad, length(y)))
