@@ -128,7 +128,15 @@ cg.sum <- function(x, name = cgraph::name())
 # Export gradient
 export("sum.grad", function(x, grad)
 {
-  `if`(is.array(x), array(grad, dim(x)), rep_len(grad, length(x)))
+  if(is.array(x))
+  {
+    array(grad, dim(x))
+  }
+  else
+  {
+    rep_len(grad, length(x))
+  }
+  #`if`(is.array(x), array(grad, dim(x)), rep_len(grad, length(x)))
 })
 
 #' Product of Vector Elements
@@ -232,7 +240,16 @@ cg.mean <- function(x, name = cgraph::name())
 # Export gradient
 export("mean.grad", function(x, grad)
 {
-  1 / length(x) * `if`(is.array(x), array(grad, dim(x)), rep_len(grad, length(x)))
+  if(is.array(x))
+  {
+    1 / length(x) * array(grad, dim(x))
+  }
+  else
+  {
+    1 / length(x) * rep_len(grad, length(x))
+  }
+
+  #1 / length(x) * `if`(is.array(x), array(grad, dim(x)), rep_len(grad, length(x)))
 })
 
 #' Row Means
@@ -367,13 +384,31 @@ cg.pmax <- function(x, y, name = cgraph::name())
 # Export gradient
 export("pmax.grad.x", function(x, y, grad)
 {
-  `if`(is.array(x), grad * (x >= y), bsum(grad * (x >= y), length(x)))
+  if(is.array(x))
+  {
+    grad * (x >= y)
+  }
+  else
+  {
+    bsum(grad * (x >= y), length(x))
+  }
+
+  #`if`(is.array(x), grad * (x >= y), bsum(grad * (x >= y), length(x)))
 })
 
 # Export gradient
 export("pmax.grad.y", function(x, y, grad)
 {
-  `if`(is.array(y), grad * (x < y), bsum(grad * (x < y), length(y)))
+  if(is.array(y))
+  {
+    grad * (x < y)
+  }
+  else
+  {
+    bsum(grad * (x < y), length(y))
+  }
+
+  #`if`(is.array(y), grad * (x < y), bsum(grad * (x < y), length(y)))
 })
 
 #' Parallel Minima
@@ -404,11 +439,29 @@ cg.pmin <- function(x, y, name = cgraph::name())
 # Export gradient
 export("pmin.grad.x", function(x, y, grad)
 {
-  `if`(is.array(x), grad * (x <= y), bsum(grad * (x <= y), length(x)))
+  if(is.array(x))
+  {
+    grad * (x <= y)
+  }
+  else
+  {
+    bsum(grad * (x <= y), length(x))
+  }
+
+  #`if`(is.array(x), grad * (x <= y), bsum(grad * (x <= y), length(x)))
 })
 
 # Export gradient
 export("pmin.grad.y", function(x, y, grad)
 {
-  `if`(is.array(y), grad * (x > y), bsum(grad * (x > y), length(y)))
+  if(is.array(y))
+  {
+    grad * (x > y)
+  }
+  else
+  {
+    bsum(grad * (x > y), length(y))
+  }
+
+  #`if`(is.array(y), grad * (x > y), bsum(grad * (x > y), length(y)))
 })

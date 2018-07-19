@@ -22,7 +22,16 @@ cg.as.double <- function(x, name = cgraph::name())
 # Export gradient
 export("as.double.grad", function(x, grad)
 {
-  `if`(is.array(x), array(grad, dim(x)), as.numeric(grad))
+  if(is.array(x))
+  {
+    array(grad, dim(x))
+  }
+  else
+  {
+    as.numeric(grad)
+  }
+
+  #`if`(is.array(x), array(grad, dim(x)), as.numeric(grad))
 })
 
 #' Coerce to a Numeric Vector
@@ -83,7 +92,15 @@ cg.reshape <- function(x, dim, name = cgraph::name())
 # Export gradient
 export("reshape.grad", function(x, grad)
 {
-  `if`(is.array(x), array(bsum(grad, length(x)), dim(x)), bsum(grad, length(x)))
+  if(is.array(x))
+  {
+    array(bsum(grad, length(x)), dim(x))
+  }
+  else
+  {
+    bsum(grad, length(x))
+  }
+  #`if`(is.array(x), array(bsum(grad, length(x)), dim(x)), bsum(grad, length(x)))
 })
 
 #' Coerce to an Array

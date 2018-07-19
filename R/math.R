@@ -24,7 +24,15 @@ cg.add <- function(x, y, name = cgraph::name())
 # Export gradient
 export("add.grad", function(x, grad)
 {
-  `if`(is.array(x), grad, bsum(grad, length(x)))
+  if(is.array(x))
+  {
+    grad
+  }
+  else
+  {
+    bsum(grad, length(x))
+  }
+  #`if`(is.array(x), grad, bsum(grad, length(x)))
 })
 
 #' Positive
@@ -85,13 +93,30 @@ cg.sub <- function(x, y, name = cgraph::name())
 # Export gradient
 export("sub.grad.x", function(x, grad)
 {
-  `if`(is.array(x), grad, bsum(grad, length(x)))
+  if(is.array(x))
+  {
+    grad
+  }
+  else
+  {
+    bsum(grad, length(x))
+  }
+  #`if`(is.array(x), grad, bsum(grad, length(x)))
 })
 
 # Export gradient
 export("sub.grad.y", function(y, grad)
 {
-  `if`(is.array(y), -grad, bsum(-grad, length(y)))
+  if(is.array(y))
+  {
+    -grad
+  }
+  else
+  {
+    bsum(-grad, length(y))
+  }
+
+  #`if`(is.array(y), -grad, bsum(-grad, length(y)))
 })
 
 #' Negative
@@ -152,13 +177,31 @@ cg.mul <- function(x, y, name = cgraph::name())
 # Export gradient
 export("mul.grad.x", function(x, y, grad)
 {
-  `if`(is.array(x), grad * y, bsum(grad * y, length(x)))
+  if(is.array(x))
+  {
+    grad * y
+  }
+  else
+  {
+    bsum(grad * y, length(x))
+  }
+
+  #`if`(is.array(x), grad * y, bsum(grad * y, length(x)))
 })
 
 # Export gradient
 export("mul.grad.y", function(x, y, grad)
 {
-  `if`(is.array(y), grad * x, bsum(grad * x, length(y)))
+  if(is.array(y))
+  {
+    grad * x
+  }
+  else
+  {
+    bsum(grad * x, length(y))
+  }
+
+  #`if`(is.array(y), grad * x, bsum(grad * x, length(y)))
 })
 
 # S3 method
@@ -193,13 +236,31 @@ cg.div <- function(x, y, name = cgraph::name())
 # Export gradient
 export("div.grad.x", function(x, y, grad)
 {
-  `if`(is.array(x), grad / y, bsum(grad / y, length(x)))
+  if(is.array(x))
+  {
+    grad / y
+  }
+  else
+  {
+    bsum(grad / y, length(x))
+  }
+
+  #`if`(is.array(x), grad / y, bsum(grad / y, length(x)))
 })
 
 # Export gradient
 export("div.grad.y", function(x, y, grad)
 {
-  `if`(is.array(y), -grad * x / y^2, bsum(-grad * x / y^2, length(y)))
+  if(is.array(y))
+  {
+    -grad * x / y^2
+  }
+  else
+  {
+    bsum(-grad * x / y^2, length(y))
+  }
+
+  #`if`(is.array(y), -grad * x / y^2, bsum(-grad * x / y^2, length(y)))
 })
 
 # S3 method
@@ -234,13 +295,31 @@ cg.pow <- function(x, y, name = cgraph::name())
 # Export gradient
 export("pow.grad.x", function(x, y, grad)
 {
-  `if`(is.array(x), grad * y * x^(y - 1), bsum(grad * y * x^(y - 1), length(x)))
+  if(is.array(x))
+  {
+    grad * y * x^(y - 1)
+  }
+  else
+  {
+    bsum(grad * y * x^(y - 1), length(x))
+  }
+
+  #`if`(is.array(x), grad * y * x^(y - 1), bsum(grad * y * x^(y - 1), length(x)))
 })
 
 # Export gradient
 export("pow.grad.y", function(x, y, grad)
 {
-  `if`(is.array(y), grad * x^y * log(x), bsum(grad * x^y * log(x), length(y)))
+  if(is.array(y))
+  {
+    grad * x^y * log(x)
+  }
+  else
+  {
+    bsum(grad * x^y * log(x), length(y))
+  }
+
+  #`if`(is.array(y), grad * x^y * log(x), bsum(grad * x^y * log(x), length(y)))
 })
 
 # S3 method
