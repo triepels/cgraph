@@ -89,11 +89,19 @@ export(cg.sin)
 export(cg.cos)
 export(cg.tan)
 export(cg.tanh)
+export(cg.asin)
+export(cg.acos)
+export(cg.atan)
+export(cg.atanh)
 
 # Export trig methods
 S3method(sin, cg.node)
 S3method(cos, cg.node)
 S3method(tan, cg.node)
 S3method(tanh, cg.node)
+S3method(asin, cg.node)
+S3method(acos, cg.node)
+S3method(atan, cg.node)
+S3method(atanh, cg.node)
 
 # Export fun functions
