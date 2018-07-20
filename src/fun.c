@@ -1,6 +1,15 @@
 #include <R.h>
 #include <Rinternals.h>
 
+SEXP address(SEXP graph)
+{
+  char address[32];
+
+  snprintf(address, 32, "%p", (void *)graph);
+
+  return(mkString(address));
+}
+
 SEXP bsum(SEXP x, SEXP n)
 {
   int k = LENGTH(x), j = 0, n_val;

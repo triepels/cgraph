@@ -1,6 +1,6 @@
 print.cgraph <- function(x, ...)
 {
-  cat("<cgraph>")
+  cat(sprintf("<cgraph: %s>", address(x)))
 }
 
 print.cg.node = function(x, ...)
@@ -23,7 +23,17 @@ print.cg.node = function(x, ...)
     warning(e)
   })
 
-  cat(sprintf("<cg.node: %s>\n\n", x))
+  if(is.null(session$graph))
+  {
+    cat(sprintf("<cg.node: %s>\n", x))
+  }
+  else
+  {
+    if(!is.null(val))
+    {
+      print(val); cat("\n")
+    }
 
-  print(val)
+    cat(sprintf("<cg.node: %s> @ %s\n", x, address(session$graph)))
+  }
 }
