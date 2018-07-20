@@ -193,3 +193,199 @@ tanh.cg.node <- function(x)
 {
   cgraph::cg.tanh(x)
 }
+
+#' Inverse Sinus
+#'
+#' Calculate \code{asin(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.asin <- function(x, name = cgraph::name())
+{
+  cgraph::opr(name = name,
+    call = quote(asin(x)),
+    grads = list(x = quote(cg.asin.grad(x, grad))),
+    binding = list(x = x)
+  )
+}
+
+#' Inverse Sinus Gradient
+#'
+#' Calculate the gradient of \code{asin(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.asin.grad <- function(x, grad)
+{
+  grad / sqrt(1 - x^2)
+}
+
+#' Inverse Sinus
+#'
+#' Calculate \code{asin(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+asin.cg.node <- function(x)
+{
+  cgraph::cg.asin(x)
+}
+
+#' Inverse Cosinus
+#'
+#' Calculate \code{acos(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.acos <- function(x, name = cgraph::name())
+{
+  cgraph::opr(name = name,
+    call = quote(acos(x)),
+    grads = list(x = quote(cg.acos.grad(x, grad))),
+    binding = list(x = x)
+  )
+}
+
+#' Inverse Cosinus Gradient
+#'
+#' Calculate the gradient of \code{acos(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.acos.grad <- function(x, grad)
+{
+  -grad / sqrt(1 - x^2)
+}
+
+#' Inverse Cosinus
+#'
+#' Calculate \code{acos(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+acos.cg.node <- function(x)
+{
+  cgraph::cg.acos(x)
+}
+
+#' Inverse Tangent
+#'
+#' Calculate \code{atan(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.atan <- function(x, name = cgraph::name())
+{
+  cgraph::opr(name = name,
+    call = quote(atan(x)),
+    grads = list(x = quote(cg.atan.grad(x, grad))),
+    binding = list(x = x)
+  )
+}
+
+#' Inverse Tangent Gradient
+#'
+#' Calculate the gradient of \code{atan(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.atan.grad <- function(x, grad)
+{
+  grad / (x^2 + 1)
+}
+
+#' Inverse Tangent
+#'
+#' Calculate \code{atan(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+atan.cg.node <- function(x)
+{
+  cgraph::cg.atan(x)
+}
+
+#' Inverse Hyperbolic Tangent
+#'
+#' Calculate \code{atanh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.atanh <- function(x, name = cgraph::name())
+{
+  cgraph::opr(name = name,
+    call = quote(atanh(x)),
+    grads = list(x = quote(cg.atanh.grad(x, grad))),
+    binding = list(x = x)
+  )
+}
+
+#' Inverse Hyperbolic Tangent Gradient
+#'
+#' Calculate the gradient of \code{atanh(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.atanh.grad <- function(x, grad)
+{
+  grad / (1 - x^2)
+}
+
+#' Inverse Hyperbolic Tangent
+#'
+#' Calculate \code{atanh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+atanh.cg.node <- function(x)
+{
+  cgraph::cg.atanh(x)
+}
