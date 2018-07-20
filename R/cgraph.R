@@ -1,32 +1,32 @@
 #' Computational Graph
 #'
-#' This class facilitates the construction, evaluation, and differentiation of computaiontal graphs in R.
+#' The \code{cgraph} class facilitates the construction, evaluation, and differentiation of computaiontal graphs in R.
 #'
 #' @section Usage:
 #' \preformatted{x <- cgraph$new()}
 #'
 #' @section Members:
 #' \describe{
-#' \item{nodes}{list, symbolic representation of the nodes.}
-#' \item{values}{environment, values of the nodes.}
+#' \item{x$nodes}{list, symbolic representation of the nodes.}
+#' \item{x$values}{environment, values of the nodes.}
 #' }
 #'
 #' @section Methods:
 #' \describe{
-#' \item{$initialize}{initialize a computational graph, see \link[cgraph]{cg.initialize}.}
-#' \item{$name}{generate a default name for a node, see \link[cgraph]{cg.name}.}
-#' \item{$const}{add a constant node to the graph, see \link[cgraph]{cg.const}.}
-#' \item{$input}{add an input node to the graph, see \link[cgraph]{cg.input}.}
-#' \item{$parm}{add a parameter node to the graph, see \link[cgraph]{cg.parm}.}
-#' \item{$get.parms}{list all parameters and their values, see \link[cgraph]{cg.get.parms}.}
-#' \item{$add.parms}{add parameters to the graph, see \link[cgraph]{cg.add.parms}.}
-#' \item{$opr}{add an operation node to the graph, see \link[cgraph]{cg.opr}.}
-#' \item{$active}{set the graph to be the active graph, see \link[cgraph]{cg.active}.}
-#' \item{$run}{evaluate a node in the graph, see \link[cgraph]{cg.run}.}
-#' \item{$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg.gradients}.}
-#' \item{$approx.grad}{differentiate the graph by numerical differentiation, see \link[cgraph]{cg.approx.grad}.}
-#' \item{$adj.mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg.adj.mat}.}
-#' \item{$plot}{plot the topology of the graph, see \link[cgraph]{cg.plot}.}
+#' \item{x$initialize}{initialize a computational graph, see \link[cgraph]{cg.initialize}.}
+#' \item{x$name}{generate a default name for a node, see \link[cgraph]{cg.name}.}
+#' \item{x$const}{add a constant node to the graph, see \link[cgraph]{cg.const}.}
+#' \item{x$input}{add an input node to the graph, see \link[cgraph]{cg.input}.}
+#' \item{x$parm}{add a parameter node to the graph, see \link[cgraph]{cg.parm}.}
+#' \item{x$get.parms}{list all parameters and their values, see \link[cgraph]{cg.get.parms}.}
+#' \item{x$add.parms}{add parameters to the graph, see \link[cgraph]{cg.add.parms}.}
+#' \item{x$opr}{add an operation node to the graph, see \link[cgraph]{cg.opr}.}
+#' \item{x$active}{set the graph to be the active graph, see \link[cgraph]{cg.active}.}
+#' \item{x$run}{evaluate a node in the graph, see \link[cgraph]{cg.run}.}
+#' \item{x$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg.gradients}.}
+#' \item{x$approx.grad}{differentiate the graph by numerical differentiation, see \link[cgraph]{cg.approx.grad}.}
+#' \item{x$adj.mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg.adj.mat}.}
+#' \item{x$plot}{plot the topology of the graph, see \link[cgraph]{cg.plot}.}
 #' }
 #'
 #' @name cgraph
@@ -271,14 +271,14 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #'
 #' Add an operation node to the graph.
 #'
-#' @details \code{$expr(call, grads, binding, name)}
+#' @details \code{$opr(call, grads, binding, name)}
 #'
 #' @param call expression or call, operations performed by the node.
 #' @param grads named list of expressions or calls, gradients of the input nodes that are consumed by the operation in argument \code{call}.
 #' @param binding named list or environment, binds the variables used in the expressions or calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.
 #' @param name character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
-#' @note The operation to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation consumes any other nodes in the graph, then the gradients of the current node with respect to these input nodes should be supplied as an expression or call to argument \code{gradients}. These gradients must be a function of each input's gradient. The special reserved word \code{grad} evaluates to this gradient at run-time and can be used in the expression and call of each input's gradient as placeholder.
+#' @note The operation to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation consumes any other nodes in the graph, then the gradients of the current node with respect to these input nodes should be supplied as an expression or call to argument \code{gradients}. These gradients must be a function of each input's gradient. The special reserved word 'grad' evaluates to this gradient at run-time and can be used in the expression and call of each input's gradient as placeholder.
 #'
 #' Any variabes used in the expressions or calls of the node (both supplied to argument \code{call} and \code{gradients}) should be bind to the symbols of the nodes in the graph. This can be done by supplying the names of the variables and the corresponding nodes to which the variables should bind to \code{binding}. At run-time, the symbols of the nodes are substituted for the variables in the expressions or calls.
 #'
