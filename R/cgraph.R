@@ -29,7 +29,7 @@
 #' \item{$plot}{plot the topology of the graph, see \link[cgraph]{cg.plot}.}
 #' }
 #'
-#' @note Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg.parm} on the graph object.
+#' @note Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg.parm} on the cgraph object.
 #'
 #' @name cgraph
 #' @author Ron Triepels
