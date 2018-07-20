@@ -21,6 +21,8 @@ Evaluate node \code{name} in the graph.
 All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
 
 Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of nodes that have not changed or are not evaluated are not returned.
+
+There is a wrapper function \link[cgraph]{run} that calls this method on the current active graph.
 }
 \author{
 Ron Triepels

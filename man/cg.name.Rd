@@ -17,6 +17,8 @@ Generate a default name for a node.
 }
 \note{
 The auto-generated name is not guaranteed to be unique.
+
+There is a wrapper function \link[cgraph]{name} that calls this method on the current active graph.
 }
 \author{
 Ron Triepels

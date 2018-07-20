@@ -13,7 +13,7 @@ Initialize a computational graph.
 \code{$new()}
 }
 \note{
-The cgraph object is set to be the active graph. Any nodes that are created by wrapper function \code{const}, \code{input}, or \code{parm} will be added to this graph unless the active graph is changed. You can change the current graph by calling the \link[cgraph]{cg.active} method on another cgraph object.
+The cgraph object is set to be the active graph. Any nodes that are created by wrapper function \link[cgraph]{const}, \link[cgraph]{input}, \link[cgraph]{parm}, or \link[cgraph]{opr} will be added to this graph. Also, when printing a node, its value will be evaluated in the active graph. You can change the active graph by calling the \link[cgraph]{cg.active} method on another cgraph object.
 }
 \author{
 Ron Triepels

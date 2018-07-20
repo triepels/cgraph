@@ -25,6 +25,8 @@ All nodes required to compute node \code{name} must have a value, or their value
 Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is to be differentiated.
 
 The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the nodes.
+
+There is a wrapper function \link[cgraph]{gradients} that calls this method on the current active graph.
 }
 \author{
 Ron Triepels

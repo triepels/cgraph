@@ -21,6 +21,8 @@ Add a constant node to the graph.
 Constants are ignored when differentiating a graph. The intended use of constants is that they are given a fixed value. However, it is still possible to change the value of constants when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
 
 The name of the constant node cannot be 'grad' as this is a reserved word.
+
+There is a wrapper function \link[cgraph]{const} that calls this method on the current active graph.
 }
 \author{
 Ron Triepels

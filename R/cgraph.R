@@ -7,27 +7,29 @@
 #'
 #' @section Members:
 #' \describe{
-#' \item{x$nodes}{list, symbolic representation of the nodes.}
-#' \item{x$values}{environment, values of the nodes.}
+#' \item{$nodes}{list, symbols of the nodes.}
+#' \item{$values}{environment, values of the nodes.}
 #' }
 #'
 #' @section Methods:
 #' \describe{
-#' \item{x$initialize}{initialize a computational graph, see \link[cgraph]{cg.initialize}.}
-#' \item{x$name}{generate a default name for a node, see \link[cgraph]{cg.name}.}
-#' \item{x$const}{add a constant node to the graph, see \link[cgraph]{cg.const}.}
-#' \item{x$input}{add an input node to the graph, see \link[cgraph]{cg.input}.}
-#' \item{x$parm}{add a parameter node to the graph, see \link[cgraph]{cg.parm}.}
-#' \item{x$get.parms}{list all parameters and their values, see \link[cgraph]{cg.get.parms}.}
-#' \item{x$add.parms}{add parameters to the graph, see \link[cgraph]{cg.add.parms}.}
-#' \item{x$opr}{add an operation node to the graph, see \link[cgraph]{cg.opr}.}
-#' \item{x$active}{set the graph to be the active graph, see \link[cgraph]{cg.active}.}
-#' \item{x$run}{evaluate a node in the graph, see \link[cgraph]{cg.run}.}
-#' \item{x$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg.gradients}.}
-#' \item{x$approx.grad}{differentiate the graph by numerical differentiation, see \link[cgraph]{cg.approx.grad}.}
-#' \item{x$adj.mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg.adj.mat}.}
-#' \item{x$plot}{plot the topology of the graph, see \link[cgraph]{cg.plot}.}
+#' \item{$initialize}{initialize a computational graph, see \link[cgraph]{cg.initialize}.}
+#' \item{$name}{generate a default name for a node, see \link[cgraph]{cg.name}.}
+#' \item{$const}{add a constant node to the graph, see \link[cgraph]{cg.const}.}
+#' \item{$input}{add an input node to the graph, see \link[cgraph]{cg.input}.}
+#' \item{$parm}{add a parameter node to the graph, see \link[cgraph]{cg.parm}.}
+#' \item{$get.parms}{list all parameters and their values, see \link[cgraph]{cg.get.parms}.}
+#' \item{$add.parms}{add parameters to the graph, see \link[cgraph]{cg.add.parms}.}
+#' \item{$opr}{add an operation node to the graph, see \link[cgraph]{cg.opr}.}
+#' \item{$active}{set the graph to be the active graph, see \link[cgraph]{cg.active}.}
+#' \item{$run}{evaluate a node in the graph, see \link[cgraph]{cg.run}.}
+#' \item{$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg.gradients}.}
+#' \item{$approx.grad}{differentiate the graph by numerical differentiation, see \link[cgraph]{cg.approx.grad}.}
+#' \item{$adj.mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg.adj.mat}.}
+#' \item{$plot}{plot the topology of the graph, see \link[cgraph]{cg.plot}.}
 #' }
+#'
+#' @note Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg.parm} on the graph object.
 #'
 #' @name cgraph
 #' @author Ron Triepels
@@ -49,7 +51,7 @@ cgraph <- R6Class(
 #'
 #' @details \code{$new()}
 #'
-#' @note The cgraph object is set to be the active graph. Any nodes that are created by wrapper function \code{const}, \code{input}, or \code{parm} will be added to this graph unless the active graph is changed. You can change the current graph by calling the \link[cgraph]{cg.active} method on another cgraph object.
+#' @note The cgraph object is set to be the active graph. Any nodes that are created by wrapper function \link[cgraph]{const}, \link[cgraph]{input}, \link[cgraph]{parm}, or \link[cgraph]{opr} will be added to this graph. Also, when printing a node, its value will be evaluated in the active graph. You can change the active graph by calling the \link[cgraph]{cg.active} method on another cgraph object.
 #'
 #' @return cgraph object.
 #'
@@ -74,6 +76,8 @@ cgraph$public_methods$initialize <- function()
 #'
 #' @note The auto-generated name is not guaranteed to be unique.
 #'
+#' There is a wrapper function \link[cgraph]{name} that calls this method on the current active graph.
+#'
 #' @return symbol, auto-generated name for the node.
 #'
 #' @name cg.name
@@ -97,6 +101,8 @@ cgraph$public_methods$name <- function(type = 3)
 #' @note Constants are ignored when differentiating a graph. The intended use of constants is that they are given a fixed value. However, it is still possible to change the value of constants when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
 #'
 #' The name of the constant node cannot be 'grad' as this is a reserved word.
+#'
+#' There is a wrapper function \link[cgraph]{const} that calls this method on the current active graph.
 #'
 #' @return cg.node, constant.
 #'
@@ -143,6 +149,8 @@ cgraph$public_methods$const <- function(value, name)
 #'
 #' The name of the input node cannot be 'grad' as this is a reserved word.
 #'
+#' There is a wrapper function \link[cgraph]{input} that calls this method on the current active graph.
+#'
 #' @return cg.node, input.
 #'
 #' @name cg.input
@@ -187,6 +195,8 @@ cgraph$public_methods$input <- function(value, name)
 #' @note Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
 #'
 #' The name of the parameter node cannot be 'grad' as this is a reserved word.
+#'
+#' There is a wrapper function \link[cgraph]{parm} that calls this method on the current active graph.
 #'
 #' @return cg.node, parameter.
 #'
@@ -284,6 +294,8 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #'
 #' The name of the operation node cannot be 'grad' as this is a reserved word.
 #'
+#' There is a wrapper function \link[cgraph]{opr} that calls this method on the current active graph.
+#'
 #' @return cg.node, operation.
 #'
 #' @name cg.opr
@@ -353,6 +365,8 @@ cgraph$public_methods$active <- function()
 #'
 #' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of nodes that have not changed or are not evaluated are not returned.
 #'
+#' There is a wrapper function \link[cgraph]{run} that calls this method on the current active graph.
+#'
 #' @return environment, the value of node \code{name} including the values of all ancestors of \code{name}.
 #'
 #' @name cg.run
@@ -389,6 +403,8 @@ cgraph$public_methods$run <- function(name, values = list())
 #' Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is to be differentiated.
 #'
 #' The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the nodes.
+#'
+#' There is a wrapper function \link[cgraph]{gradients} that calls this method on the current active graph.
 #'
 #' @return environment, the gradients of all nodes with respect to target node \code{name}.
 #'
@@ -430,6 +446,8 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #' The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The caluclated gradient has the same shape as the value of node \code{y}.
 #'
 #' Numerical differentiation is subject to estimation error and can be very slow. Therefore, this function should only be used for testing purposes.
+#'
+#' There is a wrapper function \link[cgraph]{approx.grad} that calls this method on the current active graph.
 #'
 #' @return numeric vector or array, the derivative of \code{x} with respect to \code{y}.
 #'

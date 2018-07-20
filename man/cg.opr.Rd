@@ -27,6 +27,8 @@ The operation to be performed by the node should be provided as an expression or
 Any variabes used in the expressions or calls of the node (both supplied to argument \code{call} and \code{gradients}) should be bind to the symbols of the nodes in the graph. This can be done by supplying the names of the variables and the corresponding nodes to which the variables should bind to \code{binding}. At run-time, the symbols of the nodes are substituted for the variables in the expressions or calls.
 
 The name of the operation node cannot be 'grad' as this is a reserved word.
+
+There is a wrapper function \link[cgraph]{opr} that calls this method on the current active graph.
 }
 \author{
 Ron Triepels

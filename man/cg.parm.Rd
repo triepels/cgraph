@@ -21,6 +21,8 @@ Add a parameter node to the graph.
 Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
 
 The name of the parameter node cannot be 'grad' as this is a reserved word.
+
+There is a wrapper function \link[cgraph]{parm} that calls this method on the current active graph.
 }
 \author{
 Ron Triepels
