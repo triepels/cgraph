@@ -9,13 +9,13 @@ You can install cgraph by running one of the following commands in the R command
 ## Binary
 
 ```{r eval = F}
-    install.packages("https://cgraph.org/releases/cgraph_0.8.17.zip", repos = NULL)
+    install.packages("https://cgraph.org/releases/cgraph_1.0.0.zip", repos = NULL)
 ```
 
 ## Source
 
 ```{r eval = F}
-  install.packages("https://cgraph.org/releases/cgraph_0.8.17.tar.gz", repos = NULL, type = "source")
+  install.packages("https://cgraph.org/releases/cgraph_1.0.0.tar.gz", repos = NULL, type = "source")
 ```
 
 Please note that this an early development version which may contain bugs or behave unexpectedly. If you find a bug, please report it [here](https://github.com/triepels/cgraph/issues). For more information about the cgraph package please visit [https://www.cgraph.org/](https://www.cgraph.org/).

@@ -1,7 +1,7 @@
 Package: cgraph
 Type: Package
 Title: Computational Graphs in R
-Version: 0.8.17
+Version: 1.0.0
 Author: Ron Triepels
 Maintainer: Ron Triepels <dev@cgraph.org>
 URL: https://cgraph.org/
