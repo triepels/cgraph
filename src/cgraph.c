@@ -172,7 +172,6 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   }
 
   setAttrib(name, install("grads"), allocVector(VECSXP, 0));
-  setAttrib(name, install("parents"), allocVector(INTSXP, 0));
   setAttrib(name, install("childeren"), allocVector(INTSXP, 0));
   setAttrib(name, install("class"), mkString("cg.node"));
 
