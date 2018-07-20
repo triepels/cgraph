@@ -10,7 +10,7 @@
 #' @keywords internal
 address <- function(x)
 {
-  .Call("address", x)
+  .Call("address", x, PACKAGE = "cgraph")
 }
 
 #' Block Summation
