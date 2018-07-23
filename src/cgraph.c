@@ -135,7 +135,7 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   }
   else
   {
-    name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
+    name = PROTECT(mkString(CHAR(asChar(name))));
   }
 
   if(cg_node_exists(asChar(name), graph))
@@ -266,7 +266,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
   }
   else
   {
-    name = PROTECT(mkString(CHAR(STRING_ELT(name, 0))));
+    name = PROTECT(mkString(CHAR(asChar(name))));
   }
 
   if(cg_node_exists(asChar(name), graph))
