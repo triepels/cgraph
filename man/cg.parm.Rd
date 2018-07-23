@@ -24,6 +24,14 @@ The name of the parameter node cannot be 'grad' as this is a reserved word.
 
 There is a wrapper function \link[cgraph]{parm} that calls this method on the current active graph.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add a parameter with value 1 and name 'p' to the graph.
+x$parm(1, name = "p")
+
+}
 \author{
 Ron Triepels
 }

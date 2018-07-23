@@ -24,6 +24,23 @@ Only those nodes needed to compute node \code{name} are evaluated and their valu
 
 There is a wrapper function \link[cgraph]{run} that calls this method on the current active graph.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add an input.
+a <- x$input(name = "a")
+
+# Square the input (i.e. b = a^2).
+b <- cg.pow(a, x$const(2), name = "b")
+
+# Evaluate the graph at a = 2.
+values <- x$run(b, list(a = 2))
+
+# Retrieve the value of b.
+values$b
+
+}
 \author{
 Ron Triepels
 }

@@ -20,6 +20,14 @@ The auto-generated name is not guaranteed to be unique.
 
 There is a wrapper function \link[cgraph]{name} that calls this method on the current active graph.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Generate some names
+x$name(0); x$name(1); x$name(2); x$name(3)
+
+}
 \author{
 Ron Triepels
 }

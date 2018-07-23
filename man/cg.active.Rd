@@ -13,9 +13,20 @@ Set the graph to be the active graph.
 \code{$active()}
 }
 \note{
-Any nodes that are created are automatically added to the active graph. This behavior also applies to operations that are created by overloaded S3 functions that do not follow the cg.<name> naming convention (such as primitive functions '+' and '-').
+Any nodes that are created are automatically added to the active graph. This also applies to operations that are created by overloaded S3 functions that do not follow the cg.<name> naming convention (such as primitive functions '+' and '-').
 
-Only one graph can be active at a time. You can use this function to change the active graph by calling it on another cgraph object.
+Only one graph can be active at a time. The active graph can be changed by calling \link[cgraph]{cg.active} on another cgraph object.
+}
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Initialize another computational graph. It becomes the current active graph.
+y <- cgraph$new()
+
+# Set graph x to be the active graph.
+x$active()
+
 }
 \author{
 Ron Triepels

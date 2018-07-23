@@ -24,6 +24,14 @@ The name of the constant node cannot be 'grad' as this is a reserved word.
 
 There is a wrapper function \link[cgraph]{const} that calls this method on the current active graph.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add a constant with value 1 and name 'c' to the graph.
+x$const(1, name = "c")
+
+}
 \author{
 Ron Triepels
 }

@@ -32,6 +32,27 @@ Numerical differentiation is subject to estimation error and can be very slow. T
 
 There is a wrapper function \link[cgraph]{approx.grad} that calls this method on the current active graph.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add some parameters.
+a <- x$parm(2, name = "a")
+b <- x$parm(4, name = "b")
+
+# Perform some operations on the parameters.
+c <- sin(a) + cos(b) - tan(a) + tanh(b)
+
+# Differentiate the graph with respect to c.
+grads <- x$gradients(c, x$run(c))
+
+# Retrieve the gradient of c with respect to a.
+grads$a
+
+# Approximate the same gradient with numerical differentiation.
+x$approx.grad(c, a)
+
+}
 \author{
 Ron Triepels
 }

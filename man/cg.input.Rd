@@ -24,6 +24,14 @@ The name of the input node cannot be 'grad' as this is a reserved word.
 
 There is a wrapper function \link[cgraph]{input} that calls this method on the current active graph.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add an input with name 'x' to the graph.
+x$input(name = "x")
+
+}
 \author{
 Ron Triepels
 }

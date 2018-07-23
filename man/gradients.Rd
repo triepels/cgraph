@@ -26,6 +26,24 @@ Currently, the cgraph package can only differentiate scalar target nodes. In cas
 
 The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the nodes.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add some parameters.
+a <- parm(2, name = "a")
+b <- parm(4, name = "b")
+
+# Perform some operations on the parameters.
+c <- sin(a) + cos(b) - tan(a) + tanh(b)
+
+# Differentiate the graph with respect to c.
+grads <- gradients(c, run(c))
+
+# Retrieve the gradient of c with respect to a.
+grads$a
+
+}
 \author{
 Ron Triepels
 }

@@ -22,6 +22,14 @@ The intended use of inputs is that they are not given a fixed value but behave a
 
 The name of the input node cannot be 'grad' as this is a reserved word.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add an input with name 'x' to the graph.
+input(name = "x")
+
+}
 \author{
 Ron Triepels
 }

@@ -28,6 +28,24 @@ The gradients of all ancestor nodes of node \code{name} are returned. Constant n
 
 There is a wrapper function \link[cgraph]{gradients} that calls this method on the current active graph.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add some parameters.
+a <- x$parm(2, name = "a")
+b <- x$parm(4, name = "b")
+
+# Perform some operations on the parameters.
+c <- sin(a) + cos(b) - tan(a) + tanh(b)
+
+# Differentiate the graph with respect to c.
+grads <- x$gradients(c, x$run(c))
+
+# Retrieve the gradient of c with respect to a.
+grads$a
+
+}
 \author{
 Ron Triepels
 }

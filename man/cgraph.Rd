@@ -42,6 +42,30 @@ Some of the methods listed above have a wrapper function that calls the method o
 }
 }
 
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add some parameters.
+a <- parm(2, name = "a")
+b <- parm(4, name = "b")
+
+# Perform some operations on the parameters.
+c <- sin(a) + cos(b) - tan(a) + tanh(b)
+
+# Evaluate c.
+values <- run(c)
+
+# Retrieve the value of c (the node is called 'opr7' in the graph).
+values$opr7
+
+# Differentiate the graph with respect to c.
+grads <- gradients(c, values)
+
+# Retrieve the gradient of c with respect to a.
+grads$a
+
+}
 \author{
 Ron Triepels
 }

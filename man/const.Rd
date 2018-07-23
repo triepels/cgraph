@@ -22,6 +22,14 @@ Constants are ignored when differentiating a graph. The intended use of constant
 
 The name of the constant node cannot be 'grad' as this is a reserved word.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add a constant with value 1 and name 'c' to the graph.
+const(1, name = "c")
+
+}
 \author{
 Ron Triepels
 }

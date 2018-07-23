@@ -15,6 +15,11 @@ Initialize a computational graph.
 \note{
 The cgraph object is set to be the active graph. Any nodes that are created by wrapper function \link[cgraph]{const}, \link[cgraph]{input}, \link[cgraph]{parm}, or \link[cgraph]{opr} will be added to this graph. Also, when printing a node, its value will be evaluated in the active graph. You can change the active graph by calling the \link[cgraph]{cg.active} method on another cgraph object.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+}
 \author{
 Ron Triepels
 }

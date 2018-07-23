@@ -12,6 +12,17 @@ List all parameters and their values.
 \details{
 \code{$get.parms()}
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add some parameters.
+x$add.parms(prm1 = 1, prm2 = 2, prm3 = 3)
+
+# List the parameters.
+x$get.parms()
+
+}
 \author{
 Ron Triepels
 }

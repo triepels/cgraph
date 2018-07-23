@@ -30,6 +30,27 @@ The graph is differentiation by the symmetric difference quotient. This method c
 
 Numerical differentiation is subject to estimation error and can be very slow. Therefore, this function should only be used for testing purposes.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add some parameters.
+a <- parm(2, name = "a")
+b <- parm(4, name = "b")
+
+# Perform some operations on the parameters.
+c <- sin(a) + cos(b) - tan(a) + tanh(b)
+
+# Differentiate the graph with respect to c.
+grads <- gradients(c, run(c))
+
+# Retrieve the gradient of c with respect to a.
+grads$a
+
+# Approximate the same gradient with numerical differentiation.
+approx.grad(c, a)
+
+}
 \author{
 Ron Triepels
 }

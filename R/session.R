@@ -14,6 +14,12 @@ session$graph <- NULL
 #'
 #' @return symbol, auto-generated name for the node.
 #'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Generate some names
+#' name(0); name(1); name(2); name(3)
+#'
 #' @author Ron Triepels
 name <- function(type = 3)
 {
@@ -37,6 +43,12 @@ name <- function(type = 3)
 #' The name of the constant node cannot be 'grad' as this is a reserved word.
 #'
 #' @return cg.node, constant.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add a constant with value 1 and name 'c' to the graph.
+#' const(1, name = "c")
 #'
 #' @author Ron Triepels
 const <- function(value, name)
@@ -62,6 +74,12 @@ const <- function(value, name)
 #'
 #' @return cg.node, input.
 #'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add an input with name 'x' to the graph.
+#' input(name = "x")
+#'
 #' @author Ron Triepels
 input <- function(value, name)
 {
@@ -85,6 +103,12 @@ input <- function(value, name)
 #' The name of the parameter node cannot be 'grad' as this is a reserved word.
 #'
 #' @return cg.node, parameter.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add a parameter with value 1 and name 'p' to the graph.
+#' parm(1, name = "p")
 #'
 #' @author Ron Triepels
 parm <- function(value, name)
@@ -138,6 +162,21 @@ opr <- function(call, grads, binding, name)
 #'
 #' @return environment, the value of node \code{name} including the values of all ancestors of \code{name}.
 #'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add an input.
+#' a <- input(name = "a")
+#'
+#' # Square the input (i.e. b = a^2).
+#' b <- cg.pow(a, const(2), name = "b")
+#'
+#' # Evaluate the graph at a = 2.
+#' values <- run(b, list(a = 2))
+#'
+#' # Retrieve the value of b.
+#' values$b
+#'
 #' @author Ron Triepels
 run <- function(name, values = list())
 {
@@ -164,6 +203,22 @@ run <- function(name, values = list())
 #' The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the nodes.
 #'
 #' @return environment, the gradients of all nodes with respect to target node \code{name}.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add some parameters.
+#' a <- parm(2, name = "a")
+#' b <- parm(4, name = "b")
+#'
+#' # Perform some operations on the parameters.
+#' c <- sin(a) + cos(b) - tan(a) + tanh(b)
+#'
+#' # Differentiate the graph with respect to c.
+#' grads <- gradients(c, run(c))
+#'
+#' # Retrieve the gradient of c with respect to a.
+#' grads$a
 #'
 #' @author Ron Triepels
 gradients <- function(name, values = list(), index = 1)
@@ -193,6 +248,25 @@ gradients <- function(name, values = list(), index = 1)
 #' Numerical differentiation is subject to estimation error and can be very slow. Therefore, this function should only be used for testing purposes.
 #'
 #' @return numeric vector or array, the derivative of \code{x} with respect to \code{y}.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add some parameters.
+#' a <- parm(2, name = "a")
+#' b <- parm(4, name = "b")
+#'
+#' # Perform some operations on the parameters.
+#' c <- sin(a) + cos(b) - tan(a) + tanh(b)
+#'
+#' # Differentiate the graph with respect to c.
+#' grads <- gradients(c, run(c))
+#'
+#' # Retrieve the gradient of c with respect to a.
+#' grads$a
+#'
+#' # Approximate the same gradient with numerical differentiation.
+#' approx.grad(c, a)
 #'
 #' @author Ron Triepels
 approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)

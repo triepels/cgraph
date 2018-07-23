@@ -18,6 +18,14 @@ Generate a default name for a node.
 \note{
 The auto-generated name is not guaranteed to be unique.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Generate some names
+name(0); name(1); name(2); name(3)
+
+}
 \author{
 Ron Triepels
 }

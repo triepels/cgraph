@@ -31,6 +31,28 @@
 #'
 #' @note Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg.parm} on the cgraph object.
 #'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add some parameters.
+#' a <- parm(2, name = "a")
+#' b <- parm(4, name = "b")
+#'
+#' # Perform some operations on the parameters.
+#' c <- sin(a) + cos(b) - tan(a) + tanh(b)
+#'
+#' # Evaluate c.
+#' values <- run(c)
+#'
+#' # Retrieve the value of c (the node is called 'opr7' in the graph).
+#' values$opr7
+#'
+#' # Differentiate the graph with respect to c.
+#' grads <- gradients(c, values)
+#'
+#' # Retrieve the gradient of c with respect to a.
+#' grads$a
+#'
 #' @name cgraph
 #' @author Ron Triepels
 NULL
@@ -54,6 +76,9 @@ cgraph <- R6Class(
 #' @note The cgraph object is set to be the active graph. Any nodes that are created by wrapper function \link[cgraph]{const}, \link[cgraph]{input}, \link[cgraph]{parm}, or \link[cgraph]{opr} will be added to this graph. Also, when printing a node, its value will be evaluated in the active graph. You can change the active graph by calling the \link[cgraph]{cg.active} method on another cgraph object.
 #'
 #' @return cgraph object.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
 #'
 #' @name cg.initialize
 #' @author Ron Triepels
@@ -80,6 +105,12 @@ cgraph$public_methods$initialize <- function()
 #'
 #' @return symbol, auto-generated name for the node.
 #'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Generate some names
+#' x$name(0); x$name(1); x$name(2); x$name(3)
+#'
 #' @name cg.name
 #' @author Ron Triepels
 cgraph$public_methods$name <- function(type = 3)
@@ -105,6 +136,12 @@ cgraph$public_methods$name <- function(type = 3)
 #' There is a wrapper function \link[cgraph]{const} that calls this method on the current active graph.
 #'
 #' @return cg.node, constant.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add a constant with value 1 and name 'c' to the graph.
+#' x$const(1, name = "c")
 #'
 #' @name cg.const
 #' @author Ron Triepels
@@ -153,6 +190,12 @@ cgraph$public_methods$const <- function(value, name)
 #'
 #' @return cg.node, input.
 #'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add an input with name 'x' to the graph.
+#' x$input(name = "x")
+#'
 #' @name cg.input
 #' @author Ron Triepels
 cgraph$public_methods$input <- function(value, name)
@@ -200,6 +243,12 @@ cgraph$public_methods$input <- function(value, name)
 #'
 #' @return cg.node, parameter.
 #'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add a parameter with value 1 and name 'p' to the graph.
+#' x$parm(1, name = "p")
+#'
 #' @name cg.parm
 #' @author Ron Triepels
 cgraph$public_methods$parm <- function(value, name)
@@ -238,6 +287,15 @@ cgraph$public_methods$parm <- function(value, name)
 #'
 #' @return named list, parameters of the graph.
 #'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add some parameters.
+#' x$add.parms(prm1 = 1, prm2 = 2, prm3 = 3)
+#'
+#' # List the parameters.
+#' x$get.parms()
+#'
 #' @name cg.get.parms
 #' @author Ron Triepels
 cgraph$public_methods$get.parms <- function()
@@ -257,6 +315,15 @@ cgraph$public_methods$get.parms <- function()
 #' @note Parameters can be named by providing named arguments to \code{...} or by naming the elements of argument \code{parms}. In case no names are provided, parameters are tried to be added to the graph under an auto-generated name. No default value is set for parameters with value \code{NULL}.
 #'
 #' @return nothing.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add some parameters.
+#' x$add.parms(prm1 = 1, prm2 = 2, prm3 = 3)
+#'
+#' # List the parameters.
+#' x$get.parms()
 #'
 #' @name cg.add.parms
 #' @author Ron Triepels
@@ -339,11 +406,20 @@ cgraph$public_methods$opr <- function(call, grads, binding, name)
 #'
 #' @details \code{$active()}
 #'
-#' @note Any nodes that are created are automatically added to the active graph. This behavior also applies to operations that are created by overloaded S3 functions that do not follow the cg.<name> naming convention (such as primitive functions '+' and '-').
+#' @note Any nodes that are created are automatically added to the active graph. This also applies to operations that are created by overloaded S3 functions that do not follow the cg.<name> naming convention (such as primitive functions '+' and '-').
 #'
-#' Only one graph can be active at a time. You can use this function to change the active graph by calling it on another cgraph object.
+#' Only one graph can be active at a time. The active graph can be changed by calling \link[cgraph]{cg.active} on another cgraph object.
 #'
 #' @return none.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Initialize another computational graph. It becomes the current active graph.
+#' y <- cgraph$new()
+#'
+#' # Set graph x to be the active graph.
+#' x$active()
 #'
 #' @name cg.active
 #' @author Ron Triepels
@@ -368,6 +444,21 @@ cgraph$public_methods$active <- function()
 #' There is a wrapper function \link[cgraph]{run} that calls this method on the current active graph.
 #'
 #' @return environment, the value of node \code{name} including the values of all ancestors of \code{name}.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add an input.
+#' a <- x$input(name = "a")
+#'
+#' # Square the input (i.e. b = a^2).
+#' b <- cg.pow(a, x$const(2), name = "b")
+#'
+#' # Evaluate the graph at a = 2.
+#' values <- x$run(b, list(a = 2))
+#'
+#' # Retrieve the value of b.
+#' values$b
 #'
 #' @name cg.run
 #' @author Ron Triepels
@@ -407,6 +498,22 @@ cgraph$public_methods$run <- function(name, values = list())
 #' There is a wrapper function \link[cgraph]{gradients} that calls this method on the current active graph.
 #'
 #' @return environment, the gradients of all nodes with respect to target node \code{name}.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add some parameters.
+#' a <- x$parm(2, name = "a")
+#' b <- x$parm(4, name = "b")
+#'
+#' # Perform some operations on the parameters.
+#' c <- sin(a) + cos(b) - tan(a) + tanh(b)
+#'
+#' # Differentiate the graph with respect to c.
+#' grads <- x$gradients(c, x$run(c))
+#'
+#' # Retrieve the gradient of c with respect to a.
+#' grads$a
 #'
 #' @name cg.gradients
 #' @author Ron Triepels
@@ -450,6 +557,25 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #' There is a wrapper function \link[cgraph]{approx.grad} that calls this method on the current active graph.
 #'
 #' @return numeric vector or array, the derivative of \code{x} with respect to \code{y}.
+#'
+#' @examples # Initialize a new computational graph.
+#' x <- cgraph$new()
+#'
+#' # Add some parameters.
+#' a <- x$parm(2, name = "a")
+#' b <- x$parm(4, name = "b")
+#'
+#' # Perform some operations on the parameters.
+#' c <- sin(a) + cos(b) - tan(a) + tanh(b)
+#'
+#' # Differentiate the graph with respect to c.
+#' grads <- x$gradients(c, x$run(c))
+#'
+#' # Retrieve the gradient of c with respect to a.
+#' grads$a
+#'
+#' # Approximate the same gradient with numerical differentiation.
+#' x$approx.grad(c, a)
 #'
 #' @name cg.approx.grad
 #' @author Ron Triepels

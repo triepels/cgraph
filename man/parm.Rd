@@ -22,6 +22,14 @@ Parameters are assumed to be subject to some optimization process. Hence, their 
 
 The name of the parameter node cannot be 'grad' as this is a reserved word.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add a parameter with value 1 and name 'p' to the graph.
+parm(1, name = "p")
+
+}
 \author{
 Ron Triepels
 }

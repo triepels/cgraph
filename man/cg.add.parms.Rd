@@ -20,6 +20,17 @@ Add parameters to the graph.
 \note{
 Parameters can be named by providing named arguments to \code{...} or by naming the elements of argument \code{parms}. In case no names are provided, parameters are tried to be added to the graph under an auto-generated name. No default value is set for parameters with value \code{NULL}.
 }
+\examples{
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add some parameters.
+x$add.parms(prm1 = 1, prm2 = 2, prm3 = 3)
+
+# List the parameters.
+x$get.parms()
+
+}
 \author{
 Ron Triepels
 }
