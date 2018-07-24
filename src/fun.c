@@ -1,3 +1,5 @@
+#include <inttypes.h>
+
 #include <R.h>
 #include <Rinternals.h>
 
@@ -5,7 +7,7 @@ SEXP address(SEXP graph)
 {
   char address[32];
 
-  snprintf(address, 32, "%p", (void *)graph);
+  sprintf(address, "0x%" PRIxPTR, (uintptr_t)graph);
 
   return(mkString(address));
 }
