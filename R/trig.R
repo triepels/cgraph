@@ -439,6 +439,104 @@ atan.cg.node <- function(x)
   cgraph::cg.atan(x)
 }
 
+#' Inverse Hyperbolic Sine
+#'
+#' Calculate \code{asinh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.asinh <- function(x, name = cgraph::name())
+{
+  cgraph::opr(name = name,
+    call = quote(asinh(x)),
+    grads = list(x = quote(cg.asinh.grad(x, grad))),
+    binding = list(x = x)
+  )
+}
+
+#' Inverse Hyperbolic Sine Gradient
+#'
+#' Calculate the gradient of \code{asinh(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.asinh.grad <- function(x, grad)
+{
+  grad / sqrt(x^2 + 1)
+}
+
+#' Inverse Hyperbolic Sine
+#'
+#' Calculate \code{asinh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+asinh.cg.node <- function(x)
+{
+  cgraph::cg.asinh(x)
+}
+
+#' Inverse Hyperbolic Cosine
+#'
+#' Calculate \code{acosh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.acosh <- function(x, name = cgraph::name())
+{
+  cgraph::opr(name = name,
+    call = quote(acosh(x)),
+    grads = list(x = quote(cg.acosh.grad(x, grad))),
+    binding = list(x = x)
+  )
+}
+
+#' Inverse Hyperbolic Cosine Gradient
+#'
+#' Calculate the gradient of \code{acosh(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.acosh.grad <- function(x, grad)
+{
+  grad / sqrt(x^2 - 1)
+}
+
+#' Inverse Hyperbolic Cosinus
+#'
+#' Calculate \code{acosh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+acosh.cg.node <- function(x)
+{
+  cgraph::cg.acosh(x)
+}
+
 #' Inverse Hyperbolic Tangent
 #'
 #' Calculate \code{atanh(x)}.

@@ -94,6 +94,8 @@ export(cg.tanh)
 export(cg.asin)
 export(cg.acos)
 export(cg.atan)
+export(cg.asinh)
+export(cg.acosh)
 export(cg.atanh)
 
 # Export trig methods
@@ -106,6 +108,8 @@ S3method(tanh, cg.node)
 S3method(asin, cg.node)
 S3method(acos, cg.node)
 S3method(atan, cg.node)
+S3method(asinh, cg.node)
+S3method(acosh, cg.node)
 S3method(atanh, cg.node)
 
 # Export fun functions
