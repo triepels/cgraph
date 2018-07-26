@@ -1,3 +1,14 @@
+cgraph 1.0.2
+----------------------------------------------------------------
+
+Features:
+
+* You can now instruct the active graph to no longer automatically evaluate a node when it is printed to the console by setting options(cg.autorun = FALSE).
+
+Bug Fixes:
+
+* Function `address` now correctly shows the address of an pointer on Windows machines.
+
 cgraph 1.0.1
 ----------------------------------------------------------------
 
