@@ -1,4 +1,4 @@
-context("Misc Expressions")
+context("Misc Operations")
 
 test_that("Scalar [*, sigmoid]",
 {

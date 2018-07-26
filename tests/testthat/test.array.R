@@ -1,4 +1,4 @@
-context("Array Expressions")
+context("Array Operations")
 
 test_that("Matrix [-, %*%, sum, prod]",
 {

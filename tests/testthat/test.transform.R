@@ -1,4 +1,4 @@
-context("Transform Expressions")
+context("Transform Operations")
 
 test_that("Array [+, as.numeric]",
 {

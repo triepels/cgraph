@@ -1,4 +1,4 @@
-context("Trigonometric Expressions")
+context("Trigonometric Operations")
 
 test_that("Scalar [+, -, sin, cos, tan]",
 {

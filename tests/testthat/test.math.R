@@ -1,4 +1,4 @@
-context("Math Expressions")
+context("Math Operations")
 
 test_that("Scalar [+, -, /, *]",
 {
