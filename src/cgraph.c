@@ -474,7 +474,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
       if(!isNumeric(value))
       {
-        error("'%s' cannot be found or is not a numeric vector or array", CHAR(asChar(node)));
+        error("'%s' is not a numeric vector or array", CHAR(asChar(node)));
       }
     }
   }
