@@ -258,7 +258,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 {
   SEXP nodes = findVar(install("nodes"), graph);
 
-  int n = LENGTH(nodes), g;
+  int n = LENGTH(nodes);
 
   if(name == R_NilValue)
   {
@@ -295,54 +295,63 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
     setVar(install(CHAR(var)), coerceVector(value, SYMSXP), binding);
   }
 
-  g = LENGTH(grads);
-
-  SEXP parents = PROTECT(allocVector(INTSXP, g));
+  SEXP parents = R_NilValue;
 
   SEXP names = getAttrib(grads, R_NamesSymbol);
 
-  for(int i = 0; i < g; i++)
+  if(isNull(names))
   {
-    SEXP symbol = findVarInFrame(binding, install(CHAR(STRING_ELT(names, i))));
+    parents = PROTECT(allocVector(INTSXP, 0));
+  }
+  else
+  {
+    int g = LENGTH(names);
 
-    if(symbol == R_UnboundValue)
+    parents = PROTECT(allocVector(INTSXP, g));
+
+    for(int i = 0; i < g; i++)
     {
-      error("cannot find '%s' in binding", CHAR(STRING_ELT(names, i)));
+      SEXP symbol = findVarInFrame(binding, install(CHAR(STRING_ELT(names, i))));
+
+      if(symbol == R_UnboundValue)
+      {
+        error("cannot find '%s' in binding", CHAR(STRING_ELT(names, i)));
+      }
+
+      INTEGER(parents)[i] = cg_node_id(asChar(symbol), graph);
     }
 
-    INTEGER(parents)[i] = cg_node_id(asChar(symbol), graph);
-  }
-
-  for(int i = 0; i < g; i++)
-  {
-    SEXP parent = VECTOR_ELT(nodes, INTEGER(parents)[i] - 1);
+    for(int i = 0; i < g; i++)
+    {
+      SEXP parent = VECTOR_ELT(nodes, INTEGER(parents)[i] - 1);
 
 
-    /* Add gradient to parent node */
-    SEXP parent_grads = getAttrib(parent, install("grads"));
+      /* Add gradient to parent node */
+      SEXP parent_grads = getAttrib(parent, install("grads"));
 
-    int h = LENGTH(parent_grads);
+      int h = LENGTH(parent_grads);
 
-    parent_grads = PROTECT(lengthgets(parent_grads, h + 1));
+      parent_grads = PROTECT(lengthgets(parent_grads, h + 1));
 
-    SET_VECTOR_ELT(parent_grads, h, substitute(VECTOR_ELT(grads, i), binding));
+      SET_VECTOR_ELT(parent_grads, h, substitute(VECTOR_ELT(grads, i), binding));
 
-    setAttrib(parent, install("grads"), parent_grads);
-
-
-    /* Add child to parent node */
-    SEXP parent_childeren = getAttrib(parent, install("childeren"));
-
-    int c = LENGTH(parent_childeren);
-
-    parent_childeren = PROTECT(lengthgets(parent_childeren, c + 1));
-
-    INTEGER(parent_childeren)[c] = n + 1;
-
-    setAttrib(parent, install("childeren"), parent_childeren);
+      setAttrib(parent, install("grads"), parent_grads);
 
 
-    UNPROTECT(2);
+      /* Add child to parent node */
+      SEXP parent_childeren = getAttrib(parent, install("childeren"));
+
+      int c = LENGTH(parent_childeren);
+
+      parent_childeren = PROTECT(lengthgets(parent_childeren, c + 1));
+
+      INTEGER(parent_childeren)[c] = n + 1;
+
+      setAttrib(parent, install("childeren"), parent_childeren);
+
+
+      UNPROTECT(2);
+    }
   }
 
   nodes = PROTECT(lengthgets(nodes, n + 1));
