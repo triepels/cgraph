@@ -13,13 +13,3 @@ LazyData: true
 Imports: R6
 Suggests: Rgraphviz, testthat
 RoxygenNote: 6.0.1
-Collate:
-  'session.R'
-  'array.R'
-  'cgraph.R'
-  'fun.R'
-  'math.R'
-  'misc.R'
-  'print.R'
-  'transform.R'
-  'trig.R'
