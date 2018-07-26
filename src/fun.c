@@ -14,26 +14,26 @@ SEXP address(SEXP graph)
 
 SEXP bsum(SEXP x, SEXP n)
 {
-  int k = LENGTH(x), j = 0, n_val;
+  int k = LENGTH(x), j = 0, nx;
 
-  double * x_val, * y_val;
+  double * px, * py;
 
-  n_val = INTEGER(n)[0];
+  nx = INTEGER(n)[0];
 
-  SEXP y = PROTECT(allocVector(REALSXP, n_val));
+  SEXP y = PROTECT(allocVector(REALSXP, nx));
 
   x = coerceVector(x, REALSXP);
 
-  x_val = REAL(x);
-  y_val = REAL(y);
+  px = REAL(x);
+  py = REAL(y);
 
-  memset(y_val, 0, n_val * sizeof(double));
+  memset(py, 0, nx * sizeof(double));
 
   for(int i = 0; i < k; i++)
   {
-    y_val[j] += x_val[i];
+    py[j] += px[i];
 
-    if(j < n_val - 1)
+    if(j < nx - 1)
     {
       j++;
     }
