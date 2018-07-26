@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{acos.cg.node}
 \alias{acos.cg.node}
-\title{Inverse Cosinus}
+\title{Inverse Cosine}
 \usage{
 \method{acos}{cg.node}(x)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{cg.sin}
 \alias{cg.sin}
-\title{Sinus}
+\title{Sine}
 \usage{
 cg.sin(x, name = cgraph::name())
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{cg.asin}
 \alias{cg.asin}
-\title{Inverse Sinus}
+\title{Inverse Sine}
 \usage{
 cg.asin(x, name = cgraph::name())
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{sin.cg.node}
 \alias{sin.cg.node}
-\title{Sinus}
+\title{Sine}
 \usage{
 \method{sin}{cg.node}(x)
 }

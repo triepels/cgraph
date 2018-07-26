@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{cg.cos.grad}
 \alias{cg.cos.grad}
-\title{Cosinus Gradient}
+\title{Cosine Gradient}
 \usage{
 cg.cos.grad(x, grad)
 }

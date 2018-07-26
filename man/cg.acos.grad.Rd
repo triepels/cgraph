@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{cg.acos.grad}
 \alias{cg.acos.grad}
-\title{Inverse Cosinus Gradient}
+\title{Inverse Cosine Gradient}
 \usage{
 cg.acos.grad(x, grad)
 }

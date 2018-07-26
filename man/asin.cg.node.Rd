@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{asin.cg.node}
 \alias{asin.cg.node}
-\title{Inverse Sinus}
+\title{Inverse Sine}
 \usage{
 \method{asin}{cg.node}(x)
 }

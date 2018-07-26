@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{cg.cos}
 \alias{cg.cos}
-\title{Cosinus}
+\title{Cosine}
 \usage{
 cg.cos(x, name = cgraph::name())
 }

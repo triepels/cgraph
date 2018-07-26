@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{cg.acos}
 \alias{cg.acos}
-\title{Inverse Cosinus}
+\title{Inverse Cosine}
 \usage{
 cg.acos(x, name = cgraph::name())
 }

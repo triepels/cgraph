@@ -1,4 +1,4 @@
-#' Sinus
+#' Sine
 #'
 #' Calculate \code{sin(x)}.
 #'
@@ -17,7 +17,7 @@ cg.sin <- function(x, name = cgraph::name())
   )
 }
 
-#' Sinus Gradient
+#' Sine Gradient
 #'
 #' Calculate the gradient of \code{sin(x)} with respect to \code{x}.
 #'
@@ -33,7 +33,7 @@ cg.sin.grad <- function(x, grad)
   grad * cos(x)
 }
 
-#' Sinus
+#' Sine
 #'
 #' Calculate \code{sin(x)}.
 #'
@@ -47,7 +47,7 @@ sin.cg.node <- function(x)
   cgraph::cg.sin(x)
 }
 
-#' Cosinus
+#' Cosine
 #'
 #' Calculate \code{cos(x)}.
 #'
@@ -66,7 +66,7 @@ cg.cos <- function(x, name = cgraph::name())
   )
 }
 
-#' Cosinus Gradient
+#' Cosine Gradient
 #'
 #' Calculate the gradient of \code{cos(x)} with respect to \code{x}.
 #'
@@ -82,7 +82,7 @@ cg.cos.grad <- function(x, grad)
   -grad * sin(x)
 }
 
-#' Cosinus
+#' Cosine
 #'
 #' Calculate \code{cos(x)}.
 #'
@@ -292,7 +292,7 @@ tanh.cg.node <- function(x)
   cgraph::cg.tanh(x)
 }
 
-#' Inverse Sinus
+#' Inverse Sine
 #'
 #' Calculate \code{asin(x)}.
 #'
@@ -311,7 +311,7 @@ cg.asin <- function(x, name = cgraph::name())
   )
 }
 
-#' Inverse Sinus Gradient
+#' Inverse Sine Gradient
 #'
 #' Calculate the gradient of \code{asin(x)} with respect to \code{x}.
 #'
@@ -327,7 +327,7 @@ cg.asin.grad <- function(x, grad)
   grad / sqrt(1 - x^2)
 }
 
-#' Inverse Sinus
+#' Inverse Sine
 #'
 #' Calculate \code{asin(x)}.
 #'
@@ -341,7 +341,7 @@ asin.cg.node <- function(x)
   cgraph::cg.asin(x)
 }
 
-#' Inverse Cosinus
+#' Inverse Cosine
 #'
 #' Calculate \code{acos(x)}.
 #'
@@ -360,7 +360,7 @@ cg.acos <- function(x, name = cgraph::name())
   )
 }
 
-#' Inverse Cosinus Gradient
+#' Inverse Cosine Gradient
 #'
 #' Calculate the gradient of \code{acos(x)} with respect to \code{x}.
 #'
@@ -376,7 +376,7 @@ cg.acos.grad <- function(x, grad)
   -grad / sqrt(1 - x^2)
 }
 
-#' Inverse Cosinus
+#' Inverse Cosine
 #'
 #' Calculate \code{acos(x)}.
 #'

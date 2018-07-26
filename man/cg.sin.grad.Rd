@@ -2,7 +2,7 @@
 % Please edit documentation in R/trig.R
 \name{cg.sin.grad}
 \alias{cg.sin.grad}
-\title{Sinus Gradient}
+\title{Sine Gradient}
 \usage{
 cg.sin.grad(x, grad)
 }
