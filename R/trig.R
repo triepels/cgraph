@@ -145,6 +145,104 @@ tan.cg.node <- function(x)
   cgraph::cg.tan(x)
 }
 
+#' Hyperbolic Sine
+#'
+#' Calculate \code{sinh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.sinh <- function(x, name = cgraph::name())
+{
+  cgraph::opr(name = name,
+    call = quote(sinh(x)),
+    grads = list(x = quote(cg.sinh.grad(x, grad))),
+    binding = list(x = x)
+  )
+}
+
+#' Hyperbolic Sine Gradient
+#'
+#' Calculate the gradient of \code{sinh(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.sinh.grad <- function(x, grad)
+{
+  grad * cosh(x)
+}
+
+#' Hyperbolic Sine
+#'
+#' Calculate \code{sinh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+sinh.cg.node <- function(x)
+{
+  cgraph::sinh(x)
+}
+
+#' Hyperbolic Cosine
+#'
+#' Calculate \code{cosh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cg.cosh <- function(x, name = cgraph::name())
+{
+  cgraph::opr(name = name,
+    call = quote(cosh(x)),
+    grads = list(x = quote(cg.cosh.grad(x, grad))),
+    binding = list(x = x)
+  )
+}
+
+#' Hyperbolic Cosine Gradient
+#'
+#' Calculate the gradient of \code{cosh(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+cg.cosh.grad <- function(x, grad)
+{
+  grad * sinh(x)
+}
+
+#' Hyperbolic Cosine
+#'
+#' Calculate \code{cosh(x)}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @author Ron Triepels
+cosh.cg.node <- function(x)
+{
+  cgraph::cosh(x)
+}
+
 #' Hyperbolic Tangent
 #'
 #' Calculate \code{tanh(x)}.
