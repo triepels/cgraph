@@ -1,6 +1,6 @@
 print.cgraph <- function(x, ...)
 {
-  cat(sprintf("<cgraph: %s>", address(x)))
+  cat(sprintf("<cgraph: %s>\n", address(x)))
 }
 
 print.cg.node = function(x, ..., autorun = getOption("cg.autorun"))
