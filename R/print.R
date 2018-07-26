@@ -3,27 +3,30 @@ print.cgraph <- function(x, ...)
   cat(sprintf("<cgraph: %s>", address(x)))
 }
 
-print.cg.node = function(x, ...)
+print.cg.node = function(x, ..., autorun = getOption("cg.autorun"))
 {
   val <- NULL
 
-  tryCatch(
+  if(is.null(autorun))
   {
-    if(is.null(session$graph))
+    autorun = TRUE
+  }
+
+  if(autorun)
+  {
+    tryCatch(
     {
-      stop("No current graph set")
-    }
+      val <- get(x, envir = run(x))
+    },
+    error = function(e)
+    {
+      e$call <- NULL
 
-    val <- get(x, envir = session$graph$run(x))
-  },
-  error = function(e)
-  {
-    e$call <- NULL
+      warning(e)
+    })
+  }
 
-    warning(e)
-  })
-
-  if(is.null(session$graph))
+  if(is.null(session$graph) | !autorun)
   {
     cat(sprintf("<cg.node: %s>\n", x))
   }
