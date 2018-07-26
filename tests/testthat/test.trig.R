@@ -1,41 +1,74 @@
-context("Trig Expressions")
+context("Trigonometric Expressions")
 
-test_that("Scalar [+, -, sin, cos, tan, tanh]",
-{
-  # Initialize graph
-  x <- cgraph$new()
-
-  # Create parameters
-  a <- parm(2, name = "a")
-  b <- parm(4, name = "b")
-
-  # Create test expression
-  c <- sin(a) + cos(b) - tan(a) + tanh(b)
-
-  # Calculate gradients
-  grads <- gradients(c, run(c))
-
-  # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
-})
-
-test_that("Scalar [+, -, asin, acos, atan, atanh]",
+test_that("Scalar [+, -, sin, cos, tan]",
 {
   # Initialize graph
   x <- cgraph$new()
 
   # Create parameters
   a <- parm(0.2, name = "a")
-  b <- parm(0.4, name = "b")
 
   # Create test expression
-  c <- asin(a) + acos(b) - atan(a) + atanh(b)
+  c <- sin(a) + cos(a) - tan(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
   expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
+
+test_that("Scalar [+, -, sinh, cosh, tanh]",
+{
+  # Initialize graph
+  x <- cgraph$new()
+
+  # Create parameters
+  a <- parm(0.2, name = "a")
+
+  # Create test expression
+  c <- sinh(a) + cosh(a) - tanh(a)
+
+  # Calculate gradients
+  grads <- gradients(c, run(c))
+
+  # Check gradients
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+})
+
+test_that("Scalar [+, -, asin, acos, atan]",
+{
+  # Initialize graph
+  x <- cgraph$new()
+
+  # Create parameters
+  a <- parm(0.2, name = "a")
+
+  # Create test expression
+  c <- asin(a) + acos(a) - atan(a)
+
+  # Calculate gradients
+  grads <- gradients(c, run(c))
+
+  # Check gradients
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+})
+
+test_that("Scalar [+, -, asinh, acosh, atanh]",
+{
+  # Initialize graph
+  x <- cgraph$new()
+
+  # Create parameters
+  a <- parm(0.2, name = "a")
+
+  # Create test expression
+  c <- asinh(a) + acosh(a) - atanh(a)
+
+  # Calculate gradients
+  grads <- gradients(c, run(c))
+
+  # Check gradients
+  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+})
+

@@ -191,7 +191,7 @@ cg.sinh.grad <- function(x, grad)
 #' @author Ron Triepels
 sinh.cg.node <- function(x)
 {
-  cgraph::sinh(x)
+  cgraph::cg.sinh(x)
 }
 
 #' Hyperbolic Cosine
@@ -240,7 +240,7 @@ cg.cosh.grad <- function(x, grad)
 #' @author Ron Triepels
 cosh.cg.node <- function(x)
 {
-  cgraph::cosh(x)
+  cgraph::cg.cosh(x)
 }
 
 #' Hyperbolic Tangent
