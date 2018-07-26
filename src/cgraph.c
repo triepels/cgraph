@@ -83,7 +83,7 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
     case CGOPR :
       sprintf(name, "opr%d", count + 1); break;
     default :
-      error("invalid type");
+      error("invalid type provided");
   }
 
   return mkString(name);
@@ -140,7 +140,7 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
 
   if(cg_node_exists(asChar(name), graph))
   {
-    error("'%s' is already defined", CHAR(asChar(name)));
+    error("node '%s' is already defined", CHAR(asChar(name)));
   }
 
   if(strcmp(CHAR(asChar(name)), "grad") == 0)
@@ -159,7 +159,7 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
     case CGPRM :
       setAttrib(name, install("type"), ScalarInteger(CGPRM)); break;
     default :
-      error("invalid type");
+      error("invalid type provided");
   }
 
   if(!isNull(value))
@@ -271,7 +271,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
   if(cg_node_exists(asChar(name), graph))
   {
-    error("'%s' is already defined", CHAR(asChar(name)));
+    error("node '%s' is already defined", CHAR(asChar(name)));
   }
 
   if(strcmp(CHAR(asChar(name)), "grad") == 0)
@@ -289,7 +289,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
     if(!isSymbol(value) & !isString(value))
     {
-      error("variable '%s' in binding must be a name or character", CHAR(var));
+      error("object '%s' in binding must be a name or character", CHAR(var));
     }
 
     setVar(install(CHAR(var)), coerceVector(value, SYMSXP), binding);
@@ -315,7 +315,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
       if(symbol == R_UnboundValue)
       {
-        error("cannot find '%s' in binding", CHAR(STRING_ELT(names, i)));
+        error("cannot find object '%s' in binding", CHAR(STRING_ELT(names, i)));
       }
 
       INTEGER(parents)[i] = cg_node_id(asChar(symbol), graph);
@@ -474,7 +474,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
       if(!isNumeric(value))
       {
-        error("'%s' is not a numeric vector or array", CHAR(asChar(node)));
+        error("object '%s' does not evaluate to a numeric vector or array but a %s", CHAR(asChar(node)), type2char(TYPEOF(value)));
       }
     }
   }
