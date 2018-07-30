@@ -29,7 +29,7 @@ Documentation:
 
 * Improved the package title and description.
 * Added RGraphviz to suggests.
-* Added examples to the documentation of the most important methods of a cgraph object and their corresponding wrapper functions.
+* Added examples to the documentation of the most important methods of a `cgraph` object and their corresponding wrapper functions.
 
 Bug Fixes:
 
