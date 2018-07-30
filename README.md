@@ -25,5 +25,5 @@ The latest development version can be installed from Github by:
 
 Notice, the development version may contain code that is experimental and not thoroughly tested. If you find a bug, please report it [here](https://github.com/triepels/cgraph/issues).
 
-### More Information
+## More Information
 Please visit the package [website](https://cgraph.org).
