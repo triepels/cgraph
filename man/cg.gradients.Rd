@@ -4,7 +4,7 @@
 \alias{cg.gradients}
 \title{Calculate Gradients}
 \arguments{
-\item{name}{character scalar or symbol, name of the node that is differentiated.}
+\item{name}{character scalar, name of the node that is differentiated.}
 
 \item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
 

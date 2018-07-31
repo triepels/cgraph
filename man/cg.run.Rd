@@ -4,7 +4,7 @@
 \alias{cg.run}
 \title{Evaluate the Graph}
 \arguments{
-\item{name}{character scalar or symbol, name of the node that is evaluated.}
+\item{name}{character scalar, name of the node that is evaluated.}
 
 \item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
 }

@@ -374,13 +374,13 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #' @details \code{$opr(call, grads, binding, name)}
 #'
 #' @param call expression or call, operations performed by the node.
-#' @param grads named list of expressions or calls, gradients of the input nodes that are consumed by the operation in argument \code{call}.
+#' @param grads named list of expressions or calls, gradients of the input nodes that are consumed by the operation in argument \code{call}. Is ignored when the elements are not named.
 #' @param binding named list or environment, binds the variables used in the expressions or calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.
 #' @param name character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
-#' @note The operation to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation consumes any other nodes in the graph, then the gradients of the current node with respect to these input nodes should be supplied as an expression or call to argument \code{gradients}. These gradients must be a function of each input's gradient. The special reserved word 'grad' evaluates to this gradient at run-time and can be used in the expression and call of each input's gradient as placeholder.
+#' @note The operation to be performed by the node should be provided as an expression or call to argument \code{call}. If this operation consumes any other nodes in the graph, then the gradients of the current node with respect to these input nodes should be supplied as an expression or call to argument \code{gradients}. These gradients must be a function of each input's gradient. The special reserved word 'grad' evaluates to this gradient at run-time and can be used in the expression or call of each input's gradient as placeholder.
 #'
-#' Any variabes used in the expressions or calls of the node (both supplied to argument \code{call} and \code{gradients}) should be bind to the symbols of the nodes in the graph. This can be done by supplying the names of the variables and the corresponding nodes to which the variables should bind to \code{binding}. At run-time, the symbols of the nodes are substituted for the variables in the expressions or calls.
+#' Any variabes in the expressions or calls of the node (both supplied to argument \code{call} and \code{gradients}) should be bind to the symbols of the nodes in the graph. This can be done by supplying the names of the variables and the corresponding nodes to which the variables should bind to \code{binding}. At run-time, the symbols of the nodes are substituted for the variables in the expressions or calls.
 #'
 #' The name of the operation node cannot be 'grad' as this is a reserved word.
 #'

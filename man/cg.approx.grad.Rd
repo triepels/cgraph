@@ -4,9 +4,9 @@
 \alias{cg.approx.grad}
 \title{Approximate Gradients}
 \arguments{
-\item{x}{character scalar or symbol, name of the node.}
+\item{x}{character scalar, name of the node.}
 
-\item{y}{character scalar or symbol, name of the node.}
+\item{y}{character scalar, name of the node.}
 
 \item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
 
