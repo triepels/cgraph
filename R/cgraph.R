@@ -53,7 +53,7 @@
 #' b <- parm(4, name = "b")
 #'
 #' # Perform some operations on the parameters.
-#' c <- sin(a) + cos(b) - tan(a) + tanh(b)
+#' c <- sin(a) + cos(b) - tan(a)
 #'
 #' # Evaluate c.
 #' values <- run(c)
@@ -399,7 +399,10 @@ cgraph$public_methods$opr <- function(call, grads, binding, name)
     call <- as.call(call)
   }
 
-  grads <- as.list(grads)
+  if(!is.list(grads) || is.null(names(grads)))
+  {
+    stop("grads must be a named list", call. = FALSE)
+  }
 
   if(!is.environment(binding))
   {
@@ -536,7 +539,7 @@ cgraph$public_methods$run <- function(name, values = list())
 #' b <- x$parm(4, name = "b")
 #'
 #' # Perform some operations on the parameters.
-#' c <- sin(a) + cos(b) - tan(a) + tanh(b)
+#' c <- sin(a) + cos(b) - tan(a)
 #'
 #' # Differentiate the graph with respect to c.
 #' grads <- x$gradients(c, x$run(c))
@@ -603,7 +606,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #' b <- x$parm(4, name = "b")
 #'
 #' # Perform some operations on the parameters.
-#' c <- sin(a) + cos(b) - tan(a) + tanh(b)
+#' c <- sin(a) + cos(b) - tan(a)
 #'
 #' # Differentiate the graph with respect to c.
 #' grads <- x$gradients(c, x$run(c))

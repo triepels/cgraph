@@ -51,7 +51,7 @@ a <- parm(2, name = "a")
 b <- parm(4, name = "b")
 
 # Perform some operations on the parameters.
-c <- sin(a) + cos(b) - tan(a) + tanh(b)
+c <- sin(a) + cos(b) - tan(a)
 
 # Evaluate c.
 values <- run(c)
