@@ -32,7 +32,7 @@ stack stack_init(int maxSize)
 
   if(data == NULL)
   {
-    error("insufficient memory to initialize stack");
+    error("insufficient memory to allocate stack of %d elements", maxSize);
   }
 
   s.top = -1;
@@ -69,7 +69,7 @@ void stack_push(stack *s, int x)
 
     if(s->data == NULL)
     {
-      error("insufficient memory to initialize stack");
+      error("insufficient memory to reallocate stack of %d elements", 2 * s->maxSize);
     }
 
     s->maxSize *= 2;
