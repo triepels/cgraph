@@ -31,7 +31,7 @@ session$graph <- NULL
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
 #'
-#' # Generate some names
+#' # Generate some names.
 #' name(0); name(1); name(2); name(3)
 #'
 #' @author Ron Triepels

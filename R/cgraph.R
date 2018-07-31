@@ -122,7 +122,7 @@ cgraph$public_methods$initialize <- function()
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
 #'
-#' # Generate some names
+#' # Generate some names.
 #' x$name(0); x$name(1); x$name(2); x$name(3)
 #'
 #' @name cg.name

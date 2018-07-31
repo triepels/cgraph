@@ -24,7 +24,7 @@ There is a wrapper function \link[cgraph]{name} that calls this method on the cu
 # Initialize a new computational graph.
 x <- cgraph$new()
 
-# Generate some names
+# Generate some names.
 x$name(0); x$name(1); x$name(2); x$name(3)
 
 }

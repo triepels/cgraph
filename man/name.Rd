@@ -22,7 +22,7 @@ The auto-generated name is not guaranteed to be unique.
 # Initialize a new computational graph.
 x <- cgraph$new()
 
-# Generate some names
+# Generate some names.
 name(0); name(1); name(2); name(3)
 
 }
