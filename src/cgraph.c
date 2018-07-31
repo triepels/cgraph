@@ -303,9 +303,9 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
     SEXP value = findVar(install(CHAR(var)), binding);
 
-    if(!isSymbol(value) & !isString(value))
+    if(!isString(value))
     {
-      errorcall(R_NilValue, "object '%s' in binding must be a name or character", CHAR(var));
+      errorcall(R_NilValue, "object '%s' in binding must be a character scalar", CHAR(var));
     }
 
     setVar(install(CHAR(var)), coerceVector(value, SYMSXP), binding);
