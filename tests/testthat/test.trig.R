@@ -21,15 +21,17 @@ test_that("Scalar [+, -, sin, cos, tan]",
 
   # Create parameters
   a <- parm(0.2, name = "a")
+  b <- parm(1.2, name = "b")
 
   # Create test expression
-  c <- sin(a) + cos(a) - tan(a)
+  c <- sin(a) + cos(b) - tan(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
   expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, -, sinh, cosh, tanh]",
@@ -39,15 +41,17 @@ test_that("Scalar [+, -, sinh, cosh, tanh]",
 
   # Create parameters
   a <- parm(0.2, name = "a")
+  b <- parm(1.2, name = "b")
 
   # Create test expression
-  c <- sinh(a) + cosh(a) - tanh(a)
+  c <- sinh(a) + cosh(b) - tanh(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
   expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, -, asin, acos, atan]",
@@ -57,15 +61,17 @@ test_that("Scalar [+, -, asin, acos, atan]",
 
   # Create parameters
   a <- parm(0.2, name = "a")
+  b <- parm(0.8, name = "b")
 
   # Create test expression
-  c <- asin(a) + acos(a) - atan(a)
+  c <- asin(a) + acos(b) - atan(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
   expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, -, asinh, acosh, atanh]",
@@ -75,14 +81,16 @@ test_that("Scalar [+, -, asinh, acosh, atanh]",
 
   # Create parameters
   a <- parm(0.2, name = "a")
+  b <- parm(1.2, name = "b")
 
   # Create test expression
-  c <- asinh(a) + acosh(a) - atanh(a)
+  c <- asinh(a) + acosh(b) - atanh(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
   expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
 })
 
