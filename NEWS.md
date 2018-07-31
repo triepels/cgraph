@@ -13,8 +13,7 @@ Features:
 
 Bug Fixes:
 
-* Improved several error messages.
-* Method `opr` now ignores the gradients provided to argument `grads` when its elements are not named.
+* Improved error handling in many methods of a `cgraph` object.
 * Function `address` now correctly shows the address of an pointer on Windows machines.
 * Function `get.parms` and `add.parms` now correctly call the underlying C-code.
 
