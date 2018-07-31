@@ -17,7 +17,7 @@ cg.reshape(x, dim, name = cgraph::name())
 cg.node, node of the operation.
 }
 \description{
-Change the dimensions of array \code{x} to \code{dims}.
+Change the dimensions of array \code{x} to \code{dim}.
 }
 \note{
 The elements of \code{x} are re-arranged column-wise.

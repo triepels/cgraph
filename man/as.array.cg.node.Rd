@@ -4,12 +4,12 @@
 \alias{as.array.cg.node}
 \title{Coerce to an Array}
 \usage{
-\method{as.array}{cg.node}(x, dims, name = cgraph::name(), ...)
+\method{as.array}{cg.node}(x, dim, name = cgraph::name(), ...)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}
 
-\item{dims}{numeric scalar or vector, the dimensions of the new array.}
+\item{dim}{numeric scalar or vector, the dimensions of the new array.}
 
 \item{name}{character scalar, name of the operation (optional).}
 
@@ -19,7 +19,7 @@
 cg.node, node of the operation.
 }
 \description{
-Coerce \code{x} to an array with dimensions \code{dims}.
+Coerce \code{x} to an array with dimensions \code{dim}.
 }
 \note{
 This function is equivalent to function \code{cg.reshape}.
