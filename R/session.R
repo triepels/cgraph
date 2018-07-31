@@ -39,7 +39,7 @@ name <- function(type = 3)
 {
   if(is.null(session$graph))
   {
-    stop("No active graph set")
+    stop("No active graph set", call. = FALSE)
   }
 
   session$graph$name(type)
@@ -69,7 +69,7 @@ const <- function(value, name)
 {
   if(is.null(session$graph))
   {
-    stop("No active graph set")
+    stop("No active graph set", call. = FALSE)
   }
 
   session$graph$const(value, name)
@@ -99,7 +99,7 @@ input <- function(value, name)
 {
   if(is.null(session$graph))
   {
-    stop("No active graph set")
+    stop("No active graph set", call. = FALSE)
   }
 
   session$graph$input(value, name)
@@ -129,7 +129,7 @@ parm <- function(value, name)
 {
   if(is.null(session$graph))
   {
-    stop("No active graph set")
+    stop("No active graph set", call. = FALSE)
   }
 
   session$graph$parm(value, name)
@@ -157,7 +157,7 @@ opr <- function(call, grads, binding, name)
 {
   if(is.null(session$graph))
   {
-    stop("No active graph set")
+    stop("No active graph set", call. = FALSE)
   }
 
   session$graph$opr(call, grads, binding, name)
@@ -196,7 +196,7 @@ run <- function(name, values = list())
 {
   if(is.null(session$graph))
   {
-    stop("No active graph set")
+    stop("No active graph set", call. = FALSE)
   }
 
   session$graph$run(name, values)
@@ -239,7 +239,7 @@ gradients <- function(name, values = list(), index = 1)
 {
   if(is.null(session$graph))
   {
-    stop("No active graph set")
+    stop("No active graph set", call. = FALSE)
   }
 
   session$graph$gradients(name, values, index)
@@ -287,7 +287,7 @@ approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
   if(is.null(session$graph))
   {
-    stop("No active graph set")
+    stop("No active graph set", call. = FALSE)
   }
 
   session$graph$approx.grad(x, y, values, index, eps)

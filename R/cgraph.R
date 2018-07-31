@@ -171,7 +171,7 @@ cgraph$public_methods$const <- function(value, name)
   {
     if(!(is.numeric(value) | is.array(value)))
     {
-      stop("value must be a numeric vector or array")
+      stop("value must be a numeric vector or array", call. = FALSE)
     }
   }
 
@@ -181,7 +181,10 @@ cgraph$public_methods$const <- function(value, name)
   }
   else
   {
-    name <- as.character(name)
+    if(!is.character(name))
+    {
+      stop("name must be a character scalar", call. = FALSE)
+    }
   }
 
   .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
@@ -224,7 +227,7 @@ cgraph$public_methods$input <- function(value, name)
   {
     if(!(is.numeric(value) | is.array(value)))
     {
-      stop("value must be a numeric vector or array")
+      stop("value must be a numeric vector or array", call. = FALSE)
     }
   }
 
@@ -234,7 +237,10 @@ cgraph$public_methods$input <- function(value, name)
   }
   else
   {
-    name <- as.character(name)
+    if(!is.character(name))
+    {
+      stop("name must be a character scalar", call. = FALSE)
+    }
   }
 
   .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
@@ -277,7 +283,7 @@ cgraph$public_methods$parm <- function(value, name)
   {
     if(!(is.numeric(value) | is.array(value)))
     {
-      stop("value must be a numeric vector or array")
+      stop("value must be a numeric vector or array", call. = FALSE)
     }
   }
 
@@ -287,7 +293,10 @@ cgraph$public_methods$parm <- function(value, name)
   }
   else
   {
-    name <- as.character(name)
+    if(!is.character(name))
+    {
+      stop("name must be a character scalar", call. = FALSE)
+    }
   }
 
   .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
@@ -351,7 +360,7 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
   {
     if(!is.list(parms))
     {
-      stop("parms must be a list")
+      stop("parms must be a list", call. = FALSE)
     }
   }
 
@@ -396,7 +405,7 @@ cgraph$public_methods$opr <- function(call, grads, binding, name)
   {
     if(!is.list(binding))
     {
-      stop("binding must be a named list or environment")
+      stop("binding must be a named list or environment", call. = FALSE)
     }
 
     binding <- list2env(binding)
@@ -408,7 +417,10 @@ cgraph$public_methods$opr <- function(call, grads, binding, name)
   }
   else
   {
-    name <- as.character(name)
+    if(!is.character(name))
+    {
+      stop("name must be a character scalar", call. = FALSE)
+    }
   }
 
   .Call("cg_add_operation", call, grads, binding, name, self, PACKAGE = "cgraph")
@@ -448,7 +460,7 @@ cgraph$public_methods$active <- function()
 #'
 #' @details \code{$run(name, values = list())}
 #'
-#' @param name character scalar or symbol, name of the node that is evaluated.
+#' @param name character scalar, name of the node that is evaluated.
 #' @param values named list or environment, values that are subsituted for the nodes in the graph.
 #'
 #' @note All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
@@ -478,13 +490,16 @@ cgraph$public_methods$active <- function()
 #' @author Ron Triepels
 cgraph$public_methods$run <- function(name, values = list())
 {
-  name <- as.character(name)
+  if(!is.character(name))
+  {
+    stop("name must be a character scalar", call. = FALSE)
+  }
 
   if(!is.environment(values))
   {
     if(!is.list(values))
     {
-      stop("values must be a named list or environment")
+      stop("values must be a named list or environment", call. = FALSE)
     }
 
     values <- list2env(values)
@@ -499,7 +514,7 @@ cgraph$public_methods$run <- function(name, values = list())
 #'
 #' @details \code{$gradients(name, values, index = 1)}
 #'
-#' @param name character scalar or symbol, name of the node that is differentiated.
+#' @param name character scalar, name of the node that is differentiated.
 #' @param values named list or environment, values that are subsituted for the nodes in the graph.
 #' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
 #'
@@ -533,16 +548,24 @@ cgraph$public_methods$run <- function(name, values = list())
 #' @author Ron Triepels
 cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 {
-  name <- as.character(name)
+  if(!is.character(name))
+  {
+    stop("name must be a character scalar", call. = FALSE)
+  }
 
   if(!is.environment(values))
   {
     if(!is.list(values))
     {
-      stop("values must be a named list or environment")
+      stop("values must be a named list or environment", call. = FALSE)
     }
 
     values <- list2env(values)
+  }
+
+  if(!(is.numeric(index) || is.integer(index)))
+  {
+    stop("index must be a numeric scalar", call. = FALSE)
   }
 
   index <- as.integer(index)
@@ -556,8 +579,8 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #'
 #' @details \code{$approx.grad(x, y, values = list(), index = 1, eps = 1e-4)}
 #'
-#' @param x character scalar or symbol, name of the node.
-#' @param y character scalar or symbol, name of the node.
+#' @param x character scalar, name of the node.
+#' @param y character scalar, name of the node.
 #' @param values named list or environment, values that are subsituted for the nodes in the graph.
 #' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
 #' @param eps numeric scalar, step size. Defaults to 1e-4.
@@ -595,21 +618,37 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #' @author Ron Triepels
 cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
-  x <- as.character(x)
+  if(!is.character(x))
+  {
+    stop("x must be a character scalar", call. = FALSE)
+  }
 
-  y <- as.character(y)
+  if(!is.character(y))
+  {
+    stop("y must be a character scalar", call. = FALSE)
+  }
 
   if(!is.environment(values))
   {
     if(!is.list(values))
     {
-      stop("values must be a named list or environment")
+      stop("values must be a named list or environment", call. = FALSE)
     }
 
     values <- list2env(values)
   }
 
+  if(!(is.numeric(index) || is.integer(index)))
+  {
+    stop("index must be a numeric scalar", call. = FALSE)
+  }
+
   index <- as.integer(index)
+
+  if(!(is.numeric(eps) || is.integer(eps)))
+  {
+    stop("index must be a numeric scalar", call. = FALSE)
+  }
 
   eps <- as.numeric(eps)
 
