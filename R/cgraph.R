@@ -159,8 +159,6 @@ cgraph$public_methods$name <- function(type = 3)
 #' @author Ron Triepels
 cgraph$public_methods$const <- function(value, name)
 {
-  type <- as.integer(0)
-
   if(missing(value))
   {
     value <- NULL
@@ -171,7 +169,7 @@ cgraph$public_methods$const <- function(value, name)
     name <- NULL
   }
 
-  .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
+  .Call("cg_add_constant", value, name, self, PACKAGE = "cgraph")
 }
 
 #' Add Input
@@ -201,8 +199,6 @@ cgraph$public_methods$const <- function(value, name)
 #' @author Ron Triepels
 cgraph$public_methods$input <- function(value, name)
 {
-  type <- as.integer(1)
-
   if(missing(value))
   {
     value <- NULL
@@ -213,7 +209,7 @@ cgraph$public_methods$input <- function(value, name)
     name <- NULL
   }
 
-  .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
+  .Call("cg_add_input", value, name, self, PACKAGE = "cgraph")
 }
 
 #' Add Parameter
@@ -243,8 +239,6 @@ cgraph$public_methods$input <- function(value, name)
 #' @author Ron Triepels
 cgraph$public_methods$parm <- function(value, name)
 {
-  type <- as.integer(2)
-
   if(missing(value))
   {
     value <- NULL
@@ -255,7 +249,7 @@ cgraph$public_methods$parm <- function(value, name)
     name <- NULL
   }
 
-  .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
+  .Call("cg_add_parameter", value, name, self, PACKAGE = "cgraph")
 }
 
 #' Get Parameters
@@ -343,13 +337,8 @@ cgraph$public_methods$opr <- function(call, grads, binding, name)
 {
   type <- as.integer(3)
 
-  if(!is.environment(binding))
+  if(is.list(binding))
   {
-    if(!is.list(binding))
-    {
-      stop("binding must be a named list or environment", call. = FALSE)
-    }
-
     binding <- list2env(binding)
   }
 
@@ -425,13 +414,8 @@ cgraph$public_methods$active <- function()
 #' @author Ron Triepels
 cgraph$public_methods$run <- function(name, values = list())
 {
-  if(!is.environment(values))
+  if(is.list(values))
   {
-    if(!is.list(values))
-    {
-      stop("values must be a named list or environment", call. = FALSE)
-    }
-
     values <- list2env(values)
   }
 
@@ -478,13 +462,8 @@ cgraph$public_methods$run <- function(name, values = list())
 #' @author Ron Triepels
 cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 {
-  if(!is.environment(values))
+  if(is.list(values))
   {
-    if(!is.list(values))
-    {
-      stop("values must be a named list or environment", call. = FALSE)
-    }
-
     values <- list2env(values)
   }
 
