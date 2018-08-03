@@ -83,7 +83,7 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
     errorcall(R_NilValue, "type must be a numeric scalar");
   }
 
-  for (int i = 0; i < LENGTH(nodes); i++)
+  for(int i = 0; i < LENGTH(nodes); i++)
   {
     SEXP node = VECTOR_ELT(nodes, i);
 
