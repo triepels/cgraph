@@ -182,7 +182,10 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   {
     SEXP values = findVar(install("values"), graph);
 
-    value = coerceVector(value, REALSXP);
+    if(isInteger(value))
+    {
+      value = coerceVector(value, REALSXP);
+    }
 
     defineVar(install(CHAR(asChar(name))), value, values);
   }
@@ -477,6 +480,8 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
   for(int i = 0; i < LENGTH(ids); i++)
   {
+    SEXP value = R_NilValue;
+
     SEXP node = VECTOR_ELT(nodes, INTEGER(ids)[i] - 1);
 
     SEXP type = getAttrib(node, install("type"));
@@ -485,7 +490,7 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
     {
       SEXP call = getAttrib(node, install("call"));
 
-      SEXP value = PROTECT(eval(call, values));
+      value = PROTECT(eval(call, values));
 
       defineVar(install(CHAR(asChar(node))), value, values);
 
@@ -493,14 +498,42 @@ void cg_forward(SEXP ids, SEXP values, SEXP graph)
     }
     else
     {
-      SEXP value = eval(install(CHAR(asChar(node))), values);
+      value = eval(install(CHAR(asChar(node))), values);
+    }
 
-      if(!isNumeric(value))
-      {
-        errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array but a %s", CHAR(asChar(node)), type2char(TYPEOF(value)));
-      }
+    if(!isNumeric(value))
+    {
+      errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array but a %s",
+                CHAR(asChar(node)), type2char(TYPEOF(value)));
     }
   }
+}
+
+SEXP cg_root_grad(SEXP value, SEXP index)
+{
+  SEXP grad = PROTECT(duplicate(value));
+
+  if(!isNumber(grad))
+  {
+    errorcall(R_NilValue, "cannot differentiate an object of type %s", type2char(TYPEOF(grad)));
+  }
+
+  int n = LENGTH(value);
+
+  if(asInteger(index) < 1 || asInteger(index) > n)
+  {
+    errorcall(R_NilValue, "invalid index provided");
+  }
+
+  grad = coerceVector(grad, REALSXP);
+
+  memset(REAL(grad), 0, n * sizeof(double));
+
+  REAL(grad)[INTEGER(index)[0] - 1] = 1;
+
+  UNPROTECT(1);
+
+  return grad;
 }
 
 void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
@@ -515,20 +548,9 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
   {
     SEXP root = VECTOR_ELT(nodes, INTEGER(ids)[n - 1] - 1);
 
-    SEXP root_grad = eval(install(CHAR(asChar(root))), values);
+    SEXP root_value = eval(install(CHAR(asChar(root))), values);
 
-    root_grad = PROTECT(duplicate(root_grad));
-
-    int g = LENGTH(root_grad);
-
-    if(asInteger(index) < 1 || asInteger(index) > g)
-    {
-      errorcall(R_NilValue, "invalid index provided");
-    }
-
-    memset(REAL(root_grad), 0, g * sizeof(double));
-
-    REAL(root_grad)[INTEGER(index)[0] - 1] = 1;
+    SEXP root_grad = PROTECT(cg_root_grad(root_value, index));
 
     defineVar(install(CHAR(asChar(root))), root_grad, grads);
 
