@@ -513,13 +513,8 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #' @author Ron Triepels
 cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
-  if(!is.environment(values))
+  if(is.list(values))
   {
-    if(!is.list(values))
-    {
-      stop("values must be a named list or environment", call. = FALSE)
-    }
-
     values <- list2env(values)
   }
 
