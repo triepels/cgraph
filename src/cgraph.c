@@ -464,7 +464,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
       if(grad_name == R_BlankString)
       {
-        errorcall(R_NilValue, "empty name provided for gradient at index %d", i + 1);
+        errorcall(R_NilValue, "blank name provided for gradient at index %d", i + 1);
       }
 
       SEXP symbol = findVarInFrame(binding, install(CHAR(grad_name)));
