@@ -96,13 +96,21 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
   switch(asInteger(type))
   {
     case CGCST :
-      sprintf(name, "cst%d", count + 1); break;
+      sprintf(name, "cst%d", count + 1);
+      break;
+
     case CGIPT :
-      sprintf(name, "ipt%d", count + 1); break;
+      sprintf(name, "ipt%d", count + 1);
+      break;
+
     case CGPRM :
-      sprintf(name, "prm%d", count + 1); break;
+      sprintf(name, "prm%d", count + 1);
+      break;
+
     case CGOPR :
-      sprintf(name, "opr%d", count + 1); break;
+      sprintf(name, "opr%d", count + 1);
+      break;
+
     default :
       errorcall(R_NilValue, "invalid type provided");
   }
@@ -184,16 +192,19 @@ SEXP cg_node(SEXP name, SEXP type, SEXP graph)
       setAttrib(node, install("grads"), allocVector(VECSXP, 0));
       setAttrib(node, install("childeren"), allocVector(INTSXP, 0));
       break;
+
     case CGIPT :
       setAttrib(node, install("type"), ScalarInteger(CGIPT));
       setAttrib(node, install("grads"), allocVector(VECSXP, 0));
       setAttrib(node, install("childeren"), allocVector(INTSXP, 0));
       break;
+
     case CGPRM :
       setAttrib(node, install("type"), ScalarInteger(CGPRM));
       setAttrib(node, install("grads"), allocVector(VECSXP, 0));
       setAttrib(node, install("childeren"), allocVector(INTSXP, 0));
       break;
+
     case CGOPR :
       setAttrib(node, install("type"), ScalarInteger(CGOPR));
       setAttrib(node, install("call"), allocVector(EXPRSXP, 1));
@@ -201,6 +212,7 @@ SEXP cg_node(SEXP name, SEXP type, SEXP graph)
       setAttrib(node, install("parents"), allocVector(INTSXP, 0));
       setAttrib(node, install("childeren"), allocVector(INTSXP, 0));
       break;
+
     default :
       errorcall(R_NilValue, "invalid type provided");
   }
