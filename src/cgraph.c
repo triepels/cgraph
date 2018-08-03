@@ -217,7 +217,7 @@ SEXP cg_node(SEXP name, SEXP type, SEXP graph)
       errorcall(R_NilValue, "invalid type provided");
   }
 
-  setAttrib(node, install("class"), mkString("cg.node"));
+  setAttrib(node, R_ClassSymbol, mkString("cg.node"));
 
   UNPROTECT(1);
 
