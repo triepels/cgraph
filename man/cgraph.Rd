@@ -17,7 +17,7 @@ Some of the methods listed above have a wrapper function that calls the method o
 \section{Members}{
 
 \describe{
-\item{$nodes}{list, symbols of the nodes.}
+\item{$nodes}{named list, symbols of the nodes.}
 \item{$values}{environment, values of the nodes.}
 }
 }

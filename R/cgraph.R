@@ -21,7 +21,7 @@
 #'
 #' @section Members:
 #' \describe{
-#' \item{$nodes}{list, symbols of the nodes.}
+#' \item{$nodes}{named list, symbols of the nodes.}
 #' \item{$values}{environment, values of the nodes.}
 #' }
 #'
