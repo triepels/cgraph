@@ -129,8 +129,6 @@ cgraph$public_methods$initialize <- function()
 #' @author Ron Triepels
 cgraph$public_methods$name <- function(type = 3)
 {
-  type <- as.integer(type)
-
   .Call("cg_gen_name", type, self, PACKAGE = "cgraph")
 }
 
@@ -167,24 +165,10 @@ cgraph$public_methods$const <- function(value, name)
   {
     value <- NULL
   }
-  else
-  {
-    if(!is.numeric(value))
-    {
-      stop("value must be a numeric vector or array", call. = FALSE)
-    }
-  }
 
   if(missing(name))
   {
     name <- NULL
-  }
-  else
-  {
-    if(!is.character(name))
-    {
-      stop("name must be a character scalar", call. = FALSE)
-    }
   }
 
   .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
@@ -223,24 +207,10 @@ cgraph$public_methods$input <- function(value, name)
   {
     value <- NULL
   }
-  else
-  {
-    if(!is.numeric(value))
-    {
-      stop("value must be a numeric vector or array", call. = FALSE)
-    }
-  }
 
   if(missing(name))
   {
     name <- NULL
-  }
-  else
-  {
-    if(!is.character(name))
-    {
-      stop("name must be a character scalar", call. = FALSE)
-    }
   }
 
   .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
@@ -279,24 +249,10 @@ cgraph$public_methods$parm <- function(value, name)
   {
     value <- NULL
   }
-  else
-  {
-    if(!is.numeric(value))
-    {
-      stop("value must be a numeric vector or array", call. = FALSE)
-    }
-  }
 
   if(missing(name))
   {
     name <- NULL
-  }
-  else
-  {
-    if(!is.character(name))
-    {
-      stop("name must be a character scalar", call. = FALSE)
-    }
   }
 
   .Call("cg_add_placeholder", value, name, type, self, PACKAGE = "cgraph")
@@ -356,13 +312,6 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
   {
     parms <- list(...)
   }
-  else
-  {
-    if(!is.list(parms))
-    {
-      stop("parms must be a list", call. = FALSE)
-    }
-  }
 
   invisible(.Call("cg_add_parms", parms, self, PACKAGE = "cgraph"))
 }
@@ -394,16 +343,6 @@ cgraph$public_methods$opr <- function(call, grads, binding, name)
 {
   type <- as.integer(3)
 
-  if(!(is.call(call) || is.name(call)))
-  {
-    stop("call must be a call or symbol", call. = FALSE)
-  }
-
-  if(!is.list(grads))
-  {
-    stop("grads must be a named list", call. = FALSE)
-  }
-
   if(!is.environment(binding))
   {
     if(!is.list(binding))
@@ -417,13 +356,6 @@ cgraph$public_methods$opr <- function(call, grads, binding, name)
   if(missing(name))
   {
     name <- NULL
-  }
-  else
-  {
-    if(!is.character(name))
-    {
-      stop("name must be a character scalar", call. = FALSE)
-    }
   }
 
   .Call("cg_add_operation", call, grads, binding, name, self, PACKAGE = "cgraph")
@@ -493,11 +425,6 @@ cgraph$public_methods$active <- function()
 #' @author Ron Triepels
 cgraph$public_methods$run <- function(name, values = list())
 {
-  if(!is.character(name))
-  {
-    stop("name must be a character scalar", call. = FALSE)
-  }
-
   if(!is.environment(values))
   {
     if(!is.list(values))
@@ -551,11 +478,6 @@ cgraph$public_methods$run <- function(name, values = list())
 #' @author Ron Triepels
 cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 {
-  if(!is.character(name))
-  {
-    stop("name must be a character scalar", call. = FALSE)
-  }
-
   if(!is.environment(values))
   {
     if(!is.list(values))
@@ -565,13 +487,6 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 
     values <- list2env(values)
   }
-
-  if(!(is.numeric(index) || is.integer(index)))
-  {
-    stop("index must be a numeric scalar", call. = FALSE)
-  }
-
-  index <- as.integer(index)
 
   .Call("cg_gradients", name, index, values, self, PACKAGE = "cgraph")
 }
@@ -621,16 +536,6 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
 #' @author Ron Triepels
 cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, eps = 1e-4)
 {
-  if(!is.character(x))
-  {
-    stop("x must be a character scalar", call. = FALSE)
-  }
-
-  if(!is.character(y))
-  {
-    stop("y must be a character scalar", call. = FALSE)
-  }
-
   if(!is.environment(values))
   {
     if(!is.list(values))
@@ -641,21 +546,7 @@ cgraph$public_methods$approx.grad <- function(x, y, values = list(), index = 1, 
     values <- list2env(values)
   }
 
-  if(!(is.numeric(index) || is.integer(index)))
-  {
-    stop("index must be a numeric scalar", call. = FALSE)
-  }
-
-  index <- as.integer(index)
-
-  if(!(is.numeric(eps) || is.integer(eps)))
-  {
-    stop("index must be a numeric scalar", call. = FALSE)
-  }
-
-  eps <- as.numeric(eps)
-
-  .Call("cg_approx_grad", x, y, index, values, eps, self, PACKAGE = "cgraph")
+  .Call("cg_approx_grad", x, y, values, index, eps, self, PACKAGE = "cgraph")
 }
 
 #' Adjacency Matrix
