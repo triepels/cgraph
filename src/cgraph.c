@@ -70,13 +70,73 @@ SEXP cgraph(SEXP graph, SEXP values)
   return graph;
 }
 
+int is_cgraph(SEXP x)
+{
+  SEXP x_class = getAttrib(x, R_ClassSymbol);
+
+  if(!isEnvironment(x))
+  {
+    return FALSE;
+  }
+
+  if(!isString(x_class))
+  {
+    return FALSE;
+  }
+
+  if(strcmp(CHAR(asChar(x_class)), "cgraph") != 0)
+  {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+SEXP cg_find_nodes(SEXP graph)
+{
+  SEXP nodes = R_NilValue;
+
+  if(!is_cgraph(graph))
+  {
+    errorcall(R_NilValue, "invalid cgraph object provided");
+  }
+
+  nodes = findVarInFrame(graph, install("nodes"));
+
+  if(TYPEOF(nodes) != VECSXP)
+  {
+    errorcall(R_NilValue, "cannot find nodes in cgraph object environment");
+  }
+
+  return nodes;
+}
+
+SEXP cg_find_values(SEXP graph)
+{
+  SEXP values = R_NilValue;
+
+  if(!is_cgraph(graph))
+  {
+    errorcall(R_NilValue, "invalid cgraph object provided");
+  }
+
+  values = findVarInFrame(graph, install("values"));
+
+  if(!isEnvironment(values))
+  {
+    errorcall(R_NilValue, "cannot find values in cgraph object environment");
+  }
+
+  return values;
+}
+
 SEXP cg_gen_name(SEXP type, SEXP graph)
 {
   char name[32];
 
   int count = 0;
 
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   if(!isNumber(type))
   {
@@ -120,7 +180,7 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
 
 int cg_node_id(SEXP name, SEXP graph)
 {
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   for(int i = LENGTH(nodes) - 1; i >= 0; i--)
   {
@@ -137,7 +197,7 @@ int cg_node_id(SEXP name, SEXP graph)
 
 int cg_node_exists(SEXP name, SEXP graph)
 {
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   for(int i = 0; i < LENGTH(nodes); i++)
   {
@@ -207,7 +267,7 @@ SEXP cg_node(SEXP name, SEXP type, SEXP graph)
 
     case CGOPR :
       setAttrib(node, install("type"), ScalarInteger(CGOPR));
-      setAttrib(node, install("call"), allocVector(EXPRSXP, 1));
+      setAttrib(node, install("call"), allocVector(EXPRSXP, 0));
       setAttrib(node, install("grads"), allocVector(VECSXP, 0));
       setAttrib(node, install("parents"), allocVector(INTSXP, 0));
       setAttrib(node, install("childeren"), allocVector(INTSXP, 0));
@@ -226,7 +286,7 @@ SEXP cg_node(SEXP name, SEXP type, SEXP graph)
 
 void cg_add_node(SEXP node, SEXP graph)
 {
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   int n = LENGTH(nodes);
 
@@ -270,7 +330,7 @@ SEXP cg_add_constant(SEXP value, SEXP name, SEXP graph)
       value = coerceVector(value, REALSXP);
     }
 
-    SEXP values = findVar(install("values"), graph);
+    SEXP values = cg_find_values(graph);
 
     defineVar(install(CHAR(asChar(node))), value, values);
   }
@@ -298,7 +358,7 @@ SEXP cg_add_input(SEXP value, SEXP name, SEXP graph)
       value = coerceVector(value, REALSXP);
     }
 
-    SEXP values = findVar(install("values"), graph);
+    SEXP values = cg_find_values(graph);
 
     defineVar(install(CHAR(asChar(node))), value, values);
   }
@@ -326,7 +386,7 @@ SEXP cg_add_parameter(SEXP value, SEXP name, SEXP graph)
       value = coerceVector(value, REALSXP);
     }
 
-    SEXP values = findVar(install("values"), graph);
+    SEXP values = cg_find_values(graph);
 
     defineVar(install(CHAR(asChar(node))), value, values);
   }
@@ -340,9 +400,9 @@ SEXP cg_add_parameter(SEXP value, SEXP name, SEXP graph)
 
 SEXP cg_get_parms(SEXP graph)
 {
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
-  SEXP values = findVar(install("values"), graph);
+  SEXP values = cg_find_values(graph);
 
   int n = LENGTH(nodes), l = 0;
 
@@ -409,7 +469,7 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
 
 SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
 {
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   SEXP node = PROTECT(cg_node(name, ScalarInteger(CGOPR), graph));
 
@@ -522,7 +582,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
 SEXP cg_traverse_graph(SEXP name, SEXP graph)
 {
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   int l = 0, n = LENGTH(nodes), visited[n];
 
@@ -598,7 +658,7 @@ SEXP cg_traverse_graph(SEXP name, SEXP graph)
 
 void cg_forward(SEXP ids, SEXP values, SEXP graph)
 {
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   for(int i = 0; i < LENGTH(ids); i++)
   {
@@ -667,7 +727,7 @@ void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 {
   int n = LENGTH(ids);
 
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   SEXP grad_env = PROTECT(NewEnv(values));
 
@@ -757,7 +817,7 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
   SEXP ids = PROTECT(cg_traverse_graph(name, graph));
 
-  SET_ENCLOS(values, findVar(install("values"), graph));
+  SET_ENCLOS(values, cg_find_values(graph));
 
   cg_forward(ids, values, graph);
 
@@ -782,7 +842,7 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
 
   SEXP ids = PROTECT(cg_traverse_graph(name, graph));
 
-  SET_ENCLOS(values, findVar(install("values"), graph));
+  SET_ENCLOS(values, cg_find_values(graph));
 
   cg_backward(ids, index, values, grads, graph);
 
@@ -793,7 +853,7 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
 
 SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP graph)
 {
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   if(!isString(x) || asChar(x) == R_BlankString)
   {
@@ -838,7 +898,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
     errorcall(R_NilValue, "y cannot be an operation node");
   }
 
-  SET_ENCLOS(values, findVar(install("values"), graph));
+  SET_ENCLOS(values, cg_find_values(graph));
 
   cg_forward(ids, values, graph);
 
@@ -880,7 +940,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
 SEXP cg_adj_mat(SEXP graph)
 {
-  SEXP nodes = findVar(install("nodes"), graph);
+  SEXP nodes = cg_find_nodes(graph);
 
   int n = LENGTH(nodes);
 
