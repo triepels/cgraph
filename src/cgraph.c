@@ -413,7 +413,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
   if(!isEnvironment(binding))
   {
-    errorcall(R_NilValue, "binding must be a named list or environment");
+    errorcall(R_NilValue, "binding must be an environment");
   }
 
   SEXP vars = R_lsInternal3(binding, TRUE, FALSE);
@@ -740,7 +740,7 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
   if(!isEnvironment(values))
   {
-    errorcall(R_NilValue, "values must be a named list or environment");
+    errorcall(R_NilValue, "values must be an environment");
   }
 
   SEXP ids = PROTECT(cg_traverse_graph(name, graph));
@@ -765,7 +765,7 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
 
   if(!isEnvironment(values))
   {
-    errorcall(R_NilValue, "values must be a named list or environment");
+    errorcall(R_NilValue, "values must be an environment");
   }
 
   SEXP ids = PROTECT(cg_traverse_graph(name, graph));
@@ -795,7 +795,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   if(!isEnvironment(values))
   {
-    errorcall(R_NilValue, "values must be a named list or environment");
+    errorcall(R_NilValue, "values must be an environment");
   }
 
   if(!isNumber(index))
