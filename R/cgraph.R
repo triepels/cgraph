@@ -140,7 +140,7 @@ cgraph$public_methods$name <- function(type = 3)
 #'
 #' @details \code{$const(value, name)}
 #'
-#' @param value numeric scalar or array, value of the node.
+#' @param value numeric vector or array, value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @note Constants are ignored when differentiating a graph. The intended use of constants is that they are given a fixed value. However, it is still possible to change the value of constants when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
@@ -169,7 +169,7 @@ cgraph$public_methods$const <- function(value, name)
   }
   else
   {
-    if(!(is.numeric(value) | is.array(value)))
+    if(!is.numeric(value))
     {
       stop("value must be a numeric vector or array", call. = FALSE)
     }
@@ -196,7 +196,7 @@ cgraph$public_methods$const <- function(value, name)
 #'
 #' @details \code{$input(value, name)}
 #'
-#' @param value numeric scalar or array, value of the node.
+#' @param value numeric vector or array, value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @note The intended use of inputs is that they are not given a fixed value but behave as placeholders. Values can be supplied for inputs when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
@@ -225,7 +225,7 @@ cgraph$public_methods$input <- function(value, name)
   }
   else
   {
-    if(!(is.numeric(value) | is.array(value)))
+    if(!is.numeric(value))
     {
       stop("value must be a numeric vector or array", call. = FALSE)
     }
@@ -252,7 +252,7 @@ cgraph$public_methods$input <- function(value, name)
 #'
 #' @details \code{$parm(value, name)}
 #'
-#' @param value numeric scalar or array, value of the node.
+#' @param value numeric vector or array, value of the node.
 #' @param name character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
 #'
 #' @note Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
@@ -281,7 +281,7 @@ cgraph$public_methods$parm <- function(value, name)
   }
   else
   {
-    if(!(is.numeric(value) | is.array(value)))
+    if(!is.numeric(value))
     {
       stop("value must be a numeric vector or array", call. = FALSE)
     }
@@ -373,7 +373,7 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #'
 #' @details \code{$opr(call, grads, binding, name)}
 #'
-#' @param call call or symbol, operation performed by the node.
+#' @param call call or symbol, operation performed by the node. Must evaluate to a numeric vector or array.
 #' @param grads named list of calls, gradients of the input nodes that are consumed by the operation in argument \code{call}. Is ignored when the elements are not named.
 #' @param binding named list or environment, binds the variables used in the calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.
 #' @param name character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.
