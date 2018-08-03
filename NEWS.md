@@ -9,11 +9,14 @@ Features:
 
 * Added hyperbolic trigonometry operations `sinh` and `cosh`.
 * Added inverse hyperbolic trigonometry operations `asinh` and `acosh`.
+* The elements of member `nodes` of a `cgraph` object are now named for more convenient access to the symbols of the nodes in a graph.
 * You can now instruct the active graph to no longer automatically evaluate a node when it is printed to the console by setting `options(cg.autorun = FALSE)`.
 
 Bug Fixes:
 
-* Improved error handling in many methods of a `cgraph` object.
+* Function `const`, `input`, and `parm` now raise an error when the object supplied to `value` is not a numeric vector or array.
+* Function `run` now checks whether each node evaluates to a numeric vector or array.
+* Function `gradients` now checks whether the node supplied to argument `name` evaluates to a numeric vector or array. 
 * Function `address` now correctly shows the address of an pointer on Windows machines.
 * Function `get.parms` and `add.parms` now correctly call the underlying C-code.
 
