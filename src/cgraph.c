@@ -236,7 +236,7 @@ SEXP cg_add_placeholder(SEXP value, SEXP name, SEXP type, SEXP graph)
   {
     if(!isNumeric(value))
     {
-      errorcall(R_NilValue, "node '%s' does not evaluate to a numeric vector or array", CHAR(asChar(name)));
+      errorcall(R_NilValue, "node '%s' does not evaluate to a numeric vector or array", CHAR(asChar(node)));
     }
 
     if(isInteger(value))
@@ -381,14 +381,14 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
     for(int i = 0; i < g; i++)
     {
-      SEXP name = STRING_ELT(names, i);
+      SEXP grad_name = STRING_ELT(names, i);
 
-      if(name == R_BlankString)
+      if(grad_name == R_BlankString)
       {
         errorcall(R_NilValue, "empty name provided for gradient at index %d", i + 1);
       }
 
-      SEXP symbol = findVarInFrame(binding, install(CHAR(name)));
+      SEXP symbol = findVarInFrame(binding, install(CHAR(grad_name)));
 
       if(symbol == R_UnboundValue)
       {
