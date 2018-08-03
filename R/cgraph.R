@@ -335,8 +335,6 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #' @author Ron Triepels
 cgraph$public_methods$opr <- function(call, grads, binding, name)
 {
-  type <- as.integer(3)
-
   if(is.list(binding))
   {
     binding <- list2env(binding)
