@@ -279,7 +279,7 @@ int cg_node_id(SEXP name, SEXP graph)
     }
   }
 
-  errorcall(R_NilValue, "cannot find node '%s'", CHAR(name));
+  errorcall(R_NilValue, "cannot find node '%s'", CHAR(asChar(name)));
 }
 
 int cg_node_exists(SEXP name, SEXP graph)
