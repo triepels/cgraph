@@ -192,12 +192,12 @@ void cg_add_value(SEXP node, SEXP value, SEXP graph)
     errorcall(R_NilValue, "node '%s' does not evaluate to a numeric vector or array", CHAR(asChar(node)));
   }
 
+  SEXP values = cg_find_values(graph);
+
   if(isInteger(value))
   {
     value = coerceVector(value, REALSXP);
   }
-
-  SEXP values = cg_find_values(graph);
 
   defineVar(install(CHAR(asChar(node))), value, values);
 }
