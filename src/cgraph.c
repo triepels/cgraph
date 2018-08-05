@@ -894,8 +894,6 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
 SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
 {
-  SEXP grads = PROTECT(NewEnv(R_NilValue));
-
   if(!isString(name) || asChar(name) == R_BlankString)
   {
     errorcall(R_NilValue, "name must be a non-blank character scalar");
@@ -905,6 +903,8 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
   {
     errorcall(R_NilValue, "values must be an environment");
   }
+
+  SEXP grads = PROTECT(NewEnv(R_NilValue));
 
   SEXP ids = PROTECT(cg_traverse_graph(name, graph));
 
