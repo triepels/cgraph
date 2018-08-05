@@ -226,7 +226,7 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
 
     if(!isInteger(node_type))
     {
-      errorcall(R_NilValue, "node '%s' has invalid type", CHAR(asChar(node)));
+      errorcall(R_NilValue, "node '%s' has an invalid type", CHAR(asChar(node)));
     }
 
     if(asInteger(node_type) == asInteger(type))
@@ -444,7 +444,7 @@ SEXP cg_get_parms(SEXP graph)
 
     if(!isInteger(node_type))
     {
-      errorcall(R_NilValue, "node '%s' has invalid type", CHAR(asChar(node)));
+      errorcall(R_NilValue, "node '%s' has an invalid type", CHAR(asChar(node)));
     }
 
     if(asInteger(node_type) == CGPRM)
@@ -709,7 +709,7 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
     if(!isInteger(node_type))
     {
-      errorcall(R_NilValue, "node '%s' has invalid type", CHAR(asChar(node)));
+      errorcall(R_NilValue, "node '%s' has an invalid type", CHAR(asChar(node)));
     }
 
     SEXP value = R_NilValue;
@@ -720,7 +720,7 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
       if(!(isLanguage(call) || isSymbol(call)))
       {
-        errorcall(R_NilValue, "node '%s' has invalid call", CHAR(asChar(node)));
+        errorcall(R_NilValue, "node '%s' has an invalid call", CHAR(asChar(node)));
       }
 
       value = PROTECT(eval(call, values));
@@ -800,7 +800,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
       if(!isInteger(node_type))
       {
-        errorcall(R_NilValue, "node '%s' has invalid type", CHAR(asChar(node)));
+        errorcall(R_NilValue, "node '%s' has an invalid type", CHAR(asChar(node)));
       }
 
       if(asInteger(node_type) == CGPRM || asInteger(node_type) == CGOPR)
@@ -966,12 +966,12 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   if(!isInteger(x_node_type))
   {
-    errorcall(R_NilValue, "node '%s' has invalid type", CHAR(asChar(x)));
+    errorcall(R_NilValue, "node '%s' has an invalid type", CHAR(asChar(x)));
   }
 
   if(!isInteger(y_node_type))
   {
-    errorcall(R_NilValue, "node '%s' has invalid type", CHAR(asChar(y)));
+    errorcall(R_NilValue, "node '%s' has an invalid type", CHAR(asChar(y)));
   }
 
   if(asInteger(x_node_type) != CGOPR)
