@@ -497,8 +497,6 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
 
 SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
 {
-  SEXP nodes = cg_find_nodes(graph);
-
   SEXP node = PROTECT(cg_node(name, ScalarInteger(CGOPR), graph));
 
   if(!(isLanguage(call) || isSymbol(call)))
@@ -533,6 +531,8 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
   }
 
   SEXP parents = R_NilValue;
+
+  SEXP nodes = cg_find_nodes(graph);
 
   SEXP names = getAttrib(grads, R_NamesSymbol);
 
