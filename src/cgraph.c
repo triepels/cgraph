@@ -894,7 +894,7 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
   return values;
 }
 
-SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
+SEXP cg_gradients(SEXP name, SEXP values, SEXP index, SEXP graph)
 {
   if(!isString(name) || asChar(name) == R_BlankString)
   {
