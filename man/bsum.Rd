@@ -18,7 +18,7 @@ numeric vector, a \code{n}-dimensional vector, where the 1th element of the vect
 Divide a vector or array in consecutive blocks of \code{n} elements and sum the elements at each position in these blocks.
 }
 \note{
-If \code{x} is an array and \code{n} is equal to the size of \code{x}'s first dimension, then \link[cgraph]{bsum} behaves as \link[base]{rowSums}.
+If \code{x} is an array and \code{n} is equal to the size of \code{x}'s first dimension, then \link[cgraph]{bsum} behaves as \link[base:colSums]{rowSums}.
 }
 \author{
 Ron Triepels
