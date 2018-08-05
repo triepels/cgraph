@@ -748,11 +748,6 @@ static SEXP cg_root_grad(SEXP value, SEXP index)
     errorcall(R_NilValue, "cannot differentiate an object of type %s", type2char(TYPEOF(grad)));
   }
 
-  if(!isNumber(index))
-  {
-    errorcall(R_NilValue, "index must be a numeric scalar");
-  }
-
   int n = LENGTH(value);
 
   if(asInteger(index) < 1 || asInteger(index) > n)
@@ -832,17 +827,24 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
           if(child_value != R_UnboundValue)
           {
+            SEXP node_grad_call = VECTOR_ELT(node_grads, j);
+
+            if(!(isLanguage(node_grad_call) || isSymbol(node_grad_call)))
+            {
+              errorcall(R_NilValue, "node '%s' has an invalid gradient at index %d", CHAR(asChar(node)), j + 1);
+            }
+
             defineVar(install("grad"), child_value, grad_env);
 
             if(isNull(node_grad))
             {
-              node_grad = eval(VECTOR_ELT(node_grads, j), grad_env);
+              node_grad = eval(node_grad_call, grad_env);
 
               node_grad = PROTECT(duplicate(node_grad));
             }
             else
             {
-              SEXP child_grad = PROTECT(eval(VECTOR_ELT(node_grads, j), grad_env));
+              SEXP child_grad = PROTECT(eval(node_grad_call, grad_env));
 
               for(int k = 0; k < LENGTH(child_grad); k++)
               {
@@ -897,6 +899,11 @@ SEXP cg_gradients(SEXP name, SEXP index, SEXP values, SEXP graph)
   if(!isString(name) || asChar(name) == R_BlankString)
   {
     errorcall(R_NilValue, "name must be a non-blank character scalar");
+  }
+
+  if(!isNumber(index))
+  {
+    errorcall(R_NilValue, "index must be a numeric scalar");
   }
 
   if(!isEnvironment(values))
