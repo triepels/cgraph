@@ -202,9 +202,6 @@ void cg_add_value(SEXP node, SEXP value, SEXP graph)
   defineVar(install(CHAR(asChar(node))), value, values);
 }
 
-/*
- * Ignores incorrct node attributes.
- */
 SEXP cg_gen_name(SEXP type, SEXP graph)
 {
   char name[32];
