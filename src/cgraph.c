@@ -154,14 +154,14 @@ SEXP cg_find_values(SEXP graph)
 
 void cg_add_node(SEXP node, SEXP graph)
 {
+  SEXP nodes = cg_find_nodes(graph);
+
+  SEXP names = getAttrib(nodes, R_NamesSymbol);
+
   if(!is_cg_node(node))
   {
     errorcall(R_NilValue, "invalid cg.node object provided");
   }
-
-  SEXP nodes = cg_find_nodes(graph);
-
-  SEXP names = getAttrib(nodes, R_NamesSymbol);
 
   int n = LENGTH(nodes);
 
@@ -182,6 +182,8 @@ void cg_add_node(SEXP node, SEXP graph)
 
 void cg_add_value(SEXP node, SEXP value, SEXP graph)
 {
+  SEXP values = cg_find_values(graph);
+
   if(!is_cg_node(node))
   {
     errorcall(R_NilValue, "invalid cg.node object provided");
@@ -208,12 +210,12 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
 
   int count = 0;
 
+  SEXP nodes = cg_find_nodes(graph);
+
   if(!isNumber(type))
   {
     errorcall(R_NilValue, "type must be a numeric scalar");
   }
-
-  SEXP nodes = cg_find_nodes(graph);
 
   for(int i = 0; i < LENGTH(nodes); i++)
   {
@@ -259,12 +261,12 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
 
 int cg_node_id(SEXP name, SEXP graph)
 {
+  SEXP nodes = cg_find_nodes(graph);
+
   if(!(isString(name) || isSymbol(name)))
   {
     errorcall(R_NilValue, "name must be a character scalar or symbol");
   }
-
-  SEXP nodes = cg_find_nodes(graph);
 
   for(int i = LENGTH(nodes) - 1; i >= 0; i--)
   {
@@ -281,12 +283,12 @@ int cg_node_id(SEXP name, SEXP graph)
 
 int cg_node_exists(SEXP name, SEXP graph)
 {
+  SEXP nodes = cg_find_nodes(graph);
+
   if(!(isString(name) || isSymbol(name)))
   {
     errorcall(R_NilValue, "name must be a character scalar or symbol");
   }
-
-  SEXP nodes = cg_find_nodes(graph);
 
   for(int i = 0; i < LENGTH(nodes); i++)
   {
@@ -497,6 +499,10 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
 
 SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
 {
+  SEXP nodes = cg_find_nodes(graph);
+
+  SEXP node = PROTECT(cg_node(name, ScalarInteger(CGOPR), graph));
+
   if(!(isLanguage(call) || isSymbol(call)))
   {
     errorcall(R_NilValue, "call must be a call or symbol");
@@ -511,10 +517,6 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
   {
     errorcall(R_NilValue, "binding must be an environment");
   }
-
-  SEXP nodes = cg_find_nodes(graph);
-
-  SEXP node = PROTECT(cg_node(name, ScalarInteger(CGOPR), graph));
 
   SEXP vars = R_lsInternal3(binding, TRUE, FALSE);
 
@@ -930,6 +932,8 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   double epsx;
 
+  SEXP nodes = cg_find_nodes(graph);
+
   if(!isString(x) || asChar(x) == R_BlankString)
   {
     errorcall(R_NilValue, "x must be a non-blank character scalar");
@@ -957,8 +961,6 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   indx = asInteger(index);
   epsx = asReal(eps);
-
-  SEXP nodes = cg_find_nodes(graph);
 
   SEXP ids = PROTECT(cg_traverse_graph(x, graph));
 
