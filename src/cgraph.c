@@ -901,14 +901,14 @@ SEXP cg_gradients(SEXP name, SEXP values, SEXP index, SEXP graph)
     errorcall(R_NilValue, "name must be a non-blank character scalar");
   }
 
-  if(!isNumber(index))
-  {
-    errorcall(R_NilValue, "index must be a numeric scalar");
-  }
-
   if(!isEnvironment(values))
   {
     errorcall(R_NilValue, "values must be an environment");
+  }
+
+  if(!isNumber(index))
+  {
+    errorcall(R_NilValue, "index must be a numeric scalar");
   }
 
   SEXP grads = PROTECT(NewEnv(R_NilValue));
