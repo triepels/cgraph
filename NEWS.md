@@ -17,8 +17,8 @@ Bug Fixes:
 * Improved error handling. Functions now raise an error when an invalid object is provided instead of trying to coerce the object to a valid object.
 * Function `run` now checks whether each node evaluates to a numeric vector or array.
 * Function `gradients` now checks whether the node supplied to argument `name` evaluates to a numeric vector or array. 
-* Function `address` now correctly shows the address of an `cgraph` object on Windows machines.
-* Function `get.parms` and `add.parms` now correctly call the underlying C-API.
+* Function `address` now correctly shows the address of an pointer on Windows machines.
+* Function `get.parms` and `add.parms` now correctly call the underlying C-code.
 
 cgraph 1.0.1
 ----------------------------------------------------------------
@@ -35,7 +35,7 @@ Documentation:
 
 Bug Fixes:
 
-* Function `address` now correctly calls the underlying C-API. 
+* Function `address` now correctly calls the underlying C-code. 
 
 cgraph 1.0.0
 ----------------------------------------------------------------
