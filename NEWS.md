@@ -1,4 +1,4 @@
-cgraph 1.0.2
+cgraph 2.0.0
 ----------------------------------------------------------------
 
 Comments:
@@ -14,7 +14,7 @@ Features:
 
 Bug Fixes:
 
-* Function `const`, `input`, and `parm` now raise an error when the object supplied to `value` is not a numeric vector or array.
+* Improved error handling. Functions now raise an error when an invalid object is provided instead of trying to coerce the object to a valid object.
 * Function `run` now checks whether each node evaluates to a numeric vector or array.
 * Function `gradients` now checks whether the node supplied to argument `name` evaluates to a numeric vector or array. 
 * Function `address` now correctly shows the address of an pointer on Windows machines.
