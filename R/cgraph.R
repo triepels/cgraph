@@ -465,7 +465,7 @@ cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
     values <- list2env(values)
   }
 
-  .Call("cg_gradients", name, index, values, self, PACKAGE = "cgraph")
+  .Call("cg_gradients", name, values, index, self, PACKAGE = "cgraph")
 }
 
 #' Approximate Gradients
