@@ -359,7 +359,7 @@ SEXP cg_node(SEXP name, SEXP type, SEXP graph)
 
     case CGOPR :
       setAttrib(node, install("type"), ScalarInteger(CGOPR));
-      setAttrib(node, install("call"), allocVector(EXPRSXP, 0));
+      setAttrib(node, install("call"), R_NilValue);
       setAttrib(node, install("grads"), allocVector(VECSXP, 0));
       setAttrib(node, install("parents"), allocVector(INTSXP, 0));
       setAttrib(node, install("childeren"), allocVector(INTSXP, 0));
