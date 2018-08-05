@@ -1042,12 +1042,14 @@ SEXP cg_adj_mat(SEXP graph)
 
     SEXP childeren = getAttrib(node, install("childeren"));
 
-    if(isInteger(childeren))
+    if(!isInteger(childeren))
     {
-      for (int j = 0; j < LENGTH(childeren); j++)
-      {
-        INTEGER(mat)[i + n * (INTEGER(childeren)[j] - 1)] = 1;
-      }
+      errorcall(R_NilValue, "node '%s' has invalid childeren", CHAR(asChar(node)));
+    }
+
+    for(int j = 0; j < LENGTH(childeren); j++)
+    {
+      INTEGER(mat)[i + n * (INTEGER(childeren)[j] - 1)] = 1;
     }
 
     SET_STRING_ELT(names, i, asChar(node));
