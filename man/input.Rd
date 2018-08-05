@@ -7,7 +7,7 @@
 input(value, name)
 }
 \arguments{
-\item{value}{numeric vector or array, value of the node.}
+\item{value}{numeric vector or array, value of the node (optional).}
 
 \item{name}{character scalar or symbol, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
