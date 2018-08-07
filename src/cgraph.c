@@ -116,7 +116,7 @@ int is_cg_node(SEXP x)
   return TRUE;
 }
 
-SEXP cg_find_nodes(SEXP graph)
+static SEXP cg_find_nodes(SEXP graph)
 {
   if(!is_cgraph(graph))
   {
@@ -135,7 +135,7 @@ SEXP cg_find_nodes(SEXP graph)
   return nodes;
 }
 
-SEXP cg_find_values(SEXP graph)
+static SEXP cg_find_values(SEXP graph)
 {
   if(!is_cgraph(graph))
   {
@@ -152,7 +152,7 @@ SEXP cg_find_values(SEXP graph)
   return values;
 }
 
-void cg_add_node(SEXP node, SEXP graph)
+static void cg_add_node(SEXP node, SEXP graph)
 {
   SEXP nodes = cg_find_nodes(graph);
 
@@ -180,7 +180,7 @@ void cg_add_node(SEXP node, SEXP graph)
   UNPROTECT(2);
 }
 
-void cg_add_value(SEXP node, SEXP value, SEXP graph)
+static void cg_add_value(SEXP node, SEXP value, SEXP graph)
 {
   SEXP values = cg_find_values(graph);
 
@@ -301,7 +301,7 @@ int cg_node_exists(SEXP name, SEXP graph)
   return FALSE;
 }
 
-SEXP cg_node(SEXP name, SEXP type, SEXP graph)
+static SEXP cg_node(SEXP name, SEXP type, SEXP graph)
 {
   SEXP node = R_NilValue;
 
