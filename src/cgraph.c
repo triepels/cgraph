@@ -730,6 +730,11 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
     }
     else
     {
+      if(!is_cg_node(node))
+      {
+        Rf_errorcall(R_NilValue, "node '%s' is not a valid cg.node object");
+      }
+
       value = Rf_eval(Rf_install(CHAR(Rf_asChar(node))), values);
     }
 
