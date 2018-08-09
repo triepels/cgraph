@@ -14,10 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <inttypes.h>
+#define R_NO_REMAP
 
 #include <R.h>
 #include <Rinternals.h>
+
+#include <inttypes.h>
 
 SEXP address(SEXP graph)
 {
@@ -25,7 +27,7 @@ SEXP address(SEXP graph)
 
   sprintf(address, "0x%" PRIxPTR, (uintptr_t)graph);
 
-  return(mkString(address));
+  return(Rf_mkString(address));
 }
 
 SEXP bsum(SEXP x, SEXP n)
@@ -36,9 +38,9 @@ SEXP bsum(SEXP x, SEXP n)
 
   nx = INTEGER(n)[0];
 
-  SEXP y = PROTECT(allocVector(REALSXP, nx));
+  SEXP y = PROTECT(Rf_allocVector(REALSXP, nx));
 
-  x = coerceVector(x, REALSXP);
+  x = Rf_coerceVector(x, REALSXP);
 
   px = REAL(x);
   py = REAL(y);
