@@ -4,7 +4,7 @@
 \alias{cg.opr}
 \title{Add Operation}
 \arguments{
-\item{call}{call or symbol, operation performed by the node. Must evaluate to a numeric vector or array.}
+\item{call}{call, operation performed by the node. Must evaluate to a numeric vector or array.}
 
 \item{grads}{named list of calls, gradients of the input nodes that are consumed by the operation in argument \code{call}. Is ignored when the elements are not named.}
 
