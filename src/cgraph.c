@@ -572,7 +572,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
       SEXP parent = VECTOR_ELT(nodes, INTEGER(parents)[i] - 1);
 
 
-      /* Add gradient to parent node */
+      // Add gradient to parent node
       SEXP parent_grads = Rf_getAttrib(parent, Rf_install("grads"));
 
       if(TYPEOF(parent_grads) != VECSXP)
@@ -589,7 +589,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
       Rf_setAttrib(parent, Rf_install("grads"), parent_grads);
 
 
-      /* Add child to parent node */
+      // Add node as child to parent node
       SEXP parent_childeren = Rf_getAttrib(parent, Rf_install("childeren"));
 
       if(!Rf_isInteger(parent_childeren))
@@ -704,6 +704,11 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
   {
     SEXP node = VECTOR_ELT(nodes, INTEGER(ids)[i] - 1);
 
+    if(!is_cg_node(node))
+    {
+      Rf_errorcall(R_NilValue, "node '%s' is not a valid cg.node object", CHAR(Rf_asChar(node)));
+    }
+
     SEXP node_type = Rf_getAttrib(node, Rf_install("type"));
 
     if(!Rf_isInteger(node_type))
@@ -730,11 +735,6 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
     }
     else
     {
-      if(!is_cg_node(node))
-      {
-        Rf_errorcall(R_NilValue, "node '%s' is not a valid cg.node object");
-      }
-
       value = Rf_eval(Rf_install(CHAR(Rf_asChar(node))), values);
     }
 
@@ -785,6 +785,11 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
   {
     SEXP root = VECTOR_ELT(nodes, INTEGER(ids)[n - 1] - 1);
 
+    if(!is_cg_node(root))
+    {
+      Rf_errorcall(R_NilValue, "node '%s' is not a valid cg.node object", CHAR(Rf_asChar(root)));
+    }
+
     SEXP root_value = Rf_eval(Rf_install(CHAR(Rf_asChar(root))), values);
 
     SEXP root_grad = PROTECT(cg_root_grad(root_value, index));
@@ -794,6 +799,11 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
     for(int i = n - 2; i >= 0; i--)
     {
       SEXP node = VECTOR_ELT(nodes, INTEGER(ids)[i] - 1);
+
+      if(!is_cg_node(node))
+      {
+        Rf_errorcall(R_NilValue, "node '%s' is not a valid cg.node object", CHAR(Rf_asChar(node)));
+      }
 
       SEXP node_type = Rf_getAttrib(node, Rf_install("type"));
 
@@ -828,6 +838,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
         for(int j = 0; j < LENGTH(node_childeren); j++)
         {
+          // Notice: we already checked that child is a cg.node object.
           SEXP child = VECTOR_ELT(nodes, INTEGER(node_childeren)[j] - 1);
 
           SEXP child_value = Rf_findVarInFrame(grads, Rf_install(CHAR(Rf_asChar(child))));
