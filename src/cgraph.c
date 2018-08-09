@@ -16,15 +16,15 @@ limitations under the License.
 
 #define R_NO_REMAP
 
-#define CGCST 0
-#define CGIPT 1
-#define CGPRM 2
-#define CGOPR 3
-
 #include <R.h>
 #include <Rinternals.h>
 
 #include "stack.h"
+
+#define CGCST 0
+#define CGIPT 1
+#define CGPRM 2
+#define CGOPR 3
 
 static SEXP NewEnv(SEXP enclos)
 {
