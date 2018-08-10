@@ -44,7 +44,7 @@ SEXP bsum(SEXP x, SEXP n)
     Rf_errorcall(R_NilValue, "n must be a non-negative numerical scalar");
   }
 
-  if(Rf_asInteger(n) < 1)
+  if(Rf_asInteger(n) < 0)
   {
     Rf_errorcall(R_NilValue, "invalid block size");
   }
