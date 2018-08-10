@@ -229,14 +229,13 @@ SEXP cg_gen_name(SEXP type, SEXP graph)
 
     SEXP node_type = Rf_getAttrib(node, Rf_install("type"));
 
-    if(!Rf_isInteger(node_type))
+    // Note: we ignore invalid node types for efficiency reasons.
+    if(Rf_isInteger(node_type))
     {
-      Rf_errorcall(R_NilValue, "node '%s' has an invalid type", CHAR(Rf_asChar(node)));
-    }
-
-    if(Rf_asInteger(node_type) == Rf_asInteger(type))
-    {
-      count += 1;
+      if(Rf_asInteger(node_type) == Rf_asInteger(type))
+      {
+        count += 1;
+      }
     }
   }
 
@@ -453,6 +452,11 @@ SEXP cg_get_parms(SEXP graph)
   {
     SEXP node = VECTOR_ELT(nodes, i);
 
+    if(!is_cg_node(node))
+    {
+      Rf_errorcall(R_NilValue, "node '%s' is not a valid cg.node object", CHAR(Rf_asChar(node)));
+    }
+
     SEXP node_type = Rf_getAttrib(node, Rf_install("type"));
 
     if(!Rf_isInteger(node_type))
@@ -597,7 +601,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
       if(TYPEOF(parent_grads) != VECSXP)
       {
-        Rf_errorcall(R_NilValue, "node '%s' has invalid grads", CHAR(Rf_asChar(node)));
+        Rf_errorcall(R_NilValue, "node '%s' has invalid grads", CHAR(Rf_asChar(parent)));
       }
 
       int h = LENGTH(parent_grads);
@@ -614,7 +618,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
       if(!Rf_isInteger(parent_childeren))
       {
-        Rf_errorcall(R_NilValue, "node '%s' has invalid childeren", CHAR(Rf_asChar(node)));
+        Rf_errorcall(R_NilValue, "node '%s' has invalid childeren", CHAR(Rf_asChar(parent)));
       }
 
       int c = LENGTH(parent_childeren);
