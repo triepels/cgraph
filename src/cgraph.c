@@ -729,33 +729,6 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
   UNPROTECT(1);
 }
 
-static SEXP cg_root_grad(SEXP value, SEXP index)
-{
-  SEXP grad = PROTECT(Rf_duplicate(value));
-
-  if(!Rf_isNumber(grad))
-  {
-    Rf_errorcall(R_NilValue, "cannot differentiate an object of type %s", Rf_type2char(TYPEOF(grad)));
-  }
-
-  int n = LENGTH(value);
-
-  if(Rf_asInteger(index) < 1 || Rf_asInteger(index) > n)
-  {
-    Rf_errorcall(R_NilValue, "invalid index provided");
-  }
-
-  grad = Rf_coerceVector(grad, REALSXP);
-
-  memset(REAL(grad), 0, n * sizeof(double));
-
-  REAL(grad)[Rf_asInteger(index) - 1] = 1;
-
-  UNPROTECT(1);
-
-  return grad;
-}
-
 static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 {
   int n = LENGTH(ids);
@@ -775,7 +748,28 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
     SEXP root_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(root))), values));
 
-    SEXP root_grad = PROTECT(cg_root_grad(root_value, index));
+    SEXP root_grad = PROTECT(Rf_duplicate(root_value));
+
+    if(!Rf_isNumber(root_grad))
+    {
+      Rf_errorcall(R_NilValue, "cannot differentiate an object of type %s", Rf_type2char(TYPEOF(root_grad)));
+    }
+
+    if(Rf_isInteger(root_grad))
+    {
+      root_grad = Rf_coerceVector(root_grad, REALSXP);
+    }
+
+    int m = LENGTH(root_grad);
+
+    if(Rf_asInteger(index) < 1 || Rf_asInteger(index) > m)
+    {
+      Rf_errorcall(R_NilValue, "invalid index provided");
+    }
+
+    memset(REAL(root_grad), 0, m * sizeof(double));
+
+    REAL(root_grad)[Rf_asInteger(index) - 1] = 1;
 
     Rf_defineVar(Rf_install(CHAR(Rf_asChar(root))), root_grad, grads);
 
