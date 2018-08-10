@@ -839,9 +839,11 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
             if(Rf_isNull(node_grad))
             {
-              node_grad = Rf_eval(node_grad_call, grad_env);
+              //node_grad = Rf_eval(node_grad_call, grad_env);
 
-              node_grad = PROTECT(Rf_duplicate(node_grad));
+              //node_grad = PROTECT(Rf_duplicate(node_grad));
+
+              node_grad = PROTECT(Rf_eval(node_grad_call, grad_env));
             }
             else
             {
@@ -861,10 +863,12 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
         Rf_defineVar(Rf_install(CHAR(Rf_asChar(node))), node_grad, grads);
 
-        if(!Rf_isNull(node_grad))
-        {
-          UNPROTECT(1);
-        }
+        //if(!Rf_isNull(node_grad))
+        //{
+        //  UNPROTECT(1);
+        //}
+
+        UNPROTECT(1);
       }
     }
 
