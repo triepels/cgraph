@@ -22,21 +22,21 @@ limitations under the License.
 
 #include "stack.h"
 
-stack stack_init(int maxSize)
+stack stack_init(int size)
 {
   int *data;
 
   stack s;
 
-  data = malloc(maxSize * sizeof(int));
+  data = malloc(size * sizeof(int));
 
   if(data == NULL)
   {
-    error("insufficient memory to allocate stack of %d elements", maxSize);
+    Rf_errorcall(R_NilValue, "insufficient memory to allocate stack of %d elements", size);
   }
 
   s.top = -1;
-  s.maxSize = maxSize;
+  s.size = size;
   s.data = data;
 
   return s;
@@ -47,7 +47,7 @@ void stack_destroy(stack *s)
   free(s->data);
 
   s->top = -1;
-  s->maxSize = 0;
+  s->size = 0;
   s->data = NULL;
 }
 
@@ -58,21 +58,21 @@ int stack_is_empty(stack *s)
 
 int stack_is_full(stack *s)
 {
-  return s->top >= s->maxSize - 1;
+  return s->top >= s->size - 1;
 }
 
 void stack_push(stack *s, int x)
 {
   if(stack_is_full(s))
   {
-    s->data = realloc(s->data, 2 * s->maxSize * sizeof(int));
+    s->data = realloc(s->data, 2 * s->size * sizeof(int));
 
     if(s->data == NULL)
     {
-      error("insufficient memory to reallocate stack of %d elements", 2 * s->maxSize);
+      Rf_errorcall(R_NilValue, "insufficient memory to reallocate stack of %d elements", 2 * s->size);
     }
 
-    s->maxSize *= 2;
+    s->size *= 2;
   }
 
   s->data[++s->top] = x;
@@ -82,7 +82,7 @@ int stack_peek(stack *s)
 {
   if(stack_is_empty(s))
   {
-    error("stack is empty");
+    Rf_errorcall(R_NilValue, "stack is empty");
   }
 
   return s->data[s->top];
@@ -92,7 +92,7 @@ void stack_remove(stack *s)
 {
   if(stack_is_empty(s))
   {
-    error("stack is empty");
+    Rf_errorcall(R_NilValue, "stack is empty");
   }
 
   s->top--;
@@ -102,7 +102,7 @@ int stack_pop(stack *s)
 {
   if(stack_is_empty(s))
   {
-    error("stack is empty");
+    Rf_errorcall(R_NilValue, "stack is empty");
   }
 
   return s->data[s->top--];
