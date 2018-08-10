@@ -523,7 +523,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
   }
   else
   {
-    int n = LENGTH(nodes), g = LENGTH(names);
+    int g = LENGTH(names);
 
     parents = PROTECT(Rf_allocVector(INTSXP, g));
 
@@ -547,6 +547,8 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
       UNPROTECT(1);
     }
+
+    int n = LENGTH(nodes);
 
     for(int i = 0; i < g; i++)
     {
