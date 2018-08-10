@@ -32,11 +32,19 @@ SEXP address(SEXP x)
 
 SEXP bsum(SEXP x, SEXP n)
 {
-  int k = LENGTH(x), j = 0, nx;
-
   double * px, * py;
 
-  nx = INTEGER(n)[0];
+  if(!Rf_isNumeric(x))
+  {
+    Rf_errorcall(R_NilValue, "x must be a numerical vector or array");
+  }
+
+  if(!Rf_isNumeric(n))
+  {
+    Rf_errorcall(R_NilValue, "n must be a numerical scalar");
+  }
+
+  int nx = Rf_asInteger(n), k = LENGTH(x), j = 0;
 
   SEXP y = PROTECT(Rf_allocVector(REALSXP, nx));
 

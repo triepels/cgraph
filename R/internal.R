@@ -42,7 +42,5 @@ address <- function(x)
 #' @keywords internal
 bsum <- function(x, n = 1)
 {
-  n <- as.integer(n)
-
   .Call("bsum", x, n, PACKAGE = "cgraph")
 }
