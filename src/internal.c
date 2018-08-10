@@ -21,11 +21,11 @@ limitations under the License.
 
 #include <inttypes.h>
 
-SEXP address(SEXP graph)
+SEXP address(SEXP x)
 {
   char address[32];
 
-  sprintf(address, "0x%" PRIxPTR, (uintptr_t)graph);
+  sprintf(address, "0x%" PRIxPTR, (uintptr_t)x);
 
   return(Rf_mkString(address));
 }
