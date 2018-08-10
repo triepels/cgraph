@@ -4,7 +4,7 @@ cgraph 2.0.1
 Bug Fixes:
 
 * Fixed several protection bugs in the C-API thanks to `rchk`.
-* Function `name` no longer generates a name that indicates the type of a node for performance reasons. Instead, it simply generates a name by `node[n]` where `[n]` evaluates to the number of nodes that have been added to the graph.
+* Function `name` no longer generates a name that indicates the type of a node for performance reasons. Instead, it simply generates a name by 'node[n]' where '[n]' evaluates to the number of nodes that have been added to the graph.
 
 cgraph 2.0.0
 ----------------------------------------------------------------
