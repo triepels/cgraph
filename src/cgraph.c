@@ -521,9 +521,9 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 {
   SEXP node = PROTECT(cg_node(name, Rf_ScalarInteger(CGOPR), graph));
 
-  if(!Rf_isLanguage(call))
+  if(!(Rf_isLanguage(call) || Rf_isSymbol(call)))
   {
-    Rf_errorcall(R_NilValue, "call must be a call");
+    Rf_errorcall(R_NilValue, "call must be a call or symbol");
   }
 
   if(TYPEOF(grads) != VECSXP)
@@ -746,7 +746,7 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
     {
       SEXP call = Rf_getAttrib(node, Rf_install("call"));
 
-      if(!Rf_isLanguage(call))
+      if(!(Rf_isLanguage(call) || Rf_isSymbol(call)))
       {
         Rf_errorcall(R_NilValue, "node '%s' has an invalid call", CHAR(Rf_asChar(node)));
       }
@@ -873,7 +873,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
           {
             SEXP node_grad_call = VECTOR_ELT(node_grads, j);
 
-            if(!Rf_isLanguage(node_grad_call))
+            if(!(Rf_isLanguage(node_grad_call) || Rf_isSymbol(node_grad_call)))
             {
               Rf_errorcall(R_NilValue, "node '%s' has an invalid gradient at index %d", CHAR(Rf_asChar(node)), j + 1);
             }
