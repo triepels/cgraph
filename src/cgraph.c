@@ -928,10 +928,6 @@ SEXP cg_gradients(SEXP name, SEXP values, SEXP index, SEXP graph)
 
 SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP graph)
 {
-  int indx;
-
-  double epsx;
-
   SEXP nodes = PROTECT(cg_find_nodes(graph));
 
   if(!Rf_isString(x) || Rf_asChar(x) == R_BlankString)
@@ -958,9 +954,6 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
   {
     Rf_errorcall(R_NilValue, "eps must be a numeric scalar");
   }
-
-  indx = Rf_asInteger(index);
-  epsx = Rf_asReal(eps);
 
   SEXP ids = PROTECT(cg_traverse_graph(x, graph));
 
@@ -997,7 +990,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
   SEXP x_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values));
   SEXP y_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(y_node))), values));
 
-  if(indx < 1 || indx > LENGTH(x_value))
+  if(Rf_asInteger(index) < 1 || Rf_asInteger(index) > LENGTH(x_value))
   {
     Rf_errorcall(R_NilValue, "invalid index provided");
   }
@@ -1006,21 +999,21 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   for(int i = 0; i < LENGTH(grad); i++)
   {
-    REAL(y_value)[i] += epsx;
+    REAL(y_value)[i] += Rf_asReal(eps);
 
     cg_forward(ids, values, graph);
 
     SEXP x_value1 = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values));
 
-    REAL(y_value)[i] -= 2 * epsx;
+    REAL(y_value)[i] -= 2 * Rf_asReal(eps);
 
     cg_forward(ids, values, graph);
 
     SEXP x_value2 = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values));
 
-    REAL(grad)[i] = (REAL(x_value1)[indx - 1] - REAL(x_value2)[indx - 1]) / (2 * epsx);
+    REAL(grad)[i] = (REAL(x_value1)[Rf_asInteger(index) - 1] - REAL(x_value2)[Rf_asInteger(index) - 1]) / (2 * Rf_asReal(eps));
 
-    REAL(y_value)[i] += epsx;
+    REAL(y_value)[i] += Rf_asReal(eps);
 
     UNPROTECT(2);
   }
