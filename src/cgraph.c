@@ -210,56 +210,13 @@ static void cg_add_value(SEXP node, SEXP value, SEXP graph)
   UNPROTECT(1);
 }
 
-SEXP cg_gen_name(SEXP type, SEXP graph)
+SEXP cg_gen_name(SEXP graph)
 {
   char name[32];
 
-  int count = 0;
-
   SEXP nodes = PROTECT(cg_find_nodes(graph));
 
-  if(!Rf_isNumber(type))
-  {
-    Rf_errorcall(R_NilValue, "type must be a numeric scalar");
-  }
-
-  for(int i = 0; i < LENGTH(nodes); i++)
-  {
-    SEXP node = VECTOR_ELT(nodes, i);
-
-    SEXP node_type = Rf_getAttrib(node, Rf_install("type"));
-
-    // Note: we ignore invalid node types for efficiency reasons.
-    if(Rf_isInteger(node_type))
-    {
-      if(Rf_asInteger(node_type) == Rf_asInteger(type))
-      {
-        count += 1;
-      }
-    }
-  }
-
-  switch(Rf_asInteger(type))
-  {
-    case CGCST :
-      sprintf(name, "cst%d", count + 1);
-      break;
-
-    case CGIPT :
-      sprintf(name, "ipt%d", count + 1);
-      break;
-
-    case CGPRM :
-      sprintf(name, "prm%d", count + 1);
-      break;
-
-    case CGOPR :
-      sprintf(name, "opr%d", count + 1);
-      break;
-
-    default :
-      Rf_errorcall(R_NilValue, "invalid type provided");
-  }
+  sprintf(name, "node%d", LENGTH(nodes) + 1);
 
   UNPROTECT(1);
 
@@ -322,7 +279,7 @@ static SEXP cg_node(SEXP name, SEXP type, SEXP graph)
 
   if(Rf_isNull(name))
   {
-    node = PROTECT(cg_gen_name(type, graph));
+    node = PROTECT(cg_gen_name(graph));
   }
   else
   {

@@ -109,27 +109,25 @@ cgraph$public_methods$initialize <- function()
 #'
 #' Generate a default name for a node.
 #'
-#' @details \code{$name(type = 3)}
-#'
-#' @param type numeric scalar, type of the node. Should be either: 0 (constant), 1 (input), 2 (parameter), or 3 (operation). Defaults to 3 (operation).
+#' @details \code{$name()}
 #'
 #' @note The auto-generated name is not guaranteed to be unique.
 #'
 #' There is a wrapper function \link[cgraph]{name} that calls this method on the current active graph.
 #'
-#' @return symbol, auto-generated name for the node.
+#' @return character scalar, auto-generated name for the node.
 #'
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
 #'
-#' # Generate some names.
-#' x$name(0); x$name(1); x$name(2); x$name(3)
+#' # Generate a name.
+#' x$name()
 #'
 #' @name cg.name
 #' @author Ron Triepels
-cgraph$public_methods$name <- function(type = 3)
+cgraph$public_methods$name <- function()
 {
-  .Call("cg_gen_name", type, self, PACKAGE = "cgraph")
+  .Call("cg_gen_name", self, PACKAGE = "cgraph")
 }
 
 #' Add Constant
