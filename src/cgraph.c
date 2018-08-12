@@ -887,13 +887,17 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
     Rf_errorcall(R_NilValue, "values must be an environment");
   }
 
+  SEXP enclos = PROTECT(ENCLOS(values));
+
   SEXP ids = PROTECT(cg_traverse_graph(name, graph));
 
   SET_ENCLOS(values, cg_find_values(graph));
 
   cg_forward(ids, values, graph);
 
-  UNPROTECT(1);
+  SET_ENCLOS(values, enclos);
+
+  UNPROTECT(2);
 
   return values;
 }
@@ -917,13 +921,17 @@ SEXP cg_gradients(SEXP name, SEXP values, SEXP index, SEXP graph)
     Rf_errorcall(R_NilValue, "index must be a numeric scalar");
   }
 
+  SEXP enclos = PROTECT(ENCLOS(values));
+
   SEXP ids = PROTECT(cg_traverse_graph(name, graph));
 
   SET_ENCLOS(values, cg_find_values(graph));
 
   cg_backward(ids, index, values, grads, graph);
 
-  UNPROTECT(2);
+  SET_ENCLOS(values, enclos);
+
+  UNPROTECT(3);
 
   return grads;
 }
