@@ -347,7 +347,9 @@ static SEXP cg_node(SEXP name, SEXP type, SEXP graph)
 
 SEXP cg_add_constant(SEXP value, SEXP name, SEXP graph)
 {
-  SEXP node = PROTECT(cg_node(name, Rf_ScalarInteger(CGCST), graph));
+  SEXP type = PROTECT(Rf_ScalarInteger(CGCST));
+
+  SEXP node = PROTECT(cg_node(name, type, graph));
 
   if(!Rf_isNull(value))
   {
@@ -356,14 +358,16 @@ SEXP cg_add_constant(SEXP value, SEXP name, SEXP graph)
 
   cg_add_node(node, graph);
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 
   return node;
 }
 
 SEXP cg_add_input(SEXP value, SEXP name, SEXP graph)
 {
-  SEXP node = PROTECT(cg_node(name, Rf_ScalarInteger(CGIPT), graph));
+  SEXP type = PROTECT(Rf_ScalarInteger(CGIPT));
+
+  SEXP node = PROTECT(cg_node(name, type, graph));
 
   if(!Rf_isNull(value))
   {
@@ -372,14 +376,16 @@ SEXP cg_add_input(SEXP value, SEXP name, SEXP graph)
 
   cg_add_node(node, graph);
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 
   return node;
 }
 
 SEXP cg_add_parameter(SEXP value, SEXP name, SEXP graph)
 {
-  SEXP node = PROTECT(cg_node(name, Rf_ScalarInteger(CGPRM), graph));
+  SEXP type = PROTECT(Rf_ScalarInteger(CGPRM));
+
+  SEXP node = PROTECT(cg_node(name, type, graph));
 
   if(!Rf_isNull(value))
   {
@@ -388,7 +394,7 @@ SEXP cg_add_parameter(SEXP value, SEXP name, SEXP graph)
 
   cg_add_node(node, graph);
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 
   return node;
 }
@@ -476,7 +482,9 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
 
 SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
 {
-  SEXP node = PROTECT(cg_node(name, Rf_ScalarInteger(CGOPR), graph));
+  SEXP type = PROTECT(Rf_ScalarInteger(CGOPR));
+
+  SEXP node = PROTECT(cg_node(name, type, graph));
 
   if(!(Rf_isLanguage(call) || Rf_isSymbol(call)))
   {
@@ -598,7 +606,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
   cg_add_node(node, graph);
 
-  UNPROTECT(4);
+  UNPROTECT(5);
 
   return node;
 }
