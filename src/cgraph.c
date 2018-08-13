@@ -513,7 +513,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
   SEXP parents = R_NilValue;
 
-  SEXP nodes = cg_find_nodes(graph);
+  SEXP nodes = PROTECT(cg_find_nodes(graph));
 
   SEXP names = Rf_getAttrib(grads, R_NamesSymbol);
 
@@ -598,7 +598,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
   cg_add_node(node, graph);
 
-  UNPROTECT(3);
+  UNPROTECT(4);
 
   return node;
 }
