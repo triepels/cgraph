@@ -3,8 +3,9 @@ cgraph 2.0.1
 
 Bug fixes:
 
+* Function `run` and `gradients` no longer change the parent environment of argument `values` when the argument is an environment.
+* Function `name` no longer generates a name that indicates the node type for performance reasons. Instead, it simply generates the name 'node' followed by the number of nodes that have been added to the graph.
 * Fixed several protection bugs in the C-API thanks to `rchk`.
-* Function `name` no longer generates a name that indicates the type of a node for performance reasons. Instead, it simply generates a name by 'node[n]' where [n] evaluates to the number of nodes that have been added to the graph.
 
 cgraph 2.0.0
 ----------------------------------------------------------------
