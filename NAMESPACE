@@ -45,8 +45,6 @@ export(cg.min)
 export(cg.pmax)
 export(cg.pmin)
 
-# Export array methods
-
 # Export cgraph object
 export(cgraph)
 
@@ -125,5 +123,3 @@ S3method(atan, cg.node)
 S3method(asinh, cg.node)
 S3method(acosh, cg.node)
 S3method(atanh, cg.node)
-
-# Export fun functions
