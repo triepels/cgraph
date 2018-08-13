@@ -465,16 +465,20 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
 
   for(int i = 0; i < LENGTH(parms); i++)
   {
-    SEXP name = R_NilValue;
-
     SEXP value = VECTOR_ELT(parms, i);
 
-    if(!Rf_isNull(names))
+    if(Rf_isNull(names))
     {
-      name = Rf_ScalarString(STRING_ELT(names, i));
+      cg_add_parameter(value, R_NilValue, graph);
     }
+    else
+    {
+      SEXP name = PROTECT(Rf_ScalarString(STRING_ELT(names, i)));
 
-    cg_add_parameter(value, name, graph);
+      cg_add_parameter(value, name, graph);
+
+      UNPROTECT(1);
+    }
   }
 
   return R_NilValue;
