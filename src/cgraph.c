@@ -747,7 +747,7 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
     if(!Rf_isNumeric(value))
     {
-      Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array but a %s",
+      Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array (%s)",
                 CHAR(Rf_asChar(node)), Rf_type2char(TYPEOF(value)));
     }
 
@@ -862,7 +862,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
             if(!Rf_isNumeric(current_grad))
             {
-              Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array but a %s",
+              Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array (%s)",
                            CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(current_grad)));
             }
 
