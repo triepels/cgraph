@@ -306,36 +306,50 @@ static SEXP cg_node(SEXP name, SEXP type, SEXP graph)
     Rf_errorcall(R_NilValue, "type must be an numeric scalar");
   }
 
+  SEXP type_sym = Rf_install("type"), grads_sym = Rf_install("grads"), childeren_sym = Rf_install("childeren");
+
   switch(Rf_asInteger(type))
   {
     case CGCST :
-      Rf_setAttrib(node, Rf_install("type"), Rf_ScalarInteger(CGCST));
-      Rf_setAttrib(node, Rf_install("grads"), Rf_allocVector(VECSXP, 0));
-      Rf_setAttrib(node, Rf_install("childeren"), Rf_allocVector(INTSXP, 0));
-      break;
+    {
+      Rf_setAttrib(node, type_sym, Rf_ScalarInteger(CGCST));
+      Rf_setAttrib(node, grads_sym, Rf_allocVector(VECSXP, 0));
+      Rf_setAttrib(node, childeren_sym, Rf_allocVector(INTSXP, 0));
 
+      break;
+    }
     case CGIPT :
-      Rf_setAttrib(node, Rf_install("type"), Rf_ScalarInteger(CGIPT));
-      Rf_setAttrib(node, Rf_install("grads"), Rf_allocVector(VECSXP, 0));
-      Rf_setAttrib(node, Rf_install("childeren"), Rf_allocVector(INTSXP, 0));
-      break;
+    {
+      Rf_setAttrib(node, type_sym, Rf_ScalarInteger(CGIPT));
+      Rf_setAttrib(node, grads_sym, Rf_allocVector(VECSXP, 0));
+      Rf_setAttrib(node, childeren_sym, Rf_allocVector(INTSXP, 0));
 
+      break;
+    }
     case CGPRM :
-      Rf_setAttrib(node, Rf_install("type"), Rf_ScalarInteger(CGPRM));
-      Rf_setAttrib(node, Rf_install("grads"), Rf_allocVector(VECSXP, 0));
-      Rf_setAttrib(node, Rf_install("childeren"), Rf_allocVector(INTSXP, 0));
-      break;
+    {
+      Rf_setAttrib(node, type_sym, Rf_ScalarInteger(CGPRM));
+      Rf_setAttrib(node, grads_sym, Rf_allocVector(VECSXP, 0));
+      Rf_setAttrib(node, childeren_sym, Rf_allocVector(INTSXP, 0));
 
+      break;
+    }
     case CGOPR :
-      Rf_setAttrib(node, Rf_install("type"), Rf_ScalarInteger(CGOPR));
-      Rf_setAttrib(node, Rf_install("call"), R_NilValue);
-      Rf_setAttrib(node, Rf_install("grads"), Rf_allocVector(VECSXP, 0));
-      Rf_setAttrib(node, Rf_install("parents"), Rf_allocVector(INTSXP, 0));
-      Rf_setAttrib(node, Rf_install("childeren"), Rf_allocVector(INTSXP, 0));
-      break;
+    {
+      SEXP call_sym = Rf_install("call"), parents_sym = Rf_install("parents");
 
+      Rf_setAttrib(node, type_sym, Rf_ScalarInteger(CGOPR));
+      Rf_setAttrib(node, call_sym, R_NilValue);
+      Rf_setAttrib(node, grads_sym, Rf_allocVector(VECSXP, 0));
+      Rf_setAttrib(node, parents_sym, Rf_allocVector(INTSXP, 0));
+      Rf_setAttrib(node, childeren_sym, Rf_allocVector(INTSXP, 0));
+
+      break;
+    }
     default :
+    {
       Rf_errorcall(R_NilValue, "invalid type provided");
+    }
   }
 
   Rf_setAttrib(node, R_ClassSymbol, Rf_mkString("cg.node"));
