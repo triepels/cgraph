@@ -991,6 +991,8 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
     Rf_errorcall(R_NilValue, "eps must be a numeric scalar");
   }
 
+  SEXP enclos = PROTECT(ENCLOS(values));
+
   SEXP ids = PROTECT(cg_traverse_graph(x, graph));
 
   SEXP x_node = VECTOR_ELT(nodes, cg_node_id(x, graph) - 1);
@@ -1053,6 +1055,8 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
     UNPROTECT(2);
   }
+
+  SET_ENCLOS(values, enclos);
 
   UNPROTECT(5);
 
