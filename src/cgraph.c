@@ -1058,7 +1058,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   SET_ENCLOS(values, enclos);
 
-  UNPROTECT(5);
+  UNPROTECT(6);
 
   return grad;
 }
