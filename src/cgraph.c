@@ -876,7 +876,10 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
               PROTECT_WITH_INDEX(node_grad = Rf_eval(node_grad_call, child_grad_env), &ipy);
 
-              REPROTECT(node_grad = Rf_duplicate(node_grad), ipy);
+              if(Rf_isSymbol(node_grad_call))
+              {
+                REPROTECT(node_grad = Rf_duplicate(node_grad), ipy);
+              }
 
               if(!Rf_isNumeric(node_grad))
               {
