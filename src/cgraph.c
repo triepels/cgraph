@@ -782,16 +782,23 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
       Rf_errorcall(R_NilValue, "node '%s' is not a valid cg.node object", CHAR(Rf_asChar(root)));
     }
 
-    SEXP root_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(root))), values));
+    PROTECT_INDEX ipx;
 
-    SEXP root_grad = PROTECT(Rf_duplicate(root_value));
+    SEXP root_grad = R_NilValue;
+
+    PROTECT_WITH_INDEX(root_grad = Rf_eval(Rf_install(CHAR(Rf_asChar(root))), values), &ipx);
+
+    REPROTECT(root_grad = Rf_duplicate(root_grad), ipx);
 
     if(!Rf_isNumber(root_grad))
     {
       Rf_errorcall(R_NilValue, "cannot differentiate an object of type %s", Rf_type2char(TYPEOF(root_grad)));
     }
 
-    root_grad = PROTECT(Rf_coerceVector(root_grad, REALSXP));
+    if(Rf_isInteger(root_grad))
+    {
+      REPROTECT(root_grad = Rf_coerceVector(root_grad, REALSXP), ipx);
+    }
 
     int m = LENGTH(root_grad);
 
@@ -865,9 +872,11 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
             if(Rf_isNull(node_grad))
             {
-              node_grad = PROTECT(Rf_eval(node_grad_call, child_grad_env));
+              PROTECT_INDEX ipy;
 
-              node_grad = PROTECT(Rf_duplicate(node_grad));
+              PROTECT_WITH_INDEX(node_grad = Rf_eval(node_grad_call, child_grad_env), &ipy);
+
+              REPROTECT(node_grad = Rf_duplicate(node_grad), ipy);
 
               if(!Rf_isNumeric(node_grad))
               {
@@ -875,11 +884,18 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
                              CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(node_grad)));
               }
 
-              node_grad = PROTECT(Rf_coerceVector(node_grad, REALSXP));
+              if(Rf_isInteger(node_grad))
+              {
+                REPROTECT(node_grad = Rf_coerceVector(node_grad, REALSXP), ipy);
+              }
             }
             else
             {
-              SEXP current_grad = PROTECT(Rf_eval(node_grad_call, child_grad_env));
+              PROTECT_INDEX ipz;
+
+              SEXP current_grad = R_NilValue;
+
+              PROTECT_WITH_INDEX(current_grad = Rf_eval(node_grad_call, child_grad_env), &ipz);
 
               if(!Rf_isNumeric(current_grad))
               {
@@ -887,14 +903,17 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
                              CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(current_grad)));
               }
 
-              current_grad = PROTECT(Rf_coerceVector(current_grad, REALSXP));
+              if(Rf_isInteger(current_grad))
+              {
+                REPROTECT(current_grad = Rf_coerceVector(current_grad, REALSXP), ipz);
+              }
 
               for(int k = 0; k < LENGTH(current_grad); k++)
               {
                 REAL(node_grad)[k] += REAL(current_grad)[k];
               }
 
-              UNPROTECT(2);
+              UNPROTECT(1);
             }
           }
 
@@ -905,12 +924,12 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
         if(!Rf_isNull(node_grad))
         {
-          UNPROTECT(3);
+          UNPROTECT(1);
         }
       }
     }
 
-    UNPROTECT(3);
+    UNPROTECT(1);
   }
 
   UNPROTECT(2);
@@ -1012,7 +1031,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   SEXP x_node = VECTOR_ELT(nodes, cg_node_id(x, graph) - 1);
   SEXP y_node = VECTOR_ELT(nodes, cg_node_id(y, graph) - 1);
-
+/*
   SEXP x_node_type = Rf_getAttrib(x_node, Rf_install("type"));
   SEXP y_node_type = Rf_getAttrib(y_node, Rf_install("type"));
 
@@ -1035,13 +1054,19 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
   {
     Rf_errorcall(R_NilValue, "y cannot be an operation node");
   }
-
+*/
   SET_ENCLOS(values, cg_find_values(graph));
 
   cg_forward(ids, values, graph);
 
-  SEXP x_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values));
-  SEXP y_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(y_node))), values));
+  PROTECT_INDEX ipx;
+  PROTECT_INDEX ipy;
+
+  SEXP x_value = R_NilValue;
+  SEXP y_value = R_NilValue;
+
+  PROTECT_WITH_INDEX(x_value = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values), &ipx);
+  PROTECT_WITH_INDEX(y_value = Rf_eval(Rf_install(CHAR(Rf_asChar(y_node))), values), &ipy);
 
   if(!Rf_isNumeric(x_value))
   {
@@ -1055,8 +1080,15 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
                  CHAR(Rf_asChar(y_node)), Rf_type2char(TYPEOF(y_value)));
   }
 
-  x_value = PROTECT(Rf_coerceVector(x_value, REALSXP));
-  y_value = PROTECT(Rf_coerceVector(y_value, REALSXP));
+  if(Rf_isInteger(x_value))
+  {
+    REPROTECT(x_value = Rf_coerceVector(x_value, REALSXP), ipx);
+  }
+
+  if(Rf_isInteger(y_value))
+  {
+    REPROTECT(y_value = Rf_coerceVector(y_value, REALSXP), ipy);
+  }
 
   if(Rf_asInteger(index) < 1 || Rf_asInteger(index) > LENGTH(x_value))
   {
@@ -1067,32 +1099,44 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   for(int i = 0; i < LENGTH(grad); i++)
   {
+    PROTECT_INDEX ipx1;
+    PROTECT_INDEX ipx2;
+
+    SEXP x_value1 = R_NilValue;
+    SEXP x_value2 = R_NilValue;
+
     REAL(y_value)[i] += Rf_asReal(eps);
 
     cg_forward(ids, values, graph);
 
-    SEXP x_value1 = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values));
+    PROTECT_WITH_INDEX(x_value1 = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values), &ipx1);
 
-    x_value1 = PROTECT(Rf_coerceVector(x_value1, REALSXP));
+    if(Rf_isInteger(x_value1))
+    {
+      REPROTECT(x_value1 = Rf_coerceVector(x_value1, REALSXP), ipx1);
+    }
 
     REAL(y_value)[i] -= 2 * Rf_asReal(eps);
 
     cg_forward(ids, values, graph);
 
-    SEXP x_value2 = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values));
+    PROTECT_WITH_INDEX(x_value2 = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values), &ipx2);
 
-    x_value2 = PROTECT(Rf_coerceVector(x_value2, REALSXP));
+    if(Rf_isInteger(x_value2))
+    {
+      REPROTECT(x_value2 = Rf_coerceVector(x_value2, REALSXP), ipx2);
+    }
 
     REAL(grad)[i] = (REAL(x_value1)[Rf_asInteger(index) - 1] - REAL(x_value2)[Rf_asInteger(index) - 1]) / (2 * Rf_asReal(eps));
 
     REAL(y_value)[i] += Rf_asReal(eps);
 
-    UNPROTECT(4);
+    UNPROTECT(2);
   }
 
   SET_ENCLOS(values, enclos);
 
-  UNPROTECT(8);
+  UNPROTECT(6);
 
   return grad;
 }
