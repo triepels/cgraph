@@ -775,10 +775,6 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
   if(n > 0)
   {
-    int root_grad_index;
-
-    SEXP root_grad = R_NilValue;
-
     SEXP root = VECTOR_ELT(nodes, INTEGER(ids)[n - 1] - 1);
 
     if(!is_cg_node(root))
@@ -788,17 +784,14 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
     SEXP root_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(root))), values));
 
-    PROTECT_WITH_INDEX(root_grad = Rf_duplicate(root_value), &root_grad_index);
+    SEXP root_grad = PROTECT(Rf_duplicate(root_value));
 
     if(!Rf_isNumber(root_grad))
     {
       Rf_errorcall(R_NilValue, "cannot differentiate an object of type %s", Rf_type2char(TYPEOF(root_grad)));
     }
 
-    if(Rf_isInteger(root_grad))
-    {
-      REPROTECT(root_grad = Rf_coerceVector(root_grad, REALSXP), root_grad_index);
-    }
+    root_grad = PROTECT(Rf_coerceVector(root_grad, REALSXP));
 
     int m = LENGTH(root_grad);
 
@@ -851,7 +844,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
                     CHAR(Rf_asChar(node)), LENGTH(node_grads), LENGTH(node_childeren));
         }
 
-        SEXP node_grad = PROTECT(R_NilValue);
+        SEXP node_grad = R_NilValue;
 
         for(int j = 0; j < LENGTH(node_childeren); j++)
         {
@@ -861,10 +854,6 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
           if(child_grad != R_UnboundValue)
           {
-            int current_grad_index;
-
-            SEXP current_grad = R_NilValue;
-
             SEXP node_grad_call = VECTOR_ELT(node_grads, j);
 
             if(!(Rf_isLanguage(node_grad_call) || Rf_isSymbol(node_grad_call)))
@@ -874,34 +863,39 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
             Rf_defineVar(Rf_install("grad"), child_grad, child_grad_env);
 
-            PROTECT_WITH_INDEX(current_grad = Rf_eval(node_grad_call, child_grad_env), &current_grad_index);
-
-            REPROTECT(current_grad = Rf_duplicate(current_grad), current_grad_index);
-
-            if(!Rf_isNumeric(current_grad))
-            {
-              Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array (%s)",
-                           CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(current_grad)));
-            }
-
-            if(Rf_isInteger(current_grad))
-            {
-              REPROTECT(current_grad = Rf_coerceVector(current_grad, REALSXP), current_grad_index);
-            }
-
             if(Rf_isNull(node_grad))
             {
-              node_grad = current_grad;
+              node_grad = PROTECT(Rf_eval(node_grad_call, child_grad_env));
+
+              node_grad = PROTECT(Rf_duplicate(node_grad));
+
+              if(!Rf_isNumeric(node_grad))
+              {
+                Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array (%s)",
+                             CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(node_grad)));
+              }
+
+              node_grad = PROTECT(Rf_coerceVector(node_grad, REALSXP));
             }
             else
             {
+              SEXP current_grad = PROTECT(Rf_eval(node_grad_call, child_grad_env));
+
+              if(!Rf_isNumeric(current_grad))
+              {
+                Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array (%s)",
+                             CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(current_grad)));
+              }
+
+              current_grad = PROTECT(Rf_coerceVector(current_grad, REALSXP));
+
               for(int k = 0; k < LENGTH(current_grad); k++)
               {
                 REAL(node_grad)[k] += REAL(current_grad)[k];
               }
-            }
 
-            UNPROTECT(1);
+              UNPROTECT(2);
+            }
           }
 
           UNPROTECT(1);
@@ -909,11 +903,14 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
         Rf_defineVar(Rf_install(CHAR(Rf_asChar(node))), node_grad, grads);
 
-        UNPROTECT(1);
+        if(!Rf_isNull(node_grad))
+        {
+          UNPROTECT(3);
+        }
       }
     }
 
-    UNPROTECT(2);
+    UNPROTECT(3);
   }
 
   UNPROTECT(2);
