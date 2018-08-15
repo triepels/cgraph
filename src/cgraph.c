@@ -50,16 +50,22 @@ static SEXP NewEnv(SEXP enclos)
 
 SEXP cgraph(SEXP graph, SEXP values)
 {
+  int n = 0;
+
   SEXP nodes = PROTECT(Rf_allocVector(VECSXP, 0));
 
   if(Rf_isNull(graph) || !Rf_isEnvironment(graph))
   {
-    graph = NewEnv(R_EmptyEnv);
+    graph = PROTECT(NewEnv(R_EmptyEnv));
+
+    n++;
   }
 
   if(Rf_isNull(values) || !Rf_isEnvironment(values))
   {
-    values = NewEnv(R_BaseEnv);
+    values = PROTECT(NewEnv(R_BaseEnv));
+
+    n++;
   }
 
   Rf_setAttrib(nodes, R_NamesSymbol, Rf_allocVector(STRSXP, 0));
@@ -69,7 +75,7 @@ SEXP cgraph(SEXP graph, SEXP values)
 
   Rf_setAttrib(graph, R_ClassSymbol, Rf_mkString("cgraph"));
 
-  UNPROTECT(1);
+  UNPROTECT(n + 1);
 
   return graph;
 }
@@ -160,9 +166,15 @@ static SEXP cg_find_values(SEXP graph)
 
 static void cg_add_node(SEXP node, SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  PROTECT_INDEX ipx;
+  PROTECT_INDEX ipy;
 
-  SEXP names = Rf_getAttrib(nodes, R_NamesSymbol);
+  SEXP nodes = R_NilValue;
+  SEXP names = R_NilValue;
+
+  PROTECT_WITH_INDEX(nodes = cg_find_nodes(graph), &ipx);
+
+  PROTECT_WITH_INDEX(names = Rf_getAttrib(nodes, R_NamesSymbol), &ipy);
 
   if(!is_cg_node(node))
   {
@@ -171,9 +183,9 @@ static void cg_add_node(SEXP node, SEXP graph)
 
   int n = LENGTH(nodes);
 
-  nodes = PROTECT(Rf_lengthgets(nodes, n + 1));
+  REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), ipx);
 
-  names = PROTECT(Rf_lengthgets(names, n + 1));
+  REPROTECT(names = Rf_lengthgets(names, n + 1), ipy);
 
   SET_VECTOR_ELT(nodes, n, node);
 
@@ -183,7 +195,7 @@ static void cg_add_node(SEXP node, SEXP graph)
 
   Rf_setVar(Rf_install("nodes"), nodes, graph);
 
-  UNPROTECT(3);
+  UNPROTECT(2);
 }
 
 static void cg_add_value(SEXP node, SEXP value, SEXP graph)
@@ -899,6 +911,11 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
               SEXP current_grad = R_NilValue;
 
               PROTECT_WITH_INDEX(current_grad = Rf_eval(node_grad_call, child_grad_env), &ipz);
+
+              if(Rf_isSymbol(node_grad_call))
+              {
+                REPROTECT(current_grad = Rf_duplicate(current_grad), ipz);
+              }
 
               if(!Rf_isNumeric(current_grad))
               {
