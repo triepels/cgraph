@@ -538,7 +538,9 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
       Rf_errorcall(R_NilValue, "object '%s' in binding must be a character scalar", CHAR(var));
     }
 
-    Rf_setVar(Rf_install(CHAR(var)), Rf_coerceVector(value, SYMSXP), binding);
+    SEXP var_symbol = Rf_install(CHAR(var));
+
+    Rf_setVar(var_symbol, Rf_coerceVector(value, SYMSXP), binding);
 
     UNPROTECT(1);
   }
