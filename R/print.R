@@ -26,11 +26,11 @@ print.cg.node = function(x, ..., autorun = getOption("cg.autorun"))
     autorun = TRUE
   }
 
-  if(autorun)
+  if(!is.null(session$graph) & autorun)
   {
     tryCatch(
     {
-      val <- get(x, envir = run(x))
+      val <- get(x, envir = run(x, values = session$graph$values), inherits = FALSE)
     },
     error = function(e)
     {
@@ -38,19 +38,16 @@ print.cg.node = function(x, ..., autorun = getOption("cg.autorun"))
 
       warning(e)
     })
-  }
 
-  if(is.null(session$graph) | !autorun)
-  {
-    cat(sprintf("<cg.node: %s>\n", x))
-  }
-  else
-  {
     if(!is.null(val))
     {
       print(val); cat("\n")
     }
 
     cat(sprintf("<cg.node: %s> @ %s\n", x, address(session$graph)))
+  }
+  else
+  {
+    cat(sprintf("<cg.node: %s>\n", x))
   }
 }
