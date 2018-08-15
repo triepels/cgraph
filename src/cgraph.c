@@ -1043,30 +1043,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   SEXP x_node = VECTOR_ELT(nodes, cg_node_id(x, graph) - 1);
   SEXP y_node = VECTOR_ELT(nodes, cg_node_id(y, graph) - 1);
-/*
-  SEXP x_node_type = Rf_getAttrib(x_node, Rf_install("type"));
-  SEXP y_node_type = Rf_getAttrib(y_node, Rf_install("type"));
 
-  if(!Rf_isInteger(x_node_type))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has an invalid type", CHAR(Rf_asChar(x)));
-  }
-
-  if(!Rf_isInteger(y_node_type))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has an invalid type", CHAR(Rf_asChar(y)));
-  }
-
-  if(Rf_asInteger(x_node_type) != CGOPR)
-  {
-    Rf_errorcall(R_NilValue, "x must be an operation node");
-  }
-
-  if(Rf_asInteger(y_node_type) == CGOPR)
-  {
-    Rf_errorcall(R_NilValue, "y cannot be an operation node");
-  }
-*/
   if(values != graph_values)
   {
     SET_ENCLOS(values, graph_values);
@@ -1093,11 +1070,6 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
   {
     Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array (%s)",
                  CHAR(Rf_asChar(y_node)), Rf_type2char(TYPEOF(y_value)));
-  }
-
-  if(Rf_isInteger(x_value))
-  {
-    REPROTECT(x_value = Rf_coerceVector(x_value, REALSXP), ipx);
   }
 
   if(Rf_isInteger(y_value))
