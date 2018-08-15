@@ -874,6 +874,8 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
             PROTECT_WITH_INDEX(current_grad = Rf_eval(node_grad_call, child_grad_env), &current_grad_index);
 
+            REPROTECT(current_grad = Rf_duplicate(current_grad), current_grad_index);
+
             if(!Rf_isNumeric(current_grad))
             {
               Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array (%s)",
