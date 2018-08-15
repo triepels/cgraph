@@ -935,52 +935,52 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
   UNPROTECT(2);
 }
 
-SEXP cg_run(SEXP name, SEXP envir, SEXP graph)
+SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 {
-  SEXP values = PROTECT(cg_find_values(graph));
+  SEXP graph_values = PROTECT(cg_find_values(graph));
 
   if(!Rf_isString(name) || Rf_asChar(name) == R_BlankString)
   {
     Rf_errorcall(R_NilValue, "name must be a non-blank character scalar");
   }
 
-  if(!Rf_isEnvironment(envir))
+  if(!Rf_isEnvironment(values))
   {
-    Rf_errorcall(R_NilValue, "envir must be an environment");
+    Rf_errorcall(R_NilValue, "values must be an environment");
   }
 
-  SEXP enclos = PROTECT(ENCLOS(envir));
+  SEXP enclos = PROTECT(ENCLOS(values));
 
   SEXP ids = PROTECT(cg_traverse_graph(name, graph));
 
-  if(envir != values)
+  if(values != graph_values)
   {
-    SET_ENCLOS(envir, values);
+    SET_ENCLOS(values, graph_values);
   }
 
-  cg_forward(ids, envir, graph);
+  cg_forward(ids, values, graph);
 
-  SET_ENCLOS(envir, enclos);
+  SET_ENCLOS(values, enclos);
 
   UNPROTECT(3);
 
-  return envir;
+  return values;
 }
 
-SEXP cg_gradients(SEXP name, SEXP envir, SEXP index, SEXP graph)
+SEXP cg_gradients(SEXP name, SEXP values, SEXP index, SEXP graph)
 {
   SEXP grads = PROTECT(NewEnv(R_NilValue));
 
-  SEXP values = PROTECT(cg_find_values(graph));
+  SEXP graph_values = PROTECT(cg_find_values(graph));
 
   if(!Rf_isString(name) || Rf_asChar(name) == R_BlankString)
   {
     Rf_errorcall(R_NilValue, "name must be a non-blank character scalar");
   }
 
-  if(!Rf_isEnvironment(envir))
+  if(!Rf_isEnvironment(values))
   {
-    Rf_errorcall(R_NilValue, "envir must be an environment");
+    Rf_errorcall(R_NilValue, "values must be an environment");
   }
 
   if(!Rf_isNumber(index))
@@ -988,29 +988,29 @@ SEXP cg_gradients(SEXP name, SEXP envir, SEXP index, SEXP graph)
     Rf_errorcall(R_NilValue, "index must be a numeric scalar");
   }
 
-  SEXP enclos = PROTECT(ENCLOS(envir));
+  SEXP enclos = PROTECT(ENCLOS(values));
 
   SEXP ids = PROTECT(cg_traverse_graph(name, graph));
 
-  if(envir != values)
+  if(values != graph_values)
   {
-    SET_ENCLOS(envir, values);
+    SET_ENCLOS(values, graph_values);
   }
 
-  cg_backward(ids, index, envir, grads, graph);
+  cg_backward(ids, index, values, grads, graph);
 
-  SET_ENCLOS(envir, enclos);
+  SET_ENCLOS(values, enclos);
 
   UNPROTECT(4);
 
   return grads;
 }
 
-SEXP cg_approx_grad(SEXP x, SEXP y, SEXP envir, SEXP index, SEXP eps, SEXP graph)
+SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP graph)
 {
   SEXP nodes = PROTECT(cg_find_nodes(graph));
 
-  SEXP values = PROTECT(cg_find_values(graph));
+  SEXP graph_values = PROTECT(cg_find_values(graph));
 
   if(!Rf_isString(x) || Rf_asChar(x) == R_BlankString)
   {
@@ -1022,9 +1022,9 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP envir, SEXP index, SEXP eps, SEXP graph
     Rf_errorcall(R_NilValue, "y must be a non-blank character scalar");
   }
 
-  if(!Rf_isEnvironment(envir))
+  if(!Rf_isEnvironment(values))
   {
-    Rf_errorcall(R_NilValue, "envir must be an environment");
+    Rf_errorcall(R_NilValue, "values must be an environment");
   }
 
   if(!Rf_isNumber(index))
@@ -1037,7 +1037,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP envir, SEXP index, SEXP eps, SEXP graph
     Rf_errorcall(R_NilValue, "eps must be a numeric scalar");
   }
 
-  SEXP enclos = PROTECT(ENCLOS(envir));
+  SEXP enclos = PROTECT(ENCLOS(values));
 
   SEXP ids = PROTECT(cg_traverse_graph(x, graph));
 
@@ -1067,12 +1067,12 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP envir, SEXP index, SEXP eps, SEXP graph
     Rf_errorcall(R_NilValue, "y cannot be an operation node");
   }
 */
-  if(envir != values)
+  if(values != graph_values)
   {
-    SET_ENCLOS(envir, values);
+    SET_ENCLOS(values, graph_values);
   }
 
-  cg_forward(ids, envir, graph);
+  cg_forward(ids, values, graph);
 
   PROTECT_INDEX ipx;
   PROTECT_INDEX ipy;
@@ -1080,8 +1080,8 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP envir, SEXP index, SEXP eps, SEXP graph
   SEXP x_value = R_NilValue;
   SEXP y_value = R_NilValue;
 
-  PROTECT_WITH_INDEX(x_value = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), envir), &ipx);
-  PROTECT_WITH_INDEX(y_value = Rf_eval(Rf_install(CHAR(Rf_asChar(y_node))), envir), &ipy);
+  PROTECT_WITH_INDEX(x_value = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values), &ipx);
+  PROTECT_WITH_INDEX(y_value = Rf_eval(Rf_install(CHAR(Rf_asChar(y_node))), values), &ipy);
 
   if(!Rf_isNumeric(x_value))
   {
@@ -1122,9 +1122,9 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP envir, SEXP index, SEXP eps, SEXP graph
 
     REAL(y_value)[i] += Rf_asReal(eps);
 
-    cg_forward(ids, envir, graph);
+    cg_forward(ids, values, graph);
 
-    PROTECT_WITH_INDEX(x_value1 = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), envir), &ipx1);
+    PROTECT_WITH_INDEX(x_value1 = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values), &ipx1);
 
     if(Rf_isInteger(x_value1))
     {
@@ -1133,9 +1133,9 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP envir, SEXP index, SEXP eps, SEXP graph
 
     REAL(y_value)[i] -= 2 * Rf_asReal(eps);
 
-    cg_forward(ids, envir, graph);
+    cg_forward(ids, values, graph);
 
-    PROTECT_WITH_INDEX(x_value2 = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), envir), &ipx2);
+    PROTECT_WITH_INDEX(x_value2 = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values), &ipx2);
 
     if(Rf_isInteger(x_value2))
     {
@@ -1149,7 +1149,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP envir, SEXP index, SEXP eps, SEXP graph
     UNPROTECT(2);
   }
 
-  SET_ENCLOS(envir, enclos);
+  SET_ENCLOS(values, enclos);
 
   UNPROTECT(7);
 
