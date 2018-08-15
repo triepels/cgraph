@@ -53,7 +53,7 @@ SEXP bsum(SEXP x, SEXP n)
 
   SEXP y = PROTECT(Rf_allocVector(REALSXP, nx));
 
-  x = Rf_coerceVector(x, REALSXP);
+  x = PROTECT(Rf_coerceVector(x, REALSXP));
 
   px = REAL(x);
   py = REAL(y);
@@ -74,7 +74,7 @@ SEXP bsum(SEXP x, SEXP n)
     }
   }
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 
   return y;
 }
