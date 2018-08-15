@@ -1043,6 +1043,21 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
   SEXP x_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values));
   SEXP y_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(y_node))), values));
 
+  if(!Rf_isNumeric(x_value))
+  {
+    Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array (%s)",
+                 CHAR(Rf_asChar(x_node)), Rf_type2char(TYPEOF(x_value)));
+  }
+
+  if(!Rf_isNumeric(y_value))
+  {
+    Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array (%s)",
+                 CHAR(Rf_asChar(y_node)), Rf_type2char(TYPEOF(y_value)));
+  }
+
+  x_value = PROTECT(Rf_coerceVector(x_value, REALSXP));
+  y_value = PROTECT(Rf_coerceVector(y_value, REALSXP));
+
   if(Rf_asInteger(index) < 1 || Rf_asInteger(index) > LENGTH(x_value))
   {
     Rf_errorcall(R_NilValue, "invalid index provided");
@@ -1058,22 +1073,26 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
     SEXP x_value1 = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values));
 
+    x_value1 = PROTECT(Rf_coerceVector(x_value1, REALSXP));
+
     REAL(y_value)[i] -= 2 * Rf_asReal(eps);
 
     cg_forward(ids, values, graph);
 
     SEXP x_value2 = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values));
 
+    x_value2 = PROTECT(Rf_coerceVector(x_value2, REALSXP));
+
     REAL(grad)[i] = (REAL(x_value1)[Rf_asInteger(index) - 1] - REAL(x_value2)[Rf_asInteger(index) - 1]) / (2 * Rf_asReal(eps));
 
     REAL(y_value)[i] += Rf_asReal(eps);
 
-    UNPROTECT(2);
+    UNPROTECT(4);
   }
 
   SET_ENCLOS(values, enclos);
 
-  UNPROTECT(6);
+  UNPROTECT(8);
 
   return grad;
 }
