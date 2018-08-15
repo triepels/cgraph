@@ -48,10 +48,10 @@ print.cg.node = function(x, ..., autorun = getOption("cg.autorun"))
       print(value); cat("\n")
     }
 
-    cat(sprintf("<cg.node: %s> @ %s\n", x, address(session$graph)))
+    cat(sprintf("<cg.node: \"%s\"> @ %s\n", x, address(session$graph)))
   }
   else
   {
-    cat(sprintf("<cg.node: %s>\n", x))
+    cat(sprintf("<cg.node: \"%s\">\n", x))
   }
 }
