@@ -776,7 +776,11 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
     SEXP root_value = PROTECT(Rf_eval(Rf_install(CHAR(Rf_asChar(root))), values));
 
-    SEXP root_grad = PROTECT(Rf_duplicate(root_value));
+    int index_rg;
+
+    SEXP root_grad = R_NilValue;
+
+    PROTECT_WITH_INDEX(root_grad = Rf_duplicate(root_value), &index_rg);
 
     if(!Rf_isNumber(root_grad))
     {
@@ -785,7 +789,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
     if(Rf_isInteger(root_grad))
     {
-      root_grad = Rf_coerceVector(root_grad, REALSXP);
+      REPROTECT(root_grad = Rf_coerceVector(root_grad, REALSXP), index_rg);
     }
 
     int m = LENGTH(root_grad);
@@ -858,7 +862,11 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
               Rf_errorcall(R_NilValue, "node '%s' has an invalid gradient at index %d", CHAR(Rf_asChar(node)), j + 1);
             }
 
-            SEXP current_grad = PROTECT(Rf_eval(node_grad_call, child_grad_env));
+            int index_cg;
+
+            SEXP current_grad = R_NilValue;
+
+            PROTECT_WITH_INDEX(current_grad = Rf_eval(node_grad_call, child_grad_env), &index_cg);
 
             if(!Rf_isNumeric(current_grad))
             {
@@ -868,7 +876,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
             if(Rf_isInteger(current_grad))
             {
-              current_grad = Rf_coerceVector(current_grad, REALSXP);
+              REPROTECT(current_grad = Rf_coerceVector(current_grad, REALSXP), index_cg);
             }
 
             if(Rf_isNull(node_grad))
