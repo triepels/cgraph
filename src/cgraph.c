@@ -884,64 +884,53 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
             Rf_defineVar(Rf_install("grad"), child_grad, child_grad_env);
 
+            PROTECT_INDEX ipy;
+
+            SEXP current_grad = R_NilValue;
+
+            PROTECT_WITH_INDEX(current_grad = Rf_eval(node_grad_call, child_grad_env), &ipy);
+
+            if(!Rf_isNumeric(current_grad))
+            {
+              Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array (%s)",
+                            CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(current_grad)));
+            }
+
+            if(Rf_isInteger(current_grad))
+            {
+              REPROTECT(current_grad = Rf_coerceVector(current_grad, REALSXP), ipy);
+            }
+
             if(Rf_isNull(node_grad))
             {
-              PROTECT_INDEX ipy;
-
-              PROTECT_WITH_INDEX(node_grad = Rf_eval(node_grad_call, child_grad_env), &ipy);
-
               if(Rf_isSymbol(node_grad_call))
               {
-                REPROTECT(node_grad = Rf_duplicate(node_grad), ipy);
+                node_grad = PROTECT(Rf_duplicate(current_grad));
               }
-
-              if(!Rf_isNumeric(node_grad))
+              else
               {
-                Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array (%s)",
-                             CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(node_grad)));
-              }
-
-              if(Rf_isInteger(node_grad))
-              {
-                REPROTECT(node_grad = Rf_coerceVector(node_grad, REALSXP), ipy);
+                node_grad = PROTECT(current_grad);
               }
             }
             else
             {
-              PROTECT_INDEX ipz;
-
-              SEXP current_grad = R_NilValue;
-
-              PROTECT_WITH_INDEX(current_grad = Rf_eval(node_grad_call, child_grad_env), &ipz);
-
-              if(!Rf_isNumeric(current_grad))
-              {
-                Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array (%s)",
-                             CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(current_grad)));
-              }
-
-              if(Rf_isInteger(current_grad))
-              {
-                REPROTECT(current_grad = Rf_coerceVector(current_grad, REALSXP), ipz);
-              }
-
               for(int k = 0; k < LENGTH(current_grad); k++)
               {
                 REAL(node_grad)[k] += REAL(current_grad)[k];
               }
-
-              UNPROTECT(1);
             }
+
+            UNPROTECT_PTR(current_grad);
           }
 
-          UNPROTECT(1);
+          UNPROTECT_PTR(child_grad);
         }
 
         Rf_defineVar(Rf_install(CHAR(Rf_asChar(node))), node_grad, grads);
 
         if(!Rf_isNull(node_grad))
         {
-          UNPROTECT(1);
+          UNPROTECT_PTR(node_grad);
         }
       }
     }
