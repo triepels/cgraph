@@ -875,14 +875,14 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
           if(child_grad != R_UnboundValue)
           {
+            Rf_defineVar(Rf_install("grad"), child_grad, child_grad_env);
+
             SEXP node_grad_call = VECTOR_ELT(node_grads, j);
 
             if(!(Rf_isLanguage(node_grad_call) || Rf_isSymbol(node_grad_call)))
             {
               Rf_errorcall(R_NilValue, "node '%s' has an invalid gradient at index %d", CHAR(Rf_asChar(node)), j + 1);
             }
-
-            Rf_defineVar(Rf_install("grad"), child_grad, child_grad_env);
 
             PROTECT_INDEX ipy;
 
