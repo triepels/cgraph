@@ -209,7 +209,8 @@ static void cg_add_value(SEXP node, SEXP value, SEXP graph)
 
   if(!Rf_isNumeric(value))
   {
-    Rf_errorcall(R_NilValue, "node '%s' does not evaluate to a numeric vector or array", CHAR(Rf_asChar(node)));
+    Rf_errorcall(R_NilValue, "node '%s' does not evaluate to a numeric vector or array (%s)",
+                  CHAR(Rf_asChar(node)),  Rf_type2char(TYPEOF(value)));
   }
 
   if(Rf_isInteger(value))
