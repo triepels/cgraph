@@ -639,7 +639,9 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
     }
   }
 
-  Rf_setAttrib(node, Rf_install("call"), Rf_substitute(call, binding));
+  SEXP call_symbol = Rf_install("call");
+
+  Rf_setAttrib(node, call_symbol, Rf_substitute(call, binding));
   Rf_setAttrib(node, Rf_install("parents"), parents);
 
   cg_add_node(node, graph);
