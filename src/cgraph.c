@@ -166,11 +166,9 @@ static SEXP cg_find_values(SEXP graph)
 
 static void cg_add_node(SEXP node, SEXP graph)
 {
-  PROTECT_INDEX ipx;
-  PROTECT_INDEX ipy;
+  SEXP nodes, names;
 
-  SEXP nodes = R_NilValue;
-  SEXP names = R_NilValue;
+  PROTECT_INDEX ipx, ipy;
 
   PROTECT_WITH_INDEX(nodes = cg_find_nodes(graph), &ipx);
 
