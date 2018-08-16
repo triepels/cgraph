@@ -166,9 +166,9 @@ static SEXP cg_find_values(SEXP graph)
 
 static void cg_add_node(SEXP node, SEXP graph)
 {
-  SEXP nodes, names;
-
   PROTECT_INDEX ipx, ipy;
+
+  SEXP nodes = R_NilValue, names = R_NilValue;
 
   PROTECT_WITH_INDEX(nodes = cg_find_nodes(graph), &ipx);
 
@@ -597,11 +597,14 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
     for(int i = 0; i < g; i++)
     {
+      PROTECT_INDEX ipx, ipy;
+
       SEXP parent = VECTOR_ELT(nodes, INTEGER(parents)[i] - 1);
 
+      SEXP parent_grads = R_NilValue, parent_childeren = R_NilValue;
 
       // Add gradient to parent node
-      SEXP parent_grads = Rf_getAttrib(parent, Rf_install("grads"));
+      PROTECT_WITH_INDEX(parent_grads = Rf_getAttrib(parent, Rf_install("grads")), &ipx);
 
       if(TYPEOF(parent_grads) != VECSXP)
       {
@@ -610,15 +613,14 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
       int h = LENGTH(parent_grads);
 
-      parent_grads = PROTECT(Rf_lengthgets(parent_grads, h + 1));
+      REPROTECT(parent_grads = Rf_lengthgets(parent_grads, h + 1), ipx);
 
       SET_VECTOR_ELT(parent_grads, h, Rf_substitute(VECTOR_ELT(grads, i), binding));
 
       Rf_setAttrib(parent, Rf_install("grads"), parent_grads);
 
-
       // Add node as child to parent node
-      SEXP parent_childeren = Rf_getAttrib(parent, Rf_install("childeren"));
+      PROTECT_WITH_INDEX(parent_childeren = Rf_getAttrib(parent, Rf_install("childeren")), &ipy);
 
       if(!Rf_isInteger(parent_childeren))
       {
@@ -627,12 +629,11 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
 
       int c = LENGTH(parent_childeren);
 
-      parent_childeren = PROTECT(Rf_lengthgets(parent_childeren, c + 1));
+      REPROTECT(parent_childeren = Rf_lengthgets(parent_childeren, c + 1), ipy);
 
       INTEGER(parent_childeren)[c] = n + 1;
 
       Rf_setAttrib(parent, Rf_install("childeren"), parent_childeren);
-
 
       UNPROTECT(2);
     }
@@ -861,7 +862,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
         if(LENGTH(node_grads) != LENGTH(node_childeren))
         {
           Rf_errorcall(R_NilValue, "node '%s' has an unequal number of gradients (%d) and childeren (%d)",
-                    CHAR(Rf_asChar(node)), LENGTH(node_grads), LENGTH(node_childeren));
+                        CHAR(Rf_asChar(node)), LENGTH(node_grads), LENGTH(node_childeren));
         }
 
         SEXP node_grad = R_NilValue;
