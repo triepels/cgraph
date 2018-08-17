@@ -3,7 +3,11 @@ cgraph 2.0.2
 
 Bug fixes:
 
-* Fixed several protection bugs in the C-API thanks to `rchk`.
+* Nodes with a fixed value are now properly printed to the R console.
+* Function `approx.grad` no longer changes the parent environment of argument `values` when the argument is an environment.
+* Function `run`, `gradients`, and `approx.grad` no longer cause an infinite loop when the `values` member of a `cgraph` object is supplied to the `values` argument of the functions.
+* Fixed protection bug in function `gradients` that caused the R session to crash unexpectedly.
+* Function `approx.grad` now checks whether node `x` and `y` evaluate to a numeric vector or array.
 
 cgraph 2.0.1
 ----------------------------------------------------------------
