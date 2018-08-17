@@ -207,7 +207,7 @@ static void cg_add_value(SEXP node, SEXP value, SEXP graph)
 
   if(!Rf_isNumeric(value))
   {
-    Rf_errorcall(R_NilValue, "node '%s' does not evaluate to a numeric vector or array (%s)",
+    Rf_errorcall(R_NilValue, "node '%s' does not evaluate to a numeric vector or array but a '%s'",
                   CHAR(Rf_asChar(node)),  Rf_type2char(TYPEOF(value)));
   }
 
@@ -769,7 +769,7 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
     if(!Rf_isNumeric(value))
     {
-      Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array (%s)",
+      Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array but a '%s'",
                 CHAR(Rf_asChar(node)), Rf_type2char(TYPEOF(value)));
     }
 
@@ -892,7 +892,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
             if(!Rf_isNumeric(current_grad))
             {
-              Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array (%s)",
+              Rf_errorcall(R_NilValue, "the gradient of node '%s' at index %d does not evaluate to a numeric vector or array but a '%s'",
                             CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(current_grad)));
             }
 
@@ -1068,13 +1068,13 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
   if(!Rf_isNumeric(x_value))
   {
-    Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array (%s)",
+    Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array but a '%s'",
                  CHAR(Rf_asChar(x_node)), Rf_type2char(TYPEOF(x_value)));
   }
 
   if(!Rf_isNumeric(y_value))
   {
-    Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array (%s)",
+    Rf_errorcall(R_NilValue, "object '%s' does not evaluate to a numeric vector or array but a '%s'",
                  CHAR(Rf_asChar(y_node)), Rf_type2char(TYPEOF(y_value)));
   }
 
