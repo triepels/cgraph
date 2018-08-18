@@ -9,7 +9,7 @@ parm(value, name)
 \arguments{
 \item{value}{numeric vector or array, value of the node (optional).}
 
-\item{name}{character scalar or symbol, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
+\item{name}{character scalar, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
 \value{
 cg.node, parameter.
