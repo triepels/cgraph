@@ -1,9 +1,13 @@
 cgraph 2.0.2
 ----------------------------------------------------------------
 
+Documentation:
+
+* The documentation of function 'const', 'input', 'parm', and 'opr', now correctly states that the name of a node should be a character scalar and not a symbol.
+
 Bug fixes:
 
-* Nodes with a fixed value are now properly printed to the R console.
+* Nodes that are given a value upon creation are now properly printed to the R console.
 * Function `approx.grad` no longer changes the parent environment of argument `values` when the argument is an environment.
 * Function `run`, `gradients`, and `approx.grad` no longer cause an infinite loop when member `values` of a `cgraph` object is supplied to the `values` argument of the functions.
 * Fixed protection bug in function `gradients` which caused the R session to crash unexpectedly.
