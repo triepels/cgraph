@@ -56,8 +56,8 @@ c <- sin(a) + cos(b) - tan(a)
 # Evaluate c.
 values <- run(c)
 
-# Retrieve the value of c (the node is called 'opr7' in the graph).
-values$opr7
+# Retrieve the value of c (the node is called 'node7' in the graph).
+values$node7
 
 # Differentiate the graph with respect to c.
 grads <- gradients(c, values)
