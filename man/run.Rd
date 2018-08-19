@@ -32,7 +32,7 @@ a <- input(name = "a")
 # Square the input (i.e. b = a^2).
 b <- cg.pow(a, const(2), name = "b")
 
-# Evaluate the graph at a = 2.
+# Evaluate b at a = 2.
 values <- run(b, list(a = 2))
 
 # Retrieve the value of b.
