@@ -211,7 +211,7 @@ static void cg_add_value(SEXP node, SEXP value, SEXP graph)
                   CHAR(Rf_asChar(node)),  Rf_type2char(TYPEOF(value)));
   }
 
-  if(Rf_isInteger(value) || Rf_isLogical(value))
+  if(!Rf_isReal(value))
   {
     value = PROTECT(Rf_coerceVector(value, REALSXP));
 
@@ -809,7 +809,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
       Rf_errorcall(R_NilValue, "cannot differentiate an object of type '%s'", Rf_type2char(TYPEOF(root_grad)));
     }
 
-    if(Rf_isInteger(root_grad) || Rf_isLogical(root_grad))
+    if(!Rf_isReal(root_grad))
     {
       REPROTECT(root_grad = Rf_coerceVector(root_grad, REALSXP), ipx);
     }
@@ -896,7 +896,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
                             CHAR(Rf_asChar(node)), j + 1, Rf_type2char(TYPEOF(current_grad)));
             }
 
-            if(Rf_isInteger(current_grad) || Rf_isLogical(current_grad))
+            if(!Rf_isReal(current_grad))
             {
               REPROTECT(current_grad = Rf_coerceVector(current_grad, REALSXP), ipy);
             }
@@ -1078,7 +1078,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
                  CHAR(Rf_asChar(y_node)), Rf_type2char(TYPEOF(y_value)));
   }
 
-  if(Rf_isInteger(y_value) || Rf_isLogical(y_value))
+  if(!Rf_isReal(y_value))
   {
     REPROTECT(y_value = Rf_coerceVector(y_value, REALSXP), ipy);
   }
@@ -1104,7 +1104,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
     PROTECT_WITH_INDEX(x_value1 = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values), &ipx1);
 
-    if(Rf_isInteger(x_value1) || Rf_isLogical(x_value1))
+    if(!Rf_isReal(x_value1))
     {
       REPROTECT(x_value1 = Rf_coerceVector(x_value1, REALSXP), ipx1);
     }
@@ -1115,7 +1115,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
     PROTECT_WITH_INDEX(x_value2 = Rf_eval(Rf_install(CHAR(Rf_asChar(x_node))), values), &ipx2);
 
-    if(Rf_isInteger(x_value2) || Rf_isLogical(x_value2))
+    if(!Rf_isReal(x_value2))
     {
       REPROTECT(x_value2 = Rf_coerceVector(x_value2, REALSXP), ipx2);
     }
