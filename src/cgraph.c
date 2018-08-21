@@ -806,7 +806,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
     if(!Rf_isNumber(root_grad))
     {
-      Rf_errorcall(R_NilValue, "cannot differentiate an object of type %s", Rf_type2char(TYPEOF(root_grad)));
+      Rf_errorcall(R_NilValue, "cannot differentiate an object of type '%s'", Rf_type2char(TYPEOF(root_grad)));
     }
 
     if(Rf_isInteger(root_grad))
