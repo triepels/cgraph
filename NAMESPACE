@@ -51,6 +51,24 @@ export(cgraph)
 # Export cgraph methods
 S3method(plot, cgraph)
 
+# Export logical functions
+export(cg.not)
+export(cg.equal)
+export(cg.not.equal)
+export(cg.less)
+export(cg.greater)
+export(cg.less.equal)
+export(cg.greater.equal)
+
+# Export logical methods
+S3method(`!`, cg.node)
+S3method(`==`, cg.node)
+S3method(`!=`, cg.node)
+S3method(`<`, cg.node)
+S3method(`>`, cg.node)
+S3method(`<=`, cg.node)
+S3method(`>=`, cg.node)
+
 # Export math functions
 export(cg.add)
 export(cg.pos)
