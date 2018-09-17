@@ -1,3 +1,14 @@
+cgraph 2.0.3
+----------------------------------------------------------------
+
+Bug fixes:
+
+* Operators `cg.pmax` and `cg.pmin` are now correctly differentiated when arguments `x` and `y` are both arrays.
+
+Features:
+
+* Added logical operators `!`, `==`, `!=`, `<`, `>`, `<=`, and `>=`.
+
 cgraph 2.0.2
 ----------------------------------------------------------------
 
