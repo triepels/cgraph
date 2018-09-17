@@ -518,11 +518,11 @@ cg.pmax.grad.x <- function(x, y, grad)
 {
   if(is.array(x))
   {
-    grad * (x >= as.numeric(y))
+    grad * (x >= c(y))
   }
   else
   {
-    bsum(grad * (x >= as.numeric(y)), length(x))
+    bsum(grad * (x >= c(y)), length(x))
   }
 }
 
@@ -542,11 +542,11 @@ cg.pmax.grad.y <- function(x, y, grad)
 {
   if(is.array(y))
   {
-    grad * (x < as.numeric(y))
+    grad * (x < c(y))
   }
   else
   {
-    bsum(grad * (x < as.numeric(y)), length(y))
+    bsum(grad * (x < c(y)), length(y))
   }
 }
 
@@ -591,11 +591,11 @@ cg.pmin.grad.x <- function(x, y, grad)
 {
   if(is.array(x))
   {
-    grad * (x <= as.numeric(y))
+    grad * (x <= c(y))
   }
   else
   {
-    bsum(grad * (x <= as.numeric(y)), length(x))
+    bsum(grad * (x <= c(y)), length(x))
   }
 }
 
@@ -615,10 +615,10 @@ cg.pmin.grad.y <- function(x, y, grad)
 {
   if(is.array(y))
   {
-    grad * (x > as.numeric(y))
+    grad * (x > c(y))
   }
   else
   {
-    bsum(grad * (x > as.numeric(y)), length(y))
+    bsum(grad * (x > c(y)), length(y))
   }
 }
