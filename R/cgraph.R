@@ -75,8 +75,8 @@ NULL
 
 cgraph <- R6Class(
   classname = "cgraph",
-  class = T,
-  cloneable = T,
+  class = TRUE,
+  cloneable = TRUE,
   public = list(
     nodes = NULL,
     values = NULL
