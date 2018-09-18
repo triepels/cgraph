@@ -48,21 +48,15 @@ SEXP sigmoid(SEXP x, SEXP eps)
 
   int n = LENGTH(x);
 
-  double epsx = Rf_asReal(eps);
+  const double min = Rf_asReal(eps), max = 1 - min;
 
   for(int i = 0; i < n; i++)
   {
     py[i] = 1 / (1 + exp(-py[i]));
 
-    if(py[i] > 1 - epsx)
-    {
-      py[i] = 1 - epsx;
-    }
+    py[i] = py[i] < min ? min : py[i];
 
-    if(py[i] < epsx)
-    {
-      py[i] = epsx;
-    }
+    py[i] = py[i] > max ? max : py[i];
   }
 
   UNPROTECT(1);
