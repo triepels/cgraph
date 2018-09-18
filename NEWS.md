@@ -3,7 +3,7 @@ cgraph 2.0.3
 
 Comments:
 
-* Several operators have been marked as deprecated and will be removed in the next major release. Only special operators like `+` or `-` will have S3 overloaded methods.
+* Several operators have been marked as deprecated and will be removed in the next major release. Only operators like `+` or `-` will have S3 overloaded methods.
 
 Bug fixes:
 
