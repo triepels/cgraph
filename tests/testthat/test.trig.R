@@ -24,7 +24,7 @@ test_that("Scalar [+, -, sin, cos, tan]",
   b <- parm(1.2, name = "b")
 
   # Create test expression
-  c <- sin(a) + cos(b) - tan(a)
+  c <- cg.sin(a) + cg.cos(b) - cg.tan(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
@@ -44,7 +44,7 @@ test_that("Scalar [+, -, sinh, cosh, tanh]",
   b <- parm(1.2, name = "b")
 
   # Create test expression
-  c <- sinh(a) + cosh(b) - tanh(a)
+  c <- cg.sinh(a) + cg.cosh(b) - cg.tanh(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
@@ -64,7 +64,7 @@ test_that("Scalar [+, -, asin, acos, atan]",
   b <- parm(0.8, name = "b")
 
   # Create test expression
-  c <- asin(a) + acos(b) - atan(a)
+  c <- cg.asin(a) + cg.acos(b) - cg.atan(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
@@ -84,7 +84,7 @@ test_that("Scalar [+, -, asinh, acosh, atanh]",
   b <- parm(1.2, name = "b")
 
   # Create test expression
-  c <- asinh(a) + acosh(b) - atanh(a)
+  c <- cg.asinh(a) + cg.acosh(b) - cg.atanh(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))

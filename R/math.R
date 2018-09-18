@@ -445,6 +445,8 @@ cg.sqrt.grad <- function(x, grad)
 #' @author Ron Triepels
 sqrt.cg.node <- function(x)
 {
+  .Deprecated("cg.sqrt")
+
   cgraph::cg.sqrt(x)
 }
 
@@ -494,6 +496,8 @@ cg.exp.grad <- function(x, grad)
 #' @author Ron Triepels
 exp.cg.node <- function(x)
 {
+  .Deprecated("cg.exp")
+
   cgraph::cg.exp(x)
 }
 
@@ -578,6 +582,8 @@ cg.log2.grad <- function(x, grad)
 #' @author Ron Triepels
 log2.cg.node <- function(x)
 {
+  .Deprecated("cg.log2")
+
   cgraph::cg.log2(x)
 }
 
@@ -627,6 +633,8 @@ cg.log10.grad <- function(x, grad)
 #' @author Ron Triepels
 log10.cg.node <- function(x)
 {
+  .Deprecated("cg.log10")
+
   cgraph::cg.log10(x)
 }
 
@@ -676,5 +684,7 @@ cg.abs.grad <- function(x, grad)
 #' @author Ron Triepels
 abs.cg.node <- function(x)
 {
+  .Deprecated("cg.abs")
+
   cgraph::cg.abs(x)
 }

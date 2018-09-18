@@ -64,7 +64,7 @@ test_that("Scalar [+, ln, log2, log10, exp]",
   b <- parm(4, name = "b")
 
   # Create test expression
-  c <- cg.ln(a) + cg.log2(b) + log10(a) + cg.exp(b)
+  c <- cg.ln(a) + cg.log2(b) + cg.log10(a) + cg.exp(b)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
@@ -84,7 +84,7 @@ test_that("Scalar [-, /, abs]",
   b <- parm(4, name = "b")
 
   # Create test expression
-  c <- abs(-a / b)
+  c <- cg.abs(-a / b)
 
   # Calculate gradients
   grads <- gradients(c, run(c))

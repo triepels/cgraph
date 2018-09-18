@@ -58,6 +58,8 @@ cg.sin.grad <- function(x, grad)
 #' @author Ron Triepels
 sin.cg.node <- function(x)
 {
+  .Deprecated("cg.sin")
+
   cgraph::cg.sin(x)
 }
 
@@ -107,6 +109,8 @@ cg.cos.grad <- function(x, grad)
 #' @author Ron Triepels
 cos.cg.node <- function(x)
 {
+  .Deprecated("cg.cos")
+
   cgraph::cg.cos(x)
 }
 
@@ -156,6 +160,8 @@ cg.tan.grad <- function(x, grad)
 #' @author Ron Triepels
 tan.cg.node <- function(x)
 {
+  .Deprecated("cg.tan")
+
   cgraph::cg.tan(x)
 }
 
@@ -205,6 +211,8 @@ cg.sinh.grad <- function(x, grad)
 #' @author Ron Triepels
 sinh.cg.node <- function(x)
 {
+  .Deprecated("cg.sinh")
+
   cgraph::cg.sinh(x)
 }
 
@@ -254,6 +262,8 @@ cg.cosh.grad <- function(x, grad)
 #' @author Ron Triepels
 cosh.cg.node <- function(x)
 {
+  .Deprecated("cg.cosh")
+
   cgraph::cg.cosh(x)
 }
 
@@ -303,6 +313,8 @@ cg.tanh.grad <- function(y, grad)
 #' @author Ron Triepels
 tanh.cg.node <- function(x)
 {
+  .Deprecated("cg.tanh")
+
   cgraph::cg.tanh(x)
 }
 
@@ -352,6 +364,8 @@ cg.asin.grad <- function(x, grad)
 #' @author Ron Triepels
 asin.cg.node <- function(x)
 {
+  .Deprecated("cg.asin")
+
   cgraph::cg.asin(x)
 }
 
@@ -401,6 +415,8 @@ cg.acos.grad <- function(x, grad)
 #' @author Ron Triepels
 acos.cg.node <- function(x)
 {
+  .Deprecated("cg.acos")
+
   cgraph::cg.acos(x)
 }
 
@@ -450,6 +466,8 @@ cg.atan.grad <- function(x, grad)
 #' @author Ron Triepels
 atan.cg.node <- function(x)
 {
+  .Deprecated("cg.atan")
+
   cgraph::cg.atan(x)
 }
 
@@ -499,6 +517,8 @@ cg.asinh.grad <- function(x, grad)
 #' @author Ron Triepels
 asinh.cg.node <- function(x)
 {
+  .Deprecated("cg.asinh")
+
   cgraph::cg.asinh(x)
 }
 
@@ -548,6 +568,8 @@ cg.acosh.grad <- function(x, grad)
 #' @author Ron Triepels
 acosh.cg.node <- function(x)
 {
+  .Deprecated("cg.acosh")
+
   cgraph::cg.acosh(x)
 }
 
@@ -597,5 +619,7 @@ cg.atanh.grad <- function(x, grad)
 #' @author Ron Triepels
 atanh.cg.node <- function(x)
 {
+  .Deprecated("cg.atanh")
+
   cgraph::cg.atanh(x)
 }

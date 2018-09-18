@@ -69,6 +69,8 @@ cg.as.double.grad <- function(x, grad)
 #' @author Ron Triepels
 as.double.cg.node <- function(x, name = cgraph::name(), ...)
 {
+  .Deprecated("cg.as.double")
+
   cgraph::cg.as.double(x, name)
 }
 
@@ -150,6 +152,8 @@ cg.reshape.grad <- function(x, grad)
 #' @author Ron Triepels
 as.array.cg.node <- function(x, dim, name = cgraph::name(), ...)
 {
+  .Deprecated("cg.reshape")
+
   cgraph::cg.reshape(x, dim, name)
 }
 
@@ -183,5 +187,7 @@ cg.t <- function(x, name = cgraph::name())
 #' @author Ron Triepels
 t.cg.node <- function(x)
 {
+  .Deprecated("cg.t")
+
   cgraph::cg.t(x)
 }
