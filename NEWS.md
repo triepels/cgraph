@@ -1,8 +1,13 @@
 cgraph 2.0.3
 ----------------------------------------------------------------
 
+Comments:
+
+* Several operators have been marked as deprecated and will be removed in the next major release. Only special operators like `+` or `-` will have S3 overloaded methods.
+
 Bug fixes:
 
+* Operator `sigmoid` now correctly handles numerical underflow.
 * Operators `cg.pmax` and `cg.pmin` are now correctly differentiated when arguments `x` and `y` are both arrays.
 
 Features:

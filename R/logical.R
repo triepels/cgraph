@@ -12,7 +12,7 @@ cg.not <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
     call = quote(!x),
-    grads = list(x = quote(cg.logical.grad(x))),
+    grads = list(x = quote(cg.constant.grad(x))),
     binding = list(x = x)
   )
 }
@@ -27,7 +27,7 @@ cg.not <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.logical.grad <- function(x)
+cg.constant.grad <- function(x)
 {
   if(is.array(x))
   {
@@ -61,8 +61,8 @@ cg.equal <- function(x, y, name = cgraph::name())
   cgraph::opr(name = name,
     call = quote(x == y),
     grads = list(
-      x = quote(cg.logical.grad(x)),
-      y = quote(cg.logical.grad(y))
+      x = quote(cg.constant.grad(x)),
+      y = quote(cg.constant.grad(y))
     ),
     binding = list(x = x, y = y)
   )
@@ -90,8 +90,8 @@ cg.not.equal <- function(x, y, name = cgraph::name())
   cgraph::opr(name = name,
     call = quote(x != y),
     grads = list(
-      x = quote(cg.logical.grad(x)),
-      y = quote(cg.logical.grad(y))
+      x = quote(cg.constant.grad(x)),
+      y = quote(cg.constant.grad(y))
     ),
     binding = list(x = x, y = y)
   )
@@ -119,8 +119,8 @@ cg.less <- function(x, y, name = cgraph::name())
   cgraph::opr(name = name,
     call = quote(x < y),
     grads = list(
-      x = quote(cg.logical.grad(x)),
-      y = quote(cg.logical.grad(y))
+      x = quote(cg.constant.grad(x)),
+      y = quote(cg.constant.grad(y))
     ),
     binding = list(x = x, y = y)
   )
@@ -148,8 +148,8 @@ cg.greater <- function(x, y, name = cgraph::name())
   cgraph::opr(name = name,
     call = quote(x > y),
     grads = list(
-      x = quote(cg.logical.grad(x)),
-      y = quote(cg.logical.grad(y))
+      x = quote(cg.constant.grad(x)),
+      y = quote(cg.constant.grad(y))
     ),
     binding = list(x = x, y = y)
   )
@@ -177,8 +177,8 @@ cg.less.equal <- function(x, y, name = cgraph::name())
   cgraph::opr(name = name,
     call = quote(x <= y),
     grads = list(
-      x = quote(cg.logical.grad(x)),
-      y = quote(cg.logical.grad(y))
+      x = quote(cg.constant.grad(x)),
+      y = quote(cg.constant.grad(y))
     ),
     binding = list(x = x, y = y)
   )
@@ -206,8 +206,8 @@ cg.greater.equal <- function(x, y, name = cgraph::name())
   cgraph::opr(name = name,
     call = quote(x >= y),
     grads = list(
-      x = quote(cg.logical.grad(x)),
-      y = quote(cg.logical.grad(y))
+      x = quote(cg.constant.grad(x)),
+      y = quote(cg.constant.grad(y))
     ),
     binding = list(x = x, y = y)
   )
