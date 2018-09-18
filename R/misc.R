@@ -14,7 +14,23 @@
 
 #' Sigmoid
 #'
-#' Calculate \code{1 / (1 + exp(-x))}.
+#' Evaluate the sigmoid function on \code{x} element-wise.
+#'
+#' @param x numeric vector or array, object on which the sigmoid function is evaluated.
+#'
+#' @note The sigmoid function is defined as \code{1 / (1 + exp(-x))}. The resulting sigmoid values are clamped within the range \code{[a, 1 - a]} where \code{a} evaluates to \code{.Machine$double.eps} to avoid numerical underflow.
+#'
+#' @return numeric vector or array, sigmoid values.
+#'
+#' @author Ron Triepels
+sigmoid <- function(x)
+{
+  .Call("sigmoid", x, .Machine$double.eps, PACKAGE = "cgraph")
+}
+
+#' Sigmoid
+#'
+#' Calculate \code{sigmoid(x)}.
 #'
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
@@ -25,7 +41,7 @@
 cg.sigmoid <- function(x, name = cgraph::name())
 {
   cgraph::opr(name = name,
-    call = quote(1 / (1 + exp(-x))),
+    call = quote(sigmoid(x)),
     grads = list(x = quote(cg.sigmoid.grad(y, grad))),
     binding = list(x = x, y = name)
   )

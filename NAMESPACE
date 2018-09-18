@@ -97,6 +97,7 @@ S3method(log10, cg.node)
 S3method(abs, cg.node)
 
 # Export misc functions
+export(sigmoid)
 export(cg.sigmoid)
 
 # Export print methods
