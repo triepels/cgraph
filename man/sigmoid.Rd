@@ -7,7 +7,7 @@
 sigmoid(x)
 }
 \arguments{
-\item{x}{numeric vector or array, object on which the sigmoid function is applied.}
+\item{x}{numeric vector or array, object on which the sigmoid function is evaluated.}
 }
 \value{
 numeric vector or array, sigmoid values.
