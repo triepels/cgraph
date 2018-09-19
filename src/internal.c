@@ -49,22 +49,22 @@ SEXP bsum(SEXP x, SEXP n)
     Rf_errorcall(R_NilValue, "invalid block size");
   }
 
-  int nx = Rf_asInteger(n), k = LENGTH(x), j = 0;
+  int size = Rf_asInteger(n), k = LENGTH(x), j = 0;
 
-  SEXP y = PROTECT(Rf_allocVector(REALSXP, nx));
+  SEXP y = PROTECT(Rf_allocVector(REALSXP, size));
 
   x = PROTECT(Rf_coerceVector(x, REALSXP));
 
   px = REAL(x);
   py = REAL(y);
 
-  memset(py, 0, nx * sizeof(double));
+  memset(py, 0, size * sizeof(double));
 
   for(int i = 0; i < k; i++)
   {
     py[j] += px[i];
 
-    j = j < nx - 1 ? j + 1 : 0;
+    j = j < size - 1 ? j + 1 : 0;
   }
 
   UNPROTECT(2);
