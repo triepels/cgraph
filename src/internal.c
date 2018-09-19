@@ -64,14 +64,7 @@ SEXP bsum(SEXP x, SEXP n)
   {
     py[j] += px[i];
 
-    if(j < nx - 1)
-    {
-      j++;
-    }
-    else
-    {
-      j = 0;
-    }
+    j = j < nx - 1 ? j + 1 : 0;
   }
 
   UNPROTECT(2);
