@@ -46,11 +46,9 @@ SEXP sigmoid(SEXP x, SEXP eps)
 
   py = REAL(y);
 
-  int n = LENGTH(x);
-
   const double min = Rf_asReal(eps), max = 1 - min;
 
-  for(int i = 0; i < n; i++)
+  for(int i = 0; i < LENGTH(x); i++)
   {
     py[i] = 1 / (1 + exp(-py[i]));
 
