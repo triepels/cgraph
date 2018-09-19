@@ -3,7 +3,7 @@ cgraph 2.0.3
 
 Comments:
 
-* Several prefix operators have been marked as deprecated and will be removed in the next major release. Only infix operators like `+` or `-` will have S3 overloaded methods.
+* The S3 overloaded methods of prefix operators have been marked as deprecated and will be removed in the next major release. Only infix operators like `+` or `-` will have S3 overloaded methods.
 
 Bug fixes:
 
