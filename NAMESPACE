@@ -28,7 +28,7 @@ export(run)
 export(gradients)
 export(approx.grad)
 
-# Export array functions
+# Export array operators
 export(cg.matmul)
 export(cg.crossprod)
 export(cg.tcrossprod)
@@ -51,7 +51,7 @@ export(cgraph)
 # Export cgraph methods
 S3method(plot, cgraph)
 
-# Export logical functions
+# Export logical operators
 export(cg.not)
 export(cg.equal)
 export(cg.not.equal)
@@ -69,7 +69,7 @@ S3method(`>`, cg.node)
 S3method(`<=`, cg.node)
 S3method(`>=`, cg.node)
 
-# Export math functions
+# Export math operators
 export(cg.add)
 export(cg.pos)
 export(cg.sub)
@@ -98,13 +98,15 @@ S3method(abs, cg.node) # Deprecated
 
 # Export misc functions
 export(sigmoid)
+
+# Export misc operators
 export(cg.sigmoid)
 
 # Export print methods
 S3method(print, cgraph)
 S3method(print, cg.node)
 
-# Export transform functions
+# Export transform operators
 export(cg.as.double)
 export(cg.as.numeric)
 export(cg.reshape)
@@ -115,7 +117,7 @@ S3method(as.double, cg.node) # Deprecated
 S3method(as.array, cg.node) # Deprecated
 S3method(t, cg.node) # Deprecated
 
-# Export trig functions
+# Export trig operators
 export(cg.sin)
 export(cg.cos)
 export(cg.tan)
