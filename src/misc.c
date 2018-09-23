@@ -19,18 +19,13 @@ limitations under the License.
 #include <R.h>
 #include <Rinternals.h>
 
-SEXP sigmoid(SEXP x, SEXP eps)
+SEXP sigmoid(SEXP x)
 {
   double * py;
 
   if(!Rf_isNumeric(x))
   {
     Rf_errorcall(R_NilValue, "x must be a numerical vector or array");
-  }
-
-  if(!Rf_isNumber(eps))
-  {
-    Rf_errorcall(R_NilValue, "eps must be a numeric scalar");
   }
 
   PROTECT_INDEX ipy;
@@ -46,7 +41,7 @@ SEXP sigmoid(SEXP x, SEXP eps)
 
   py = REAL(y);
 
-  const double min = Rf_asReal(eps), max = 1 - min;
+  const double min = DBL_EPSILON, max = 1 - DBL_EPSILON;
 
   for(int i = 0; i < LENGTH(x); i++)
   {

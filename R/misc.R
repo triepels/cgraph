@@ -25,7 +25,7 @@
 #' @author Ron Triepels
 sigmoid <- function(x)
 {
-  .Call("sigmoid", x, .Machine$double.eps, PACKAGE = "cgraph")
+  .Call("sigmoid", x, PACKAGE = "cgraph")
 }
 
 #' Sigmoid

@@ -38,7 +38,7 @@ extern SEXP address(SEXP);
 extern SEXP bsum(SEXP, SEXP);
 
 // misc.c functions
-extern SEXP sigmoid(SEXP, SEXP);
+extern SEXP sigmoid(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   // cgraph.c functions
@@ -58,7 +58,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"address",            (DL_FUNC) &address,            1},
   {"bsum",               (DL_FUNC) &bsum,               2},
   // misc.c functions
-  {"sigmoid",            (DL_FUNC) &sigmoid,            2},
+  {"sigmoid",            (DL_FUNC) &sigmoid,            1},
 
   {NULL, NULL, 0}
 };
