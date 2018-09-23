@@ -7,7 +7,7 @@ Comments:
 
 Bug fixes:
 
-* Operator `sigmoid` now correctly handles numerical underflow.
+* Operator `sigmoid` is now slightly faster and correctly handles numerical underflow.
 * Operators `cg.pmax` and `cg.pmin` are now correctly differentiated when arguments `x` and `y` are both arrays.
 
 Features:
