@@ -35,7 +35,7 @@ a <- parm(2, name = "a")
 b <- parm(4, name = "b")
 
 # Perform some operations on the parameters.
-c <- sin(a) + cos(b) - tan(a)
+c <- cg.sin(a) + cg.cos(b) - cg.tan(a)
 
 # Differentiate the graph with respect to c.
 grads <- gradients(c, run(c))
