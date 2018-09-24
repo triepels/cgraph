@@ -1,7 +1,7 @@
 Package: cgraph
 Type: Package
 Title: Computational Graphs
-Version: 2.0.3
+Version: 2.0.3.9999
 Author: Ron Triepels
 Maintainer: Ron Triepels <dev@cgraph.org>
 URL: https://cgraph.org/
