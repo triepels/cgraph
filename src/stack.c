@@ -28,9 +28,9 @@ stack* stack_allocate(int size)
 
   int *data;
 
-  if(size < 1)
+  if(size < 0)
   {
-    Rf_errorcall(R_NilValue, "cannot allocate stack of %d elements", size);
+    Rf_errorcall(R_NilValue, "invalid stack size provided");
   }
 
   s = malloc(sizeof(stack));
