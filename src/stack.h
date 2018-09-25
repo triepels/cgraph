@@ -20,7 +20,7 @@ typedef struct {
   int *data;
 } stack;
 
-stack stack_init(int size);
+stack stack_initialize(int size);
 
 void stack_destroy(stack *s);
 
