@@ -22,8 +22,10 @@ limitations under the License.
 
 #include "stack.h"
 
-stack stack_initialize(int size)
+stack* stack_initialize(int size)
 {
+  stack *s;
+
   int *data;
 
   if(size < 1)
@@ -31,7 +33,7 @@ stack stack_initialize(int size)
     Rf_errorcall(R_NilValue, "cannot allocate stack of %d elements", size);
   }
 
-  stack s;
+  s = malloc(sizeof(stack));
 
   data = malloc(size * sizeof(int));
 
@@ -40,9 +42,9 @@ stack stack_initialize(int size)
     Rf_errorcall(R_NilValue, "insufficient memory to allocate stack of %d elements", size);
   }
 
-  s.top = -1;
-  s.size = size;
-  s.data = data;
+  s->top = -1;
+  s->size = size;
+  s->data = data;
 
   return s;
 }
