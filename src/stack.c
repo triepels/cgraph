@@ -88,7 +88,7 @@ int stack_peek(stack *s)
 {
   if(stack_is_empty(s))
   {
-    Rf_errorcall(R_NilValue, "unable to peek stack because it is empty");
+    Rf_errorcall(R_NilValue, "unable to peek the stack because it is empty");
   }
 
   return s->data[s->top];
