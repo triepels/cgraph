@@ -22,7 +22,7 @@ limitations under the License.
 
 #include "stack.h"
 
-stack* stack_initialize(int size)
+stack* stack_allocate(int size)
 {
   stack *s;
 

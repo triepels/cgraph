@@ -661,7 +661,7 @@ static SEXP cg_traverse_graph(SEXP name, SEXP graph)
 
   memset(visited, 0, n * sizeof(int));
 
-  stack *s = stack_initialize(n);
+  stack *s = stack_allocate(n);
 
   stack_push(s, cg_node_id(name, graph));
 
