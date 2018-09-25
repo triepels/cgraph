@@ -52,10 +52,7 @@ stack* stack_initialize(int size)
 void stack_destroy(stack *s)
 {
   free(s->data);
-
-  s->top = -1;
-  s->size = 0;
-  s->data = NULL;
+  free(s);
 }
 
 int stack_is_empty(stack *s)
