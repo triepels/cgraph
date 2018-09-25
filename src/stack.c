@@ -37,9 +37,9 @@ stack* stack_initialize(int size)
 
   data = malloc(size * sizeof(int));
 
-  if(data == NULL)
+  if(s == NULL || data == NULL)
   {
-    Rf_errorcall(R_NilValue, "insufficient memory to allocate stack of %d elements", size);
+    Rf_errorcall(R_NilValue, "unable to allocate stack of %d elements", size);
   }
 
   s->top = -1;
@@ -69,14 +69,16 @@ void stack_push(stack *s, int x)
 {
   if(stack_is_full(s))
   {
-    s->data = realloc(s->data, 2 * s->size * sizeof(int));
+    const int size = 2 * s->size;
+
+    s->data = realloc(s->data, size * sizeof(int));
 
     if(s->data == NULL)
     {
-      Rf_errorcall(R_NilValue, "insufficient memory to reallocate stack of %d elements", 2 * s->size);
+      Rf_errorcall(R_NilValue, "unable to reallocate stack of %d elements", size);
     }
 
-    s->size *= 2;
+    s->size = size;
   }
 
   s->data[++s->top] = x;
@@ -86,7 +88,7 @@ int stack_peek(stack *s)
 {
   if(stack_is_empty(s))
   {
-    Rf_errorcall(R_NilValue, "stack is empty");
+    Rf_errorcall(R_NilValue, "unable to peek stack because it is empty");
   }
 
   return s->data[s->top];
@@ -96,7 +98,7 @@ void stack_remove(stack *s)
 {
   if(stack_is_empty(s))
   {
-    Rf_errorcall(R_NilValue, "stack is empty");
+    Rf_errorcall(R_NilValue, "unable to remove the top element of the stack because it is empty");
   }
 
   s->top--;
@@ -106,7 +108,7 @@ int stack_pop(stack *s)
 {
   if(stack_is_empty(s))
   {
-    Rf_errorcall(R_NilValue, "stack is empty");
+    Rf_errorcall(R_NilValue, "unable to pop the stack because it is empty");
   }
 
   return s->data[s->top--];
