@@ -69,7 +69,7 @@ void stack_push(stack *s, int x)
 {
   if(stack_is_full(s))
   {
-    const int size = 2 * s->size;
+    const int size = s->size == 0 ? 1 : 2 * s->size;
 
     s->data = realloc(s->data, size * sizeof(int));
 
