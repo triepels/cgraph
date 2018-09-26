@@ -21,7 +21,7 @@ limitations under the License.
 
 SEXP sigmoid(SEXP x)
 {
-  double * py;
+  double *py;
 
   if(!Rf_isNumeric(x))
   {

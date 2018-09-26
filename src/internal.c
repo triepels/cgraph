@@ -32,7 +32,7 @@ SEXP address(SEXP x)
 
 SEXP bsum(SEXP x, SEXP n)
 {
-  double * px, * py;
+  double *px, *py;
 
   if(!Rf_isNumeric(x))
   {
