@@ -16,7 +16,7 @@ limitations under the License.
 
 typedef struct {
   int top;
-  unsigned int size;
+  int size;
   int *data;
 } stack;
 
