@@ -663,11 +663,11 @@ static SEXP cg_traverse_graph(SEXP name, SEXP graph)
 
   stack *s = stack_allocate(n);
 
-  stack_push(s, cg_node_id(name, graph));
+  stack_add(s, cg_node_id(name, graph));
 
   while(!stack_is_empty(s))
   {
-    int current = stack_peek(s);
+    int current = stack_current(s);
 
     SEXP node = VECTOR_ELT(nodes, current - 1);
 
@@ -683,13 +683,13 @@ static SEXP cg_traverse_graph(SEXP name, SEXP graph)
         {
           if(visited[INTEGER(parents)[i] - 1] == 0)
           {
-            stack_push(s, INTEGER(parents)[i]);
+            stack_add(s, INTEGER(parents)[i]);
           }
         }
       }
       else
       {
-        INTEGER(ids)[l] = stack_pop(s);
+        INTEGER(ids)[l] = stack_get(s);
 
         l++;
       }
@@ -700,7 +700,7 @@ static SEXP cg_traverse_graph(SEXP name, SEXP graph)
       {
         if(Rf_isInteger(parents))
         {
-          INTEGER(ids)[l] = stack_pop(s);
+          INTEGER(ids)[l] = stack_get(s);
 
           l++;
         }

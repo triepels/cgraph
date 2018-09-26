@@ -16,7 +16,7 @@ limitations under the License.
 
 typedef struct {
   int top;
-  int size;
+  unsigned int size;
   int *data;
 } stack;
 
@@ -28,10 +28,10 @@ int stack_is_empty(stack *s);
 
 int stack_is_full(stack *s);
 
-void stack_push(stack *s, int x);
+void stack_add(stack *s, int x);
 
-int stack_peek(stack *s);
+int stack_current(stack *s);
 
 void stack_remove(stack *s);
 
-int stack_pop(stack *s);
+int stack_get(stack *s);
