@@ -136,7 +136,7 @@ int is_cg_node(SEXP x)
   return TRUE;
 }
 
-static SEXP cg_find_nodes(SEXP graph)
+static SEXP cg_get_nodes(SEXP graph)
 {
   if(!is_cgraph(graph))
   {
@@ -155,7 +155,7 @@ static SEXP cg_find_nodes(SEXP graph)
   return nodes;
 }
 
-static SEXP cg_find_values(SEXP graph)
+static SEXP cg_get_values(SEXP graph)
 {
   if(!is_cgraph(graph))
   {
@@ -472,7 +472,7 @@ int cg_node_exists(SEXP symbol, SEXP graph)
 {
   int exists = FALSE;
 
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   if(!Rf_isSymbol(symbol))
   {
@@ -491,7 +491,7 @@ int cg_node_exists(SEXP symbol, SEXP graph)
 
 SEXP cg_get_node(SEXP symbol, SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   if(!Rf_isSymbol(symbol))
   {
@@ -512,7 +512,7 @@ SEXP cg_get_node(SEXP symbol, SEXP graph)
 
 void cg_set_node(SEXP node, SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   if(!is_cg_node(node))
   {
@@ -533,7 +533,7 @@ void cg_set_node(SEXP node, SEXP graph)
 
 void cg_add_node(SEXP node, SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   SEXP node_symbol = cg_get_symbol(node);
 
@@ -549,7 +549,7 @@ void cg_add_node(SEXP node, SEXP graph)
 
 static void cg_add_value(SEXP node, SEXP value, SEXP graph)
 {
-  SEXP values = PROTECT(cg_find_values(graph));
+  SEXP values = PROTECT(cg_get_values(graph));
 
   if(!is_cg_node(node))
   {
@@ -582,7 +582,7 @@ SEXP cg_gen_name(SEXP graph)
 {
   char name[32];
 
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   sprintf(name, "node%d", (int) Rf_xlength(nodes) + 1);
 
@@ -593,7 +593,7 @@ SEXP cg_gen_name(SEXP graph)
 
 int cg_node_id(SEXP name, SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   if(!(Rf_isString(name) || Rf_isSymbol(name)))
   {
@@ -753,9 +753,9 @@ SEXP cg_add_parameter(SEXP value, SEXP name, SEXP graph)
 
 SEXP cg_get_parms(SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
-  SEXP values = PROTECT(cg_find_values(graph));
+  SEXP values = PROTECT(cg_get_values(graph));
 
   int n = LENGTH(nodes), l = 0;
 
@@ -961,7 +961,7 @@ return node;
 
 static SEXP cg_traverse_graph(SEXP name, SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   int l = 0, n = LENGTH(nodes), visited[n];
 
@@ -1037,7 +1037,7 @@ static SEXP cg_traverse_graph(SEXP name, SEXP graph)
 
 static void cg_forward(SEXP ids, SEXP values, SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   for(int i = 0; i < LENGTH(ids); i++)
   {
@@ -1091,7 +1091,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 {
   int n = LENGTH(ids);
 
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   SEXP child_grad_env = PROTECT(NewEnv(values));
 
@@ -1251,7 +1251,7 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
 
 SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 {
-  SEXP graph_values = PROTECT(cg_find_values(graph));
+  SEXP graph_values = PROTECT(cg_get_values(graph));
 
   if(!Rf_isString(name) || Rf_asChar(name) == R_BlankString)
   {
@@ -1285,7 +1285,7 @@ SEXP cg_gradients(SEXP name, SEXP values, SEXP index, SEXP graph)
 {
   SEXP grads = PROTECT(NewEnv(R_NilValue));
 
-  SEXP graph_values = PROTECT(cg_find_values(graph));
+  SEXP graph_values = PROTECT(cg_get_values(graph));
 
   if(!Rf_isString(name) || Rf_asChar(name) == R_BlankString)
   {
@@ -1322,9 +1322,9 @@ SEXP cg_gradients(SEXP name, SEXP values, SEXP index, SEXP graph)
 
 SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
-  SEXP graph_values = PROTECT(cg_find_values(graph));
+  SEXP graph_values = PROTECT(cg_get_values(graph));
 
   if(!Rf_isString(x) || Rf_asChar(x) == R_BlankString)
   {
@@ -1444,7 +1444,7 @@ SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP grap
 
 SEXP cg_adj_mat(SEXP graph)
 {
-  SEXP nodes = PROTECT(cg_find_nodes(graph));
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
 
   int n = LENGTH(nodes);
 
