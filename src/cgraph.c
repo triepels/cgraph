@@ -206,12 +206,7 @@ void cg_set_name(SEXP node, const char* name)
 
 SEXP cg_get_symbol(SEXP node)
 {
-  if(!Rf_isString(node) || Rf_asChar(node) == R_BlankString)
-  {
-    Rf_errorcall(R_NilValue, "node has an invalid name");
-  }
-
-  return Rf_install(CHAR(Rf_asChar(node)));
+  return Rf_install(cg_get_name(node));
 }
 
 int cg_get_type(SEXP node)
@@ -240,7 +235,7 @@ SEXP cg_get_call(SEXP node)
 {
   SEXP node_call = Rf_getAttrib(node, CG_CallSymbol);
 
-  if(!(Rf_isSymbol(node_call) || Rf_isLanguage(node_call)))
+  if(!Rf_isSymbol(node_call))
   {
     Rf_errorcall(R_NilValue, "node '%s' has an invalid call", cg_get_name(node));
   }
@@ -250,9 +245,9 @@ SEXP cg_get_call(SEXP node)
 
 void cg_set_call(SEXP node, SEXP call)
 {
-  if(!(Rf_isSymbol(call) || Rf_isLanguage(call)))
+  if(!Rf_isSymbol(call))
   {
-    Rf_errorcall(R_NilValue, "call must be a symbol or call");
+    Rf_errorcall(R_NilValue, "call must be a symbol");
   }
 
   Rf_setAttrib(node, CG_CallSymbol, call);
@@ -267,6 +262,16 @@ SEXP cg_get_grads(SEXP node)
     Rf_errorcall(R_NilValue, "node '%s' has invalid gradients", cg_get_name(node));
   }
 
+  for(int i = 0; i < LENGTH(node_grads); i++)
+  {
+    SEXP grad = VECTOR_ELT(node_grads, i);
+
+    if(!Rf_isSymbol(grad))
+    {
+      Rf_errorcall(R_NilValue, "node '%s' has an invalid gradient at index %d", cg_get_name(node), i);
+    }
+  }
+
   return node_grads;
 }
 
@@ -275,6 +280,16 @@ void cg_set_grads(SEXP node, SEXP grads)
   if(TYPEOF(grads) != VECSXP)
   {
     Rf_errorcall(R_NilValue, "grads must be a list");
+  }
+
+  for(int i = 0; i < LENGTH(grads); i++)
+  {
+    SEXP grad = VECTOR_ELT(grads, i);
+
+    if(!Rf_isSymbol(grad))
+    {
+      Rf_errorcall(R_NilValue, "invalid gradient provided at index %d", i);
+    }
   }
 
   Rf_setAttrib(node, CG_GradsSymbol, grads);
@@ -296,7 +311,14 @@ SEXP cg_get_grad(SEXP node, int index)
     Rf_errorcall(R_NilValue, "cannot retrieve gradient of node '%s' at index %d", cg_get_name(node), index);
   }
 
-  return VECTOR_ELT(node_grads, index);
+  SEXP grad = VECTOR_ELT(node_grads, index);
+
+  if(!Rf_isSymbol(grad))
+  {
+    Rf_errorcall(R_NilValue, "node '%s' has an invalid gradient at index %d", cg_get_name(node), index);
+  }
+
+  return grad;
 }
 
 void cg_add_grad(SEXP node, SEXP grad)
@@ -314,14 +336,18 @@ void cg_add_grad(SEXP node, SEXP grad)
 
   if(TYPEOF(node_grads) != VECSXP)
   {
-    Rf_errorcall(R_NilValue, "node '%s' has invalid gradients", cg_get_name(node));
+    REPROTECT(node_grads = Rf_allocVector(VECSXP, 1), node_grads_index);
+
+    SET_VECTOR_ELT(node_grads, 0, grad);
   }
+  else
+  {
+    int n = LENGTH(node_grads);
 
-  int n = LENGTH(node_grads);
+    REPROTECT(node_grads = Rf_lengthgets(node_grads, n + 1), node_grads_index);
 
-  REPROTECT(node_grads = Rf_lengthgets(node_grads, n + 1), node_grads_index);
-
-  SET_VECTOR_ELT(node_grads, n, grad);
+    SET_VECTOR_ELT(node_grads, n, grad);
+  }
 
   Rf_setAttrib(node, CG_GradsSymbol, node_grads);
 
@@ -332,9 +358,17 @@ SEXP cg_get_parents(SEXP node)
 {
   SEXP node_parents = Rf_getAttrib(node, CG_ParentsSymbol);
 
-  if(TYPEOF(node_parents) != VECSXP)
+  if(TYPEOF(node_parents) != LISTSXP)
   {
-    Rf_errorcall(R_NilValue, "node '%s' has an invalid parents", cg_get_name(node));
+    Rf_errorcall(R_NilValue, "node '%s' has invalid parents", cg_get_name(node));
+  }
+
+  for(SEXP parent = node_parents; parent != R_NilValue; parent = CDR(parent))
+  {
+    if(!Rf_isSymbol(CAR(parent)))
+    {
+      Rf_errorcall(R_NilValue, "node '%s' has an invalid parent", cg_get_name(node));
+    }
   }
 
   return node_parents;
@@ -342,31 +376,20 @@ SEXP cg_get_parents(SEXP node)
 
 void cg_set_parents(SEXP node, SEXP parents)
 {
-  if(TYPEOF(parents) != VECSXP)
+  if(TYPEOF(parents) != LISTSXP)
   {
-    Rf_errorcall(R_NilValue, "parents must be a list");
+    Rf_errorcall(R_NilValue, "parents must be a pairlist");
+  }
+
+  for(SEXP parent = parents; parent != R_NilValue; parent = CDR(parent))
+  {
+    if(!Rf_isSymbol(CAR(parent)))
+    {
+      Rf_errorcall(R_NilValue, "invalid parent provided");
+    }
   }
 
   Rf_setAttrib(node, CG_ParentsSymbol, parents);
-}
-
-SEXP cg_get_parent(SEXP node, int index)
-{
-  SEXP node_parents = Rf_getAttrib(node, CG_ParentsSymbol);
-
-  if(TYPEOF(node_parents) != VECSXP)
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has invalid parents", cg_get_name(node));
-  }
-
-  int n = LENGTH(node_parents);
-
-  if(index < 0 || index > n - 1)
-  {
-    Rf_errorcall(R_NilValue, "cannot retrieve parent of node '%s' at index %d", cg_get_name(node), index);
-  }
-
-  return VECTOR_ELT(node_parents, index);
 }
 
 void cg_add_parent(SEXP node, SEXP parent)
@@ -382,16 +405,14 @@ void cg_add_parent(SEXP node, SEXP parent)
 
   PROTECT_WITH_INDEX(node_parents = Rf_getAttrib(node, CG_ParentsSymbol), &node_parents_index);
 
-  if(TYPEOF(node_parents) != VECSXP)
+  if(TYPEOF(node_parents) != LISTSXP)
   {
-    Rf_errorcall(R_NilValue, "node '%s' has invalid parents", cg_get_name(node));
+    REPROTECT(node_parents = Rf_list1(parent), node_parents_index);
   }
-
-  int n = LENGTH(node_parents);
-
-  REPROTECT(node_parents = Rf_lengthgets(node_parents, n + 1), node_parents_index);
-
-  SET_VECTOR_ELT(node_parents, n, parent);
+  else
+  {
+    REPROTECT(node_parents = Rf_listAppend(node_parents, Rf_list1(parent)), node_parents_index);
+  }
 
   Rf_setAttrib(node, CG_ParentsSymbol, node_parents);
 
@@ -402,9 +423,17 @@ SEXP cg_get_childeren(SEXP node)
 {
   SEXP node_childeren = Rf_getAttrib(node, CG_ChilderenSymbol);
 
-  if(TYPEOF(node_childeren) != VECSXP)
+  if(TYPEOF(node_childeren) != LISTSXP)
   {
     Rf_errorcall(R_NilValue, "node '%s' has an invalid childeren", cg_get_name(node));
+  }
+
+  for(SEXP child = node_childeren; child != R_NilValue; child = CDR(child))
+  {
+    if(!Rf_isSymbol(CAR(child)))
+    {
+      Rf_errorcall(R_NilValue, "node '%s' has an invalid child", cg_get_name(node));
+    }
   }
 
   return node_childeren;
@@ -412,31 +441,20 @@ SEXP cg_get_childeren(SEXP node)
 
 void cg_set_childeren(SEXP node, SEXP childeren)
 {
-  if(TYPEOF(childeren) != VECSXP)
+  if(TYPEOF(childeren) != LISTSXP)
   {
-    Rf_errorcall(R_NilValue, "childeren must be a list");
+    Rf_errorcall(R_NilValue, "childeren must be a pairlist");
+  }
+
+  for(SEXP child = childeren; child != R_NilValue; child = CDR(child))
+  {
+    if(!Rf_isSymbol(CAR(child)))
+    {
+      Rf_errorcall(R_NilValue, "invalid child provided");
+    }
   }
 
   Rf_setAttrib(node, CG_ChilderenSymbol, childeren);
-}
-
-SEXP cg_get_child(SEXP node, int index)
-{
-  SEXP node_childeren = Rf_getAttrib(node, CG_ChilderenSymbol);
-
-  if(TYPEOF(node_childeren) != VECSXP)
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has invalid childeren", cg_get_name(node));
-  }
-
-  int n = LENGTH(node_childeren);
-
-  if(index < 0 || index > n - 1)
-  {
-    Rf_errorcall(R_NilValue, "cannot retrieve child of node '%s' at index %d", cg_get_name(node), index);
-  }
-
-  return VECTOR_ELT(node_childeren, index);
 }
 
 void cg_add_child(SEXP node, SEXP child)
@@ -452,16 +470,14 @@ void cg_add_child(SEXP node, SEXP child)
 
   PROTECT_WITH_INDEX(node_childeren = Rf_getAttrib(node, CG_ChilderenSymbol), &node_childeren_index);
 
-  if(TYPEOF(node_childeren) != VECSXP)
+  if(TYPEOF(node_childeren) != LISTSXP)
   {
-    Rf_errorcall(R_NilValue, "node '%s' has invalid childeren", cg_get_name(node));
+    REPROTECT(node_childeren = Rf_list1(child), node_childeren_index);
   }
-
-  int n = LENGTH(node_childeren);
-
-  REPROTECT(node_childeren = Rf_lengthgets(node_childeren, n + 1), node_childeren_index);
-
-  SET_VECTOR_ELT(node_childeren, n, child);
+  else
+  {
+    REPROTECT(node_childeren = Rf_listAppend(node_childeren, Rf_list1(child)), node_childeren_index);
+  }
 
   Rf_setAttrib(node, CG_ChilderenSymbol, node_childeren);
 
@@ -502,7 +518,7 @@ SEXP cg_get_node(SEXP symbol, SEXP graph)
 
   if(node == R_UnboundValue)
   {
-    Rf_errorcall(R_NilValue, "cannot find node '%s'", CHAR(Rf_asChar(symbol)));
+    Rf_errorcall(R_NilValue, "cannot find node '%s' in the graph", CHAR(Rf_asChar(symbol)));
   }
 
   UNPROTECT(1);
@@ -514,16 +530,11 @@ void cg_set_node(SEXP node, SEXP graph)
 {
   SEXP nodes = PROTECT(cg_get_nodes(graph));
 
-  if(!is_cg_node(node))
-  {
-    Rf_errorcall(R_NilValue, "invalid cg.node object provided");
-  }
-
   SEXP node_symbol = cg_get_symbol(node);
 
   if(!cg_node_exists(node_symbol, graph))
   {
-    Rf_errorcall(R_NilValue, "cannot find node '%s'", cg_get_name(node));
+    Rf_errorcall(R_NilValue, "cannot find node '%s' in the graph", cg_get_name(node));
   }
 
   Rf_setVar(node_symbol, node, nodes);
@@ -539,7 +550,7 @@ void cg_add_node(SEXP node, SEXP graph)
 
   if(cg_node_exists(node_symbol, graph))
   {
-    Rf_errorcall(R_NilValue, "'%s' is already defined", cg_get_name(node));
+    Rf_errorcall(R_NilValue, "'%s' is already defined in the graph", cg_get_name(node));
   }
 
   Rf_defineVar(node_symbol, node, nodes);
@@ -547,35 +558,33 @@ void cg_add_node(SEXP node, SEXP graph)
   UNPROTECT(1);
 }
 
-static void cg_add_value(SEXP node, SEXP value, SEXP graph)
+// CHECK THIS FUNCTION!!
+void cg_add_value(SEXP node, SEXP value, SEXP graph)
 {
   SEXP values = PROTECT(cg_get_values(graph));
-
-  if(!is_cg_node(node))
-  {
-    Rf_errorcall(R_NilValue, "invalid cg.node object provided");
-  }
 
   if(!Rf_isNumeric(value))
   {
     Rf_errorcall(R_NilValue, "node '%s' does not evaluate to a numeric vector or array but a '%s'",
-                  CHAR(Rf_asChar(node)),  Rf_type2char(TYPEOF(value)));
+                cg_get_name(node),  Rf_type2char(TYPEOF(value)));
   }
+
+  SEXP node_symbol = PROTECT(cg_get_symbol(node));
 
   if(!Rf_isReal(value))
   {
     value = PROTECT(Rf_coerceVector(value, REALSXP));
 
-    Rf_defineVar(Rf_install(CHAR(Rf_asChar(node))), value, values);
+    Rf_defineVar(node_symbol, value, values);
 
     UNPROTECT(1);
   }
   else
   {
-    Rf_defineVar(Rf_install(CHAR(Rf_asChar(node))), value, values);
+    Rf_defineVar(node_symbol, value, values);
   }
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 }
 
 SEXP cg_gen_name(SEXP graph)
@@ -615,47 +624,13 @@ int cg_node_id(SEXP name, SEXP graph)
   Rf_errorcall(R_NilValue, "cannot find node '%s'", CHAR(Rf_asChar(name)));
 }
 
-SEXP cg_node(SEXP type, SEXP name)
+SEXP cg_node(int type, const char* name)
 {
-  if(!Rf_isNumber(type))
-  {
-    Rf_errorcall(R_NilValue, "type must be an numeric scalar");
-  }
-
-  if(!Rf_isString(name))
-  {
-    Rf_errorcall(R_NilValue, "the name of a node must be a character scalar");
-  }
-
-  int node_type = Rf_asInteger(type);
-
   SEXP node = PROTECT(Rf_allocVector(STRSXP, 1));
 
-  cg_set_name(node, CHAR(Rf_asChar(name)));
+  cg_set_type(node, type);
 
-  cg_set_type(node, node_type);
-
-  switch(node_type)
-  {
-    case CGCST :
-    case CGIPT :
-    case CGPRM :
-    {
-      cg_set_grads(node, Rf_allocVector(VECSXP, 0));
-      cg_set_childeren(node, Rf_allocVector(VECSXP, 0));
-
-      break;
-    }
-    case CGOPR :
-    {
-      cg_set_call(node, Rf_allocVector(LANGSXP, 1));
-      cg_set_grads(node, Rf_allocVector(VECSXP, 0));
-      cg_set_parents(node, Rf_allocVector(VECSXP, 0));
-      cg_set_childeren(node, Rf_allocVector(VECSXP, 0));
-
-      break;
-    }
-  }
+  cg_set_name(node, name);
 
   Rf_setAttrib(node, R_ClassSymbol, Rf_mkString("cg.node"));
 
@@ -664,11 +639,34 @@ SEXP cg_node(SEXP type, SEXP name)
   return node;
 }
 
+SEXP cg_eval(SEXP node, SEXP envir)
+{
+  if(!Rf_isEnvironment(envir))
+  {
+    Rf_errorcall(R_NilValue, "envir must be an environment");
+  }
+
+  SEXP node_call = cg_get_call(node);
+
+  SEXP node_parents = PROTECT(Rf_duplicate(cg_get_parents(node)));
+
+  for(SEXP parent = node_parents; parent != R_NilValue; parent = CDR(parent))
+  {
+    SETCAR(parent, Rf_eval(CAR(parent), envir));
+  }
+
+  SEXP call = Rf_lcons(node_call, node_parents);
+
+  SEXP value = Rf_eval(call, envir);
+
+  UNPROTECT(1);
+
+  return value;
+}
+
 SEXP cg_add_constant(SEXP value, SEXP name, SEXP graph)
 {
   SEXP node_name = R_NilValue;
-
-  SEXP node_type = PROTECT(Rf_ScalarInteger(CGCST));
 
   if(Rf_isNull(name))
   {
@@ -676,10 +674,15 @@ SEXP cg_add_constant(SEXP value, SEXP name, SEXP graph)
   }
   else
   {
+    if(!Rf_isString(name))
+    {
+      Rf_errorcall(R_NilValue, "name must be a character scalar");
+    }
+
     node_name = PROTECT(Rf_duplicate(name));
   }
 
-  SEXP node = PROTECT(cg_node(node_type, node_name));
+  SEXP node = PROTECT(cg_node(CGCST, CHAR(Rf_asChar(node_name))));
 
   if(!Rf_isNull(value))
   {
@@ -688,7 +691,7 @@ SEXP cg_add_constant(SEXP value, SEXP name, SEXP graph)
 
   cg_add_node(node, graph);
 
-  UNPROTECT(3);
+  UNPROTECT(2);
 
   return node;
 }
@@ -697,18 +700,21 @@ SEXP cg_add_input(SEXP value, SEXP name, SEXP graph)
 {
   SEXP node_name = R_NilValue;
 
-  SEXP node_type = PROTECT(Rf_ScalarInteger(CGIPT));
-
   if(Rf_isNull(name))
   {
     node_name = PROTECT(cg_gen_name(graph));
   }
   else
   {
+    if(!Rf_isString(name))
+    {
+      Rf_errorcall(R_NilValue, "name must be a character scalar");
+    }
+
     node_name = PROTECT(Rf_duplicate(name));
   }
 
-  SEXP node = PROTECT(cg_node(node_type, node_name));
+  SEXP node = PROTECT(cg_node(CGIPT, CHAR(Rf_asChar(node_name))));
 
   if(!Rf_isNull(value))
   {
@@ -717,7 +723,7 @@ SEXP cg_add_input(SEXP value, SEXP name, SEXP graph)
 
   cg_add_node(node, graph);
 
-  UNPROTECT(3);
+  UNPROTECT(2);
 
   return node;
 }
@@ -726,18 +732,21 @@ SEXP cg_add_parameter(SEXP value, SEXP name, SEXP graph)
 {
   SEXP node_name = R_NilValue;
 
-  SEXP node_type = PROTECT(Rf_ScalarInteger(CGPRM));
-
   if(Rf_isNull(name))
   {
     node_name = PROTECT(cg_gen_name(graph));
   }
   else
   {
+    if(!Rf_isString(name))
+    {
+      Rf_errorcall(R_NilValue, "name must be a character scalar");
+    }
+
     node_name = PROTECT(Rf_duplicate(name));
   }
 
-  SEXP node = PROTECT(cg_node(node_type, node_name));
+  SEXP node = PROTECT(cg_node(CGPRM, CHAR(Rf_asChar(node_name))));
 
   if(!Rf_isNull(value))
   {
@@ -746,7 +755,7 @@ SEXP cg_add_parameter(SEXP value, SEXP name, SEXP graph)
 
   cg_add_node(node, graph);
 
-  UNPROTECT(3);
+  UNPROTECT(2);
 
   return node;
 }
@@ -836,60 +845,18 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
   return R_NilValue;
 }
 
-SEXP cg_binding(SEXP x)
+SEXP cg_add_operation(SEXP call, SEXP grads, SEXP args, SEXP name, SEXP graph)
 {
-  SEXP binding = PROTECT(NewEnv(R_EmptyEnv));
-
-  SEXP names = Rf_getAttrib(x, R_NamesSymbol);
-
-  if(TYPEOF(x) != VECSXP || !Rf_isString(names))
-  {
-    Rf_errorcall(R_NilValue, "x must be a named list");
-  }
-
-  for(int i = 0; i < LENGTH(x); i++)
-  {
-    SEXP var = STRING_ELT(names, i);
-
-    if(Rf_asChar(var) == R_BlankString)
-    {
-      Rf_errorcall(R_NilValue, "one of the members of x is not properly named");
-    }
-
-    SEXP node_name = VECTOR_ELT(x, i);
-
-    if(!Rf_isString(node_name) || Rf_asChar(node_name) == R_BlankString)
-    {
-      Rf_errorcall(R_NilValue, "the node bound to '%s' has an invalid name", CHAR(var));
-    }
-
-    Rf_defineVar(Rf_install(CHAR(var)), Rf_install(CHAR(Rf_asChar(node_name))), binding);
-
-    UNPROTECT(1);
-  }
-
-  return binding;
-}
-
-SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph)
-{
-  SEXP node_type = PROTECT(Rf_ScalarInteger(CGOPR));
-
   SEXP node_name = R_NilValue;
-
-  if(!(Rf_isSymbol(call) || Rf_isLanguage(call)))
-  {
-    Rf_errorcall(R_NilValue, "call must be a symbol or call");
-  }
 
   if(TYPEOF(grads) != VECSXP)
   {
-    Rf_errorcall(R_NilValue, "grads must be a named list");
+    Rf_errorcall(R_NilValue, "grads must be a list");
   }
 
-  if(!Rf_isEnvironment(binding))
+  if(TYPEOF(args) != VECSXP)
   {
-    Rf_errorcall(R_NilValue, "binding must be an environment");
+    Rf_errorcall(R_NilValue, "args must be a list");
   }
 
   if(Rf_isNull(name))
@@ -898,63 +865,38 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP binding, SEXP name, SEXP graph
   }
   else
   {
+    if(!Rf_isString(name))
+    {
+      Rf_errorcall(R_NilValue, "name must be a character scalar");
+    }
+
     node_name = PROTECT(Rf_duplicate(name));
   }
 
-  SEXP node = PROTECT(cg_node(node_type, node_name));
+  SEXP node = PROTECT(cg_node(CGOPR, CHAR(Rf_asChar(node_name))));
 
-  SEXP grad_names = Rf_getAttrib(grads, R_NamesSymbol);
+  SEXP node_symbol = cg_get_symbol(node);
 
-  if(Rf_isString(grad_names))
+  cg_set_call(node, call);
+
+  cg_set_grads(node, grads);
+
+  for(int i = 0; i < LENGTH(args); i++)
   {
-    int n = LENGTH(grad_names);
+    SEXP parent = VECTOR_ELT(args, i);
 
-    SEXP node_parents = PROTECT(Rf_allocVector(VECSXP, n));
+    SEXP parent_symbol = cg_get_symbol(parent);
 
-    for(int i = 0; i < n; i++)
-    {
-      SEXP grad_name = STRING_ELT(grad_names, i);
+    cg_add_parent(node, parent_symbol);
 
-      if(grad_name == R_BlankString)
-      {
-        Rf_errorcall(R_NilValue, "blank name provided for gradient at index %d", i + 1);
-      }
+    cg_add_child(parent, node_symbol);
 
-      SEXP parent_name = PROTECT(Rf_findVarInFrame(binding, Rf_install(CHAR(grad_name))));
-
-      if(parent_name == R_UnboundValue || !Rf_isSymbol(parent_name))
-      {
-        Rf_errorcall(R_NilValue, "cannot find symbol '%s' in binding", CHAR(STRING_ELT(grad_names, i)));
-      }
-
-      SET_VECTOR_ELT(node_parents, i, parent_name);
-
-      UNPROTECT(1);
-    }
-
-    for(int i = 0; i < n; i++)
-    {
-      SEXP parent = PROTECT(cg_get_node(VECTOR_ELT(node_parents, i), graph));
-
-      cg_add_grad(parent, Rf_substitute(VECTOR_ELT(grads, i), binding));
-
-      cg_add_child(parent, Rf_install(cg_get_name(node)));
-
-      cg_set_node(parent, graph);
-
-      UNPROTECT(1);
-    }
-
-    cg_set_parents(node, node_parents);
-
-    UNPROTECT(1);
+    cg_set_node(parent, graph);
   }
-
-  cg_set_call(node, Rf_substitute(call, binding));
 
   cg_add_node(node, graph);
 
-  UNPROTECT(3);
+  UNPROTECT(2);
 
 return node;
 }

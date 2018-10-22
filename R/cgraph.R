@@ -335,19 +335,14 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #'
 #' @name cg.opr
 #' @author Ron Triepels
-cgraph$public_methods$opr <- function(call, grads, binding, name)
+cgraph$public_methods$opr <- function(call, grads, args, name)
 {
-  if(is.list(binding))
-  {
-    binding <- list2env(binding)
-  }
-
   if(missing(name))
   {
     name <- NULL
   }
 
-  .Call("cg_add_operation", call, grads, binding, name, self, PACKAGE = "cgraph")
+  .Call("cg_add_operation", call, grads, args, name, self, PACKAGE = "cgraph")
 }
 
 #' Change Active Graph

@@ -26,12 +26,12 @@
 cg.add <- function(x, y, name = cgraph::name())
 {
   cgraph::opr(name = name,
-    call = quote(x + y),
+    call = as.name("+"),
     grads = list(
-      x = quote(cg.add.grad(x, grad)),
-      y = quote(cg.add.grad(y, grad))
+      as.name("cg.add.grad"),
+      as.name("cg.add.grad")
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
 }
 

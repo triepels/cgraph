@@ -151,14 +151,14 @@ parm <- function(value, name)
 #' @return cg.node, operation.
 #'
 #' @author Ron Triepels
-opr <- function(call, grads, binding, name)
+opr <- function(call, grads, args, name)
 {
   if(is.null(session$graph))
   {
     stop("No active graph set", call. = FALSE)
   }
 
-  session$graph$opr(call, grads, binding, name)
+  session$graph$opr(call, grads, args, name)
 }
 
 #' Evaluate the Graph
