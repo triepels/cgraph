@@ -664,6 +664,18 @@ SEXP cg_eval(SEXP node, SEXP envir)
   return value;
 }
 
+SEXP cg_eval_grad(SEXP node, SEXP envir)
+{
+  if(!Rf_isEnvironment(envir))
+  {
+    Rf_errorcall(R_NilValue, "envir must be an environment");
+  }
+
+  SEXP node_grad = cg_get_grad(node, 0);
+
+  return node_grad;
+}
+
 SEXP cg_add_constant(SEXP value, SEXP name, SEXP graph)
 {
   SEXP node_name = R_NilValue;
@@ -899,6 +911,11 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP args, SEXP name, SEXP graph)
   UNPROTECT(2);
 
 return node;
+}
+
+SEXP test(SEXP x)
+{
+  return HASHTAB(x);
 }
 
 static SEXP cg_traverse_graph(SEXP name, SEXP graph)
