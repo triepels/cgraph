@@ -891,13 +891,13 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP args, SEXP name, SEXP graph)
 
   cg_set_call(node, call);
 
-  cg_set_grads(node, grads);
-
   for(int i = 0; i < LENGTH(args); i++)
   {
     SEXP parent = VECTOR_ELT(args, i);
 
     SEXP parent_symbol = cg_get_symbol(parent);
+
+    cg_add_grad(parent, VECTOR_ELT(grads, i));
 
     cg_add_parent(node, parent_symbol);
 
