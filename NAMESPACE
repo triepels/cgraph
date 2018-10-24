@@ -57,8 +57,6 @@ S3method(init.grad, numeric)
 S3method(add.grad, default)
 S3method(add.grad, numeric)
 
-
-
 # Export logical operators
 export(cg.not)
 export(cg.equal)
