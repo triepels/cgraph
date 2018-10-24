@@ -1104,7 +1104,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
       for(int k = 0; k < LENGTH(value); k++)
       {
-        REAL(value)[k] += REAL(value)[k];
+        REAL(grad)[k] += REAL(value)[k];
       }
 
       UNPROTECT(1);
