@@ -14,15 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <R.h>
-#include <Rinternals.h>
-
-#define R_NO_REMAP
-
 typedef struct {
   int top;
-  int index;
-  SEXP data;
+  int size;
+  int *data;
 } stack;
 
 stack* stack_allocate(int size);
@@ -33,10 +28,10 @@ int stack_is_empty(stack *s);
 
 int stack_is_full(stack *s);
 
-void stack_add(stack *s, SEXP x);
+void stack_add(stack *s, int x);
 
-SEXP stack_current(stack *s);
+int stack_current(stack *s);
 
 void stack_remove(stack *s);
 
-SEXP stack_get(stack *s);
+int stack_get(stack *s);

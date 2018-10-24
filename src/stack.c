@@ -25,6 +25,8 @@ stack* stack_allocate(int size)
 {
   stack *s;
 
+  int *data;
+
   if(size < 0)
   {
     Rf_errorcall(R_NilValue, "invalid stack size provided");
@@ -32,22 +34,23 @@ stack* stack_allocate(int size)
 
   s = malloc(sizeof(stack));
 
-  if(s == NULL)
+  data = malloc(size * sizeof(int));
+
+  if(s == NULL || data == NULL)
   {
-    Rf_errorcall(R_NilValue, "unable to allocate stack");
+    Rf_errorcall(R_NilValue, "unable to allocate stack of %d elements", size);
   }
 
   s->top = -1;
-
-  PROTECT_WITH_INDEX(s->data = Rf_allocVector(VECSXP, size), &s->index);
+  s->size = size;
+  s->data = data;
 
   return s;
 }
 
 void stack_destroy(stack *s)
 {
-  UNPROTECT_PTR(s->data);
-
+  free(s->data);
   free(s);
 }
 
@@ -58,36 +61,41 @@ int stack_is_empty(stack *s)
 
 int stack_is_full(stack *s)
 {
-  return s->top >= LENGTH(s->data) - 1;
+  return s->top >= s->size - 1;
 }
 
-void stack_add(stack *s, SEXP x)
+void stack_add(stack *s, int x)
 {
   if(stack_is_full(s))
   {
-    int size = LENGTH(s->data);
-
-    if(size == 0)
+    if(s->size == 0)
     {
-      REPROTECT(s->data = Rf_lengthgets(s->data, 1), s->index);
+      s->size = 1;
     }
     else
     {
-      REPROTECT(s->data = Rf_lengthgets(s->data, size * 2), s->index);
+      s->size *= 2;
+    }
+
+    s->data = realloc(s->data, s->size * sizeof(int));
+
+    if(s->data == NULL)
+    {
+      Rf_errorcall(R_NilValue, "unable to reallocate stack of %d elements", s->size);
     }
   }
 
-  SET_VECTOR_ELT(s->data, ++s->top, x);
+  s->data[++s->top] = x;
 }
 
-SEXP stack_current(stack *s)
+int stack_current(stack *s)
 {
   if(stack_is_empty(s))
   {
     Rf_errorcall(R_NilValue, "unable to retrieve the current element of the stack because it is empty");
   }
 
-  return VECTOR_ELT(s->data, s->top);
+  return s->data[s->top];
 }
 
 void stack_remove(stack *s)
@@ -100,12 +108,12 @@ void stack_remove(stack *s)
   s->top--;
 }
 
-SEXP stack_get(stack *s)
+int stack_get(stack *s)
 {
   if(stack_is_empty(s))
   {
     Rf_errorcall(R_NilValue, "unable to get the first element of the stack because it is empty");
   }
 
-  return VECTOR_ELT(s->data, s->top--);
+  return s->data[s->top--];
 }

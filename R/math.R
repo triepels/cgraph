@@ -12,29 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Add
-#'
-#' Calculate \code{x + y}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#' @param y cg.node, placeholder for a numeric vector or array.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-cg.add <- function(x, y, name = cgraph::name())
-{
-  cgraph::opr(name = name,
-    call = as.name("+"),
-    grads = list(
-      as.name("cg.add.grad"),
-      as.name("cg.add.grad")
-    ),
-    args = list(x, y)
-  )
-}
-
 #' Add Gradient
 #'
 #' Calculate the gradient of \code{x + y} with respect to \code{x}.
@@ -46,17 +23,17 @@ cg.add <- function(x, y, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.add.grad <- function(x, grad)
-{
-  if(is.array(x))
-  {
-    grad
-  }
-  else
-  {
-    bsum(grad, length(x))
-  }
-}
+#cg.add.grad <- function(x, y, grad)
+#{
+#  if(is.array(x))
+#  {
+#    grad
+#  }
+#  else
+#  {
+#    bsum(grad, length(x))
+#  }
+#}
 
 #' Positive
 #'
