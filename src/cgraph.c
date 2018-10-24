@@ -313,7 +313,7 @@ SEXP cg_get_grad(SEXP node, int index)
 
 int cg_add_grad(SEXP node, SEXP grad)
 {
-  int node_grads_index;
+  int i_node_grads;
 
   SEXP node_grads = R_NilValue;
 
@@ -322,13 +322,13 @@ int cg_add_grad(SEXP node, SEXP grad)
     Rf_errorcall(R_NilValue, "grad must be a symbol");
   }
 
-  PROTECT_WITH_INDEX(node_grads = Rf_getAttrib(node, CG_GradsSymbol), &node_grads_index);
+  PROTECT_WITH_INDEX(node_grads = Rf_getAttrib(node, CG_GradsSymbol), &i_node_grads);
 
   int index = 0;
 
   if(TYPEOF(node_grads) != VECSXP)
   {
-    REPROTECT(node_grads = Rf_allocVector(VECSXP, 1), node_grads_index);
+    REPROTECT(node_grads = Rf_allocVector(VECSXP, 1), i_node_grads);
 
     SET_VECTOR_ELT(node_grads, index, grad);
   }
@@ -336,7 +336,7 @@ int cg_add_grad(SEXP node, SEXP grad)
   {
     index = LENGTH(node_grads);
 
-    REPROTECT(node_grads = Rf_lengthgets(node_grads, index + 1), node_grads_index);
+    REPROTECT(node_grads = Rf_lengthgets(node_grads, index + 1), i_node_grads);
 
     SET_VECTOR_ELT(node_grads, index, grad);
   }
@@ -381,23 +381,23 @@ int* cg_get_parents(SEXP node, int* length)
 
 int cg_add_parent(SEXP node, int id)
 {
-  int node_parents_index;
+  int i_node_parents;
 
   SEXP node_parents = R_NilValue;
 
-  PROTECT_WITH_INDEX(node_parents = Rf_getAttrib(node, CG_ParentsSymbol), &node_parents_index);
+  PROTECT_WITH_INDEX(node_parents = Rf_getAttrib(node, CG_ParentsSymbol), &i_node_parents);
 
   int index = 0;
 
   if(!Rf_isInteger(node_parents))
   {
-    REPROTECT(node_parents = Rf_ScalarInteger(id), node_parents_index);
+    REPROTECT(node_parents = Rf_ScalarInteger(id), i_node_parents);
   }
   else
   {
     index = LENGTH(node_parents);
 
-    REPROTECT(node_parents = Rf_lengthgets(node_parents, index + 1), node_parents_index);
+    REPROTECT(node_parents = Rf_lengthgets(node_parents, index + 1), i_node_parents);
 
     INTEGER(node_parents)[index] = id;
   }
@@ -442,23 +442,23 @@ int* cg_get_childeren(SEXP node, int* length)
 
 int cg_add_child(SEXP node, int id)
 {
-  int node_childeren_index;
+  int i_node_childeren;
 
   SEXP node_childeren = R_NilValue;
 
-  PROTECT_WITH_INDEX(node_childeren = Rf_getAttrib(node, CG_ChilderenSymbol), &node_childeren_index);
+  PROTECT_WITH_INDEX(node_childeren = Rf_getAttrib(node, CG_ChilderenSymbol), &i_node_childeren);
 
   int index = 0;
 
   if(!Rf_isInteger(node_childeren))
   {
-    REPROTECT(node_childeren = Rf_ScalarInteger(id), node_childeren_index);
+    REPROTECT(node_childeren = Rf_ScalarInteger(id), i_node_childeren);
   }
   else
   {
     index = LENGTH(node_childeren);
 
-    REPROTECT(node_childeren = Rf_lengthgets(node_childeren, index + 1), node_childeren_index);
+    REPROTECT(node_childeren = Rf_lengthgets(node_childeren, index + 1), i_node_childeren);
 
     INTEGER(node_childeren)[index] = id;
   }
@@ -584,19 +584,19 @@ int cg_add_node(SEXP node, SEXP graph)
     Rf_errorcall(R_NilValue, "'%s' is already defined in the graph", node_name);
   }
 
-  int nodes_index, names_index;
+  int i_nodes, i_names;
 
   SEXP nodes = R_NilValue, names = R_NilValue;
 
-  PROTECT_WITH_INDEX(nodes = cg_get_nodes(graph), &nodes_index);
+  PROTECT_WITH_INDEX(nodes = cg_get_nodes(graph), &i_nodes);
 
-  PROTECT_WITH_INDEX(names = Rf_getAttrib(nodes, R_NamesSymbol), &names_index);
+  PROTECT_WITH_INDEX(names = Rf_getAttrib(nodes, R_NamesSymbol), &i_names);
 
   int n = LENGTH(nodes);
 
-  REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), nodes_index);
+  REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), i_nodes);
 
-  REPROTECT(names = Rf_lengthgets(names, n + 1), names_index);
+  REPROTECT(names = Rf_lengthgets(names, n + 1), i_names);
 
   SET_VECTOR_ELT(nodes, n, node);
 
@@ -970,7 +970,7 @@ SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
 
 SEXP cg_init_gradient(SEXP node, SEXP values, SEXP index, SEXP graph)
 {
-  int node_grad_index;
+  int i_node_grad;
 
   SEXP node_grad = R_NilValue;
 
@@ -979,9 +979,9 @@ SEXP cg_init_gradient(SEXP node, SEXP values, SEXP index, SEXP graph)
     Rf_errorcall(R_NilValue, "index must be an numeric scalar");
   }
 
-  PROTECT_WITH_INDEX(node_grad = Rf_eval(cg_get_symbol(node), values), &node_grad_index);
+  PROTECT_WITH_INDEX(node_grad = Rf_eval(cg_get_symbol(node), values), &i_node_grad);
 
-  REPROTECT(node_grad = Rf_duplicate(node_grad), node_grad_index);
+  REPROTECT(node_grad = Rf_duplicate(node_grad), i_node_grad);
 
   int x_index = Rf_asInteger(index);
 
@@ -1037,9 +1037,9 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 {
   SEXP grad;
 
-  int grad_index;
+  int i_grad;
 
-  PROTECT_WITH_INDEX(grad = R_NilValue, &grad_index);
+  PROTECT_WITH_INDEX(grad = R_NilValue, &i_grad);
 
   if(!Rf_isEnvironment(values))
   {
@@ -1086,7 +1086,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
     if(i == 0)
     {
-      REPROTECT(grad = Rf_eval(call, values), grad_index);
+      REPROTECT(grad = Rf_eval(call, values), i_grad);
     }
     else
     {
