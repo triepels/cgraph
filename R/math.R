@@ -46,18 +46,6 @@ cg.add <- function(x, y, name)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-#cg.add.grad <- function(x, y, grad)
-#{
-#  if(is.array(x))
-#  {
-#    grad
-#  }
-#  else
-#  {
-#    bsum(grad, length(x))
-#  }
-#}
-
 add.grad <- function(grad, x, y)
 {
   if(is.array(x))
