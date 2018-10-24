@@ -1136,7 +1136,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
         }
         case REALSXP :
         {
-          switch(TYPEOF(grad))
+          switch(TYPEOF(value))
           {
             case LGLSXP :
             case INTSXP :
@@ -1205,13 +1205,13 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
   for(int i = 0; i < n; i++)
   {
-    SEXP node = cg_get_node_id(ids[i], graph);
+    SEXP node = PROTECT(cg_get_node_id(ids[i], graph));
 
     SEXP node_value = PROTECT(cg_eval(node, default_values, graph));
 
     Rf_defineVar(cg_get_symbol(node), node_value, values);
 
-    UNPROTECT(1);
+    UNPROTECT(2);
   }
 
   SET_ENCLOS(default_values, R_EmptyEnv);
@@ -1238,23 +1238,23 @@ SEXP cg_gradients(SEXP name, SEXP values, SEXP grads, SEXP index, SEXP graph)
 
   if(n > 0)
   {
-    SEXP root = cg_get_node_id(ids[n - 1], graph);
+    SEXP root = PROTECT(cg_get_node_id(ids[n - 1], graph));
 
     SEXP root_grad = PROTECT(cg_init_gradient(root, values, index, graph));
 
     Rf_defineVar(cg_get_symbol(root), root_grad, grads);
 
-    UNPROTECT(1);
+    UNPROTECT(2);
 
     for(int i = n - 2; i >= 0; i--)
     {
-      SEXP node = cg_get_node_id(ids[i], graph);
+      SEXP node = PROTECT(cg_get_node_id(ids[i], graph));
 
       SEXP node_grad = PROTECT(cg_eval_gradient(node, values, grads, graph));
 
       Rf_defineVar(cg_get_symbol(node), node_grad, grads);
 
-      UNPROTECT(1);
+      UNPROTECT(2);
     }
   }
 
