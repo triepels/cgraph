@@ -1094,10 +1094,10 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
       int l = LENGTH(grad);
 
-      //if(l != LENGTH(value))
-      //{
-      //  Rf_errorcall(R_NilValue, "cannot accumulate gradients of node '%s'", cg_get_name(node));
-      //}
+      if(l != LENGTH(value))
+      {
+        Rf_errorcall(R_NilValue, "cannot accumulate gradients of node '%s'", cg_get_name(node));
+      }
 
       switch(TYPEOF(grad))
       {
