@@ -1090,6 +1090,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
     }
     else
     {
+      /*
       SEXP value = PROTECT(Rf_eval(call, values));
 
       SEXP add_call = PROTECT(Rf_lang3(Rf_install("+"), grad, value));
@@ -1097,6 +1098,16 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
       REPROTECT(grad = Rf_eval(add_call, values), grad_index);
 
       UNPROTECT(2);
+      */
+
+      SEXP value = PROTECT(Rf_eval(call, values));
+
+      for(int k = 0; k < LENGTH(value); k++)
+      {
+        REAL(value)[k] += REAL(value)[k];
+      }
+
+      UNPROTECT(1);
     }
 
     UNPROTECT(4);
