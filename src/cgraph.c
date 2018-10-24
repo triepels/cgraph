@@ -1082,24 +1082,24 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
       j++;
     }
 
-    SEXP adjoint_call = PROTECT(Rf_lcons(cg_get_grad(node, i), args));
-
-    SEXP adjoint = PROTECT(Rf_eval(adjoint_call, values));
+    SEXP call = PROTECT(Rf_lcons(cg_get_grad(node, i), args));
 
     if(i == 0)
     {
-      REPROTECT(grad = Rf_duplicate(adjoint), grad_index);
+      REPROTECT(grad = Rf_eval(call, values), grad_index);
     }
     else
     {
-      SEXP add_call = PROTECT(Rf_lang3(Rf_install("+"), grad, adjoint));
+      SEXP value = PROTECT(Rf_eval(call, values));
+
+      SEXP add_call = PROTECT(Rf_lang3(Rf_install("+"), grad, value));
 
       REPROTECT(grad = Rf_eval(add_call, values), grad_index);
 
-      UNPROTECT(1);
+      UNPROTECT(2);
     }
 
-    UNPROTECT(5);
+    UNPROTECT(4);
   }
 
   UNPROTECT(1);
