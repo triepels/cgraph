@@ -1036,11 +1036,9 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
     {
       SEXP parent = PROTECT(cg_get_node_id(child_parents[j], graph));
 
-      SEXP parent_value = PROTECT(Rf_eval(cg_get_symbol(parent), values));
+      SETCAR(arg, cg_get_symbol(parent));
 
-      SETCAR(arg, parent_value);
-
-      UNPROTECT(2);
+      UNPROTECT(1);
 
       j++;
     }
@@ -1085,9 +1083,6 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
     UNPROTECT_PTR(test2);
     UNPROTECT_PTR(test3);
   }
-
-
-  //Rf_PrintValue(adjoints);
 
   UNPROTECT(2);
 
