@@ -1090,21 +1090,93 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
     }
     else
     {
-      /*
       SEXP value = PROTECT(Rf_eval(call, values));
 
-      SEXP add_call = PROTECT(Rf_lang3(Rf_install("+"), grad, value));
-
-      REPROTECT(grad = Rf_eval(add_call, values), grad_index);
-
-      UNPROTECT(2);
-      */
-
-      SEXP value = PROTECT(Rf_eval(call, values));
-
-      for(int k = 0; k < LENGTH(value); k++)
+      switch(TYPEOF(grad))
       {
-        REAL(grad)[k] += REAL(value)[k];
+        case LGLSXP :
+        case INTSXP :
+        {
+          switch(TYPEOF(value))
+          {
+            case LGLSXP :
+            case INTSXP :
+            {
+              int* p_grad = INTEGER(grad);
+
+              int* p_value = INTEGER(value);
+
+              for(int k = 0; k < LENGTH(value); k++)
+              {
+                p_grad[k] += p_value[k];
+              }
+
+              break;
+            }
+            case REALSXP :
+            {
+              int* p_grad = INTEGER(grad);
+
+              double* p_value = REAL(value);
+
+              for(int k = 0; k < LENGTH(value); k++)
+              {
+                p_grad[k] += p_value[k];
+              }
+
+              break;
+            }
+            default :
+            {
+              Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(value)));
+            }
+          }
+
+          break;
+        }
+        case REALSXP :
+        {
+          switch(TYPEOF(grad))
+          {
+            case LGLSXP :
+            case INTSXP :
+            {
+              double* p_grad = REAL(grad);
+
+              int* p_value = INTEGER(value);
+
+              for(int k = 0; k < LENGTH(value); k++)
+              {
+                p_grad[k] += p_value[k];
+              }
+
+              break;
+            }
+            case REALSXP :
+            {
+              double* p_grad = REAL(grad);
+
+              double* p_value = REAL(value);
+
+              for(int k = 0; k < LENGTH(value); k++)
+              {
+                p_grad[k] += p_value[k];
+              }
+
+              break;
+            }
+            default :
+            {
+              Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(value)));
+            }
+          }
+
+          break;
+        }
+        default :
+        {
+          Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(grad)));
+        }
       }
 
       UNPROTECT(1);
