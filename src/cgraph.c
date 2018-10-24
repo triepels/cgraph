@@ -1092,6 +1092,13 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
     {
       SEXP value = PROTECT(Rf_eval(call, values));
 
+      int l = LENGTH(grad);
+
+      if(l != LENGTH(value))
+      {
+        Rf_errorcall(R_NilValue, "cannot accumulate gradients of node '%s'", cg_get_name(node));
+      }
+
       switch(TYPEOF(grad))
       {
         case LGLSXP :
@@ -1106,7 +1113,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
               int* p_value = INTEGER(value);
 
-              for(int k = 0; k < LENGTH(value); k++)
+              for(int k = 0; k < l; k++)
               {
                 p_grad[k] += p_value[k];
               }
@@ -1119,7 +1126,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
               double* p_value = REAL(value);
 
-              for(int k = 0; k < LENGTH(value); k++)
+              for(int k = 0; k < l; k++)
               {
                 p_grad[k] += p_value[k];
               }
@@ -1145,7 +1152,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
               int* p_value = INTEGER(value);
 
-              for(int k = 0; k < LENGTH(value); k++)
+              for(int k = 0; k < l; k++)
               {
                 p_grad[k] += p_value[k];
               }
@@ -1158,7 +1165,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
               double* p_value = REAL(value);
 
-              for(int k = 0; k < LENGTH(value); k++)
+              for(int k = 0; k < l; k++)
               {
                 p_grad[k] += p_value[k];
               }
