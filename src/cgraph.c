@@ -953,7 +953,7 @@ SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
 
       SETCAR(arg, cg_get_symbol(parent));
 
-      UNPROTECT(2);
+      UNPROTECT(1);
 
       i++;
     }
