@@ -949,11 +949,15 @@ SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
     {
       SEXP parent = PROTECT(cg_get_node_id(node_parents[i], graph));
 
-      SEXP parent_value = PROTECT(Rf_eval(cg_get_symbol(parent), values));
+      SETCAR(arg, cg_get_symbol(parent));
 
-      SETCAR(arg, parent_value);
+      UNPROTECT(1);
 
-      UNPROTECT(2);
+      //SEXP parent_value = PROTECT(Rf_eval(cg_get_symbol(parent), values));
+
+      //SETCAR(arg, parent_value);
+
+      //UNPROTECT(2);
 
       i++;
     }
@@ -997,6 +1001,82 @@ SEXP cg_init_gradient(SEXP node, SEXP values, SEXP index, SEXP graph)
 }
 
 SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
+{
+  int grad_index;
+
+  SEXP grad = R_NilValue;
+
+  if(!Rf_isEnvironment(values))
+  {
+    Rf_errorcall(R_NilValue, "values must be an environment");
+  }
+
+  if(!Rf_isEnvironment(grads))
+  {
+    Rf_errorcall(R_NilValue, "grads must be an environment");
+  }
+
+  int n;
+
+  int* node_childeren = cg_get_childeren(node, &n);
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP child = PROTECT(cg_get_node_id(node_childeren[i], graph));
+
+    SEXP child_grad = PROTECT(Rf_eval(cg_get_symbol(child), grads));
+
+    int m, j = 0;
+
+    int* child_parents = cg_get_parents(child, &m);
+
+    SEXP args = PROTECT(Rf_allocVector(LISTSXP, m + 1));
+
+    SET_TAG(args, Rf_install("grad"));
+
+    SETCAR(args, child_grad);
+
+    for(SEXP arg = CDR(args); arg != R_NilValue; arg = CDR(arg))
+    {
+      SEXP parent = PROTECT(cg_get_node_id(child_parents[j], graph));
+
+      SETCAR(arg, cg_get_symbol(parent));
+
+      UNPROTECT(1);
+
+      j++;
+    }
+
+    SEXP grad_call = PROTECT(Rf_lcons(cg_get_grad(node, i), args));
+
+    if(i == 0)
+    {
+      PROTECT_WITH_INDEX(grad = Rf_eval(grad_call, values), &grad_index);
+    }
+    else
+    {
+      SEXP temp_call = PROTECT(Rf_lang3(Rf_install("+"), grad, grad_call));
+
+      REPROTECT(grad = Rf_eval(temp_call, values), grad_index);
+
+      UNPROTECT(1);
+    }
+
+    UNPROTECT(4);
+  }
+
+  UNPROTECT(1);
+
+  return grad;
+}
+
+SEXP test(SEXP x, SEXP y, SEXP z)
+{
+  return Rf_lang3(x, y, z);
+}
+
+
+SEXP cg_eval_gradient2(SEXP node, SEXP values, SEXP grads, SEXP graph)
 {
   SEXP grad = R_NilValue;
 
