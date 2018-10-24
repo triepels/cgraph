@@ -949,11 +949,11 @@ SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
     {
       SEXP parent = PROTECT(cg_get_node_id(node_parents[i], graph));
 
-      //SEXP parent_value = PROTECT(Rf_eval(cg_get_symbol(parent), values));
+      SEXP parent_value = PROTECT(Rf_eval(cg_get_symbol(parent), values));
 
-      SETCAR(arg, cg_get_symbol(parent));
+      SETCAR(arg, parent_value);
 
-      UNPROTECT(1);
+      UNPROTECT(2);
 
       i++;
     }
