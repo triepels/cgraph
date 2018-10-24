@@ -19,7 +19,6 @@ importFrom(R6, R6Class)
 useDynLib(cgraph)
 
 # Export session functions
-export(name)
 export(const)
 export(input)
 export(parm)

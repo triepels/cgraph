@@ -868,7 +868,7 @@ int* cg_traverse_graph(int id, int* length, SEXP graph)
   {
     int current = stack_current(s);
 
-    SEXP node = cg_get_node_id(current, graph);
+    SEXP node = PROTECT(cg_get_node_id(current, graph));
 
     if(visited[current - 1] == 0)
     {
@@ -915,6 +915,8 @@ int* cg_traverse_graph(int id, int* length, SEXP graph)
     }
 
     visited[current - 1] += 1;
+
+    UNPROTECT(1);
   }
 
   stack_destroy(s);
@@ -945,16 +947,20 @@ SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
 
     for(SEXP arg = args; arg != R_NilValue; arg = CDR(arg))
     {
-      SEXP parent = cg_get_node_id(node_parents[i], graph);
+      SEXP parent = PROTECT(cg_get_node_id(node_parents[i], graph));
 
-      SETCAR(arg, Rf_eval(cg_get_symbol(parent), values));
+      SEXP parent_value = PROTECT(Rf_eval(cg_get_symbol(parent), values));
+
+      SETCAR(arg, parent_value);
+
+      UNPROTECT(2);
 
       i++;
     }
 
-    call = Rf_lcons(cg_get_call(node), args);
-
     UNPROTECT(1);
+
+    call = Rf_lcons(cg_get_call(node), args);
   }
   else
   {
@@ -964,14 +970,35 @@ SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
   return Rf_eval(call, values);
 }
 
-SEXP cg_init_gradient(SEXP node, SEXP values, SEXP graph)
+SEXP cg_init_gradient(SEXP node, SEXP values, SEXP index, SEXP graph)
 {
+  SEXP call = R_NilValue;
 
+  if(!Rf_isNumeric(index))
+  {
+    Rf_errorcall(R_NilValue, "index must be an numeric scalar");
+  }
+
+  SEXP node_value = PROTECT(Rf_eval(cg_get_symbol(node), values));
+
+  SEXP args = PROTECT(Rf_allocVector(LISTSXP, 2));
+
+  SETCAR(args, node_value);
+
+  SET_TAG(CDR(args), Rf_install("index"));
+
+  SETCAR(CDR(args), index);
+
+  call = Rf_lcons(Rf_install("init.grad"), args);
+
+  UNPROTECT(2);
+
+  return Rf_eval(call, values);
 }
 
 SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 {
-  SEXP call = R_NilValue;
+  SEXP grad = R_NilValue;
 
   if(!Rf_isEnvironment(values))
   {
@@ -987,11 +1014,13 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
   int* node_childeren = cg_get_childeren(node, &n);
 
-  SEXP funs = PROTECT(Rf_allocVector(LISTSXP, n));
+  SEXP adjoints = PROTECT(Rf_allocVector(LISTSXP, n));
 
-  for(SEXP fun = funs; fun != R_NilValue; fun = CDR(fun))
+  for(SEXP adjoint = adjoints; adjoint != R_NilValue; adjoint = CDR(adjoint))
   {
-    SEXP child = cg_get_node_id(node_childeren[i], graph);
+    SEXP child = PROTECT(cg_get_node_id(node_childeren[i], graph));
+
+    SEXP child_grad = PROTECT(Rf_eval(cg_get_symbol(child), grads));
 
     int m, j = 0;
 
@@ -1001,41 +1030,68 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
     SET_TAG(args, Rf_install("grad"));
 
-    SETCAR(args, Rf_eval(cg_get_symbol(child), grads));
+    SETCAR(args, child_grad);
 
     for(SEXP arg = CDR(args); arg != R_NilValue; arg = CDR(arg))
     {
-      SEXP parent = cg_get_node_id(child_parents[j], graph);
+      SEXP parent = PROTECT(cg_get_node_id(child_parents[j], graph));
 
-      SETCAR(arg, Rf_eval(cg_get_symbol(parent), values));
+      SEXP parent_value = PROTECT(Rf_eval(cg_get_symbol(parent), values));
+
+      SETCAR(arg, parent_value);
+
+      UNPROTECT(2);
 
       j++;
     }
 
-    SETCAR(fun, Rf_lcons(cg_get_grad(node, i), args));
+    SEXP adjoint_call = PROTECT(Rf_lcons(cg_get_grad(node, i), args));
 
-    UNPROTECT(1);
+    SEXP adjoint_value = PROTECT(Rf_eval(adjoint_call, values));
+
+    SETCAR(adjoint, adjoint_value);
+
+    UNPROTECT(5);
 
     i++;
   }
 
   if(n < 2)
   {
-    call = CAR(funs);
+    grad = PROTECT(CAR(adjoints));
   }
   else
   {
-    call = Rf_lcons(Rf_install("+"), Rf_list2(CAR(funs), CADR(funs)));
+    int grad_index;
 
-    for(SEXP fun = CDDR(funs); fun != R_NilValue; fun = CDR(fun))
+    SEXP test2 = PROTECT(Rf_list2(CAR(adjoints), CADR(adjoints)));
+
+    SEXP test3 = PROTECT(Rf_lcons(Rf_install("+"), test2));
+
+    PROTECT_WITH_INDEX(grad = Rf_eval(test3, values), &grad_index);
+
+    for(SEXP adjoint = CDDR(adjoints); adjoint != R_NilValue; adjoint = CDR(adjoint))
     {
-      call = Rf_lcons(Rf_install("+"), Rf_list2(call, CAR(fun)));
+      SEXP test4 = PROTECT(Rf_list2(grad, CAR(adjoint)));
+
+      SEXP test5 = PROTECT(Rf_lcons(Rf_install("+"), test4));
+
+      REPROTECT(grad = Rf_eval(test5, values), grad_index);
+
+      UNPROTECT_PTR(test4);
+      UNPROTECT_PTR(test5);
     }
+
+    UNPROTECT_PTR(test2);
+    UNPROTECT_PTR(test3);
   }
 
-  UNPROTECT(1);
 
-  return Rf_eval(call, values);
+  //Rf_PrintValue(adjoints);
+
+  UNPROTECT(2);
+
+  return grad;
 }
 
 SEXP cg_run(SEXP name, SEXP values, SEXP graph)
@@ -1055,9 +1111,9 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
   {
     SEXP node = cg_get_node_id(ids[i], graph);
 
-    SEXP value = PROTECT(cg_eval(node, default_values, graph));
+    SEXP node_value = PROTECT(cg_eval(node, default_values, graph));
 
-    Rf_defineVar(cg_get_symbol(node), value, values);
+    Rf_defineVar(cg_get_symbol(node), node_value, values);
 
     UNPROTECT(1);
   }
@@ -1071,7 +1127,52 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
   return values;
 }
 
+SEXP cg_gradients(SEXP name, SEXP values, SEXP grads, SEXP index, SEXP graph)
+{
+  int n = 0, id = cg_node_id(name, graph);
+
+  int* ids = cg_traverse_graph(id, &n, graph);
+
+  SEXP default_values = PROTECT(cg_get_values(graph));
+
+  if(values != default_values)
+  {
+    SET_ENCLOS(default_values, values);
+  }
+
+  if(n > 0)
+  {
+    SEXP root = cg_get_node_id(ids[n - 1], graph);
+
+    SEXP root_grad = PROTECT(cg_init_gradient(root, values, index, graph));
+
+    Rf_defineVar(cg_get_symbol(root), root_grad, grads);
+
+    UNPROTECT(1);
+
+    for(int i = n - 2; i >= 0; i--)
+    {
+      SEXP node = cg_get_node_id(ids[i], graph);
+
+      SEXP node_grad = PROTECT(cg_eval_gradient(node, values, grads, graph));
+
+      Rf_defineVar(cg_get_symbol(node), node_grad, grads);
+
+      UNPROTECT(1);
+    }
+  }
+
+  SET_ENCLOS(default_values, R_EmptyEnv);
+
+  free(ids);
+
+  UNPROTECT(1);
+
+  return grads;
+}
+
 /*
+
 static void cg_forward(SEXP ids, SEXP values, SEXP graph)
 {
   SEXP nodes = PROTECT(cg_get_nodes(graph));
@@ -1123,7 +1224,6 @@ static void cg_forward(SEXP ids, SEXP values, SEXP graph)
 
   UNPROTECT(1);
 }
-*/
 
 static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP graph)
 {
@@ -1287,7 +1387,6 @@ static void cg_backward(SEXP ids, SEXP index, SEXP values, SEXP grads, SEXP grap
   UNPROTECT(2);
 }
 
-/*
 SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 {
   SEXP graph_values = PROTECT(cg_get_values(graph));
@@ -1319,7 +1418,6 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
   return values;
 }
-*/
 
 SEXP cg_gradients(SEXP name, SEXP values, SEXP index, SEXP graph)
 {
@@ -1359,6 +1457,8 @@ SEXP cg_gradients(SEXP name, SEXP values, SEXP index, SEXP graph)
 
   return grads;
 }
+
+*/
 
 SEXP cg_approx_grad(SEXP x, SEXP y, SEXP values, SEXP index, SEXP eps, SEXP graph)
 {

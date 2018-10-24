@@ -18,31 +18,6 @@ session <- new.env()
 # Active graph
 session$graph <- NULL
 
-#' Generate Name
-#'
-#' Generate a default name for a node.
-#'
-#' @note The auto-generated name is not guaranteed to be unique.
-#'
-#' @return character scalar, auto-generated name for the node.
-#'
-#' @examples # Initialize a new computational graph.
-#' x <- cgraph$new()
-#'
-#' # Generate a name.
-#' name()
-#'
-#' @author Ron Triepels
-name <- function()
-{
-  if(is.null(session$graph))
-  {
-    stop("No active graph set", call. = FALSE)
-  }
-
-  session$graph$name()
-}
-
 #' Add Constant
 #'
 #' Add a constant node to the active graph.
@@ -233,7 +208,7 @@ run <- function(name, values = list())
 #' grads$a
 #'
 #' @author Ron Triepels
-gradients <- function(name, values = list(), index = 1)
+gradients <- function(name, values = new.env(), grads = new.env(), index = 1)
 {
   if(is.null(session$graph))
   {

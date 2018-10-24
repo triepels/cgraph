@@ -10,11 +10,6 @@ init.grad.default <- function(x, index = 1)
 
 init.grad.numeric <- function(x, index = 1)
 {
-  if(!is.numeric(index))
-  {
-    stop("index must be a numeric scalar")
-  }
-
   grad <- x * 0
 
   grad[index] <- 1

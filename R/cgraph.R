@@ -100,38 +100,9 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  nodes <- new.env()
-
-  values <- new.env(parent = asNamespace("cgraph"))
-
-  .Call("cgraph", self, nodes, values, PACKAGE = "cgraph")
+  .Call("cgraph", self, new.env(), PACKAGE = "cgraph")
 
   self$active()
-}
-
-#' Generate Name
-#'
-#' Generate a default name for a node.
-#'
-#' @details \code{$name()}
-#'
-#' @note The auto-generated name is not guaranteed to be unique.
-#'
-#' There is a wrapper function \link[cgraph]{name} that calls this method on the current active graph.
-#'
-#' @return character scalar, auto-generated name for the node.
-#'
-#' @examples # Initialize a new computational graph.
-#' x <- cgraph$new()
-#'
-#' # Generate a name.
-#' x$name()
-#'
-#' @name cg.name
-#' @author Ron Triepels
-cgraph$public_methods$name <- function()
-{
-  .Call("cg_gen_name", self, PACKAGE = "cgraph")
 }
 
 #' Add Constant
@@ -407,7 +378,7 @@ cgraph$public_methods$active <- function()
 #'
 #' @name cg.run
 #' @author Ron Triepels
-cgraph$public_methods$run <- function(name, values = list())
+cgraph$public_methods$run <- function(name, values = new.env())
 {
   if(is.list(values))
   {
@@ -455,14 +426,14 @@ cgraph$public_methods$run <- function(name, values = list())
 #'
 #' @name cg.gradients
 #' @author Ron Triepels
-cgraph$public_methods$gradients <- function(name, values = list(), index = 1)
+cgraph$public_methods$gradients <- function(name, values = new.env(), index = 1)
 {
   if(is.list(values))
   {
     values <- list2env(values)
   }
 
-  .Call("cg_gradients", name, values, index, self, PACKAGE = "cgraph")
+  .Call("cg_gradients", name, values, new.env(), index, self, PACKAGE = "cgraph")
 }
 
 #' Approximate Gradients
