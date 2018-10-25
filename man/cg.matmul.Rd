@@ -4,7 +4,7 @@
 \alias{cg.matmul}
 \title{Matrix Multiplication}
 \usage{
-cg.matmul(x, y, name = cgraph::name())
+cg.matmul(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric matrix.}

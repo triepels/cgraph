@@ -4,7 +4,7 @@
 \alias{exp.grad}
 \title{Exponential Gradient Function}
 \usage{
-\method{exp}{grad}(x, grad)
+\method{exp}{grad}(x, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

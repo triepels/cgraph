@@ -4,14 +4,14 @@
 \alias{cg.min.grad}
 \title{Minima Gradient}
 \usage{
-cg.min.grad(x, y, grad)
+cg.min.grad(x, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}
 
-\item{y}{numeric vector or array, value of \code{min(y)}.}
-
 \item{grad}{numeric vector or array, gradient of \code{x}.}
+
+\item{y}{numeric vector or array, value of \code{min(y)}.}
 }
 \value{
 numeric vector or array, gradient of the operation.

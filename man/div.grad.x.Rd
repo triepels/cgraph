@@ -4,7 +4,7 @@
 \alias{div.grad.x}
 \title{Divide Gradient}
 \usage{
-div.grad.x(x, y, grad)
+div.grad.x(x, y, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

@@ -8,12 +8,14 @@
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.not <- function(x, name = cgraph::name())
+cg.not <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(!x),
-    grads = list(x = quote(cg.constant.grad(x))),
-    binding = list(x = x)
+    call = as.name("!"),
+    grads = list(
+      as.name("constant.grad")
+    ),
+    args = list(x)
   )
 }
 
@@ -27,7 +29,7 @@ cg.not <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.constant.grad <- function(x)
+constant.grad <- function(x, val, grad)
 {
   if(is.array(x))
   {
@@ -56,10 +58,10 @@ cg.constant.grad <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.equal <- function(x, y, name = cgraph::name())
+cg.equal <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(x == y),
+    call = as.name("=="),
     grads = list(
       x = quote(cg.constant.grad(x)),
       y = quote(cg.constant.grad(y))

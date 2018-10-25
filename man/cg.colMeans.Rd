@@ -4,7 +4,7 @@
 \alias{cg.colMeans}
 \title{Column Means}
 \usage{
-cg.colMeans(x, name = cgraph::name())
+cg.colMeans(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric array.}

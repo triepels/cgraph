@@ -4,7 +4,7 @@
 \alias{cg.min}
 \title{Minima}
 \usage{
-cg.min(x, name = cgraph::name())
+cg.min(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

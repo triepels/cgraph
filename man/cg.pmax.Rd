@@ -4,7 +4,7 @@
 \alias{cg.pmax}
 \title{Parallel Maxima}
 \usage{
-cg.pmax(x, y, name = cgraph::name())
+cg.pmax(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

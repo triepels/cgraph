@@ -4,7 +4,7 @@
 \alias{cg.equal}
 \title{Equal}
 \usage{
-cg.equal(x, y, name = cgraph::name())
+cg.equal(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

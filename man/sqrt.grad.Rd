@@ -4,7 +4,7 @@
 \alias{sqrt.grad}
 \title{Square Root Gradient}
 \usage{
-\method{sqrt}{grad}(x, grad)
+\method{sqrt}{grad}(x, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

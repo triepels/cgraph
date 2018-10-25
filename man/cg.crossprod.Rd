@@ -4,7 +4,7 @@
 \alias{cg.crossprod}
 \title{Matrix Crossproduct}
 \usage{
-cg.crossprod(x, y, name = cgraph::name())
+cg.crossprod(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric matrix.}

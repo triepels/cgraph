@@ -4,7 +4,7 @@
 \alias{cg.mean}
 \title{Arithmetic Mean}
 \usage{
-cg.mean(x, name = cgraph::name())
+cg.mean(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

@@ -4,7 +4,7 @@
 \alias{cg.linear}
 \title{Linear Transformation}
 \usage{
-cg.linear(x, y, z, name = cgraph::name())
+cg.linear(x, y, z, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric matrix.}

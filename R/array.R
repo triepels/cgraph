@@ -23,16 +23,26 @@
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.matmul <- function(x, y, name = cgraph::name())
+cg.matmul <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(x %*% y),
+    call = quote(`%*%`),
     grads = list(
-      x = quote(tcrossprod(grad, y)),
-      y = quote(crossprod(x, grad))
+      quote(matmul.grad.x),
+      quote(matmul.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
+}
+
+matmul.grad.x <- function(x, y, val, grad)
+{
+  tcrossprod(grad, y)
+}
+
+matmul.grad.y <- function(x, y, val, grad)
+{
+  crossprod(x, grad)
 }
 
 #' Matrix Crossproduct
@@ -48,16 +58,26 @@ cg.matmul <- function(x, y, name = cgraph::name())
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.crossprod <- function(x, y, name = cgraph::name())
+cg.crossprod <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(crossprod(x, y)),
+    call = quote(crossprod),
     grads = list(
-      x = quote(y %*% grad),
-      y = quote(x %*% grad)
+      quote(crossprod.grad.x),
+      quote(crossprod.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
+}
+
+crossprod.grad.x <- function(x, y, val, grad)
+{
+  y %*% grad
+}
+
+crossprod.grad.y <- function(x, y, val, grad)
+{
+  x %*% grad
 }
 
 #' Transpose Matrix Crossproduct
@@ -73,16 +93,26 @@ cg.crossprod <- function(x, y, name = cgraph::name())
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.tcrossprod <- function(x, y, name = cgraph::name())
+cg.tcrossprod <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(tcrossprod(x, y)),
+    call = quote(tcrossprod),
     grads = list(
-      x = quote(grad %*% y),
-      y = quote(grad %*% x)
+      quote(tcrossprod.grad.x),
+      quote(tcrossprod.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
+}
+
+tcrossprod.grad.x <- function(x, y, val, grad)
+{
+  grad %*% y
+}
+
+tcrossprod.grad.y <- function(x, y, val, grad)
+{
+  grad %*% x
 }
 
 #' Linear Transformation
@@ -99,17 +129,32 @@ cg.tcrossprod <- function(x, y, name = cgraph::name())
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.linear <- function(x, y, z, name = cgraph::name())
+cg.linear <- function(x, y, z, name)
 {
   cgraph::opr(name = name,
-    call = quote(x %*% y + c(z)),
+    call = quote(linear),
     grads = list(
-      x = quote(tcrossprod(grad, y)),
-      y = quote(crossprod(x, grad)),
-      z = quote(cg.linear.grad.z(z, grad))
+      quote(linear.grad.x),
+      quote(linear.grad.y),
+      quote(linear.grad.z)
     ),
-    binding = list(x = x, y = y, z = z)
+    args = list(x, y, z)
   )
+}
+
+linear <- function(x, y, z)
+{
+  x %*% y + c(z)
+}
+
+linear.grad.x  <- function(x, y, z, val, grad)
+{
+  tcrossprod(grad, y)
+}
+
+linear.grad.y <- function(x, y, z, val, grad)
+{
+  crossprod(x, grad)
 }
 
 #' Linear Transformation Gradient
@@ -123,7 +168,8 @@ cg.linear <- function(x, y, z, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.linear.grad.z <- function(z, grad)
+
+linear.grad.z <- function(x, y, z, val, grad)
 {
   if(is.array(z))
   {
@@ -147,12 +193,14 @@ cg.linear.grad.z <- function(z, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.sum <- function(x, name = cgraph::name())
+cg.sum <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(sum(x)),
-    grads = list(x = quote(cg.sum.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(sum),
+    grads = list(
+      quote(sum.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -167,7 +215,7 @@ cg.sum <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.sum.grad <- function(x, grad)
+sum.grad <- function(x, val, grad)
 {
   if(is.array(x))
   {
@@ -191,12 +239,14 @@ cg.sum.grad <- function(x, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.prod <- function(x, name = cgraph::name())
+cg.prod <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(prod(x)),
-    grads = list(x = quote(cg.prod.grad(x, y, grad))),
-    binding = list(x = x, y = name)
+    call = quote(prod),
+    grads = list(
+      quote(prod.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -212,9 +262,9 @@ cg.prod <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.prod.grad <- function(x, y, grad)
+prod.grad <- function(x, val, grad)
 {
-  grad * y / x
+  grad * val / x
 }
 
 #' Row Sums
@@ -227,12 +277,14 @@ cg.prod.grad <- function(x, y, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.rowSums <- function(x, name = cgraph::name())
+cg.rowSums <- function(x, name)
 {
  cgraph::opr(name = name,
-   call = quote(rowSums(x)),
-   grads = list(x = quote(cg.rowSums.grad(x, grad))),
-   binding = list(x = x)
+   call = quote(rowSums),
+   grads = list(
+     quote(rowSums.grad)
+   ),
+   args = list(x)
  )
 }
 
@@ -247,7 +299,7 @@ cg.rowSums <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.rowSums.grad <- function(x, grad)
+rowSums.grad <- function(x, val, grad)
 {
   array(grad, dim(x))
 }
@@ -262,12 +314,14 @@ cg.rowSums.grad <- function(x, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.colSums <- function(x, name = cgraph::name())
+cg.colSums <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(colSums(x)),
-    grads = list(x = quote(cg.colSums.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(colSums),
+    grads = list(
+      quote(colSums.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -282,10 +336,17 @@ cg.colSums <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.colSums.grad <- function(x, grad)
+colSums.grad <- function(x, val, grad)
 {
   aperm(array(grad, rev(dim(x))))
 }
+
+
+
+# To do:
+# Update documentation of cg.mean
+
+
 
 #' Arithmetic Mean
 #'
@@ -299,12 +360,14 @@ cg.colSums.grad <- function(x, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.mean <- function(x, name = cgraph::name())
+cg.mean <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(sum(x) / length(x)),
-    grads = list(x = quote(cg.mean.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(mean),
+    grads = list(
+      quote(mean.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -319,7 +382,7 @@ cg.mean <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.mean.grad <- function(x, grad)
+mean.grad <- function(x, val, grad)
 {
   if(is.array(x))
   {
@@ -341,12 +404,14 @@ cg.mean.grad <- function(x, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.rowMeans <- function(x, name = cgraph::name())
+cg.rowMeans <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(rowMeans(x)),
-    grads = list(x = quote(cg.rowMeans.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(rowMeans),
+    grads = list(
+      quote(rowMeans.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -361,9 +426,9 @@ cg.rowMeans <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.rowMeans.grad <- function(x, grad)
+rowMeans.grad <- function(x, val, grad)
 {
-  1 / prod(dim(x)[-1]) * array(grad, dim(x))
+  1 / prod(dim(x)[-1L]) * array(grad, dim(x))
 }
 
 #' Column Means
@@ -376,12 +441,14 @@ cg.rowMeans.grad <- function(x, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.colMeans <- function(x, name = cgraph::name())
+cg.colMeans <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(colMeans(x)),
-    grads = list(x = quote(cg.colMeans.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(colMeans),
+    grads = list(
+      quote(colMeans.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -396,7 +463,7 @@ cg.colMeans <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.colMeans.grad <- function(x, grad)
+colMeans.grad <- function(x, val, grad)
 {
   1 / dim(x)[1] * aperm(array(grad, rev(dim(x))))
 }
@@ -413,12 +480,14 @@ cg.colMeans.grad <- function(x, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.max <- function(x, name = cgraph::name())
+cg.max <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(max(x)),
-    grads = list(x = quote(cg.max.grad(x, y, grad))),
-    binding = list(x = x, y = name)
+    call = quote(max),
+    grads = list(
+      quote(max.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -434,9 +503,9 @@ cg.max <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.max.grad <- function(x, y, grad)
+max.grad <- function(x, val, grad)
 {
-  c(grad) * (x == c(y))
+  c(grad) * (x == c(val))
 }
 
 #' Minima
@@ -451,12 +520,14 @@ cg.max.grad <- function(x, y, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.min <- function(x, name = cgraph::name())
+cg.min <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(min(x)),
-    grads = list(x = quote(cg.min.grad(x, y, grad))),
-    binding = list(x = x, y = name)
+    call = quote(min),
+    grads = list(
+      quote(min.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -472,9 +543,9 @@ cg.min <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.min.grad <- function(x, y, grad)
+cg.min.grad <- function(x, val, grad)
 {
-  c(grad) * (x == c(y))
+  c(grad) * (x == c(val))
 }
 
 #' Parallel Maxima
@@ -490,15 +561,15 @@ cg.min.grad <- function(x, y, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.pmax <- function(x, y, name = cgraph::name())
+cg.pmax <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(pmax(x, y)),
+    call = quote(pmax),
     grads = list(
-      x = quote(cg.pmax.grad.x(x, y, grad)),
-      y = quote(cg.pmax.grad.y(x, y, grad))
+      quote(pmax.grad.x),
+      quote(pmax.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
 }
 
@@ -514,7 +585,7 @@ cg.pmax <- function(x, y, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.pmax.grad.x <- function(x, y, grad)
+pmax.grad.x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -538,7 +609,7 @@ cg.pmax.grad.x <- function(x, y, grad)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.pmax.grad.y <- function(x, y, grad)
+pmax.grad.y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -563,15 +634,15 @@ cg.pmax.grad.y <- function(x, y, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.pmin <- function(x, y, name = cgraph::name())
+cg.pmin <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(pmin(x, y)),
+    call = quote(pmin),
     grads = list(
-      x = quote(cg.pmin.grad.x(x, y, grad)),
-      y = quote(cg.pmin.grad.y(x, y, grad))
+      quote(pmin.grad.x),
+      quote(pmin.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
 }
 
@@ -587,7 +658,7 @@ cg.pmin <- function(x, y, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.pmin.grad.x <- function(x, y, grad)
+pmin.grad.x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -611,7 +682,7 @@ cg.pmin.grad.x <- function(x, y, grad)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.pmin.grad.y <- function(x, y, grad)
+pmin.grad.y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {

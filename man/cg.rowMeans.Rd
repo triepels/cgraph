@@ -4,7 +4,7 @@
 \alias{cg.rowMeans}
 \title{Row Means}
 \usage{
-cg.rowMeans(x, name = cgraph::name())
+cg.rowMeans(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric array.}

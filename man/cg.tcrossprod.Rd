@@ -4,7 +4,7 @@
 \alias{cg.tcrossprod}
 \title{Transpose Matrix Crossproduct}
 \usage{
-cg.tcrossprod(x, y, name = cgraph::name())
+cg.tcrossprod(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric matrix.}

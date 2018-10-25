@@ -4,7 +4,7 @@
 \alias{abs.grad}
 \title{Absolute Value Gradient}
 \usage{
-\method{abs}{grad}(x, grad)
+\method{abs}{grad}(x, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

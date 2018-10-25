@@ -4,7 +4,7 @@
 \alias{cg.not}
 \title{Not}
 \usage{
-cg.not(x, name = cgraph::name())
+cg.not(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

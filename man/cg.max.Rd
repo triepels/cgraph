@@ -4,7 +4,7 @@
 \alias{cg.max}
 \title{Maxima}
 \usage{
-cg.max(x, name = cgraph::name())
+cg.max(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

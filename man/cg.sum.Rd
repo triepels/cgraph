@@ -4,7 +4,7 @@
 \alias{cg.sum}
 \title{Sum of Vector Elements}
 \usage{
-cg.sum(x, name = cgraph::name())
+cg.sum(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

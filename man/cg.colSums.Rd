@@ -4,7 +4,7 @@
 \alias{cg.colSums}
 \title{Column Sums}
 \usage{
-cg.colSums(x, name = cgraph::name())
+cg.colSums(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric array.}

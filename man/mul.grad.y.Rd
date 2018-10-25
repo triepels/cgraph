@@ -4,7 +4,7 @@
 \alias{mul.grad.y}
 \title{Multiply Gradient}
 \usage{
-mul.grad.y(x, y, grad)
+mul.grad.y(x, y, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

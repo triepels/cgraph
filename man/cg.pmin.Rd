@@ -4,7 +4,7 @@
 \alias{cg.pmin}
 \title{Parallel Minima}
 \usage{
-cg.pmin(x, y, name = cgraph::name())
+cg.pmin(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

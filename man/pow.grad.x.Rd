@@ -4,7 +4,7 @@
 \alias{pow.grad.x}
 \title{Power Gradient}
 \usage{
-pow.grad.x(x, y, grad)
+pow.grad.x(x, y, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

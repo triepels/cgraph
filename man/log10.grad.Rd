@@ -4,7 +4,7 @@
 \alias{log10.grad}
 \title{Logarithmic Base 10 Gradient Function}
 \usage{
-log10.grad(x, grad)
+log10.grad(x, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

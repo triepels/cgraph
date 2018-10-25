@@ -4,7 +4,7 @@
 \alias{add.grad}
 \title{Add Gradient}
 \usage{
-add.grad(x, y, grad)
+add.grad(x, y, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

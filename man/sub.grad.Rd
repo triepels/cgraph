@@ -4,7 +4,7 @@
 \alias{sub.grad}
 \title{Subtract Gradient}
 \usage{
-sub.grad(x, y, grad)
+sub.grad(x, y, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{y}.}
