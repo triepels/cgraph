@@ -4,7 +4,7 @@
 \alias{cg.abs}
 \title{Absolute Value}
 \usage{
-cg.abs(x, name = cgraph::name())
+cg.abs(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

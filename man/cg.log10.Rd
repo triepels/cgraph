@@ -4,7 +4,7 @@
 \alias{cg.log10}
 \title{Logarithmic Base 10 Function}
 \usage{
-cg.log10(x, name = cgraph::name())
+cg.log10(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

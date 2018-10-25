@@ -4,7 +4,7 @@
 \alias{cg.exp}
 \title{Exponential Function}
 \usage{
-cg.exp(x, name = cgraph::name())
+cg.exp(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

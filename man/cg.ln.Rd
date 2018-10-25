@@ -4,7 +4,7 @@
 \alias{cg.ln}
 \title{Natural Logarithmic Function}
 \usage{
-cg.ln(x, name = cgraph::name())
+cg.ln(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

@@ -4,7 +4,7 @@
 \alias{gradients}
 \title{Calculate Gradients}
 \usage{
-gradients(name, values = list(), index = 1)
+gradients(name, values = new.env(), index = 1)
 }
 \arguments{
 \item{name}{character scalar or symbol, name of the node that is differentiated.}

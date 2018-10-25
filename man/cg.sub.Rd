@@ -4,7 +4,7 @@
 \alias{cg.sub}
 \title{Subtract}
 \usage{
-cg.sub(x, y, name = cgraph::name())
+cg.sub(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

@@ -208,7 +208,7 @@ run <- function(name, values = list())
 #' grads$a
 #'
 #' @author Ron Triepels
-gradients <- function(name, values = new.env(), grads = new.env(), index = 1)
+gradients <- function(name, values = new.env(), index = 1)
 {
   if(is.null(session$graph))
   {

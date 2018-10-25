@@ -4,7 +4,7 @@
 \alias{cg.div}
 \title{Divide}
 \usage{
-cg.div(x, y, name = cgraph::name())
+cg.div(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

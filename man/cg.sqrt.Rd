@@ -4,7 +4,7 @@
 \alias{cg.sqrt}
 \title{Square Root}
 \usage{
-cg.sqrt(x, name = cgraph::name())
+cg.sqrt(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

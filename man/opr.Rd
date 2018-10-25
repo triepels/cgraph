@@ -4,16 +4,16 @@
 \alias{opr}
 \title{Add Operation}
 \usage{
-opr(call, grads, binding, name)
+opr(call, grads, args, name)
 }
 \arguments{
 \item{call}{call or symbol, operation performed by the node. Must evaluate to a numeric vector or array.}
 
 \item{grads}{named list of calls, gradients of the input nodes that are consumed by the operation in argument \code{call}. Is ignored when the elements are not named.}
 
-\item{binding}{named list or environment, binds the variables in the calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.}
-
 \item{name}{character scalar, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
+
+\item{binding}{named list or environment, binds the variables in the calls of argument \code{call} and \code{grads} to the symbols of the nodes in the graph.}
 }
 \value{
 cg.node, operation.

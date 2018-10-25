@@ -4,7 +4,7 @@
 \alias{cg.add}
 \title{Add}
 \usage{
-cg.add(x, y, name = cgraph::name())
+cg.add(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

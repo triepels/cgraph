@@ -1061,26 +1061,28 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
     SEXP child_grad = PROTECT(Rf_eval(cg_get_symbol(child), grads));
 
-    int m, j = 0;
+    int m;
 
     int* child_parents = cg_get_parents(child, &m);
 
-    SEXP args = PROTECT(Rf_allocVector(LISTSXP, m + 1));
+    SEXP args = PROTECT(Rf_allocVector(LISTSXP, m + 2));
 
-    SET_TAG(args, Rf_install("grad"));
+    SEXP arg = args;
 
-    SETCAR(args, child_grad);
-
-    for(SEXP arg = CDR(args); arg != R_NilValue; arg = CDR(arg))
+    for(int j = 0; j < m; j++)
     {
       SEXP parent = PROTECT(cg_get_node_id(child_parents[j], graph));
 
       SETCAR(arg, cg_get_symbol(parent));
 
-      UNPROTECT(1);
+      arg = CDR(arg);
 
-      j++;
+      UNPROTECT(1);
     }
+
+    SET_TAG(arg, Rf_install("grad"));
+
+    SETCAR(arg, child_grad);
 
     SEXP call = PROTECT(Rf_lcons(cg_get_grad(node, i), args));
 

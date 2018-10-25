@@ -4,7 +4,7 @@
 \alias{cg.mul}
 \title{Multiply}
 \usage{
-cg.mul(x, y, name = cgraph::name())
+cg.mul(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

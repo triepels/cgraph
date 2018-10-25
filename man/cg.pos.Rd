@@ -4,7 +4,7 @@
 \alias{cg.pos}
 \title{Positive}
 \usage{
-cg.pos(x, name = cgraph::name())
+cg.pos(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

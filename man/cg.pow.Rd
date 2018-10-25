@@ -4,7 +4,7 @@
 \alias{cg.pow}
 \title{Power}
 \usage{
-cg.pow(x, y, name = cgraph::name())
+cg.pow(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}
