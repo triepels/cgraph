@@ -50,6 +50,6 @@ print.cg.node = function(x, ..., autorun = getOption("cg.autorun"))
   }
   else
   {
-    cat(sprintf("<cg.node: %s>\n", x))
+
   }
 }

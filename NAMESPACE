@@ -27,6 +27,8 @@ export(run)
 export(gradients)
 export(approx.grad)
 
+export(val)
+
 # Export array operators
 export(cg.matmul)
 export(cg.crossprod)

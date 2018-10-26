@@ -22,12 +22,14 @@
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.sin <- function(x, name = cgraph::name())
+cg.sin <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(sin(x)),
-    grads = list(x = quote(cg.sin.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(sin),
+    grads = list(
+      x = quote(sin.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -42,7 +44,7 @@ cg.sin <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.sin.grad <- function(x, grad)
+sin.grad <- function(x, val, grad)
 {
   grad * cos(x)
 }
@@ -73,12 +75,14 @@ sin.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.cos <- function(x, name = cgraph::name())
+cg.cos <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(cos(x)),
-    grads = list(x = quote(cg.cos.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(cos),
+    grads = list(
+      quote(cos.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -93,7 +97,7 @@ cg.cos <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.cos.grad <- function(x, grad)
+cos.grad <- function(x, val, grad)
 {
   -grad * sin(x)
 }
@@ -124,12 +128,14 @@ cos.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.tan <- function(x, name = cgraph::name())
+cg.tan <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(tan(x)),
-    grads = list(x = quote(cg.tan.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(tan),
+    grads = list(
+      quote(tan.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -144,7 +150,7 @@ cg.tan <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.tan.grad <- function(x, grad)
+tan.grad <- function(x, val, grad)
 {
   grad / cos(x)^2
 }
@@ -175,12 +181,14 @@ tan.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.sinh <- function(x, name = cgraph::name())
+cg.sinh <- function(x, name)
 {
   cgraph::opr(name = name,
     call = quote(sinh(x)),
-    grads = list(x = quote(cg.sinh.grad(x, grad))),
-    binding = list(x = x)
+    grads = list(
+      quote(sinh.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -195,7 +203,7 @@ cg.sinh <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.sinh.grad <- function(x, grad)
+sinh.grad <- function(x, val, grad)
 {
   grad * cosh(x)
 }
@@ -226,12 +234,14 @@ sinh.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.cosh <- function(x, name = cgraph::name())
+cg.cosh <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(cosh(x)),
-    grads = list(x = quote(cg.cosh.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(cosh),
+    grads = list(
+      quote(cosh.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -246,7 +256,7 @@ cg.cosh <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.cosh.grad <- function(x, grad)
+cosh.grad <- function(x, val, grad)
 {
   grad * sinh(x)
 }
@@ -277,12 +287,14 @@ cosh.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.tanh <- function(x, name = cgraph::name())
+cg.tanh <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(tanh(x)),
-    grads = list(x = quote(cg.tanh.grad(y, grad))),
-    binding = list(x = x, y = name)
+    call = quote(tanh),
+    grads = list(
+      quote(tanh.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -297,9 +309,9 @@ cg.tanh <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.tanh.grad <- function(y, grad)
+tanh.grad <- function(x, val, grad)
 {
-  grad * (1 - y^2)
+  grad * (1 - val^2)
 }
 
 #' Hyperbolic Tangent
@@ -328,12 +340,14 @@ tanh.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.asin <- function(x, name = cgraph::name())
+cg.asin <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(asin(x)),
-    grads = list(x = quote(cg.asin.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(asin),
+    grads = list(
+      quote(asin.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -348,7 +362,7 @@ cg.asin <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.asin.grad <- function(x, grad)
+asin.grad <- function(x, val, grad)
 {
   grad / sqrt(1 - x^2)
 }
@@ -379,12 +393,14 @@ asin.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.acos <- function(x, name = cgraph::name())
+cg.acos <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(acos(x)),
-    grads = list(x = quote(cg.acos.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(acos),
+    grads = list(
+      quote(acos.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -399,7 +415,7 @@ cg.acos <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.acos.grad <- function(x, grad)
+acos.grad <- function(x, grad)
 {
   -grad / sqrt(1 - x^2)
 }
@@ -430,12 +446,14 @@ acos.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.atan <- function(x, name = cgraph::name())
+cg.atan <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(atan(x)),
-    grads = list(x = quote(cg.atan.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(atan),
+    grads = list(
+      quote(atan.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -450,7 +468,7 @@ cg.atan <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.atan.grad <- function(x, grad)
+atan.grad <- function(x, val, grad)
 {
   grad / (x^2 + 1)
 }
@@ -481,12 +499,14 @@ atan.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.asinh <- function(x, name = cgraph::name())
+cg.asinh <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(asinh(x)),
-    grads = list(x = quote(cg.asinh.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(asinh),
+    grads = list(
+      quote(asinh.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -501,7 +521,7 @@ cg.asinh <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.asinh.grad <- function(x, grad)
+asinh.grad <- function(x, grad)
 {
   grad / sqrt(x^2 + 1)
 }
@@ -532,12 +552,14 @@ asinh.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.acosh <- function(x, name = cgraph::name())
+cg.acosh <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(acosh(x)),
-    grads = list(x = quote(cg.acosh.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(acosh),
+    grads = list(
+      quote(cg.acosh.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -552,7 +574,7 @@ cg.acosh <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.acosh.grad <- function(x, grad)
+acosh.grad <- function(x, val, grad)
 {
   grad / sqrt(x^2 - 1)
 }
@@ -583,12 +605,14 @@ acosh.cg.node <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.atanh <- function(x, name = cgraph::name())
+cg.atanh <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(atanh(x)),
-    grads = list(x = quote(cg.atanh.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(atanh),
+    grads = list(
+      quote(atanh.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -603,7 +627,7 @@ cg.atanh <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.atanh.grad <- function(x, grad)
+atanh.grad <- function(x, val, grad)
 {
   grad / (1 - x^2)
 }

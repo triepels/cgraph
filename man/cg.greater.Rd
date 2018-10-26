@@ -4,7 +4,7 @@
 \alias{cg.greater}
 \title{Greater}
 \usage{
-cg.greater(x, y, name = cgraph::name())
+cg.greater(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

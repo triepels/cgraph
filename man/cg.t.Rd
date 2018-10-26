@@ -4,7 +4,7 @@
 \alias{cg.t}
 \title{Matrix Transpose}
 \usage{
-cg.t(x, name = cgraph::name())
+cg.t(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric matrix.}

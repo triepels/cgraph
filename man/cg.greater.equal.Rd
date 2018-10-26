@@ -4,7 +4,7 @@
 \alias{cg.greater.equal}
 \title{Greater or Equal}
 \usage{
-cg.greater.equal(x, y, name = cgraph::name())
+cg.greater.equal(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

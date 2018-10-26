@@ -4,7 +4,7 @@
 \alias{as.double.cg.node}
 \title{Coerce to a Numeric Vector}
 \usage{
-\method{as.double}{cg.node}(x, name = cgraph::name(), ...)
+\method{as.double}{cg.node}(x, name, ...)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric array.}

@@ -4,7 +4,7 @@
 \alias{cg.atanh}
 \title{Inverse Hyperbolic Tangent}
 \usage{
-cg.atanh(x, name = cgraph::name())
+cg.atanh(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

@@ -4,7 +4,7 @@
 \alias{cg.atan}
 \title{Inverse Tangent}
 \usage{
-cg.atan(x, name = cgraph::name())
+cg.atan(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

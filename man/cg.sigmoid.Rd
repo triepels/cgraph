@@ -4,7 +4,7 @@
 \alias{cg.sigmoid}
 \title{Sigmoid}
 \usage{
-cg.sigmoid(x, name = cgraph::name())
+cg.sigmoid(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

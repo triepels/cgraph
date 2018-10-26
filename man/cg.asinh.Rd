@@ -4,7 +4,7 @@
 \alias{cg.asinh}
 \title{Inverse Hyperbolic Sine}
 \usage{
-cg.asinh(x, name = cgraph::name())
+cg.asinh(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

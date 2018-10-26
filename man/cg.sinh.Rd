@@ -4,7 +4,7 @@
 \alias{cg.sinh}
 \title{Hyperbolic Sine}
 \usage{
-cg.sinh(x, name = cgraph::name())
+cg.sinh(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

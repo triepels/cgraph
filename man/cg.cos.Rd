@@ -4,7 +4,7 @@
 \alias{cg.cos}
 \title{Cosine}
 \usage{
-cg.cos(x, name = cgraph::name())
+cg.cos(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

@@ -38,12 +38,14 @@ sigmoid <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.sigmoid <- function(x, name = cgraph::name())
+cg.sigmoid <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(sigmoid(x)),
-    grads = list(x = quote(cg.sigmoid.grad(y, grad))),
-    binding = list(x = x, y = name)
+    call = quote(sigmoid),
+    grads = list(
+      quote(sigmoid.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -58,7 +60,7 @@ cg.sigmoid <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.sigmoid.grad <- function(y, grad)
+sigmoid.grad <- function(x, val, grad)
 {
-  grad * y * (1 - y)
+  grad * val * (1 - val)
 }

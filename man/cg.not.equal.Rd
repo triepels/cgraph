@@ -4,7 +4,7 @@
 \alias{cg.not.equal}
 \title{Not equal}
 \usage{
-cg.not.equal(x, y, name = cgraph::name())
+cg.not.equal(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

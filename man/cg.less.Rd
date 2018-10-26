@@ -4,7 +4,7 @@
 \alias{cg.less}
 \title{Less}
 \usage{
-cg.less(x, y, name = cgraph::name())
+cg.less(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

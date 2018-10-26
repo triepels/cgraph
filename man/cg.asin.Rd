@@ -4,7 +4,7 @@
 \alias{cg.asin}
 \title{Inverse Sine}
 \usage{
-cg.asin(x, name = cgraph::name())
+cg.asin(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

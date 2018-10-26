@@ -4,7 +4,7 @@
 \alias{cg.acos}
 \title{Inverse Cosine}
 \usage{
-cg.acos(x, name = cgraph::name())
+cg.acos(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

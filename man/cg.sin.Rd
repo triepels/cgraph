@@ -4,7 +4,7 @@
 \alias{cg.sin}
 \title{Sine}
 \usage{
-cg.sin(x, name = cgraph::name())
+cg.sin(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

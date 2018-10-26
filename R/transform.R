@@ -24,12 +24,14 @@
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.as.double <- function(x, name = cgraph::name())
+cg.as.double <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(as.numeric(x)),
-    grads = list(x = quote(cg.as.double.grad(x, grad))),
-    binding = list(x = x)
+    call = quote(as.double),
+    grads = list(
+      quote(as.double.grad)
+    ),
+    args = list(x)
   )
 }
 
@@ -44,7 +46,7 @@ cg.as.double <- function(x, name = cgraph::name())
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.as.double.grad <- function(x, grad)
+as.double.grad <- function(x, val, grad)
 {
   if(is.array(x))
   {
@@ -67,7 +69,7 @@ cg.as.double.grad <- function(x, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-as.double.cg.node <- function(x, name = cgraph::name(), ...)
+as.double.cg.node <- function(x, name, ...)
 {
   .Deprecated("cg.as.double")
 
@@ -86,10 +88,15 @@ as.double.cg.node <- function(x, name = cgraph::name(), ...)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.as.numeric <- function(x, name = cgraph::name())
+cg.as.numeric <- function(x, name)
 {
   cgraph::cg.as.double(x, name)
 }
+
+
+#### TO DO: Check description of cg.reshape
+
+
 
 #' Reshape Array Dimensions
 #'
@@ -104,10 +111,10 @@ cg.as.numeric <- function(x, name = cgraph::name())
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.reshape <- function(x, dim, name = cgraph::name())
+cg.reshape <- function(x, dim, name)
 {
   cgraph::opr(name = name,
-    call = substitute(array(x, dim), list(dim = dim)),
+    call = quote(array),
     grads = list(x = quote(cg.reshape.grad(x, grad))),
     binding = list(x = x)
   )
@@ -167,13 +174,20 @@ as.array.cg.node <- function(x, dim, name = cgraph::name(), ...)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.t <- function(x, name = cgraph::name())
+cg.t <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(t(x)),
-    grads = list(x = quote(t(grad))),
-    binding = list(x = x)
+    call = quote(t),
+    grads = list(
+      x = quote(t.grad)
+    ),
+    args = list(x)
   )
+}
+
+t.grad <- function(x, val, grad)
+{
+  t(grad)
 }
 
 #' Matrix Transpose

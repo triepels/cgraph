@@ -4,7 +4,7 @@
 \alias{cg.cosh}
 \title{Hyperbolic Cosine}
 \usage{
-cg.cosh(x, name = cgraph::name())
+cg.cosh(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

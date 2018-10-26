@@ -4,7 +4,7 @@
 \alias{cg.less.equal}
 \title{Less or Equal}
 \usage{
-cg.less.equal(x, y, name = cgraph::name())
+cg.less.equal(x, y, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

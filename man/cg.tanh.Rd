@@ -4,7 +4,7 @@
 \alias{cg.tanh}
 \title{Hyperbolic Tangent}
 \usage{
-cg.tanh(x, name = cgraph::name())
+cg.tanh(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

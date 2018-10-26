@@ -4,7 +4,7 @@
 \alias{cg.reshape}
 \title{Reshape Array Dimensions}
 \usage{
-cg.reshape(x, dim, name = cgraph::name())
+cg.reshape(x, dim, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

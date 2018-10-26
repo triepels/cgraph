@@ -11,9 +11,9 @@
 cg.not <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = as.name("!"),
+    call = quote(`!`),
     grads = list(
-      as.name("constant.grad")
+      quote(constant.grad)
     ),
     args = list(x)
   )
@@ -29,7 +29,7 @@ cg.not <- function(x, name)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-constant.grad <- function(x, val, grad)
+not.grad <- function(x, val, grad)
 {
   if(is.array(x))
   {
@@ -61,13 +61,37 @@ constant.grad <- function(x, val, grad)
 cg.equal <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = as.name("=="),
+    call = quote(`==`),
     grads = list(
-      x = quote(cg.constant.grad(x)),
-      y = quote(cg.constant.grad(y))
+      quote(equal.grad.x),
+      quote(equal.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
+}
+
+equal.grad.x <- function(x, y, val, grad)
+{
+  if(is.array(x))
+  {
+    array(0, dim(x))
+  }
+  else
+  {
+    rep(0, length(x))
+  }
+}
+
+equal.grad.y <- function(x, y, val, grad)
+{
+  if(is.array(y))
+  {
+    array(0, dim(y))
+  }
+  else
+  {
+    rep(0, length(y))
+  }
 }
 
 # S3 method
@@ -87,16 +111,40 @@ cg.equal <- function(x, y, name)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.not.equal <- function(x, y, name = cgraph::name())
+cg.not.equal <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(x != y),
+    call = quote(`!=`),
     grads = list(
-      x = quote(cg.constant.grad(x)),
-      y = quote(cg.constant.grad(y))
+      quote(not.equal.grad.x),
+      quote(not.equal.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
+}
+
+not.equal.grad.x <- function(x, y, val, grad)
+{
+  if(is.array(x))
+  {
+    array(0, dim(x))
+  }
+  else
+  {
+    rep(0, length(x))
+  }
+}
+
+not.equal.grad.y <- function(x, y, val, grad)
+{
+  if(is.array(y))
+  {
+    array(0, dim(y))
+  }
+  else
+  {
+    rep(0, length(y))
+  }
 }
 
 # S3 method
@@ -116,16 +164,40 @@ cg.not.equal <- function(x, y, name = cgraph::name())
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.less <- function(x, y, name = cgraph::name())
+cg.less <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(x < y),
+    call = quote(`<`),
     grads = list(
-      x = quote(cg.constant.grad(x)),
-      y = quote(cg.constant.grad(y))
+      quote(less.grad.x),
+      quote(less.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
+}
+
+less.grad.x <- function(x, y, val, grad)
+{
+  if(is.array(x))
+  {
+    array(0, dim(x))
+  }
+  else
+  {
+    rep(0, length(x))
+  }
+}
+
+less.grad.y <- function(x, y, val, grad)
+{
+  if(is.array(y))
+  {
+    array(0, dim(y))
+  }
+  else
+  {
+    rep(0, length(y))
+  }
 }
 
 # S3 method
@@ -145,16 +217,40 @@ cg.less <- function(x, y, name = cgraph::name())
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.greater <- function(x, y, name = cgraph::name())
+cg.greater <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(x > y),
+    call = quote(`>`),
     grads = list(
-      x = quote(cg.constant.grad(x)),
-      y = quote(cg.constant.grad(y))
+      quote(greater.grad.x),
+      quote(greater.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
+}
+
+greater.grad.x <- function(x, y, val, grad)
+{
+  if(is.array(x))
+  {
+    array(0, dim(x))
+  }
+  else
+  {
+    rep(0, length(x))
+  }
+}
+
+greater.grad.y <- function(x, y, val, grad)
+{
+  if(is.array(y))
+  {
+    array(0, dim(y))
+  }
+  else
+  {
+    rep(0, length(y))
+  }
 }
 
 # S3 method
@@ -174,16 +270,40 @@ cg.greater <- function(x, y, name = cgraph::name())
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.less.equal <- function(x, y, name = cgraph::name())
+cg.less.equal <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(x <= y),
+    call = quote(`<=`),
     grads = list(
-      x = quote(cg.constant.grad(x)),
-      y = quote(cg.constant.grad(y))
+      quote(less.equal.grad.x),
+      quote(less.equal.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
+}
+
+less.equal.grad.x <- function(x, y, val, grad)
+{
+  if(is.array(x))
+  {
+    array(0, dim(x))
+  }
+  else
+  {
+    rep(0, length(x))
+  }
+}
+
+less.equal.grad.y <- function(x, y, val, grad)
+{
+  if(is.array(y))
+  {
+    array(0, dim(y))
+  }
+  else
+  {
+    rep(0, length(y))
+  }
 }
 
 # S3 method
@@ -203,16 +323,40 @@ cg.less.equal <- function(x, y, name = cgraph::name())
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.greater.equal <- function(x, y, name = cgraph::name())
+cg.greater.equal <- function(x, y, name)
 {
   cgraph::opr(name = name,
-    call = quote(x >= y),
+    call = quote(`>=`),
     grads = list(
-      x = quote(cg.constant.grad(x)),
-      y = quote(cg.constant.grad(y))
+      quote(greater.equal.grad.x),
+      quote(greater.equal.grad.y)
     ),
-    binding = list(x = x, y = y)
+    args = list(x, y)
   )
+}
+
+greater.equal.grad.x <- function(x, y, val, grad)
+{
+  if(is.array(x))
+  {
+    array(0, dim(x))
+  }
+  else
+  {
+    rep(0, length(x))
+  }
+}
+
+greater.equal.grad.y <- function(x, y, val, grad)
+{
+  if(is.array(y))
+  {
+    array(0, dim(y))
+  }
+  else
+  {
+    rep(0, length(y))
+  }
 }
 
 # S3 method

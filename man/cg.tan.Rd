@@ -4,7 +4,7 @@
 \alias{cg.tan}
 \title{Tangent}
 \usage{
-cg.tan(x, name = cgraph::name())
+cg.tan(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}

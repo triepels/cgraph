@@ -4,7 +4,7 @@
 \alias{cg.acosh}
 \title{Inverse Hyperbolic Cosine}
 \usage{
-cg.acosh(x, name = cgraph::name())
+cg.acosh(x, name)
 }
 \arguments{
 \item{x}{cg.node, placeholder for a numeric vector or array.}
