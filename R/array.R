@@ -543,7 +543,7 @@ cg.min <- function(x, name)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.min.grad <- function(x, val, grad)
+min.grad <- function(x, val, grad)
 {
   c(grad) * (x == c(val))
 }

@@ -29,3 +29,31 @@ bsum <- function(x, n = 1)
 {
   .Call("bsum", x, n, PACKAGE = "cgraph")
 }
+
+approx.grad <- function(x, y, index = 1, eps = 1e-4)
+{
+  grad <- y.value <- val(y)
+
+  for(i in 1:length(grad))
+  {
+    y.value[i] <- y.value[i] + eps
+
+    set(y, y.value)
+
+    x.value1 <- val(x)[index]
+
+    y.value[i] <- y.value[i] - 2 * eps
+
+    set(y, y.value)
+
+    x.value2 <- val(x)[index]
+
+    y.value[i] <- y.value[i] + eps
+
+    set(y, y.value)
+
+    grad[i] <- (x.value1 - x.value2) / (2 * eps)
+  }
+
+  grad
+}

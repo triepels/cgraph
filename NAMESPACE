@@ -27,7 +27,6 @@ export(val)
 export(set)
 export(run)
 export(gradients)
-export(approx.grad)
 
 # Export array operators
 export(cg.matmul)

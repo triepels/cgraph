@@ -184,7 +184,7 @@ tan.cg.node <- function(x)
 cg.sinh <- function(x, name)
 {
   cgraph::opr(name = name,
-    call = quote(sinh(x)),
+    call = quote(sinh),
     grads = list(
       quote(sinh.grad)
     ),
@@ -415,7 +415,7 @@ cg.acos <- function(x, name)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-acos.grad <- function(x, grad)
+acos.grad <- function(x, val, grad)
 {
   -grad / sqrt(1 - x^2)
 }
@@ -521,7 +521,7 @@ cg.asinh <- function(x, name)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-asinh.grad <- function(x, grad)
+asinh.grad <- function(x, val, grad)
 {
   grad / sqrt(x^2 + 1)
 }
@@ -557,7 +557,7 @@ cg.acosh <- function(x, name)
   cgraph::opr(name = name,
     call = quote(acosh),
     grads = list(
-      quote(cg.acosh.grad)
+      quote(acosh.grad)
     ),
     args = list(x)
   )
