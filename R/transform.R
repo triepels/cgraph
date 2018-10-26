@@ -54,7 +54,7 @@ as.double.grad <- function(x, val, grad)
   }
   else
   {
-    as.numeric(grad)
+    as.double(grad)
   }
 }
 

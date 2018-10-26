@@ -166,7 +166,7 @@ cg.neg <- function(x, name)
 
 neg.grad <- function(x, val, grad)
 {
-  grad
+  -grad
 }
 
 # S3 method

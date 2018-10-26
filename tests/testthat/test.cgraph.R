@@ -26,18 +26,6 @@ test_that("Duplicate Nodes",
   expect_error(parm(name = "a"))
 })
 
-test_that("Invalid Node Scope",
-{
-  # Initialize graph
-  x <- cgraph$new()
-
-  # Create parameter
-  a <- parm(name = "sum")
-
-  # Evaluate graph
-  expect_error(run(a))
-})
-
 test_that("Expression with Equivalent Inputs",
 {
   # Initialize graph

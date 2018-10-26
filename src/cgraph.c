@@ -414,29 +414,6 @@ int cg_add_child(SEXP node, int id)
   return index;
 }
 
-int cg_has_value(SEXP node, SEXP values)
-{
-  int has_value = FALSE;
-
-  if(!Rf_isEnvironment(values))
-  {
-    Rf_errorcall(R_NilValue, "values must be an environment");
-  }
-
-  SEXP node_symbol = cg_get_symbol(node);
-
-  SEXP node_value = PROTECT(Rf_findVarInFrame3(values, node_symbol, FALSE));
-
-  if(node_value != R_UnboundValue)
-  {
-    has_value = TRUE;
-  }
-
-  UNPROTECT(1);
-
-  return has_value;
-}
-
 SEXP cg_gen_name(SEXP graph)
 {
   char name[32];
@@ -989,9 +966,13 @@ int* cg_unset_backward_dep(int id, int* p_length, SEXP values, SEXP graph)
     {
       int m;
 
+      SEXP node_symbol = cg_get_symbol(node);
+
+      SEXP node_value = PROTECT(Rf_findVarInFrame3(values, node_symbol, FALSE));
+
       int* p_node_parents = cg_get_parents(node, &m);
 
-      if(m > 0 && !cg_has_value(node, values))
+      if(m > 0 && node_value == R_UnboundValue)
       {
         for(int i = 0; i < m; i++)
         {
@@ -1007,6 +988,8 @@ int* cg_unset_backward_dep(int id, int* p_length, SEXP values, SEXP graph)
 
         (*p_length)++;
       }
+
+      UNPROTECT(1);
     }
     else
     {
@@ -1176,158 +1159,163 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
     SEXP child_symbol = cg_get_symbol(child);
 
-    SEXP child_grad = PROTECT(Rf_eval(child_symbol, grads));
+    SEXP child_grad = PROTECT(Rf_findVarInFrame(grads, child_symbol));
 
-    int m;
-
-    int* p_child_parents = cg_get_parents(child, &m);
-
-    SEXP args = PROTECT(Rf_allocVector(LISTSXP, m + 2));
-
-    SEXP arg = args;
-
-    for(int j = 0; j < m; j++)
+    if(child_grad != R_UnboundValue)
     {
-      SEXP parent = PROTECT(cg_get_node_id(p_child_parents[j], graph));
+      int m;
 
-      SETCAR(arg, cg_get_symbol(parent));
+      int* p_child_parents = cg_get_parents(child, &m);
 
-      arg = CDR(arg);
+      SEXP args = PROTECT(Rf_allocVector(LISTSXP, m + 2));
 
-      UNPROTECT(1);
-    }
+      SEXP arg = args;
 
-    SET_TAG(arg, Rf_install("val"));
-
-    SETCAR(arg, child_symbol);
-
-    SET_TAG(CDR(arg), Rf_install("grad"));
-
-    SETCADR(arg, child_grad);
-
-    SEXP call = PROTECT(Rf_lcons(cg_get_grad(node, i), args));
-
-    if(i == 0)
-    {
-      REPROTECT(grad = Rf_eval(call, values), i_grad);
-
-      l = length(grad);
-    }
-    else
-    {
-      SEXP value = PROTECT(Rf_eval(call, values));
-
-      switch(TYPEOF(grad))
+      for(int j = 0; j < m; j++)
       {
-        case LGLSXP :
-        case INTSXP :
-        {
-          switch(TYPEOF(value))
-          {
-            case LGLSXP :
-            case INTSXP :
-            {
-              int* p_grad = INTEGER(grad);
+        SEXP parent = PROTECT(cg_get_node_id(p_child_parents[j], graph));
 
-              int* p_value = INTEGER(value);
+        SETCAR(arg, cg_get_symbol(parent));
 
-              if(LENGTH(value) != l)
-              {
-                Rf_errorcall(R_NilValue, "cannot accumulate gradient of node '%s' at index %d", cg_get_name(node), i);
-              }
+        arg = CDR(arg);
 
-              for(int k = 0; k < l; k++)
-              {
-                p_grad[k] += p_value[k];
-              }
-
-              break;
-            }
-            case REALSXP :
-            {
-              int* p_grad = INTEGER(grad);
-
-              double* p_value = REAL(value);
-
-              if(LENGTH(value) != l)
-              {
-                Rf_errorcall(R_NilValue, "cannot accumulate gradient of node '%s' at index %d", cg_get_name(node), i);
-              }
-
-              for(int k = 0; k < l; k++)
-              {
-                p_grad[k] += p_value[k];
-              }
-
-              break;
-            }
-            default :
-            {
-              Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(value)));
-            }
-          }
-
-          break;
-        }
-        case REALSXP :
-        {
-          switch(TYPEOF(value))
-          {
-            case LGLSXP :
-            case INTSXP :
-            {
-              double* p_grad = REAL(grad);
-
-              int* p_value = INTEGER(value);
-
-              if(LENGTH(value) != l)
-              {
-                Rf_errorcall(R_NilValue, "cannot accumulate gradient of node '%s' at index %d", cg_get_name(node), i);
-              }
-
-              for(int k = 0; k < l; k++)
-              {
-                p_grad[k] += p_value[k];
-              }
-
-              break;
-            }
-            case REALSXP :
-            {
-              double* p_grad = REAL(grad);
-
-              double* p_value = REAL(value);
-
-              if(LENGTH(value) != l)
-              {
-                Rf_errorcall(R_NilValue, "cannot accumulate gradient of node '%s' at index %d", cg_get_name(node), i);
-              }
-
-              for(int k = 0; k < l; k++)
-              {
-                p_grad[k] += p_value[k];
-              }
-
-              break;
-            }
-            default :
-            {
-              Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(value)));
-            }
-          }
-
-          break;
-        }
-        default :
-        {
-          Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(grad)));
-        }
+        UNPROTECT(1);
       }
 
-      UNPROTECT(1);
+      SET_TAG(arg, Rf_install("val"));
+
+      SETCAR(arg, child_symbol);
+
+      SET_TAG(CDR(arg), Rf_install("grad"));
+
+      SETCADR(arg, child_grad);
+
+      SEXP call = PROTECT(Rf_lcons(cg_get_grad(node, i), args));
+
+      if(Rf_isNull(grad))
+      {
+        REPROTECT(grad = Rf_eval(call, values), i_grad);
+
+        l = length(grad);
+      }
+      else
+      {
+        SEXP value = PROTECT(Rf_eval(call, values));
+
+        switch(TYPEOF(grad))
+        {
+          case LGLSXP :
+          case INTSXP :
+          {
+            switch(TYPEOF(value))
+            {
+              case LGLSXP :
+              case INTSXP :
+              {
+                int* p_grad = INTEGER(grad);
+
+                int* p_value = INTEGER(value);
+
+                if(LENGTH(value) != l)
+                {
+                  Rf_errorcall(R_NilValue, "cannot accumulate gradient of node '%s' at index %d", cg_get_name(node), i);
+                }
+
+                for(int k = 0; k < l; k++)
+                {
+                  p_grad[k] += p_value[k];
+                }
+
+                break;
+              }
+              case REALSXP :
+              {
+                int* p_grad = INTEGER(grad);
+
+                double* p_value = REAL(value);
+
+                if(LENGTH(value) != l)
+                {
+                  Rf_errorcall(R_NilValue, "cannot accumulate gradient of node '%s' at index %d", cg_get_name(node), i);
+                }
+
+                for(int k = 0; k < l; k++)
+                {
+                  p_grad[k] += p_value[k];
+                }
+
+                break;
+              }
+              default :
+              {
+                Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(value)));
+              }
+            }
+
+            break;
+          }
+          case REALSXP :
+          {
+            switch(TYPEOF(value))
+            {
+              case LGLSXP :
+              case INTSXP :
+              {
+                double* p_grad = REAL(grad);
+
+                int* p_value = INTEGER(value);
+
+                if(LENGTH(value) != l)
+                {
+                  Rf_errorcall(R_NilValue, "cannot accumulate gradient of node '%s' at index %d", cg_get_name(node), i);
+                }
+
+                for(int k = 0; k < l; k++)
+                {
+                  p_grad[k] += p_value[k];
+                }
+
+                break;
+              }
+              case REALSXP :
+              {
+                double* p_grad = REAL(grad);
+
+                double* p_value = REAL(value);
+
+                if(LENGTH(value) != l)
+                {
+                  Rf_errorcall(R_NilValue, "cannot accumulate gradient of node '%s' at index %d", cg_get_name(node), i);
+                }
+
+                for(int k = 0; k < l; k++)
+                {
+                  p_grad[k] += p_value[k];
+                }
+
+                break;
+              }
+              default :
+              {
+                Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(value)));
+              }
+            }
+
+            break;
+          }
+          default :
+          {
+            Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(grad)));
+          }
+        }
+
+        UNPROTECT(1);
+      }
+
+      UNPROTECT(2);
     }
 
-    UNPROTECT(4);
+    UNPROTECT(2);
   }
 
   UNPROTECT(1);
@@ -1367,11 +1355,11 @@ SEXP cg_get(SEXP name, SEXP graph)
 
 SEXP cg_set(SEXP name, SEXP value, SEXP graph)
 {
-  SEXP graph_values = PROTECT(cg_get_values(graph));
-
   int node_id = cg_node_id(name, graph), n;
 
   int* p_ids = cg_forward_dep(node_id, &n, graph);
+
+  SEXP graph_values = PROTECT(cg_get_values(graph));
 
   for(int i = 0; i < n; i++)
   {
