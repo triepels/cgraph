@@ -12,21 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Retrieve Object Address
-#'
-#' Retrieve the pointer address of \code{x}.
-#'
-#' @param x, any R object, the object whose pointer address is retrieved.
-#'
-#' @return character scalar, the address of the object.
-#'
-#' @author Ron Triepels
-#' @keywords internal
-address <- function(x)
-{
-  .Call("address", x, PACKAGE = "cgraph")
-}
-
 #' Block Summation
 #'
 #' Divide a vector or array in consecutive blocks of \code{n} elements and sum the elements at each position in these blocks.

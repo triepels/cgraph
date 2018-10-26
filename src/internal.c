@@ -21,53 +21,78 @@ limitations under the License.
 
 #include <inttypes.h>
 
-SEXP address(SEXP x)
-{
-  char address[32];
-
-  sprintf(address, "0x%" PRIxPTR, (uintptr_t)x);
-
-  return(Rf_mkString(address));
-}
-
 SEXP bsum(SEXP x, SEXP n)
 {
-  double *px, *py;
-
-  if(!Rf_isNumeric(x))
-  {
-    Rf_errorcall(R_NilValue, "x must be a numerical vector or array");
-  }
-
   if(!Rf_isNumeric(n))
   {
-    Rf_errorcall(R_NilValue, "n must be a non-negative numerical scalar");
+    Rf_errorcall(R_NilValue, "n must be a numerical scalar");
   }
 
-  if(Rf_asInteger(n) < 0)
+  int x_n = Rf_asInteger(n);
+
+  if(x_n < 0)
   {
     Rf_errorcall(R_NilValue, "invalid block size");
   }
 
-  int size = Rf_asInteger(n), k = LENGTH(x), j = 0;
+  SEXP y = R_NilValue;
 
-  SEXP y = PROTECT(Rf_allocVector(REALSXP, size));
-
-  x = PROTECT(Rf_coerceVector(x, REALSXP));
-
-  px = REAL(x);
-  py = REAL(y);
-
-  memset(py, 0, size * sizeof(double));
-
-  for(int i = 0; i < k; i++)
+  switch(TYPEOF(x))
   {
-    py[j] += px[i];
+    case LGLSXP :
+    case INTSXP :
+    {
+      int* p_x;
+      int* p_y;
 
-    j = j < size - 1 ? j + 1 : 0;
+      y = PROTECT(Rf_allocVector(TYPEOF(x), x_n));
+
+      p_x = INTEGER(x);
+      p_y = INTEGER(y);
+
+      memset(p_y, 0, x_n * sizeof(int));
+
+      int k = LENGTH(x), j = 0;
+
+      for(int i = 0; i < k; i++)
+      {
+        p_y[j] += p_x[i];
+
+        j = j < x_n - 1 ? j + 1 : 0;
+      }
+
+      break;
+    }
+    case REALSXP :
+    {
+      double* p_x;
+      double* p_y;
+
+      y = PROTECT(Rf_allocVector(TYPEOF(x), x_n));
+
+      p_x = REAL(x);
+      p_y = REAL(y);
+
+      memset(p_y, 0, x_n * sizeof(double));
+
+      int k = LENGTH(x), j = 0;
+
+      for(int i = 0; i < k; i++)
+      {
+        p_y[j] += p_x[i];
+
+        j = j < x_n - 1 ? j + 1 : 0;
+      }
+
+      break;
+    }
+    default :
+    {
+      Rf_errorcall(R_NilValue, "invalid object of type '%s' provided", Rf_type2char(TYPEOF(x)));
+    }
   }
 
-  UNPROTECT(2);
+  UNPROTECT(1);
 
   return y;
 }

@@ -14,42 +14,10 @@
 
 print.cgraph <- function(x, ...)
 {
-  cat(sprintf("<cgraph: %s>\n", address(x)))
+  cat("<cgraph>")
 }
 
 print.cg.node = function(x, ..., autorun = getOption("cg.autorun"))
 {
-  value <- NULL
-
-  if(is.null(autorun))
-  {
-    autorun = TRUE
-  }
-
-  if(!is.null(session$graph) & autorun)
-  {
-    tryCatch(
-    {
-      values <- run(x)
-
-      value <- get(x, envir = values)
-    },
-    error = function(e)
-    {
-      e$call <- NULL
-
-      warning(e)
-    })
-
-    if(!is.null(value))
-    {
-      print(value); cat("\n")
-    }
-
-    cat(sprintf("<cg.node: %s> @ %s\n", x, address(session$graph)))
-  }
-  else
-  {
-
-  }
+  cat(sprintf("<cg.node: %s>", x))
 }

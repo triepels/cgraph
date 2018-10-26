@@ -18,20 +18,6 @@ session <- new.env()
 # Active graph
 session$graph <- NULL
 
-session$cache <- new.env()
-
-val <- function(node)
-{
-  if(is.null(session$graph))
-  {
-    stop("No active graph set", call. = FALSE)
-  }
-
-  session$graph$val(node)
-}
-
-
-
 #' Add Constant
 #'
 #' Add a constant node to the active graph.
@@ -148,6 +134,26 @@ opr <- function(call, grads, args, name)
   }
 
   session$graph$opr(call, grads, args, name)
+}
+
+val <- function(name)
+{
+  if(is.null(session$graph))
+  {
+    stop("No active graph set", call. = FALSE)
+  }
+
+  session$graph$val(name)
+}
+
+set <- function(name, value)
+{
+  if(is.null(session$graph))
+  {
+    stop("No active graph set", call. = FALSE)
+  }
+
+  session$graph$set(name, value)
 }
 
 #' Evaluate the Graph

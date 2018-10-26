@@ -342,15 +342,16 @@ cgraph$public_methods$opr <- function(call, grads, args, name)
 cgraph$public_methods$active <- function()
 {
   assign("graph", self, envir = session)
-
-  assign("cache", new.env(), envir = session)
 }
 
-cgraph$public_methods$val <- function(node)
+cgraph$public_methods$val <- function(name)
 {
-  cache <- get("cache", envir = session)
+  .Call("cg_get", name, self)
+}
 
-  .Call("cg_val", node, cache, self)
+cgraph$public_methods$set <- function(name, value)
+{
+  invisible(.Call("cg_set", name, value, self))
 }
 
 #' Evaluate the Graph

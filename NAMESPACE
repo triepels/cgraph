@@ -23,11 +23,11 @@ export(const)
 export(input)
 export(parm)
 export(opr)
+export(val)
+export(set)
 export(run)
 export(gradients)
 export(approx.grad)
-
-export(val)
 
 # Export array operators
 export(cg.matmul)
