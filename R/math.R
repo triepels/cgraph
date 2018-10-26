@@ -28,8 +28,8 @@ cg.add <- function(x, y, name)
   cgraph::opr(name = name,
     call = as.name("+"),
     grads = list(
-      as.name("add.grad"),
-      as.name("add.grad")
+      as.name("add.grad.x"),
+      as.name("add.grad.y")
     ),
     args = list(x, y)
   )
@@ -46,7 +46,7 @@ cg.add <- function(x, y, name)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-add.grad <- function(x, y, val, grad)
+add.grad.x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -55,6 +55,18 @@ add.grad <- function(x, y, val, grad)
   else
   {
     bsum(grad, length(x))
+  }
+}
+
+add.grad.y <- function(x, y, val, grad)
+{
+  if(is.array(y))
+  {
+    grad
+  }
+  else
+  {
+    bsum(grad, length(y))
   }
 }
 
@@ -113,8 +125,8 @@ cg.sub <- function(x, y, name)
   cgraph::opr(name = name,
     call = quote(`-`),
     grads = list(
-      quote(add.grad),
-      quote(sub.grad)
+      quote(sub.grad.x),
+      quote(sub.grad.y)
     ),
     args = list(x, y)
   )
@@ -131,7 +143,19 @@ cg.sub <- function(x, y, name)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-sub.grad <- function(x, y, val, grad)
+sub.grad.x <- function(x, y, val, grad)
+{
+  if(is.array(x))
+  {
+    grad
+  }
+  else
+  {
+    bsum(grad, length(x))
+  }
+}
+
+sub.grad.y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -450,22 +474,6 @@ sqrt.grad <- function(x, val, grad)
   grad * 1 / (2 * val)
 }
 
-#' Square Root
-#'
-#' Calculate \code{sqrt(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-sqrt.cg.node <- function(x)
-{
-  .Deprecated("cg.sqrt")
-
-  cgraph::cg.sqrt(x)
-}
-
 #' Exponential Function
 #'
 #' Calculate \code{exp(x)}.
@@ -501,22 +509,6 @@ cg.exp <- function(x, name)
 exp.grad <- function(x, val, grad)
 {
   grad * val
-}
-
-#' Exponential Function
-#'
-#' Calculate \code{exp(1)^x}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-exp.cg.node <- function(x)
-{
-  .Deprecated("cg.exp")
-
-  cgraph::cg.exp(x)
 }
 
 #' Natural Logarithmic Function
@@ -593,22 +585,6 @@ log2.grad <- function(x, val, grad)
   grad / (x * log(2))
 }
 
-#' Logarithmic Base 2 Function
-#'
-#' Calculate \code{log2(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-log2.cg.node <- function(x)
-{
-  .Deprecated("cg.log2")
-
-  cgraph::cg.log2(x)
-}
-
 #' Logarithmic Base 10 Function
 #'
 #' Calculate \code{log10(x)}.
@@ -646,22 +622,6 @@ log10.grad <- function(x, val, grad)
   grad / (x * log(10))
 }
 
-#' Logarithmic Base 10 Function
-#'
-#' Calculate \code{log10(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-log10.cg.node <- function(x)
-{
-  .Deprecated("cg.log10")
-
-  cgraph::cg.log10(x)
-}
-
 #' Absolute Value
 #'
 #' Calculate \code{abs(x)}.
@@ -697,20 +657,4 @@ cg.abs <- function(x, name)
 abs.grad <- function(x, val, grad)
 {
   grad * (x / val)
-}
-
-#' Absolute Value
-#'
-#' Calculate \code{abs(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-abs.cg.node <- function(x)
-{
-  .Deprecated("cg.abs")
-
-  cgraph::cg.abs(x)
 }

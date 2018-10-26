@@ -64,24 +64,6 @@ as.double.grad <- function(x, val, grad)
 #'
 #' @param x cg.node, placeholder for a numeric array.
 #' @param name character scalar, name of the operation (optional).
-#' @param ... further arguments passed to or from other methods.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-as.double.cg.node <- function(x, name, ...)
-{
-  .Deprecated("cg.as.double")
-
-  cgraph::cg.as.double(x, name)
-}
-
-#' Coerce to a Numeric Vector
-#'
-#' Coerce \code{x} to a one-dimensional numeric vector.
-#'
-#' @param x cg.node, placeholder for a numeric array.
-#' @param name character scalar, name of the operation (optional).
 #'
 #' @note This function is identical to \code{cg.as.double}.
 #'
@@ -115,8 +97,11 @@ cg.reshape <- function(x, dim, name)
 {
   cgraph::opr(name = name,
     call = quote(array),
-    grads = list(x = quote(cg.reshape.grad(x, grad))),
-    binding = list(x = x)
+    grads = list(
+      quote(reshape.grad.x),
+      quote(reshape.grad.dim)
+    ),
+    args = list(x, dim)
   )
 }
 
@@ -131,7 +116,7 @@ cg.reshape <- function(x, dim, name)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cg.reshape.grad <- function(x, grad)
+reshape.grad.x <- function(x, dim, val, grad)
 {
   if(is.array(x))
   {
@@ -143,25 +128,9 @@ cg.reshape.grad <- function(x, grad)
   }
 }
 
-#' Coerce to an Array
-#'
-#' Coerce \code{x} to an array with dimensions \code{dim}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#' @param dim numeric scalar or vector, the dimensions of the new array.
-#' @param name character scalar, name of the operation (optional).
-#' @param ... further arguments passed to or from other methods.
-#'
-#' @note This function is equivalent to function \code{cg.reshape}.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-as.array.cg.node <- function(x, dim, name = cgraph::name(), ...)
+reshape.grad.dim <- function(x, dim, val, grad)
 {
-  .Deprecated("cg.reshape")
-
-  cgraph::cg.reshape(x, dim, name)
+  stop("unable to differentiate argument 'dim' of operator 'cg.reshape'")
 }
 
 #' Matrix Transpose
@@ -188,20 +157,4 @@ cg.t <- function(x, name)
 t.grad <- function(x, val, grad)
 {
   t(grad)
-}
-
-#' Matrix Transpose
-#'
-#' Perform \code{t(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric matrix.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-t.cg.node <- function(x)
-{
-  .Deprecated("cg.t")
-
-  cgraph::cg.t(x)
 }

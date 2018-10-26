@@ -183,8 +183,11 @@ test_that("Scalar [%*%, reshape, t]",
   a <- parm(1:4, name = "a")
   b <- parm(2:5, name = "b")
 
+  # Create constants
+  dim <- const(c(1, 4))
+
   # Create test expression
-  c <- cg.matmul(cg.reshape(a, c(1,4)), cg.t(cg.reshape(b, c(1,4))))
+  c <- cg.matmul(cg.reshape(a, dim), cg.t(cg.reshape(b, dim)))
 
   # Calculate gradients
   grads <- gradients(c, run(c))
@@ -203,8 +206,11 @@ test_that("Mixed [sum, reshape]",
   a <- parm(array(1:10, c(5,2)), name = "a")
   b <- parm(1:3, name = "b")
 
+  # Create constants
+  dim <- const(c(4, 2))
+
   # Create test expression
-  c <- cg.sum(cg.reshape(a, c(4, 2)) * cg.reshape(b, c(4, 2)))
+  c <- cg.sum(cg.reshape(a, dim) * cg.reshape(b, dim))
 
   # Calculate gradients
   grads <- gradients(c, run(c))

@@ -17,7 +17,7 @@ print.cgraph <- function(x, ...)
   cat("<cgraph>")
 }
 
-print.cg.node = function(x, ..., autorun = getOption("cg.autorun"))
+print.cg.node = function(x, ...)
 {
   cat(sprintf("<cg.node: %s>", x))
 }

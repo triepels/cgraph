@@ -44,7 +44,6 @@ test_that("Expression with Equivalent Inputs",
   expect_equivalent(grads$a, approx.grad(b, a), tolerance = 1e-4)
 })
 
-
 test_that("Network with Multiple Outputs",
 {
   # Initialize graph

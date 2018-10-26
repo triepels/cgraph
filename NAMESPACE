@@ -90,11 +90,6 @@ S3method(`-`, cg.node)
 S3method(`*`, cg.node)
 S3method(`/`, cg.node)
 S3method(`^`, cg.node)
-S3method(sqrt, cg.node) # Deprecated
-S3method(exp, cg.node) # Deprecated
-S3method(log2, cg.node) # Deprecated
-S3method(log10, cg.node) # Deprecated
-S3method(abs, cg.node) # Deprecated
 
 # Export misc functions
 export(sigmoid)
@@ -112,11 +107,6 @@ export(cg.as.numeric)
 export(cg.reshape)
 export(cg.t)
 
-# Export transform methods
-S3method(as.double, cg.node) # Deprecated
-S3method(as.array, cg.node) # Deprecated
-S3method(t, cg.node) # Deprecated
-
 # Export trig operators
 export(cg.sin)
 export(cg.cos)
@@ -130,17 +120,3 @@ export(cg.atan)
 export(cg.asinh)
 export(cg.acosh)
 export(cg.atanh)
-
-# Export trig methods
-S3method(sin, cg.node) # Deprecated
-S3method(cos, cg.node) # Deprecated
-S3method(tan, cg.node) # Deprecated
-S3method(sinh, cg.node) # Deprecated
-S3method(cosh, cg.node) # Deprecated
-S3method(tanh, cg.node) # Deprecated
-S3method(asin, cg.node) # Deprecated
-S3method(acos, cg.node) # Deprecated
-S3method(atan, cg.node) # Deprecated
-S3method(asinh, cg.node) # Deprecated
-S3method(acosh, cg.node) # Deprecated
-S3method(atanh, cg.node) # Deprecated

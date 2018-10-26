@@ -49,22 +49,6 @@ sin.grad <- function(x, val, grad)
   grad * cos(x)
 }
 
-#' Sine
-#'
-#' Calculate \code{sin(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-sin.cg.node <- function(x)
-{
-  .Deprecated("cg.sin")
-
-  cgraph::cg.sin(x)
-}
-
 #' Cosine
 #'
 #' Calculate \code{cos(x)}.
@@ -100,22 +84,6 @@ cg.cos <- function(x, name)
 cos.grad <- function(x, val, grad)
 {
   -grad * sin(x)
-}
-
-#' Cosine
-#'
-#' Calculate \code{cos(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-cos.cg.node <- function(x)
-{
-  .Deprecated("cg.cos")
-
-  cgraph::cg.cos(x)
 }
 
 #' Tangent
@@ -155,22 +123,6 @@ tan.grad <- function(x, val, grad)
   grad / cos(x)^2
 }
 
-#' Tangent
-#'
-#' Calculate \code{tan(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-tan.cg.node <- function(x)
-{
-  .Deprecated("cg.tan")
-
-  cgraph::cg.tan(x)
-}
-
 #' Hyperbolic Sine
 #'
 #' Calculate \code{sinh(x)}.
@@ -206,22 +158,6 @@ cg.sinh <- function(x, name)
 sinh.grad <- function(x, val, grad)
 {
   grad * cosh(x)
-}
-
-#' Hyperbolic Sine
-#'
-#' Calculate \code{sinh(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-sinh.cg.node <- function(x)
-{
-  .Deprecated("cg.sinh")
-
-  cgraph::cg.sinh(x)
 }
 
 #' Hyperbolic Cosine
@@ -261,22 +197,6 @@ cosh.grad <- function(x, val, grad)
   grad * sinh(x)
 }
 
-#' Hyperbolic Cosine
-#'
-#' Calculate \code{cosh(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-cosh.cg.node <- function(x)
-{
-  .Deprecated("cg.cosh")
-
-  cgraph::cg.cosh(x)
-}
-
 #' Hyperbolic Tangent
 #'
 #' Calculate \code{tanh(x)}.
@@ -312,22 +232,6 @@ cg.tanh <- function(x, name)
 tanh.grad <- function(x, val, grad)
 {
   grad * (1 - val^2)
-}
-
-#' Hyperbolic Tangent
-#'
-#' Calculate \code{tanh(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-tanh.cg.node <- function(x)
-{
-  .Deprecated("cg.tanh")
-
-  cgraph::cg.tanh(x)
 }
 
 #' Inverse Sine
@@ -367,22 +271,6 @@ asin.grad <- function(x, val, grad)
   grad / sqrt(1 - x^2)
 }
 
-#' Inverse Sine
-#'
-#' Calculate \code{asin(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-asin.cg.node <- function(x)
-{
-  .Deprecated("cg.asin")
-
-  cgraph::cg.asin(x)
-}
-
 #' Inverse Cosine
 #'
 #' Calculate \code{acos(x)}.
@@ -418,22 +306,6 @@ cg.acos <- function(x, name)
 acos.grad <- function(x, val, grad)
 {
   -grad / sqrt(1 - x^2)
-}
-
-#' Inverse Cosine
-#'
-#' Calculate \code{acos(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-acos.cg.node <- function(x)
-{
-  .Deprecated("cg.acos")
-
-  cgraph::cg.acos(x)
 }
 
 #' Inverse Tangent
@@ -473,22 +345,6 @@ atan.grad <- function(x, val, grad)
   grad / (x^2 + 1)
 }
 
-#' Inverse Tangent
-#'
-#' Calculate \code{atan(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-atan.cg.node <- function(x)
-{
-  .Deprecated("cg.atan")
-
-  cgraph::cg.atan(x)
-}
-
 #' Inverse Hyperbolic Sine
 #'
 #' Calculate \code{asinh(x)}.
@@ -524,22 +380,6 @@ cg.asinh <- function(x, name)
 asinh.grad <- function(x, val, grad)
 {
   grad / sqrt(x^2 + 1)
-}
-
-#' Inverse Hyperbolic Sine
-#'
-#' Calculate \code{asinh(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-asinh.cg.node <- function(x)
-{
-  .Deprecated("cg.asinh")
-
-  cgraph::cg.asinh(x)
 }
 
 #' Inverse Hyperbolic Cosine
@@ -579,22 +419,6 @@ acosh.grad <- function(x, val, grad)
   grad / sqrt(x^2 - 1)
 }
 
-#' Inverse Hyperbolic Cosinus
-#'
-#' Calculate \code{acosh(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-acosh.cg.node <- function(x)
-{
-  .Deprecated("cg.acosh")
-
-  cgraph::cg.acosh(x)
-}
-
 #' Inverse Hyperbolic Tangent
 #'
 #' Calculate \code{atanh(x)}.
@@ -630,20 +454,4 @@ cg.atanh <- function(x, name)
 atanh.grad <- function(x, val, grad)
 {
   grad / (1 - x^2)
-}
-
-#' Inverse Hyperbolic Tangent
-#'
-#' Calculate \code{atanh(x)}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @author Ron Triepels
-atanh.cg.node <- function(x)
-{
-  .Deprecated("cg.atanh")
-
-  cgraph::cg.atanh(x)
 }
