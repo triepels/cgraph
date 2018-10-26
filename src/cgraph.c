@@ -299,7 +299,7 @@ int cg_has_parents(SEXP node)
 
 int* cg_get_parents(SEXP node, int* p_length)
 {
-  int* p_node_parents;
+  int* p_node_parents = NULL;
 
   SEXP node_parents = Rf_getAttrib(node, CG_ParentsSymbol);
 
@@ -366,7 +366,7 @@ int cg_has_childeren(SEXP node)
 
 int* cg_get_childeren(SEXP node, int* p_length)
 {
-  int* p_node_childeren;
+  int* p_node_childeren = NULL;
 
   SEXP node_childeren = Rf_getAttrib(node, CG_ChilderenSymbol);
 
@@ -811,7 +811,7 @@ int* cg_forward_dep(int id, int* p_length, SEXP graph)
 
   int* p_ids = malloc(n * sizeof(int));
 
-  int* visited = calloc(n, sizeof(int));
+  int* p_visited = calloc(n, sizeof(int));
 
   stack *s = stack_allocate(n);
 
@@ -825,7 +825,7 @@ int* cg_forward_dep(int id, int* p_length, SEXP graph)
 
     SEXP node = PROTECT(cg_get_node_id(current, graph));
 
-    if(visited[current - 1] == 0)
+    if(p_visited[current - 1] == 0)
     {
       int m;
 
@@ -835,7 +835,7 @@ int* cg_forward_dep(int id, int* p_length, SEXP graph)
       {
         for(int i = 0; i < m; i++)
         {
-          if(visited[node_childeren[i] - 1] == 0)
+          if(p_visited[node_childeren[i] - 1] == 0)
           {
             stack_add(s, node_childeren[i]);
           }
@@ -850,7 +850,7 @@ int* cg_forward_dep(int id, int* p_length, SEXP graph)
     }
     else
     {
-      if(visited[current - 1] == 1)
+      if(p_visited[current - 1] == 1)
       {
         if(cg_has_childeren(node))
         {
@@ -869,14 +869,14 @@ int* cg_forward_dep(int id, int* p_length, SEXP graph)
       }
     }
 
-    visited[current - 1] += 1;
+    p_visited[current - 1] += 1;
 
     UNPROTECT(1);
   }
 
   stack_destroy(s);
 
-  free(visited);
+  free(p_visited);
 
   UNPROTECT(1);
 
@@ -1180,7 +1180,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
     int m;
 
-    int* child_parents = cg_get_parents(child, &m);
+    int* p_child_parents = cg_get_parents(child, &m);
 
     SEXP args = PROTECT(Rf_allocVector(LISTSXP, m + 2));
 
@@ -1188,7 +1188,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
     for(int j = 0; j < m; j++)
     {
-      SEXP parent = PROTECT(cg_get_node_id(child_parents[j], graph));
+      SEXP parent = PROTECT(cg_get_node_id(p_child_parents[j], graph));
 
       SETCAR(arg, cg_get_symbol(parent));
 
@@ -1341,7 +1341,7 @@ SEXP cg_get(SEXP name, SEXP graph)
 
   SEXP graph_values = PROTECT(cg_get_values(graph));
 
-  int node_id = cg_node_id(name, graph), i_node_value, n = 0;
+  int node_id = cg_node_id(name, graph), i_node_value, n;
 
   int* p_ids = cg_unset_backward_dep(node_id, &n, graph_values, graph);
 
@@ -1369,7 +1369,7 @@ SEXP cg_set(SEXP name, SEXP value, SEXP graph)
 {
   SEXP graph_values = PROTECT(cg_get_values(graph));
 
-  int node_id = cg_node_id(name, graph), n = 0;
+  int node_id = cg_node_id(name, graph), n;
 
   int* p_ids = cg_forward_dep(node_id, &n, graph);
 
@@ -1393,7 +1393,7 @@ SEXP cg_set(SEXP name, SEXP value, SEXP graph)
 
 SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 {
-  int node_id = cg_node_id(name, graph), n = 0;
+  int node_id = cg_node_id(name, graph), n;
 
   int* p_ids = cg_backward_dep(node_id, &n, graph);
 
@@ -1433,7 +1433,7 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
 SEXP cg_gradients(SEXP name, SEXP values, SEXP grads, SEXP index, SEXP graph)
 {
-  int node_id = cg_node_id(name, graph), n = 0;
+  int node_id = cg_node_id(name, graph), n;
 
   int* p_ids = cg_backward_dep(node_id, &n, graph);
 
