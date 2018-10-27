@@ -7,29 +7,33 @@
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Logic]{not}
+#'
 #' @author Ron Triepels
-cg.not <- function(x, name)
+cg_not <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`!`),
     grads = list(
-      quote(constant.grad)
+      quote(not_grad)
     ),
     args = list(x)
   )
 }
 
-#' Logical Gradient
+#' Not Gradient
 #'
-#' Calculate the gradient of logical \code{x}.
+#' Calculate the gradient of \code{!x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{!x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-not.grad <- function(x, val, grad)
+not_grad <- function(x, val, grad)
 {
   if(is.array(x))
   {
@@ -42,9 +46,9 @@ not.grad <- function(x, val, grad)
 }
 
 # S3 method
-`!.cg.node` <- function(x)
+`!.cg_node` <- function(x)
 {
-  cgraph::cg.not(x)
+  cgraph::cg_not(x)
 }
 
 #' Equal
@@ -57,20 +61,35 @@ not.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Comparison]{equal}
+#'
 #' @author Ron Triepels
-cg.equal <- function(x, y, name)
+cg_equal <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`==`),
     grads = list(
-      quote(equal.grad.x),
-      quote(equal.grad.y)
+      quote(equal_grad_x),
+      quote(equal_grad_y)
     ),
     args = list(x, y)
   )
 }
 
-equal.grad.x <- function(x, y, val, grad)
+#' Equal Gradient
+#'
+#' Calculate the gradient of \code{x == y} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x == y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+equal_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -82,7 +101,20 @@ equal.grad.x <- function(x, y, val, grad)
   }
 }
 
-equal.grad.y <- function(x, y, val, grad)
+#' Equal Gradient
+#'
+#' Calculate the gradient of \code{x == y} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x == y}.
+#' @param grad numeric vector or array, gradient of \code{y}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+equal_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -95,9 +127,9 @@ equal.grad.y <- function(x, y, val, grad)
 }
 
 # S3 method
-`==.cg.node` <- function(x, y)
+`==.cg_node` <- function(x, y)
 {
-  cgraph::cg.equal(x, y)
+  cgraph::cg_equal(x, y)
 }
 
 #' Not equal
@@ -110,20 +142,35 @@ equal.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Comparison]{not equal}
+#'
 #' @author Ron Triepels
-cg.not.equal <- function(x, y, name)
+cg_not_equal <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`!=`),
     grads = list(
-      quote(not.equal.grad.x),
-      quote(not.equal.grad.y)
+      quote(not_equal_grad_x),
+      quote(not_equal_grad_y)
     ),
     args = list(x, y)
   )
 }
 
-not.equal.grad.x <- function(x, y, val, grad)
+#' Not Equal Gradient
+#'
+#' Calculate the gradient of \code{x != y} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x != y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+not_equal_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -135,7 +182,20 @@ not.equal.grad.x <- function(x, y, val, grad)
   }
 }
 
-not.equal.grad.y <- function(x, y, val, grad)
+#' Not Equal Gradient
+#'
+#' Calculate the gradient of \code{x != y} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x != y}.
+#' @param grad numeric vector or array, gradient of \code{y}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+not_equal_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -148,9 +208,9 @@ not.equal.grad.y <- function(x, y, val, grad)
 }
 
 # S3 method
-`!=.cg.node` <- function(x, y)
+`!=.cg_node` <- function(x, y)
 {
-  cgraph::cg.not.equal(x, y)
+  cgraph::cg_not_equal(x, y)
 }
 
 #' Less
@@ -163,20 +223,35 @@ not.equal.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Comparison]{less}
+#'
 #' @author Ron Triepels
-cg.less <- function(x, y, name)
+cg_less <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`<`),
     grads = list(
-      quote(less.grad.x),
-      quote(less.grad.y)
+      quote(less_grad_x),
+      quote(less_grad_y)
     ),
     args = list(x, y)
   )
 }
 
-less.grad.x <- function(x, y, val, grad)
+#' Less Gradient
+#'
+#' Calculate the gradient of \code{x < y} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x < y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+less_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -188,7 +263,20 @@ less.grad.x <- function(x, y, val, grad)
   }
 }
 
-less.grad.y <- function(x, y, val, grad)
+#' Less Gradient
+#'
+#' Calculate the gradient of \code{x < y} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x < y}.
+#' @param grad numeric vector or array, gradient of \code{y}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+less_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -201,9 +289,9 @@ less.grad.y <- function(x, y, val, grad)
 }
 
 # S3 method
-`<.cg.node` <- function(x, y)
+`<.cg_node` <- function(x, y)
 {
-  cgraph::cg.less(x, y)
+  cgraph::cg_less(x, y)
 }
 
 #' Greater
@@ -216,20 +304,35 @@ less.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Comparison]{greater}
+#'
 #' @author Ron Triepels
-cg.greater <- function(x, y, name)
+cg_greater <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`>`),
     grads = list(
-      quote(greater.grad.x),
-      quote(greater.grad.y)
+      quote(greater_grad_x),
+      quote(greater_grad_y)
     ),
     args = list(x, y)
   )
 }
 
-greater.grad.x <- function(x, y, val, grad)
+#' Greater Gradient
+#'
+#' Calculate the gradient of \code{x > y} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x > y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+greater_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -241,7 +344,20 @@ greater.grad.x <- function(x, y, val, grad)
   }
 }
 
-greater.grad.y <- function(x, y, val, grad)
+#' Greater Gradient
+#'
+#' Calculate the gradient of \code{x > y} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x > y}.
+#' @param grad numeric vector or array, gradient of \code{y}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+greater_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -254,9 +370,9 @@ greater.grad.y <- function(x, y, val, grad)
 }
 
 # S3 method
-`>.cg.node` <- function(x, y)
+`>.cg_node` <- function(x, y)
 {
-  cgraph::cg.greater(x, y)
+  cgraph::cg_greater(x, y)
 }
 
 #' Less or Equal
@@ -269,8 +385,10 @@ greater.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Comparison]{less or equal}
+#'
 #' @author Ron Triepels
-cg.less.equal <- function(x, y, name)
+cg_less_equal <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`<=`),
@@ -282,7 +400,20 @@ cg.less.equal <- function(x, y, name)
   )
 }
 
-less.equal.grad.x <- function(x, y, val, grad)
+#' Less or Equal Gradient
+#'
+#' Calculate the gradient of \code{x <= y} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x <= y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+less_equal_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -294,7 +425,20 @@ less.equal.grad.x <- function(x, y, val, grad)
   }
 }
 
-less.equal.grad.y <- function(x, y, val, grad)
+#' Less or Equal Gradient
+#'
+#' Calculate the gradient of \code{x <= y} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x <= y}.
+#' @param grad numeric vector or array, gradient of \code{y}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+less_equal_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -307,9 +451,9 @@ less.equal.grad.y <- function(x, y, val, grad)
 }
 
 # S3 method
-`<=.cg.node` <- function(x, y)
+`<=.cg_node` <- function(x, y)
 {
-  cgraph::cg.less.equal(x, y)
+  cgraph::cg_less_equal(x, y)
 }
 
 #' Greater or Equal
@@ -322,8 +466,10 @@ less.equal.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Comparison]{greater or equal}
+#'
 #' @author Ron Triepels
-cg.greater.equal <- function(x, y, name)
+cg_greater_equal <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`>=`),
@@ -335,7 +481,20 @@ cg.greater.equal <- function(x, y, name)
   )
 }
 
-greater.equal.grad.x <- function(x, y, val, grad)
+#' Greater or Equal Gradient
+#'
+#' Calculate the gradient of \code{x >= y} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x >= y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+greater_equal_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -347,7 +506,20 @@ greater.equal.grad.x <- function(x, y, val, grad)
   }
 }
 
-greater.equal.grad.y <- function(x, y, val, grad)
+#' Greater or Equal Gradient
+#'
+#' Calculate the gradient of \code{x >= y} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x >= y}.
+#' @param grad numeric vector or array, gradient of \code{y}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+greater_equal_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -360,7 +532,7 @@ greater.equal.grad.y <- function(x, y, val, grad)
 }
 
 # S3 method
-`>=.cg.node` <- function(x, y)
+`>=.cg_node` <- function(x, y)
 {
-  cgraph::cg.greater.equal(x, y)
+  cgraph::cg_greater_equal(x, y)
 }
