@@ -22,14 +22,16 @@
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:matmult]{matmult}
+#'
 #' @author Ron Triepels
-cg.matmul <- function(x, y, name)
+cg_matmul <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`%*%`),
     grads = list(
-      quote(matmul.grad.x),
-      quote(matmul.grad.y)
+      quote(matmul_grad_x),
+      quote(matmul_grad_y)
     ),
     args = list(x, y)
   )
@@ -39,21 +41,34 @@ cg.matmul <- function(x, y, name)
 #'
 #' Calculate the gradient of \code{x \%*\% y} with respect to \code{x}.
 #'
-#' @param x numeric vector or array, value of \code{x}.
-#' @param y numeric vector or array, value of \code{y}.
-#' @param val numeric vector or array, value of \code{x \%*\% y}.
-#' @param grad numeric vector or array, gradient of \code{x}.
+#' @param x numeric matrix, value of \code{x}.
+#' @param y numeric matrix, value of \code{y}.
+#' @param val numeric matrix, value of \code{x \%*\% y}.
+#' @param grad numeric matrix, gradient of \code{x}.
 #'
-#' @return numeric vector or array, gradient of the operation.
+#' @return numeric matrix, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-matmul.grad.x <- function(x, y, val, grad)
+matmul_grad_x <- function(x, y, val, grad)
 {
   tcrossprod(grad, y)
 }
 
-matmul.grad.y <- function(x, y, val, grad)
+#' Matrix Multiplication Gradient
+#'
+#' Calculate the gradient of \code{x \%*\% y} with respect to \code{y}.
+#'
+#' @param x numeric matrix, value of \code{x}.
+#' @param y numeric matrix, value of \code{y}.
+#' @param val numeric matrix, value of \code{x \%*\% y}.
+#' @param grad numeric matrix, gradient of \code{y}.
+#'
+#' @return numeric matrix, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+matmul_grad_y <- function(x, y, val, grad)
 {
   crossprod(x, grad)
 }
@@ -63,32 +78,67 @@ matmul.grad.y <- function(x, y, val, grad)
 #' Calculate \code{crossprod(x, y)}.
 #'
 #' @param x cg.node, placeholder for a numeric matrix.
-#' @param y cg.node, placeholder for a numeric matrix.
+#' @param y cg.node, placeholder for a numeric matrix (optional).
 #' @param name character scalar, name of the operation (optional).
-#'
-#' @note In contrast to the base \code{crossprod} function, this function requires both \code{x} and \code{y} to be supplied.
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:crossprod]{crossprod}
+#'
 #' @author Ron Triepels
-cg.crossprod <- function(x, y, name)
+cg_crossprod <- function(x, y = NULL, name = NULL)
 {
+  if(is.null(y))
+  {
+    args <- list(x, x)
+  }
+  else
+  {
+    args <- list(x, y)
+  }
+
   cgraph::opr(name = name,
     call = quote(crossprod),
     grads = list(
-      quote(crossprod.grad.x),
-      quote(crossprod.grad.y)
+      quote(crossprod_grad_x),
+      quote(crossprod_grad_y)
     ),
-    args = list(x, y)
+    args = args
   )
 }
 
-crossprod.grad.x <- function(x, y, val, grad)
+#' Matrix Crossproduct Gradient
+#'
+#' Calculate the gradient of \code{crossprod(x, y)} with respect to \code{x}.
+#'
+#' @param x numeric matrix, value of \code{x}.
+#' @param y numeric matrix, value of \code{y}.
+#' @param val numeric matrix, value of \code{crossprod(x, y)}.
+#' @param grad numeric matrix, gradient of \code{x}.
+#'
+#' @return numeric matrix, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+crossprod_grad_x <- function(x, y, val, grad)
 {
   y %*% grad
 }
 
-crossprod.grad.y <- function(x, y, val, grad)
+#' Matrix Crossproduct Gradient
+#'
+#' Calculate the gradient of \code{crossprod(x, y)} with respect to \code{y}.
+#'
+#' @param x numeric matrix, value of \code{x}.
+#' @param y numeric matrix, value of \code{y}.
+#' @param val numeric matrix, value of \code{crossprod(x, y)}.
+#' @param grad numeric matrix, gradient of \code{y}.
+#'
+#' @return numeric matrix, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+crossprod_grad_y <- function(x, y, val, grad)
 {
   x %*% grad
 }
@@ -98,90 +148,167 @@ crossprod.grad.y <- function(x, y, val, grad)
 #' Calculate \code{tcrossprod(x, y)}.
 #'
 #' @param x cg.node, placeholder for a numeric matrix.
-#' @param y cg.node, placeholder for a numeric matrix.
+#' @param y cg.node, placeholder for a numeric matrix (optional).
 #' @param name character scalar, name of the operation (optional).
-#'
-#' @note In contrast to the base \code{tcrossprod} function, this function requires both \code{x} and \code{y} to be supplied.
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:crossprod]{tcrossprod}
+#'
 #' @author Ron Triepels
-cg.tcrossprod <- function(x, y, name)
+cg_tcrossprod <- function(x, y = NULL, name = NULL)
 {
+  if(missing(y))
+  {
+    args <- list(x, x)
+  }
+  else
+  {
+    args <- list(x, y)
+  }
+
   cgraph::opr(name = name,
     call = quote(tcrossprod),
     grads = list(
-      quote(tcrossprod.grad.x),
-      quote(tcrossprod.grad.y)
+      quote(tcrossprod_grad_x),
+      quote(tcrossprod_grad_y)
     ),
-    args = list(x, y)
+    args = args
   )
 }
 
-tcrossprod.grad.x <- function(x, y, val, grad)
+#' Transpose Matrix Crossproduct Gradient
+#'
+#' Calculate the gradient of \code{tcrossprod(x, y)} with respect to \code{x}.
+#'
+#' @param x numeric matrix, value of \code{x}.
+#' @param y numeric matrix, value of \code{y}.
+#' @param val numeric matrix, value of \code{tcrossprod(x, y)}.
+#' @param grad numeric matrix, gradient of \code{x}.
+#'
+#' @return numeric matrix, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+tcrossprod_grad_x <- function(x, y, val, grad)
 {
   grad %*% y
 }
 
-tcrossprod.grad.y <- function(x, y, val, grad)
+#' Transpose Matrix Crossproduct Gradient
+#'
+#' Calculate the gradient of \code{tcrossprod(x, y)} with respect to \code{y}.
+#'
+#' @param x numeric matrix, value of \code{x}.
+#' @param y numeric matrix, value of \code{y}.
+#' @param val numeric matrix, value of \code{tcrossprod(x, y)}.
+#' @param grad numeric matrix, gradient of \code{y}.
+#'
+#' @return numeric matrix, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+tcrossprod_grad_y <- function(x, y, val, grad)
 {
   grad %*% x
 }
 
 #' Linear Transformation
 #'
-#' Calculate \code{x \%*\% y + as.numeric(z)}.
+#' Calculate \code{linear(x, y, z)}.
 #'
 #' @param x cg.node, placeholder for a numeric matrix.
 #' @param y cg.node, placeholder for a numeric matrix.
 #' @param z cg.node, placeholder for a numeric vector.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note This function is equivalent to \code{cg.matmul(x, y) + as.numeric(z)}.
-#'
 #' @return cg.node, node of the operation.
 #'
+#' @note This function is equivalent to \code{cg.matmul(x, y) + cg.as.numeric(z)}.
+#'
+#' @seealso \link[cgraph:linear]{linear}
+#'
 #' @author Ron Triepels
-cg.linear <- function(x, y, z, name)
+cg_linear <- function(x, y, z, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(linear),
     grads = list(
-      quote(linear.grad.x),
-      quote(linear.grad.y),
-      quote(linear.grad.z)
+      quote(linear_grad_x),
+      quote(linear_grad_y),
+      quote(linear_grad_z)
     ),
     args = list(x, y, z)
   )
 }
 
+
+#' Linear Transformation
+#'
+#' Calculate the linear transformation \code{x \%*\% y + c(z)}.
+#'
+#' @param x numeric matrix.
+#' @param y numeric matrix.
+#' @param z numeric vector.
+#'
+#' @return numeric matrix, result of the transformation.
+#'
+#' @author Ron Triepels
 linear <- function(x, y, z)
 {
   x %*% y + c(z)
 }
 
-linear.grad.x  <- function(x, y, z, val, grad)
+#' Linear Transformation Gradient
+#'
+#' Calculate the gradient of \code{linear(x, y, z)} with respect to \code{x}.
+#'
+#' @param x numeric matrix, value of \code{x}.
+#' @param y numeric matrix, value of \code{y}.
+#' @param val numeric matrix, value of \code{linear(x, y, z)}.
+#' @param grad numeric matrix, gradient of \code{x}.
+#'
+#' @return numeric matrix, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+linear_grad_x  <- function(x, y, z, val, grad)
 {
   tcrossprod(grad, y)
 }
 
-linear.grad.y <- function(x, y, z, val, grad)
+#' Linear Transformation Gradient
+#'
+#' Calculate the gradient of \code{linear(x, y, z)} with respect to \code{y}.
+#'
+#' @param x numeric matrix, value of \code{x}.
+#' @param y numeric matrix, value of \code{y}.
+#' @param val numeric matrix, value of \code{linear(x, y, z)}.
+#' @param grad numeric matrix, gradient of \code{y}.
+#'
+#' @return numeric matrix, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+linear_grad_y <- function(x, y, z, val, grad)
 {
   crossprod(x, grad)
 }
 
 #' Linear Transformation Gradient
 #'
-#' Calculate the gradient of \code{x \%*\% y + as.numeric(z)} with respect to \code{z}.
+#' Calculate the gradient of \code{linear(x, y, z)} with respect to \code{z}.
 #'
-#' @param z numeric vector or array, value of \code{z}.
-#' @param grad numeric vector or array, gradient of \code{z}.
+#' @param x numeric matrix, value of \code{x}.
+#' @param y numeric matrix, value of \code{y}.
+#' @param val numeric matrix, value of \code{linear(x, y, z)}.
+#' @param grad numeric matrix, gradient of \code{z}.
 #'
-#' @return numeric vector or array, gradient of the operation.
+#' @return numeric matrix, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-linear.grad.z <- function(x, y, z, val, grad)
+linear_grad_z <- function(x, y, z, val, grad)
 {
   if(is.array(z))
   {
@@ -200,17 +327,21 @@ linear.grad.z <- function(x, y, z, val, grad)
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note In contrast to the base \code{sum} function, this function only accepts a single variable.
+#' @note In contrast to the base \link[base:sum]{sum} function, this function only accepts a single vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @note Function \link[base:sum]{sum} is called without setting argument \code{na.rm}.
+#'
+#' @seealso \link[base:sum]{sum}
+#'
 #' @author Ron Triepels
-cg.sum <- function(x, name)
+cg_sum <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(sum),
     grads = list(
-      quote(sum.grad)
+      quote(sum_grad)
     ),
     args = list(x)
   )
@@ -221,13 +352,14 @@ cg.sum <- function(x, name)
 #' Calculate the gradient of \code{sum(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{sum(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-sum.grad <- function(x, val, grad)
+sum_grad <- function(x, val, grad)
 {
   if(is.array(x))
   {
@@ -246,17 +378,21 @@ sum.grad <- function(x, val, grad)
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note In contrast to the base \code{prod} function, this function only accepts a single variable.
+#' @note In contrast to the base \link[base:prod]{prod} function, this function only accepts a single vector or array.
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @note Function \link[base:prod]{prod} is called without setting argument \code{na.rm}.
+#'
+#' @seealso \link[base:prod]{prod}
+#'
 #' @author Ron Triepels
-cg.prod <- function(x, name)
+cg_prod <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(prod),
     grads = list(
-      quote(prod.grad)
+      quote(prod_grad)
     ),
     args = list(x)
   )
@@ -267,14 +403,14 @@ cg.prod <- function(x, name)
 #' Calculate the gradient of \code{prod(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
-#' @param y numeric vector or array, value of \code{prod(x)}.
+#' @param val numeric vector or array, value of \code{prod(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-prod.grad <- function(x, val, grad)
+prod_grad <- function(x, val, grad)
 {
   grad * val / x
 }
@@ -288,13 +424,17 @@ prod.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @note Function \link[base:colSums]{rowSums} is called without setting argument \code{na.rm} and \code{dims}.
+#'
+#' @seealso \link[base:colSums]{rowSums}
+#'
 #' @author Ron Triepels
-cg.rowSums <- function(x, name)
+cg_rowSums <- function(x, name = NULL)
 {
  cgraph::opr(name = name,
    call = quote(rowSums),
    grads = list(
-     quote(rowSums.grad)
+     quote(rowSums_grad)
    ),
    args = list(x)
  )
@@ -304,14 +444,15 @@ cg.rowSums <- function(x, name)
 #'
 #' Calculate the gradient of \code{rowSums(x)} with respect to \code{x}.
 #'
-#' @param x numeric vector or array, value of \code{x}.
-#' @param grad numeric vector or array, gradient of \code{x}.
+#' @param x numeric array, value of \code{x}.
+#' @param val numeric array, value of \code{rowSums(x)}.
+#' @param grad numeric array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-rowSums.grad <- function(x, val, grad)
+rowSums_grad <- function(x, val, grad)
 {
   array(grad, dim(x))
 }
@@ -325,13 +466,17 @@ rowSums.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @note Function \link[base:colSums]{colSums} is called without setting argument \code{na.rm} and \code{dims}.
+#'
+#' @seealso \link[base:colSums]{colSums}
+#'
 #' @author Ron Triepels
-cg.colSums <- function(x, name)
+cg_colSums <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(colSums),
     grads = list(
-      quote(colSums.grad)
+      quote(colSums_grad)
     ),
     args = list(x)
   )
@@ -341,43 +486,39 @@ cg.colSums <- function(x, name)
 #'
 #' Calculate the gradient of \code{colSums(x)} with respect to \code{x}.
 #'
-#' @param x numeric vector or array, value of \code{x}.
-#' @param grad numeric vector or array, gradient of \code{x}.
+#' @param x numeric array, value of \code{x}.
+#' @param val numeric array, value of \code{colSums(x)}.
+#' @param grad numeric array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-colSums.grad <- function(x, val, grad)
+colSums_grad <- function(x, val, grad)
 {
   aperm(array(grad, rev(dim(x))))
 }
 
-
-
-# To do:
-# Update documentation of cg.mean
-
-
-
 #' Arithmetic Mean
 #'
-#' Calculate \code{sum(x) / length(x)}.
+#' Calculate \code{mean(x)}.
 #'
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note For computational efficiency, this function does not use the base \code{mean} function.
-#'
 #' @return cg.node, node of the operation.
 #'
+#' @note Function \link[base:mean]{mean} is called without setting argument \code{trim} and \code{na.rm}.
+#'
+#' @seealso \link[base:mean]{mean}
+#'
 #' @author Ron Triepels
-cg.mean <- function(x, name)
+cg_mean <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(mean),
     grads = list(
-      quote(mean.grad)
+      quote(mean_grad)
     ),
     args = list(x)
   )
@@ -385,16 +526,17 @@ cg.mean <- function(x, name)
 
 #' Arithmetic Mean Gradient
 #'
-#' Calculate the gradient of \code{sum(x) / length(x)} with respect to \code{x}.
+#' Calculate the gradient of \code{mean(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{mean(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-mean.grad <- function(x, val, grad)
+mean_grad <- function(x, val, grad)
 {
   if(is.array(x))
   {
@@ -415,13 +557,17 @@ mean.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @note Function \link[base:colSums]{rowMeans} is called without setting argument \code{na.rm} and \code{dims}.
+#'
+#' @seealso \link[base:colSums]{rowMeans}
+#'
 #' @author Ron Triepels
-cg.rowMeans <- function(x, name)
+cg_rowMeans <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(rowMeans),
     grads = list(
-      quote(rowMeans.grad)
+      quote(rowMeans_grad)
     ),
     args = list(x)
   )
@@ -432,13 +578,14 @@ cg.rowMeans <- function(x, name)
 #' Calculate the gradient of \code{rowMeans(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{rowMeans(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-rowMeans.grad <- function(x, val, grad)
+rowMeans_grad <- function(x, val, grad)
 {
   1 / prod(dim(x)[-1L]) * array(grad, dim(x))
 }
@@ -452,13 +599,17 @@ rowMeans.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @note Function \link[base:colSums]{colMeans} is called without setting argument \code{na.rm} and \code{dims}.
+#'
+#' @seealso \link[base:colSums]{colMeans}
+#'
 #' @author Ron Triepels
-cg.colMeans <- function(x, name)
+cg_colMeans <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(colMeans),
     grads = list(
-      quote(colMeans.grad)
+      quote(colMeans_grad)
     ),
     args = list(x)
   )
@@ -469,13 +620,14 @@ cg.colMeans <- function(x, name)
 #' Calculate the gradient of \code{colMeans(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{colMeans(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-colMeans.grad <- function(x, val, grad)
+colMeans_grad <- function(x, val, grad)
 {
   1 / dim(x)[1] * aperm(array(grad, rev(dim(x))))
 }
@@ -487,17 +639,19 @@ colMeans.grad <- function(x, val, grad)
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note In contrast to the base \code{max} function, this function only accepts a single variable.
-#'
 #' @return cg.node, node of the operation.
 #'
+#' @note Function \link[base:max]{max} is called without setting argument \code{na.rm}.
+#'
+#' @seealso \link[base:max]{max}
+#'
 #' @author Ron Triepels
-cg.max <- function(x, name)
+cg_max <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(max),
     grads = list(
-      quote(max.grad)
+      quote(max_grad)
     ),
     args = list(x)
   )
@@ -508,14 +662,14 @@ cg.max <- function(x, name)
 #' Calculate the gradient of \code{max(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
-#' @param y numeric vector or array, value of \code{max(x)}.
+#' @param val numeric vector or array, value of \code{max(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-max.grad <- function(x, val, grad)
+max_grad <- function(x, val, grad)
 {
   c(grad) * (x == c(val))
 }
@@ -527,17 +681,19 @@ max.grad <- function(x, val, grad)
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note In contrast to the base \code{min} function, this function only accepts a single variable.
+#' @note Function \link[base:min]{min} is called without setting argument \code{na.rm}.
+#'
+#' @seealso \link[base:min]{min}
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.min <- function(x, name)
+cg_min <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(min),
     grads = list(
-      quote(min.grad)
+      quote(min_grad)
     ),
     args = list(x)
   )
@@ -548,14 +704,14 @@ cg.min <- function(x, name)
 #' Calculate the gradient of \code{min(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
-#' @param y numeric vector or array, value of \code{min(y)}.
+#' @param val numeric vector or array, value of \code{min(y)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-min.grad <- function(x, val, grad)
+min_grad <- function(x, val, grad)
 {
   c(grad) * (x == c(val))
 }
@@ -568,18 +724,20 @@ min.grad <- function(x, val, grad)
 #' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note In contrast to the base \code{pmax} function, this function only accepts two variables.
+#' @note Function \link[base:pmax]{pmax} is called without setting argument \code{na.rm}.
+#'
+#' @seealso \link[base:pmax]{pmax}
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.pmax <- function(x, y, name)
+cg_pmax <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(pmax),
     grads = list(
-      quote(pmax.grad.x),
-      quote(pmax.grad.y)
+      quote(pmax_grad_x),
+      quote(pmax_grad_y)
     ),
     args = list(x, y)
   )
@@ -591,13 +749,14 @@ cg.pmax <- function(x, y, name)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{pmax(x, y)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-pmax.grad.x <- function(x, y, val, grad)
+pmax_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -615,13 +774,14 @@ pmax.grad.x <- function(x, y, val, grad)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{pmax(x, y)}.
 #' @param grad numeric vector or array, gradient of \code{y}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-pmax.grad.y <- function(x, y, val, grad)
+pmax_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -641,18 +801,20 @@ pmax.grad.y <- function(x, y, val, grad)
 #' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note In contrast to the base \code{pmin} function, this function only accepts two variables.
+#' @note Function \link[base:pmin]{pmin} is called without setting argument \code{na.rm}.
+#'
+#' @seealso \link[base:pmin]{pmin}
 #'
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.pmin <- function(x, y, name)
+cg_pmin <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(pmin),
     grads = list(
-      quote(pmin.grad.x),
-      quote(pmin.grad.y)
+      quote(pmin_grad_x),
+      quote(pmin_grad_y)
     ),
     args = list(x, y)
   )
@@ -664,13 +826,14 @@ cg.pmin <- function(x, y, name)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{pmin(x, y)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-pmin.grad.x <- function(x, y, val, grad)
+pmin_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -688,13 +851,14 @@ pmin.grad.x <- function(x, y, val, grad)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{pmin(x, y)}.
 #' @param grad numeric vector or array, gradient of \code{y}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-pmin.grad.y <- function(x, y, val, grad)
+pmin_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {

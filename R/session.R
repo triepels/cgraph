@@ -38,7 +38,7 @@ session$graph <- NULL
 #' const(1, name = "c")
 #'
 #' @author Ron Triepels
-const <- function(value, name)
+const <- function(value = NULL, name = NULL)
 {
   if(is.null(session$graph))
   {
@@ -68,7 +68,7 @@ const <- function(value, name)
 #' input(name = "x")
 #'
 #' @author Ron Triepels
-input <- function(value, name)
+input <- function(value = NULL, name = NULL)
 {
   if(is.null(session$graph))
   {
@@ -98,7 +98,7 @@ input <- function(value, name)
 #' parm(1, name = "p")
 #'
 #' @author Ron Triepels
-parm <- function(value, name)
+parm <- function(value = NULL, name = NULL)
 {
   if(is.null(session$graph))
   {
@@ -126,7 +126,7 @@ parm <- function(value, name)
 #' @return cg.node, operation.
 #'
 #' @author Ron Triepels
-opr <- function(call, grads, args, name)
+opr <- function(call, grads, args, name = NULL)
 {
   if(is.null(session$graph))
   {

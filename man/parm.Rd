@@ -4,7 +4,7 @@
 \alias{parm}
 \title{Add Parameter}
 \usage{
-parm(value, name)
+parm(value = NULL, name = NULL)
 }
 \arguments{
 \item{value}{numeric vector or array, value of the node (optional).}

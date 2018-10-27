@@ -1,3 +1,15 @@
+cgraph 3.0.0
+----------------------------------------------------------------
+
+Comments:
+
+* Some naming conventions have changed. Individual names in the name of a function are now separated with an underscore (_) instead of a dot (.). For example, operator `cg.matmul` is now named `cg_matmul`. The same rule applies to class names. For example, class `cg.node` is now `cg_node`.
+
+Features:
+
+* Operator `cg_mean` now calls the base \code{mean} function.
+* Operator `cg_crossprod` and `cg_tcrossprod` now allow argument \code{y} to be missing (similarly as the corresponding base functions).
+
 cgraph 2.0.3
 ----------------------------------------------------------------
 
@@ -8,7 +20,7 @@ Comments:
 Bug fixes:
 
 * Operator `sigmoid` now correctly handles numerical underflow.
-* Operators `cg.pmax` and `cg.pmin` are now correctly differentiated when arguments `x` and `y` are both arrays.
+* Operator `cg.pmax` and `cg.pmin` are now correctly differentiated when arguments `x` and `y` are both arrays.
 
 Features:
 

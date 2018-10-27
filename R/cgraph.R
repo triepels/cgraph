@@ -130,18 +130,8 @@ cgraph$public_methods$initialize <- function()
 #'
 #' @name cg.const
 #' @author Ron Triepels
-cgraph$public_methods$const <- function(value, name)
+cgraph$public_methods$const <- function(value = NULL, name = NULL)
 {
-  if(missing(value))
-  {
-    value <- NULL
-  }
-
-  if(missing(name))
-  {
-    name <- NULL
-  }
-
   .Call("cg_add_constant", value, name, self, PACKAGE = "cgraph")
 }
 
@@ -170,18 +160,8 @@ cgraph$public_methods$const <- function(value, name)
 #'
 #' @name cg.input
 #' @author Ron Triepels
-cgraph$public_methods$input <- function(value, name)
+cgraph$public_methods$input <- function(value = NULL, name = NULL)
 {
-  if(missing(value))
-  {
-    value <- NULL
-  }
-
-  if(missing(name))
-  {
-    name <- NULL
-  }
-
   .Call("cg_add_input", value, name, self, PACKAGE = "cgraph")
 }
 
@@ -210,18 +190,8 @@ cgraph$public_methods$input <- function(value, name)
 #'
 #' @name cg.parm
 #' @author Ron Triepels
-cgraph$public_methods$parm <- function(value, name)
+cgraph$public_methods$parm <- function(value = NULL, name = NULL)
 {
-  if(missing(value))
-  {
-    value <- NULL
-  }
-
-  if(missing(name))
-  {
-    name <- NULL
-  }
-
   .Call("cg_add_parameter", value, name, self, PACKAGE = "cgraph")
 }
 
@@ -306,13 +276,8 @@ cgraph$public_methods$add.parms <- function(..., parms = NULL)
 #'
 #' @name cg.opr
 #' @author Ron Triepels
-cgraph$public_methods$opr <- function(call, grads, args, name)
+cgraph$public_methods$opr <- function(call, grads, args, name = NULL)
 {
-  if(missing(name))
-  {
-    name <- NULL
-  }
-
   .Call("cg_add_operation", call, grads, args, name, self, PACKAGE = "cgraph")
 }
 

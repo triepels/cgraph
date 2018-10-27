@@ -4,7 +4,7 @@
 \alias{const}
 \title{Add Constant}
 \usage{
-const(value, name)
+const(value = NULL, name = NULL)
 }
 \arguments{
 \item{value}{numeric vector or array, value of the node (optional).}

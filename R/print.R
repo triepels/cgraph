@@ -17,7 +17,7 @@ print.cgraph <- function(x, ...)
   cat("<cgraph>")
 }
 
-print.cg.node = function(x, ...)
+print.cg_node = function(x, ...)
 {
   cat(sprintf("<cg.node: %s>", x))
 }

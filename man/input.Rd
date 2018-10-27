@@ -4,7 +4,7 @@
 \alias{input}
 \title{Add Input}
 \usage{
-input(value, name)
+input(value = NULL, name = NULL)
 }
 \arguments{
 \item{value}{numeric vector or array, value of the node (optional).}

@@ -44,7 +44,7 @@ test_that("Matrix [+, mean, crossprod, tcrossprod]",
   b <- parm(matrix(2:5, 2, 2), name = "b")
 
   # Create test expression
-  c <- cg.mean(cg.crossprod(a, b) + cg.tcrossprod(a, b))
+  c <- cg.mean(cg.crossprod(a, b) + cg.tcrossprod(a, b) + cg.crossprod(a) + cg.tcrossprod(b))
 
   # Calculate gradients
   grads <- gradients(c, run(c))

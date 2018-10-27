@@ -29,11 +29,11 @@ limitations under the License.
 #define CG_NodesSymbol Rf_install("nodes")
 #define CG_ValuesSymbol Rf_install("values")
 
-#define CG_TypeSymbol Rf_install("type")
-#define CG_CallSymbol Rf_install("call")
-#define CG_GradsSymbol Rf_install("grads")
-#define CG_ParentsSymbol Rf_install("parents")
-#define CG_ChilderenSymbol Rf_install("childeren")
+#define CG_TypeSymbol Rf_install("cg_type")
+#define CG_CallSymbol Rf_install("cg_call")
+#define CG_GradsSymbol Rf_install("cg_grads")
+#define CG_ParentsSymbol Rf_install("cg_parents")
+#define CG_ChilderenSymbol Rf_install("cg_childeren")
 
 SEXP cgraph(SEXP graph, SEXP values)
 {
@@ -431,11 +431,11 @@ SEXP cg_node(int type, const char* name)
 {
   SEXP node = PROTECT(Rf_allocVector(STRSXP, 1));
 
+  Rf_setAttrib(node, R_ClassSymbol, Rf_mkString("cg_node"));
+
   cg_set_type(node, type);
 
   cg_set_name(node, name);
-
-  Rf_setAttrib(node, R_ClassSymbol, Rf_mkString("cg.node"));
 
   UNPROTECT(1);
 

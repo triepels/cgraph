@@ -4,7 +4,7 @@
 \alias{opr}
 \title{Add Operation}
 \usage{
-opr(call, grads, args, name)
+opr(call, grads, args, name = NULL)
 }
 \arguments{
 \item{call}{call or symbol, operation performed by the node. Must evaluate to a numeric vector or array.}
