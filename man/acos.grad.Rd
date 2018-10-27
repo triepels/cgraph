@@ -4,7 +4,7 @@
 \alias{acos.grad}
 \title{Inverse Cosine Gradient}
 \usage{
-\method{acos}{grad}(x, grad)
+\method{acos}{grad}(x, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

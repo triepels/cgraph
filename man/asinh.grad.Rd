@@ -4,7 +4,7 @@
 \alias{asinh.grad}
 \title{Inverse Hyperbolic Sine Gradient}
 \usage{
-\method{asinh}{grad}(x, grad)
+\method{asinh}{grad}(x, val, grad)
 }
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}

@@ -35,6 +35,19 @@ cg.matmul <- function(x, y, name)
   )
 }
 
+#' Matrix Multiplication Gradient
+#'
+#' Calculate the gradient of \code{x \%*\% y} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x \%*\% y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
 matmul.grad.x <- function(x, y, val, grad)
 {
   tcrossprod(grad, y)
@@ -168,7 +181,6 @@ linear.grad.y <- function(x, y, z, val, grad)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-
 linear.grad.z <- function(x, y, z, val, grad)
 {
   if(is.array(z))
