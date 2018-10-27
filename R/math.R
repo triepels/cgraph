@@ -22,14 +22,16 @@
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Arithmetic]{add}
+#'
 #' @author Ron Triepels
-cg.add <- function(x, y, name)
+cg_add <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = as.name("+"),
     grads = list(
-      as.name("add.grad.x"),
-      as.name("add.grad.y")
+      as.name("add_grad_x"),
+      as.name("add_grad_y")
     ),
     args = list(x, y)
   )
@@ -40,13 +42,15 @@ cg.add <- function(x, y, name)
 #' Calculate the gradient of \code{x + y} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x + y}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-add.grad.x <- function(x, y, val, grad)
+add_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -58,7 +62,20 @@ add.grad.x <- function(x, y, val, grad)
   }
 }
 
-add.grad.y <- function(x, y, val, grad)
+#' Add Gradient
+#'
+#' Calculate the gradient of \code{x + y} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x + y}.
+#' @param grad numeric vector or array, gradient of \code{y}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+add_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -79,19 +96,33 @@ add.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Arithmetic]{positive}
+#'
 #' @author Ron Triepels
-cg.pos <- function(x, name)
+cg_pos <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`+`),
     grads = list(
-      quote(pos.grad)
+      quote(pos_grad)
     ),
     args = list(x)
   )
 }
 
-pos.grad <- function(x, val, grad)
+#' Positive Gradient
+#'
+#' Calculate the gradient of \code{x} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+pos_grad <- function(x, val, grad)
 {
   grad
 }
@@ -101,11 +132,11 @@ pos.grad <- function(x, val, grad)
 {
   if(missing(y))
   {
-    cgraph::cg.pos(x)
+    cgraph::cg_pos(x)
   }
   else
   {
-    cgraph::cg.add(x, y)
+    cgraph::cg_add(x, y)
   }
 }
 
@@ -119,14 +150,16 @@ pos.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Arithmetic]{subtract}
+#'
 #' @author Ron Triepels
-cg.sub <- function(x, y, name)
+cg_sub <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`-`),
     grads = list(
-      quote(sub.grad.x),
-      quote(sub.grad.y)
+      quote(sub_grad_x),
+      quote(sub_grad_y)
     ),
     args = list(x, y)
   )
@@ -134,16 +167,18 @@ cg.sub <- function(x, y, name)
 
 #' Subtract Gradient
 #'
-#' Calculate the gradient of \code{x - y} with respect to \code{y}.
+#' Calculate the gradient of \code{x - y} with respect to \code{x}.
 #'
-#' @param x numeric vector or array, value of \code{y}.
-#' @param grad numeric vector or array, gradient of \code{y}.
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x - y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-sub.grad.x <- function(x, y, val, grad)
+sub_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -155,7 +190,20 @@ sub.grad.x <- function(x, y, val, grad)
   }
 }
 
-sub.grad.y <- function(x, y, val, grad)
+#' Subtract Gradient
+#'
+#' Calculate the gradient of \code{x - y} with respect to \code{y}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x - y}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+sub_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -176,8 +224,10 @@ sub.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Arithmetic]{negative}
+#'
 #' @author Ron Triepels
-cg.neg <- function(x, name)
+cg_neg <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`-`),
@@ -188,6 +238,18 @@ cg.neg <- function(x, name)
   )
 }
 
+#' Negative Gradient
+#'
+#' Calculate the gradient of \code{-x} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{-x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
 neg.grad <- function(x, val, grad)
 {
   -grad
@@ -198,11 +260,11 @@ neg.grad <- function(x, val, grad)
 {
   if(missing(y))
   {
-    cgraph::cg.neg(x)
+    cgraph::cg_neg(x)
   }
   else
   {
-    cgraph::cg.sub(x, y)
+    cgraph::cg_sub(x, y)
   }
 }
 
@@ -216,14 +278,16 @@ neg.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Arithmetic]{multiply}
+#'
 #' @author Ron Triepels
-cg.mul <- function(x, y, name)
+cg_mul <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`*`),
     grads = list(
-      x = quote(mul.grad.x),
-      y = quote(mul.grad.y)
+      x = quote(mul_grad_x),
+      y = quote(mul_grad_y)
     ),
     args = list(x, y)
   )
@@ -235,13 +299,14 @@ cg.mul <- function(x, y, name)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x * y}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-mul.grad.x <- function(x, y, val, grad)
+mul_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -259,13 +324,14 @@ mul.grad.x <- function(x, y, val, grad)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x * y}.
 #' @param grad numeric vector or array, gradient of \code{y}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-mul.grad.y <- function(x, y, val, grad)
+mul_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -280,7 +346,7 @@ mul.grad.y <- function(x, y, val, grad)
 # S3 method
 `*.cg.node` <- function(x, y)
 {
-  cgraph::cg.mul(x, y)
+  cgraph::cg_mul(x, y)
 }
 
 #' Divide
@@ -293,14 +359,16 @@ mul.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Arithmetic]{divide}
+#'
 #' @author Ron Triepels
-cg.div <- function(x, y, name)
+cg_div <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`/`),
     grads = list(
-      quote(div.grad.x),
-      quote(div.grad.y)
+      quote(div_grad_x),
+      quote(div_grad_y)
     ),
     args = list(x, y)
   )
@@ -312,13 +380,14 @@ cg.div <- function(x, y, name)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x / y}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-div.grad.x <- function(x, y, val, grad)
+div_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
@@ -336,13 +405,14 @@ div.grad.x <- function(x, y, val, grad)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x / y}.
 #' @param grad numeric vector or array, gradient of \code{y}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-div.grad.y <- function(x, y, val, grad)
+div_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -357,12 +427,12 @@ div.grad.y <- function(x, y, val, grad)
 # S3 method
 `/.cg.node` <- function(x, y)
 {
-  cgraph::cg.div(x, y)
+  cgraph::cg_div(x, y)
 }
 
 #' Power
 #'
-#' Calculate \code{x^y}.
+#' Calculate \code{x ^ y}.
 #'
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param y cg.node, placeholder for a numeric vector or array.
@@ -370,14 +440,16 @@ div.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Arithmetic]{power}
+#'
 #' @author Ron Triepels
-cg.pow <- function(x, y, name)
+cg_pow <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`^`),
     grads = list(
-      quote(pow.grad.x),
-      quote(pow.grad.y)
+      quote(pow_grad_x),
+      quote(pow_grad_y)
     ),
     args = list(x, y)
   )
@@ -389,21 +461,22 @@ cg.pow <- function(x, y, name)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x ^ y}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-pow.grad.x <- function(x, y, val, grad)
+pow_grad_x <- function(x, y, val, grad)
 {
   if(is.array(x))
   {
-    grad * y * x^(y - 1)
+    grad * y * x ^ (y - 1)
   }
   else
   {
-    bsum(grad * y * x^(y - 1), length(x))
+    bsum(grad * y * x ^ (y - 1), length(x))
   }
 }
 
@@ -413,13 +486,14 @@ pow.grad.x <- function(x, y, val, grad)
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
+#' @param val numeric vector or array, value of \code{x ^ y}.
 #' @param grad numeric vector or array, gradient of \code{y}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-pow.grad.y <- function(x, y, val, grad)
+pow_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
@@ -434,7 +508,7 @@ pow.grad.y <- function(x, y, val, grad)
 # S3 method
 `^.cg.node` <- function(x, y)
 {
-  cgraph::cg.pow(x, y)
+  cgraph::cg_pow(x, y)
 }
 
 #' Square Root
@@ -446,13 +520,15 @@ pow.grad.y <- function(x, y, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:MathFun]{sqrt}
+#'
 #' @author Ron Triepels
-cg.sqrt <- function(x, name)
+cg_sqrt <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(sqrt),
     grads = list(
-      quote(sqrt.grad)
+      quote(sqrt_grad)
     ),
     args = list(x)
   )
@@ -463,13 +539,14 @@ cg.sqrt <- function(x, name)
 #' Calculate the gradient of \code{sqrt(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{sqrt(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-sqrt.grad <- function(x, val, grad)
+sqrt_grad <- function(x, val, grad)
 {
   grad * 1 / (2 * val)
 }
@@ -483,13 +560,15 @@ sqrt.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:log]{exp}
+#'
 #' @author Ron Triepels
-cg.exp <- function(x, name)
+cg_exp <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(exp),
     grads = list(
-      quote(exp.grad)
+      quote(exp_grad)
     ),
     args = list(x)
   )
@@ -500,18 +579,19 @@ cg.exp <- function(x, name)
 #' Calculate the gradient of \code{exp(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{exp(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-exp.grad <- function(x, val, grad)
+exp_grad <- function(x, val, grad)
 {
   grad * val
 }
 
-#' Natural Logarithmic Function
+#' Natural Logarithm
 #'
 #' Calculate \code{log(x)}.
 #'
@@ -520,35 +600,38 @@ exp.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:log]{log}
+#'
 #' @author Ron Triepels
-cg.ln <- function(x, name)
+cg_ln <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(log),
     grads = list(
-      quote(ln.grad)
+      quote(ln_grad)
     ),
     args = list(x)
   )
 }
 
-#' Natural Logarithmic Gradient Gradient
+#' Natural Logarithm Gradient
 #'
 #' Calculate the gradient of \code{log(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{log(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-ln.grad <- function(x, val, grad)
+ln_grad <- function(x, val, grad)
 {
   grad / x
 }
 
-#' Logarithmic Base 2 Function
+#' Logarithm Base 2
 #'
 #' Calculate \code{log2(x)}.
 #'
@@ -557,35 +640,38 @@ ln.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:log]{log}
+#'
 #' @author Ron Triepels
-cg.log2 <- function(x, name)
+cg_log2 <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(log2),
     grads = list(
-      quote(log2.grad)
+      quote(log2_grad)
     ),
     args = list(x)
   )
 }
 
-#' Logarithmic Base 2 Gradient Function
+#' Logarithmic Base 2 Gradient
 #'
 #' Calculate the gradient of \code{log2(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{log2(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-log2.grad <- function(x, val, grad)
+log2_grad <- function(x, val, grad)
 {
   grad / (x * log(2))
 }
 
-#' Logarithmic Base 10 Function
+#' Logarithmic Base 10
 #'
 #' Calculate \code{log10(x)}.
 #'
@@ -594,30 +680,33 @@ log2.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:log]{log10}
+#'
 #' @author Ron Triepels
-cg.log10 <- function(x, name)
+cg_log10 <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(log10),
     grads = list(
-      quote(log10.grad)
+      quote(log10_grad)
     ),
     args = list(x)
   )
 }
 
-#' Logarithmic Base 10 Gradient Function
+#' Logarithmic Base 10 Gradient
 #'
 #' Calculate the gradient of \code{log10(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{log10(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-log10.grad <- function(x, val, grad)
+log10_grad <- function(x, val, grad)
 {
   grad / (x * log(10))
 }
@@ -631,13 +720,15 @@ log10.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:MathFun]{abs}
+#'
 #' @author Ron Triepels
-cg.abs <- function(x, name)
+cg_abs <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(abs),
     grads = list(
-      quote(abs.grad)
+      quote(abs_grad)
     ),
     args = list(x)
   )
@@ -648,13 +739,14 @@ cg.abs <- function(x, name)
 #' Calculate the gradient of \code{abs(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{abs(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-abs.grad <- function(x, val, grad)
+abs_grad <- function(x, val, grad)
 {
   grad * (x / val)
 }
