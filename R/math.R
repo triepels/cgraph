@@ -12,6 +12,86 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Positive
+#'
+#' Calculate \code{x}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @seealso \link[base:Arithmetic]{positive}
+#'
+#' @author Ron Triepels
+cg_pos <- function(x, name = NULL)
+{
+  cgraph::opr(name = name,
+    call = quote(`+`),
+    grads = list(
+      quote(pos_grad)
+    ),
+    args = list(x)
+  )
+}
+
+#' Positive Gradient
+#'
+#' Calculate the gradient of \code{x} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+pos_grad <- function(x, val, grad)
+{
+  grad
+}
+
+#' Negative
+#'
+#' Calculate \code{-x}.
+#'
+#' @param x cg.node, placeholder for a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg.node, node of the operation.
+#'
+#' @seealso \link[base:Arithmetic]{negative}
+#'
+#' @author Ron Triepels
+cg_neg <- function(x, name = NULL)
+{
+  cgraph::opr(name = name,
+    call = quote(`-`),
+    grads = list(
+      quote(neg.grad)
+    ),
+    args = list(x)
+  )
+}
+
+#' Negative Gradient
+#'
+#' Calculate the gradient of \code{-x} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{-x}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+neg.grad <- function(x, val, grad)
+{
+  -grad
+}
+
 #' Add
 #'
 #' Calculate \code{x + y}.
@@ -85,46 +165,6 @@ add_grad_y <- function(x, y, val, grad)
   {
     bsum(grad, length(y))
   }
-}
-
-#' Positive
-#'
-#' Calculate \code{x}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @seealso \link[base:Arithmetic]{positive}
-#'
-#' @author Ron Triepels
-cg_pos <- function(x, name = NULL)
-{
-  cgraph::opr(name = name,
-    call = quote(`+`),
-    grads = list(
-      quote(pos_grad)
-    ),
-    args = list(x)
-  )
-}
-
-#' Positive Gradient
-#'
-#' Calculate the gradient of \code{x} with respect to \code{x}.
-#'
-#' @param x numeric vector or array, value of \code{x}.
-#' @param val numeric vector or array, value of \code{x}.
-#' @param grad numeric vector or array, gradient of \code{x}.
-#'
-#' @return numeric vector or array, gradient of the operation.
-#'
-#' @author Ron Triepels
-#' @keywords internal
-pos_grad <- function(x, val, grad)
-{
-  grad
 }
 
 # S3 method
@@ -213,46 +253,6 @@ sub_grad_y <- function(x, y, val, grad)
   {
     bsum(-grad, length(y))
   }
-}
-
-#' Negative
-#'
-#' Calculate \code{-x}.
-#'
-#' @param x cg.node, placeholder for a numeric vector or array.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @return cg.node, node of the operation.
-#'
-#' @seealso \link[base:Arithmetic]{negative}
-#'
-#' @author Ron Triepels
-cg_neg <- function(x, name = NULL)
-{
-  cgraph::opr(name = name,
-    call = quote(`-`),
-    grads = list(
-      quote(neg.grad)
-    ),
-    args = list(x)
-  )
-}
-
-#' Negative Gradient
-#'
-#' Calculate the gradient of \code{-x} with respect to \code{x}.
-#'
-#' @param x numeric vector or array, value of \code{x}.
-#' @param val numeric vector or array, value of \code{-x}.
-#' @param grad numeric vector or array, gradient of \code{x}.
-#'
-#' @return numeric vector or array, gradient of the operation.
-#'
-#' @author Ron Triepels
-#' @keywords internal
-neg.grad <- function(x, val, grad)
-{
-  -grad
 }
 
 # S3 method
