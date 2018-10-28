@@ -71,8 +71,11 @@
 #'
 #' @name cgraph
 #' @author Ron Triepels
+#' @importFrom R6 R6Class
+#' @useDynLib cgraph
 NULL
 
+#' @export
 cgraph <- R6Class(
   classname = "cgraph",
   class = TRUE,

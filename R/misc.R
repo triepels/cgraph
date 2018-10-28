@@ -23,6 +23,7 @@
 #' @return numeric vector or array, sigmoid values.
 #'
 #' @author Ron Triepels
+#' @export
 sigmoid <- function(x)
 {
   .Call("sigmoid", x, PACKAGE = "cgraph")
@@ -38,12 +39,13 @@ sigmoid <- function(x)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
-cg.sigmoid <- function(x, name)
+#' @export
+cg_sigmoid <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(sigmoid),
     grads = list(
-      quote(sigmoid.grad)
+      quote(sigmoid_grad)
     ),
     args = list(x)
   )
@@ -60,7 +62,7 @@ cg.sigmoid <- function(x, name)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-sigmoid.grad <- function(x, val, grad)
+sigmoid_grad <- function(x, val, grad)
 {
   grad * val * (1 - val)
 }

@@ -45,7 +45,7 @@ SEXP bsum(SEXP x, SEXP n)
       int* p_x;
       int* p_y;
 
-      y = PROTECT(Rf_allocVector(TYPEOF(x), x_n));
+      y = PROTECT(Rf_allocVector(INTSXP, x_n));
 
       p_x = INTEGER(x);
       p_y = INTEGER(y);
@@ -68,7 +68,7 @@ SEXP bsum(SEXP x, SEXP n)
       double* p_x;
       double* p_y;
 
-      y = PROTECT(Rf_allocVector(TYPEOF(x), x_n));
+      y = PROTECT(Rf_allocVector(REALSXP, x_n));
 
       p_x = REAL(x);
       p_y = REAL(y);

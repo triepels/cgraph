@@ -21,35 +21,43 @@ limitations under the License.
 
 SEXP sigmoid(SEXP x)
 {
-  double *py;
-
-  if(!Rf_isNumeric(x))
-  {
-    Rf_errorcall(R_NilValue, "x must be a numerical vector or array");
-  }
-
-  PROTECT_INDEX ipy;
+  int i_y;
 
   SEXP y = R_NilValue;
 
-  PROTECT_WITH_INDEX(y = Rf_duplicate(x), &ipy);
+  PROTECT_WITH_INDEX(y = Rf_duplicate(x), &i_y);
 
-  if(!Rf_isReal(y))
+  switch(TYPEOF(y))
   {
-    REPROTECT(y = Rf_coerceVector(y, REALSXP), ipy);
+    case INTSXP :
+    {
+      REPROTECT(y = Rf_coerceVector(y, REALSXP), i_y);
+
+      break;
+    }
+    case REALSXP :
+    {
+      break;
+    }
+    default :
+    {
+      Rf_errorcall(R_NilValue, "invalid object of type '%s' provided", Rf_type2char(TYPEOF(y)));
+    }
   }
 
-  py = REAL(y);
+  int n = LENGTH(y);
+
+  double* p_y = REAL(y);
 
   const double min = DBL_EPSILON, max = 1 - DBL_EPSILON;
 
-  for(int i = 0; i < LENGTH(x); i++)
+  for(int i = 0; i < n; i++)
   {
-    py[i] = 1 / (1 + exp(-py[i]));
+    p_y[i] = 1 / (1 + exp(-p_y[i]));
 
-    py[i] = py[i] < min ? min : py[i];
+    p_y[i] = p_y[i] < min ? min : p_y[i];
 
-    py[i] = py[i] > max ? max : py[i];
+    p_y[i] = p_y[i] > max ? max : p_y[i];
   }
 
   UNPROTECT(1);

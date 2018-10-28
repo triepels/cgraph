@@ -25,6 +25,7 @@
 #' @seealso \link[base:matmult]{matmult}
 #'
 #' @author Ron Triepels
+#' @export
 cg_matmul <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -86,6 +87,7 @@ matmul_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:crossprod]{crossprod}
 #'
 #' @author Ron Triepels
+#' @export
 cg_crossprod <- function(x, y = NULL, name = NULL)
 {
   if(is.null(y))
@@ -156,6 +158,7 @@ crossprod_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:crossprod]{tcrossprod}
 #'
 #' @author Ron Triepels
+#' @export
 cg_tcrossprod <- function(x, y = NULL, name = NULL)
 {
   if(missing(y))
@@ -229,6 +232,7 @@ tcrossprod_grad_y <- function(x, y, val, grad)
 #' @seealso \link[cgraph:linear]{linear}
 #'
 #' @author Ron Triepels
+#' @export
 cg_linear <- function(x, y, z, name = NULL)
 {
   cgraph::opr(name = name,
@@ -254,6 +258,7 @@ cg_linear <- function(x, y, z, name = NULL)
 #' @return numeric matrix, result of the transformation.
 #'
 #' @author Ron Triepels
+#' @export
 linear <- function(x, y, z)
 {
   x %*% y + c(z)
@@ -336,6 +341,7 @@ linear_grad_z <- function(x, y, z, val, grad)
 #' @seealso \link[base:sum]{sum}
 #'
 #' @author Ron Triepels
+#' @export
 cg_sum <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -387,6 +393,7 @@ sum_grad <- function(x, val, grad)
 #' @seealso \link[base:prod]{prod}
 #'
 #' @author Ron Triepels
+#' @export
 cg_prod <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -429,6 +436,7 @@ prod_grad <- function(x, val, grad)
 #' @seealso \link[base:colSums]{rowSums}
 #'
 #' @author Ron Triepels
+#' @export
 cg_rowSums <- function(x, name = NULL)
 {
  cgraph::opr(name = name,
@@ -513,6 +521,7 @@ colSums_grad <- function(x, val, grad)
 #' @seealso \link[base:mean]{mean}
 #'
 #' @author Ron Triepels
+#' @export
 cg_mean <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -562,6 +571,7 @@ mean_grad <- function(x, val, grad)
 #' @seealso \link[base:colSums]{rowMeans}
 #'
 #' @author Ron Triepels
+#' @export
 cg_rowMeans <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -604,6 +614,7 @@ rowMeans_grad <- function(x, val, grad)
 #' @seealso \link[base:colSums]{colMeans}
 #'
 #' @author Ron Triepels
+#' @export
 cg_colMeans <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -646,6 +657,7 @@ colMeans_grad <- function(x, val, grad)
 #' @seealso \link[base:max]{max}
 #'
 #' @author Ron Triepels
+#' @export
 cg_max <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -688,6 +700,7 @@ max_grad <- function(x, val, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
+#' @export
 cg_min <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -731,6 +744,7 @@ min_grad <- function(x, val, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
+#' @export
 cg_pmax <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -808,6 +822,7 @@ pmax_grad_y <- function(x, y, val, grad)
 #' @return cg.node, node of the operation.
 #'
 #' @author Ron Triepels
+#' @export
 cg_pmin <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,

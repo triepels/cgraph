@@ -10,6 +10,7 @@
 #' @seealso \link[base:Logic]{not}
 #'
 #' @author Ron Triepels
+#' @export
 cg_not <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -64,6 +65,7 @@ not_grad <- function(x, val, grad)
 #' @seealso \link[base:Comparison]{equal}
 #'
 #' @author Ron Triepels
+#' @export
 cg_equal <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -145,6 +147,7 @@ equal_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:Comparison]{not equal}
 #'
 #' @author Ron Triepels
+#' @export
 cg_not_equal <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -226,6 +229,7 @@ not_equal_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:Comparison]{less}
 #'
 #' @author Ron Triepels
+#' @export
 cg_less <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -307,6 +311,7 @@ less_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:Comparison]{greater}
 #'
 #' @author Ron Triepels
+#' @export
 cg_greater <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -388,6 +393,7 @@ greater_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:Comparison]{less or equal}
 #'
 #' @author Ron Triepels
+#' @export
 cg_less_equal <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -469,6 +475,7 @@ less_equal_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:Comparison]{greater or equal}
 #'
 #' @author Ron Triepels
+#' @export
 cg_greater_equal <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,

@@ -7,6 +7,7 @@ Comments:
 
 Features:
 
+* Function `sigmoid` is now faster.
 * Operator `cg_mean` now calls the base \code{mean} function.
 * Operator `cg_crossprod` and `cg_tcrossprod` now allow argument \code{y} to be missing (similarly as the corresponding base functions).
 
