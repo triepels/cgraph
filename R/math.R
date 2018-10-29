@@ -24,6 +24,7 @@
 #' @seealso \link[base:Arithmetic]{positive}
 #'
 #' @author Ron Triepels
+#' @export
 cg_pos <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -64,12 +65,13 @@ pos_grad <- function(x, val, grad)
 #' @seealso \link[base:Arithmetic]{negative}
 #'
 #' @author Ron Triepels
+#' @export
 cg_neg <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(`-`),
     grads = list(
-      quote(neg.grad)
+      quote(neg_grad)
     ),
     args = list(x)
   )
@@ -87,7 +89,7 @@ cg_neg <- function(x, name = NULL)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-neg.grad <- function(x, val, grad)
+neg_grad <- function(x, val, grad)
 {
   -grad
 }
@@ -105,6 +107,7 @@ neg.grad <- function(x, val, grad)
 #' @seealso \link[base:Arithmetic]{add}
 #'
 #' @author Ron Triepels
+#' @export
 cg_add <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -167,8 +170,8 @@ add_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
-`+.cg.node` <- function(x, y)
+#' @export
+`+.cg_node` <- function(x, y)
 {
   if(missing(y))
   {
@@ -193,6 +196,7 @@ add_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:Arithmetic]{subtract}
 #'
 #' @author Ron Triepels
+#' @export
 cg_sub <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -255,8 +259,8 @@ sub_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
-`-.cg.node` <- function(x, y)
+#' @export
+`-.cg_node` <- function(x, y)
 {
   if(missing(y))
   {
@@ -281,6 +285,7 @@ sub_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:Arithmetic]{multiply}
 #'
 #' @author Ron Triepels
+#' @export
 cg_mul <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -343,8 +348,8 @@ mul_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
-`*.cg.node` <- function(x, y)
+#' @export
+`*.cg_node` <- function(x, y)
 {
   cgraph::cg_mul(x, y)
 }
@@ -362,6 +367,7 @@ mul_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:Arithmetic]{divide}
 #'
 #' @author Ron Triepels
+#' @export
 cg_div <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -424,8 +430,8 @@ div_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
-`/.cg.node` <- function(x, y)
+#' @export
+`/.cg_node` <- function(x, y)
 {
   cgraph::cg_div(x, y)
 }
@@ -443,6 +449,7 @@ div_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:Arithmetic]{power}
 #'
 #' @author Ron Triepels
+#' @export
 cg_pow <- function(x, y, name = NULL)
 {
   cgraph::opr(name = name,
@@ -505,8 +512,8 @@ pow_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
-`^.cg.node` <- function(x, y)
+#' @export
+`^.cg_node` <- function(x, y)
 {
   cgraph::cg_pow(x, y)
 }
@@ -523,6 +530,7 @@ pow_grad_y <- function(x, y, val, grad)
 #' @seealso \link[base:MathFun]{sqrt}
 #'
 #' @author Ron Triepels
+#' @export
 cg_sqrt <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -563,6 +571,7 @@ sqrt_grad <- function(x, val, grad)
 #' @seealso \link[base:log]{exp}
 #'
 #' @author Ron Triepels
+#' @export
 cg_exp <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -603,6 +612,7 @@ exp_grad <- function(x, val, grad)
 #' @seealso \link[base:log]{log}
 #'
 #' @author Ron Triepels
+#' @export
 cg_ln <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -643,6 +653,7 @@ ln_grad <- function(x, val, grad)
 #' @seealso \link[base:log]{log}
 #'
 #' @author Ron Triepels
+#' @export
 cg_log2 <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -683,6 +694,7 @@ log2_grad <- function(x, val, grad)
 #' @seealso \link[base:log]{log10}
 #'
 #' @author Ron Triepels
+#' @export
 cg_log10 <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
@@ -723,6 +735,7 @@ log10_grad <- function(x, val, grad)
 #' @seealso \link[base:MathFun]{abs}
 #'
 #' @author Ron Triepels
+#' @export
 cg_abs <- function(x, name = NULL)
 {
   cgraph::opr(name = name,

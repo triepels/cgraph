@@ -24,14 +24,14 @@ test_that("Scalar [+, -, sin, cos, tan]",
   b <- parm(1.2, name = "b")
 
   # Create test expression
-  c <- cg.sin(a) + cg.cos(b) - cg.tan(a)
+  c <- cg_sin(a) + cg_cos(b) - cg_tan(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx_grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, -, sinh, cosh, tanh]",
@@ -44,14 +44,14 @@ test_that("Scalar [+, -, sinh, cosh, tanh]",
   b <- parm(1.2, name = "b")
 
   # Create test expression
-  c <- cg.sinh(a) + cg.cosh(b) - cg.tanh(a)
+  c <- cg_sinh(a) + cg_cosh(b) - cg_tanh(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx_grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, -, asin, acos, atan]",
@@ -64,14 +64,14 @@ test_that("Scalar [+, -, asin, acos, atan]",
   b <- parm(0.8, name = "b")
 
   # Create test expression
-  c <- cg.asin(a) + cg.acos(b) - cg.atan(a)
+  c <- cg_asin(a) + cg_acos(b) - cg_atan(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx_grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, -, asinh, acosh, atanh]",
@@ -84,13 +84,13 @@ test_that("Scalar [+, -, asinh, acosh, atanh]",
   b <- parm(1.2, name = "b")
 
   # Create test expression
-  c <- cg.asinh(a) + cg.acosh(b) - cg.atanh(a)
+  c <- cg_asinh(a) + cg_acosh(b) - cg_atanh(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx_grad(c, b), tolerance = 1e-4)
 })
 

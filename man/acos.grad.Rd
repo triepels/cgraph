@@ -9,6 +9,8 @@
 \arguments{
 \item{x}{numeric vector or array, value of \code{x}.}
 
+\item{val}{numeric vector or array, value of \code{acos(x)}.}
+
 \item{grad}{numeric vector or array, gradient of \code{x}.}
 }
 \value{

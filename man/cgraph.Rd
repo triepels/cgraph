@@ -7,7 +7,7 @@
 The \code{cgraph} class facilitates the construction, evaluation, and differentiation of computaiontal graphs in R.
 }
 \note{
-Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg.parm} on the cgraph object of the currently active graph.
+Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg_parm} on the cgraph object of the currently active graph.
 }
 \section{Usage}{
 
@@ -25,20 +25,20 @@ Some of the methods listed above have a wrapper function that calls the method o
 \section{Methods}{
 
 \describe{
-\item{$initialize}{initialize a computational graph, see \link[cgraph]{cg.initialize}.}
-\item{$name}{generate a default name for a node, see \link[cgraph]{cg.name}.}
-\item{$const}{add a constant node to the graph, see \link[cgraph]{cg.const}.}
-\item{$input}{add an input node to the graph, see \link[cgraph]{cg.input}.}
-\item{$parm}{add a parameter node to the graph, see \link[cgraph]{cg.parm}.}
-\item{$get.parms}{list all parameters and their values, see \link[cgraph]{cg.get.parms}.}
-\item{$add.parms}{add parameters to the graph, see \link[cgraph]{cg.add.parms}.}
-\item{$opr}{add an operation node to the graph, see \link[cgraph]{cg.opr}.}
-\item{$active}{set the graph to be the active graph, see \link[cgraph]{cg.active}.}
-\item{$run}{evaluate a node in the graph, see \link[cgraph]{cg.run}.}
-\item{$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg.gradients}.}
-\item{$approx.grad}{differentiate the graph by numerical differentiation, see \link[cgraph]{cg.approx.grad}.}
-\item{$adj.mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg.adj.mat}.}
-\item{$plot}{plot the topology of the graph, see \link[cgraph]{cg.plot}.}
+\item{$initialize}{initialize a computational graph, see \link[cgraph]{cg_initialize}.}
+\item{$const}{add a constant node to the graph, see \link[cgraph]{cg_const}.}
+\item{$input}{add an input node to the graph, see \link[cgraph]{cg_input}.}
+\item{$parm}{add a parameter node to the graph, see \link[cgraph]{cg_parm}.}
+\item{$get.parms}{list all parameters and their values, see \link[cgraph]{cg_get_parms}.}
+\item{$add.parms}{add parameters to the graph, see \link[cgraph]{cg_add_parms}.}
+\item{$opr}{add an operation node to the graph, see \link[cgraph]{cg_opr}.}
+\item{$active}{set the graph to be the active graph, see \link[cgraph]{cg_active}.}
+\item{$val}{get the value of a node in the graph, see \link[cgraph]{cg_val}.}
+\item{$set}{set the value of a node in the graph, see \link[cgraph]{cg_set}.}
+\item{$run}{evaluate a node in the graph, see \link[cgraph]{cg_run}.}
+\item{$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg_gradients}.}
+\item{$adj.mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg_adj_mat}.}
+\item{$plot}{plot the topology of the graph, see \link[cgraph]{cg_plot}.}
 }
 }
 
@@ -53,7 +53,7 @@ a <- input(name = "a")
 b <- parm(4, name = "b")
 
 # Perform some operations (i.e. c = exp(a * b)).
-c <- cg.exp(a * b, name = "c")
+c <- cg_exp(a * b, name = "c")
 
 # Evaluate c at a = 2.
 values <- run(c, list(a = 2))

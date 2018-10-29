@@ -46,7 +46,7 @@ not_grad <- function(x, val, grad)
   }
 }
 
-# S3 method
+#' @export
 `!.cg_node` <- function(x)
 {
   cgraph::cg_not(x)
@@ -128,7 +128,7 @@ equal_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
+#' @export
 `==.cg_node` <- function(x, y)
 {
   cgraph::cg_equal(x, y)
@@ -210,7 +210,7 @@ not_equal_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
+#' @export
 `!=.cg_node` <- function(x, y)
 {
   cgraph::cg_not_equal(x, y)
@@ -292,7 +292,7 @@ less_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
+#' @export
 `<.cg_node` <- function(x, y)
 {
   cgraph::cg_less(x, y)
@@ -374,7 +374,7 @@ greater_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
+#' @export
 `>.cg_node` <- function(x, y)
 {
   cgraph::cg_greater(x, y)
@@ -456,7 +456,7 @@ less_equal_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
+#' @export
 `<=.cg_node` <- function(x, y)
 {
   cgraph::cg_less_equal(x, y)
@@ -538,7 +538,7 @@ greater_equal_grad_y <- function(x, y, val, grad)
   }
 }
 
-# S3 method
+#' @export
 `>=.cg_node` <- function(x, y)
 {
   cgraph::cg_greater_equal(x, y)

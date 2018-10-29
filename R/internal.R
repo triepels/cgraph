@@ -30,7 +30,7 @@ bsum <- function(x, n = 1)
   .Call("bsum", x, n, PACKAGE = "cgraph")
 }
 
-approx.grad <- function(x, y, index = 1, eps = 1e-4)
+approx_grad <- function(x, y, index = 1, eps = 1e-4)
 {
   grad <- y.value <- val(y)
 

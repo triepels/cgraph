@@ -23,13 +23,16 @@
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:double]{as.double}
+#'
 #' @author Ron Triepels
-cg.as.double <- function(x, name)
+#' @export
+cg_as_double <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(as.double),
     grads = list(
-      quote(as.double.grad)
+      quote(as_double_grad)
     ),
     args = list(x)
   )
@@ -40,13 +43,14 @@ cg.as.double <- function(x, name)
 #' Calculate the gradient of \code{as.numeric(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{as.numeric(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-as.double.grad <- function(x, val, grad)
+as_double_grad <- function(x, val, grad)
 {
   if(is.array(x))
   {
@@ -69,37 +73,38 @@ as.double.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:double]{as.numeric}
+#'
 #' @author Ron Triepels
-cg.as.numeric <- function(x, name)
+#' @export
+cg_as_numeric <- function(x, name = NULL)
 {
-  cgraph::cg.as.double(x, name)
+  cgraph::cg_as_double(x, name)
 }
-
-
-#### TO DO: Check description of cg.reshape
-
-
 
 #' Reshape Array Dimensions
 #'
 #' Change the dimensions of array \code{x} to \code{dim}.
 #'
 #' @param x cg.node, placeholder for a numeric vector or array.
-#' @param dim numeric scalar or vector, the dimensions of the new array.
+#' @param dim cg.node, placeholder for a numeric scalar or vector, the dimensions of the new array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note The elements of \code{x} are re-arranged column-wise.
+#' @note The elements of \code{x} are re-arranged column-wise by base function \link[base:array]{array}.
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:array]{array}
+#'
 #' @author Ron Triepels
-cg.reshape <- function(x, dim, name)
+#' @export
+cg_reshape <- function(x, dim, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(array),
     grads = list(
-      quote(reshape.grad.x),
-      quote(reshape.grad.dim)
+      quote(reshape_grad_x),
+      quote(reshape_grad_dim)
     ),
     args = list(x, dim)
   )
@@ -110,13 +115,15 @@ cg.reshape <- function(x, dim, name)
 #' Calculate the gradient of \code{array(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param dim numeric scalar or vector, value of \code{dim}.
+#' @param val numeric vector or array, value of \code{array(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-reshape.grad.x <- function(x, dim, val, grad)
+reshape_grad_x <- function(x, dim, val, grad)
 {
   if(is.array(x))
   {
@@ -128,9 +135,22 @@ reshape.grad.x <- function(x, dim, val, grad)
   }
 }
 
-reshape.grad.dim <- function(x, dim, val, grad)
+#' Reshape Array Dimensions Gradient
+#'
+#' Calculate the gradient of \code{array(x)} with respect to \code{dim}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param dim numeric scalar or vector, value of \code{dim}.
+#' @param val numeric vector or array, value of \code{array(x)}.
+#' @param grad numeric vector or array, gradient of \code{dim}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+reshape_grad_dim <- function(x, dim, val, grad)
 {
-  stop("unable to differentiate argument 'dim' of operator 'cg.reshape'")
+  stop("unable to differentiate argument 'dim' of operator 'cg_reshape'")
 }
 
 #' Matrix Transpose
@@ -142,19 +162,34 @@ reshape.grad.dim <- function(x, dim, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:t]{t}
+#'
 #' @author Ron Triepels
-cg.t <- function(x, name)
+#' @export
+cg_t <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(t),
     grads = list(
-      x = quote(t.grad)
+      x = quote(t_grad)
     ),
     args = list(x)
   )
 }
 
-t.grad <- function(x, val, grad)
+#' Matrix Transpose Gradient
+#'
+#' Calculate the gradient of \code{t(x)} with respect to \code{x}.
+#'
+#' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{t(x)}.
+#' @param grad numeric vector or array, gradient of \code{x}.
+#'
+#' @return numeric vector or array, gradient of the operation.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+t_grad <- function(x, val, grad)
 {
   t(grad)
 }

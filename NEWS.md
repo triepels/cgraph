@@ -7,7 +7,8 @@ Comments:
 
 Features:
 
-* Function `sigmoid` is now faster.
+* A node can now also be named 'grad'. 'grad' is no longer a reserved word.
+* Function `approx.gradients` has been removed.
 * Operator `cg_mean` now calls the base \code{mean} function.
 * Operator `cg_crossprod` and `cg_tcrossprod` now allow argument \code{y} to be missing (similarly as the corresponding base functions).
 

@@ -30,8 +30,8 @@ test_that("Scalar [+, -, /, *]",
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx_grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, pow, sqrt]",
@@ -44,14 +44,14 @@ test_that("Scalar [+, pow, sqrt]",
   b <- parm(4, name = "b")
 
   # Create test expression
-  c <- a^b + cg.sqrt(a)
+  c <- a^b + cg_sqrt(a)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx_grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [+, ln, log2, log10, exp]",
@@ -64,14 +64,14 @@ test_that("Scalar [+, ln, log2, log10, exp]",
   b <- parm(4, name = "b")
 
   # Create test expression
-  c <- cg.ln(a) + cg.log2(b) + cg.log10(a) + cg.exp(b)
+  c <- cg_ln(a) + cg_log2(b) + cg_log10(a) + cg_exp(b)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx_grad(c, b), tolerance = 1e-4)
 })
 
 test_that("Scalar [-, /, abs]",
@@ -84,12 +84,12 @@ test_that("Scalar [-, /, abs]",
   b <- parm(4, name = "b")
 
   # Create test expression
-  c <- cg.abs(-a / b)
+  c <- cg_abs(-a / b)
 
   # Calculate gradients
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
-  expect_equivalent(grads$b, approx.grad(c, b), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$b, approx_grad(c, b), tolerance = 1e-4)
 })

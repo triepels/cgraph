@@ -21,13 +21,16 @@
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Trig]{sin}
+#'
 #' @author Ron Triepels
-cg.sin <- function(x, name)
+#' @export
+cg_sin <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(sin),
     grads = list(
-      x = quote(sin.grad)
+      x = quote(sin_grad)
     ),
     args = list(x)
   )
@@ -38,13 +41,14 @@ cg.sin <- function(x, name)
 #' Calculate the gradient of \code{sin(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{sin(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-sin.grad <- function(x, val, grad)
+sin_grad <- function(x, val, grad)
 {
   grad * cos(x)
 }
@@ -58,13 +62,16 @@ sin.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Trig]{cos}
+#'
 #' @author Ron Triepels
-cg.cos <- function(x, name)
+#' @export
+cg_cos <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(cos),
     grads = list(
-      quote(cos.grad)
+      quote(cos_grad)
     ),
     args = list(x)
   )
@@ -75,13 +82,14 @@ cg.cos <- function(x, name)
 #' Calculate the gradient of \code{cos(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{cos(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cos.grad <- function(x, val, grad)
+cos_grad <- function(x, val, grad)
 {
   -grad * sin(x)
 }
@@ -95,13 +103,16 @@ cos.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Trig]{tan}
+#'
 #' @author Ron Triepels
-cg.tan <- function(x, name)
+#' @export
+cg_tan <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(tan),
     grads = list(
-      quote(tan.grad)
+      quote(tan_grad)
     ),
     args = list(x)
   )
@@ -112,13 +123,14 @@ cg.tan <- function(x, name)
 #' Calculate the gradient of \code{tan(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{tan(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-tan.grad <- function(x, val, grad)
+tan_grad <- function(x, val, grad)
 {
   grad / cos(x)^2
 }
@@ -132,13 +144,16 @@ tan.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Hyperbolic]{sinh}
+#'
 #' @author Ron Triepels
-cg.sinh <- function(x, name)
+#' @export
+cg_sinh <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(sinh),
     grads = list(
-      quote(sinh.grad)
+      quote(sinh_grad)
     ),
     args = list(x)
   )
@@ -149,13 +164,14 @@ cg.sinh <- function(x, name)
 #' Calculate the gradient of \code{sinh(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{sinh(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-sinh.grad <- function(x, val, grad)
+sinh_grad <- function(x, val, grad)
 {
   grad * cosh(x)
 }
@@ -169,13 +185,16 @@ sinh.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Hyperbolic]{cosh}
+#'
 #' @author Ron Triepels
-cg.cosh <- function(x, name)
+#' @export
+cg_cosh <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(cosh),
     grads = list(
-      quote(cosh.grad)
+      quote(cosh_grad)
     ),
     args = list(x)
   )
@@ -186,13 +205,14 @@ cg.cosh <- function(x, name)
 #' Calculate the gradient of \code{cosh(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{cosh(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-cosh.grad <- function(x, val, grad)
+cosh_grad <- function(x, val, grad)
 {
   grad * sinh(x)
 }
@@ -206,13 +226,16 @@ cosh.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Hyperbolic]{tanh}
+#'
 #' @author Ron Triepels
-cg.tanh <- function(x, name)
+#' @export
+cg_tanh <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(tanh),
     grads = list(
-      quote(tanh.grad)
+      quote(tanh_grad)
     ),
     args = list(x)
   )
@@ -222,14 +245,15 @@ cg.tanh <- function(x, name)
 #'
 #' Calculate the gradient of \code{tanh(x)} with respect to \code{x}.
 #'
-#' @param y numeric vector or array, value of \code{tanh(x)}.
+#' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{tanh(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-tanh.grad <- function(x, val, grad)
+tanh_grad <- function(x, val, grad)
 {
   grad * (1 - val^2)
 }
@@ -243,13 +267,16 @@ tanh.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Trig]{asin}
+#'
 #' @author Ron Triepels
-cg.asin <- function(x, name)
+#' @export
+cg_asin <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(asin),
     grads = list(
-      quote(asin.grad)
+      quote(asin_grad)
     ),
     args = list(x)
   )
@@ -260,13 +287,14 @@ cg.asin <- function(x, name)
 #' Calculate the gradient of \code{asin(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{asin(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-asin.grad <- function(x, val, grad)
+asin_grad <- function(x, val, grad)
 {
   grad / sqrt(1 - x^2)
 }
@@ -280,13 +308,16 @@ asin.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Trig]{acos}
+#'
 #' @author Ron Triepels
-cg.acos <- function(x, name)
+#' @export
+cg_acos <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(acos),
     grads = list(
-      quote(acos.grad)
+      quote(acos_grad)
     ),
     args = list(x)
   )
@@ -297,13 +328,14 @@ cg.acos <- function(x, name)
 #' Calculate the gradient of \code{acos(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{acos(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-acos.grad <- function(x, val, grad)
+acos_grad <- function(x, val, grad)
 {
   -grad / sqrt(1 - x^2)
 }
@@ -317,13 +349,16 @@ acos.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Trig]{atan}
+#'
 #' @author Ron Triepels
-cg.atan <- function(x, name)
+#' @export
+cg_atan <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(atan),
     grads = list(
-      quote(atan.grad)
+      quote(atan_grad)
     ),
     args = list(x)
   )
@@ -334,13 +369,14 @@ cg.atan <- function(x, name)
 #' Calculate the gradient of \code{atan(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{atan(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-atan.grad <- function(x, val, grad)
+atan_grad <- function(x, val, grad)
 {
   grad / (x^2 + 1)
 }
@@ -354,13 +390,16 @@ atan.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Hyperbolic]{asinh}
+#'
 #' @author Ron Triepels
-cg.asinh <- function(x, name)
+#' @export
+cg_asinh <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(asinh),
     grads = list(
-      quote(asinh.grad)
+      quote(asinh_grad)
     ),
     args = list(x)
   )
@@ -371,13 +410,14 @@ cg.asinh <- function(x, name)
 #' Calculate the gradient of \code{asinh(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{asinh(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-asinh.grad <- function(x, val, grad)
+asinh_grad <- function(x, val, grad)
 {
   grad / sqrt(x^2 + 1)
 }
@@ -391,13 +431,16 @@ asinh.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Hyperbolic]{acosh}
+#'
 #' @author Ron Triepels
-cg.acosh <- function(x, name)
+#' @export
+cg_acosh <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(acosh),
     grads = list(
-      quote(acosh.grad)
+      quote(acosh_grad)
     ),
     args = list(x)
   )
@@ -408,13 +451,14 @@ cg.acosh <- function(x, name)
 #' Calculate the gradient of \code{acosh(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{acosh(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-acosh.grad <- function(x, val, grad)
+acosh_grad <- function(x, val, grad)
 {
   grad / sqrt(x^2 - 1)
 }
@@ -428,13 +472,16 @@ acosh.grad <- function(x, val, grad)
 #'
 #' @return cg.node, node of the operation.
 #'
+#' @seealso \link[base:Hyperbolic]{atanh}
+#'
 #' @author Ron Triepels
-cg.atanh <- function(x, name)
+#' @export
+cg_atanh <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
     call = quote(atanh),
     grads = list(
-      quote(atanh.grad)
+      quote(atanh_grad)
     ),
     args = list(x)
   )
@@ -445,13 +492,14 @@ cg.atanh <- function(x, name)
 #' Calculate the gradient of \code{atanh(x)} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
+#' @param val numeric vector or array, value of \code{atanh(x)}.
 #' @param grad numeric vector or array, gradient of \code{x}.
 #'
 #' @return numeric vector or array, gradient of the operation.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-atanh.grad <- function(x, val, grad)
+atanh_grad <- function(x, val, grad)
 {
   grad / (1 - x^2)
 }

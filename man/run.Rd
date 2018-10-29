@@ -10,9 +10,15 @@ run(name, values = list())
 \item{name}{character scalar or symbol, name of the node that is evaluated.}
 
 \item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
+
+\item{name}{character scalar, name of the node that is evaluated.}
+
+\item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
 }
 \value{
 environment, the value of node \code{name} including the values of all ancestors of \code{name}.
+
+environment, the value of node \code{name} including the value of all ancestors of \code{name}.
 }
 \description{
 Evaluate node \code{name} in the active graph.
@@ -21,6 +27,10 @@ Evaluate node \code{name} in the active graph.
 All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
 
 Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of nodes that have not changed or are not evaluated are not returned.
+
+All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created or by calling method \link[cgraph]{set}. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
+
+Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of operation nodes that are cached by function \link[cgraph]{get} are ignored and re-computed. The values of all nodes that are computed are returned.
 }
 \examples{
 # Initialize a new computational graph.
@@ -38,7 +48,27 @@ values <- run(b, list(a = 2))
 # Retrieve the value of b.
 values$b
 
+# Initialize a new computational graph.
+x <- cgraph$new()
+
+# Add an input.
+a <- input(name = "a")
+
+# Square the input (i.e. b = a^2).
+b <- cg_pow(a, const(2), name = "b")
+
+# Evaluate b at a = 2.
+values <- run(b, list(a = 2))
+
+# Retrieve the value of b.
+values$b
+
 }
 \author{
+Ron Triepels
+Evaluate the Graph
+
+Evaluate node \code{name} in the active graph.
+
 Ron Triepels
 }

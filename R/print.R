@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' @export
 print.cgraph <- function(x, ...)
 {
   cat("<cgraph>")
 }
 
+#' @export
 print.cg_node = function(x, ...)
 {
   cat(sprintf("<cg_node: %s>", x))

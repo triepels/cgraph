@@ -41,7 +41,7 @@ test_that("Expression with Equivalent Inputs",
   grads <- gradients(b, run(b))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(b, a), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(b, a), tolerance = 1e-4)
 })
 
 test_that("Network with Multiple Outputs",
@@ -61,13 +61,13 @@ test_that("Network with Multiple Outputs",
   grads <- gradients(c, run(c))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(c, a), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(c, a), tolerance = 1e-4)
 
   # Calculate gradients
   grads <- gradients(d, run(d))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(d, a), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(d, a), tolerance = 1e-4)
 })
 
 test_that("Large Network",
@@ -81,12 +81,12 @@ test_that("Large Network",
   # Generate expressions
   for(i in 1:10000)
   {
-    a <- cg.abs(a)
+    a <- cg_abs(a)
   }
 
   # Calculate gradients
   grads <- gradients(a, run(a))
 
   # Check gradients
-  expect_equivalent(grads$a, approx.grad(a, "a", eps = 1e-6), tolerance = 1e-4)
+  expect_equivalent(grads$a, approx_grad(a, "a", eps = 1e-6), tolerance = 1e-4)
 })

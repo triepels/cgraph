@@ -19,8 +19,6 @@ Add an input node to the active graph.
 }
 \note{
 The intended use of inputs is that they are not given a fixed value but behave as placeholders. Values can be supplied for inputs when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
-
-The name of the input node cannot be 'grad' as this is a reserved word.
 }
 \examples{
 # Initialize a new computational graph.
