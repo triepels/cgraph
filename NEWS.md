@@ -3,14 +3,22 @@ cgraph 3.0.0
 
 Comments:
 
-* Some naming conventions have changed. Individual names in the name of a function are now separated with an underscore (_) instead of a dot (.). For example, operator `cg.matmul` is now named `cg_matmul`. The same rule applies to class names. For example, class `cg.node` is now `cg_node`.
+* Large parts of the C-API have been reworked.
+* Function `name` is removed. Names for nodes are now generated internally in the C-API.
+* Function `approx.gradients` is removed. The function is still available as `cgraph:::approx_grad` in the package namespace. However, it should be noted that it is not well-optimized and should only be used for testing purposes.
+* Some naming conventions have changed. Individual names in the name of a function are now separated with an underscore (_) instead of a dot (.). For example, operator `cg.matmul` is now named `cg_matmul`. The same rule applies to class names. For example, class `cg.node` is now named `cg_node`.
 
 Features:
 
+* The calls of functions and their corresponding gradient functions are no longer build at compile-time but generated at run-time. This allows operators to accept a variable number of arguments.
+* Added function `val` and `set` to retrieve or set the value of a node respectively.
 * A node can now also be named 'grad'. 'grad' is no longer a reserved word.
-* Function `approx.gradients` has been removed.
-* Operator `cg_mean` now calls the base \code{mean} function.
-* Operator `cg_crossprod` and `cg_tcrossprod` now allow argument \code{y} to be missing (similarly as the corresponding base functions).
+* Operator `cg_mean` now calls the base `mean` function.
+* Operator `cg_crossprod` and `cg_tcrossprod` now allow argument `y` to be missing (similarly as the corresponding base functions).
+
+Bug fixes:
+
+* Fixed a bug that caused a segfault when using cgraph in RStudio on Red Hat Enterprise Linux.
 
 cgraph 2.0.3
 ----------------------------------------------------------------

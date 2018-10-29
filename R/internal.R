@@ -30,6 +30,25 @@ bsum <- function(x, n = 1)
   .Call("bsum", x, n, PACKAGE = "cgraph")
 }
 
+#' Approximate Gradients
+#'
+#' Differentiate node \code{x} with respect to node \code{y} by numerical differentiation.
+#'
+#' @param x character scalar, name of the node.
+#' @param y character scalar, name of the node.
+#' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
+#' @param eps numeric scalar, step size. Defaults to 1e-4.
+#'
+#' @note All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time.
+#'
+#' The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The caluclated gradient has the same shape as node \code{y}.
+#'
+#' Numerical differentiation is subject to estimation error and can be very slow. Therefore, this function should only be used for testing purposes.
+#'
+#' @return numeric vector or array, the derivative of \code{x} with respect to \code{y}.
+#'
+#' @author Ron Triepels
+#' @keywords internal
 approx_grad <- function(x, y, index = 1, eps = 1e-4)
 {
   grad <- y.value <- val(y)
