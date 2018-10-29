@@ -31,19 +31,19 @@
 #' \item{$const}{add a constant node to the graph, see \link[cgraph]{cg_const}.}
 #' \item{$input}{add an input node to the graph, see \link[cgraph]{cg_input}.}
 #' \item{$parm}{add a parameter node to the graph, see \link[cgraph]{cg_parm}.}
-#' \item{$get.parms}{list all parameters and their values, see \link[cgraph]{cg_get_parms}.}
-#' \item{$add.parms}{add parameters to the graph, see \link[cgraph]{cg_add_parms}.}
+#' \item{$get_parms}{list all parameters and their values, see \link[cgraph]{cg_get_parms}.}
+#' \item{$add_parms}{add parameters to the graph, see \link[cgraph]{cg_add_parms}.}
 #' \item{$opr}{add an operation node to the graph, see \link[cgraph]{cg_opr}.}
 #' \item{$active}{set the graph to be the active graph, see \link[cgraph]{cg_active}.}
 #' \item{$val}{get the value of a node in the graph, see \link[cgraph]{cg_val}.}
 #' \item{$set}{set the value of a node in the graph, see \link[cgraph]{cg_set}.}
 #' \item{$run}{evaluate a node in the graph, see \link[cgraph]{cg_run}.}
 #' \item{$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg_gradients}.}
-#' \item{$adj.mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg_adj_mat}.}
+#' \item{$adj_mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg_adj_mat}.}
 #' \item{$plot}{plot the topology of the graph, see \link[cgraph]{cg_plot}.}
 #' }
 #'
-#' @note Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg_parm} on the cgraph object of the currently active graph.
+#' @note Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg_parm} on the currently active cgraph object. Similarly, nodes can be evaluated or changed by calling \link[cgraph]{val} or \link[cgraph]{set} instead of calling method \link[cgraph]{cg_val} or \link[cgraph]{cg_set} respectively.
 #'
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
@@ -92,7 +92,7 @@ cgraph <- R6Class(
 #'
 #' @details \code{$new()}
 #'
-#' @note The cgraph object is set to be the active graph. Nodes that are created by wrapper function \link[cgraph]{const}, \link[cgraph]{input}, \link[cgraph]{parm}, or \link[cgraph]{opr} are added to the graph that is currently active. Also, wrapper function \link[cgraph]{get} and \link[cgraph]{set} operate on this graph. You can change the active graph by creating a new cgraph object using method \link[cgraph]{cg_initialize} or by calling the \link[cgraph]{cg_active} method on another cgraph object.
+#' @note The cgraph object is set to be the active graph.
 #'
 #' @return cgraph object.
 #'
@@ -121,7 +121,7 @@ cgraph$public_methods$initialize <- function()
 #'
 #' There is a wrapper function \link[cgraph]{const} that calls this method on the current active graph.
 #'
-#' @return cg.node, constant.
+#' @return cg_node, constant.
 #'
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
@@ -149,7 +149,7 @@ cgraph$public_methods$const <- function(value = NULL, name = NULL)
 #'
 #' There is a wrapper function \link[cgraph]{input} that calls this method on the current active graph.
 #'
-#' @return cg.node, input.
+#' @return cg_node, input.
 #'
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
@@ -177,7 +177,7 @@ cgraph$public_methods$input <- function(value = NULL, name = NULL)
 #'
 #' There is a wrapper function \link[cgraph]{parm} that calls this method on the current active graph.
 #'
-#' @return cg.node, parameter.
+#' @return cg_node, parameter.
 #'
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
@@ -265,7 +265,7 @@ cgraph$public_methods$add_parms <- function(..., parms = NULL)
 #'
 #' There is a wrapper function \link[cgraph]{opr} that calls this method on the current active graph.
 #'
-#' @return cg.node, operation.
+#' @return cg_node, operation.
 #'
 #' @name cg_opr
 #' @author Ron Triepels
@@ -373,7 +373,7 @@ cgraph$public_methods$set <- function(name, value)
 #'
 #' @note All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created or by calling method \link[cgraph]{cg_set}. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
 #'
-#' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of operation nodes that are cached by function \link[cgraph]{cg_get} are ignored and re-computed. The values of all nodes that are computed are returned.
+#' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of operation nodes that are cached by function \link[cgraph]{cg_val} are ignored and re-computed. The values of all nodes that are computed are returned.
 #'
 #' There is a wrapper function \link[cgraph]{run} that calls this method on the current active graph.
 #'

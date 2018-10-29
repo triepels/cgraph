@@ -7,7 +7,7 @@
 The \code{cgraph} class facilitates the construction, evaluation, and differentiation of computaiontal graphs in R.
 }
 \note{
-Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg_parm} on the cgraph object of the currently active graph.
+Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg_parm} on the currently active cgraph object. Similarly, nodes can be evaluated or changed by calling \link[cgraph]{val} or \link[cgraph]{set} instead of calling method \link[cgraph]{cg_val} or \link[cgraph]{cg_set} respectively.
 }
 \section{Usage}{
 
@@ -29,15 +29,15 @@ Some of the methods listed above have a wrapper function that calls the method o
 \item{$const}{add a constant node to the graph, see \link[cgraph]{cg_const}.}
 \item{$input}{add an input node to the graph, see \link[cgraph]{cg_input}.}
 \item{$parm}{add a parameter node to the graph, see \link[cgraph]{cg_parm}.}
-\item{$get.parms}{list all parameters and their values, see \link[cgraph]{cg_get_parms}.}
-\item{$add.parms}{add parameters to the graph, see \link[cgraph]{cg_add_parms}.}
+\item{$get_parms}{list all parameters and their values, see \link[cgraph]{cg_get_parms}.}
+\item{$add_parms}{add parameters to the graph, see \link[cgraph]{cg_add_parms}.}
 \item{$opr}{add an operation node to the graph, see \link[cgraph]{cg_opr}.}
 \item{$active}{set the graph to be the active graph, see \link[cgraph]{cg_active}.}
 \item{$val}{get the value of a node in the graph, see \link[cgraph]{cg_val}.}
 \item{$set}{set the value of a node in the graph, see \link[cgraph]{cg_set}.}
 \item{$run}{evaluate a node in the graph, see \link[cgraph]{cg_run}.}
 \item{$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg_gradients}.}
-\item{$adj.mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg_adj_mat}.}
+\item{$adj_mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg_adj_mat}.}
 \item{$plot}{plot the topology of the graph, see \link[cgraph]{cg_plot}.}
 }
 }

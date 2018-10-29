@@ -20,7 +20,7 @@ Evaluate node \code{name} in the graph.
 \note{
 All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created or by calling method \link[cgraph]{cg_set}. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
 
-Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of operation nodes that are cached by function \link[cgraph]{cg_get} are ignored and re-computed. The values of all nodes that are computed are returned.
+Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of operation nodes that are cached by function \link[cgraph]{cg_val} are ignored and re-computed. The values of all nodes that are computed are returned.
 
 There is a wrapper function \link[cgraph]{run} that calls this method on the current active graph.
 }

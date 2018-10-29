@@ -12,7 +12,7 @@ const(value = NULL, name = NULL)
 \item{name}{character scalar, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
 \value{
-cg.node, constant.
+cg_node, constant.
 }
 \description{
 Add a constant node to the active graph.

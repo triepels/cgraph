@@ -27,7 +27,7 @@ session$graph <- NULL
 #'
 #' @note Constants are ignored when differentiating a graph. The intended use of constants is that they are given a fixed value. However, it is still possible to change the value of constants when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
 #'
-#' @return cg.node, constant.
+#' @return cg_node, constant.
 #'
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
@@ -56,7 +56,7 @@ const <- function(value = NULL, name = NULL)
 #'
 #' @note The intended use of inputs is that they are not given a fixed value but behave as placeholders. Values can be supplied for inputs when evaluating or differentiating a graph (see \link[cgraph]{run} and \link[cgraph]{gradients} for more details).
 #'
-#' @return cg.node, input.
+#' @return cg_node, input.
 #'
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
@@ -85,7 +85,7 @@ input <- function(value = NULL, name = NULL)
 #'
 #' @note Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
 #'
-#' @return cg.node, parameter.
+#' @return cg_node, parameter.
 #'
 #' @examples # Initialize a new computational graph.
 #' x <- cgraph$new()
@@ -116,7 +116,7 @@ parm <- function(value = NULL, name = NULL)
 #'
 #' @note The operation to be performed by the node should be provided as a symbol to argument \code{call}. If this operation consumes any other nodes in the graph, then the gradient function of the operation with respect to these input nodes should be supplied as a symbol to argument \code{gradients}. These gradients must be a function of each input's gradient. A gradient function must be provided for each input node as specified by argument \code{args}.
 #'
-#' @return cg.node, operation.
+#' @return cg_node, operation.
 #'
 #' @author Ron Triepels
 #' @export
@@ -200,42 +200,12 @@ set <- function(name, value)
 #'
 #' Evaluate node \code{name} in the active graph.
 #'
-#' @param name character scalar or symbol, name of the node that is evaluated.
-#' @param values named list or environment, values that are subsituted for the nodes in the graph.
-#'
-#' @note All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
-#'
-#' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of nodes that have not changed or are not evaluated are not returned.
-#'
-#' @return environment, the value of node \code{name} including the values of all ancestors of \code{name}.
-#'
-#' @examples # Initialize a new computational graph.
-#' x <- cgraph$new()
-#'
-#' # Add an input.
-#' a <- input(name = "a")
-#'
-#' # Square the input (i.e. b = a^2).
-#' b <- cg.pow(a, const(2), name = "b")
-#'
-#' # Evaluate b at a = 2.
-#' values <- run(b, list(a = 2))
-#'
-#' # Retrieve the value of b.
-#' values$b
-#'
-#' @author Ron Triepels
-
-#' Evaluate the Graph
-#'
-#' Evaluate node \code{name} in the active graph.
-#'
 #' @param name character scalar, name of the node that is evaluated.
 #' @param values named list or environment, values that are subsituted for the nodes in the graph.
 #'
 #' @note All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created or by calling method \link[cgraph]{set}. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
 #'
-#' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of operation nodes that are cached by function \link[cgraph]{get} are ignored and re-computed. The values of all nodes that are computed are returned.
+#' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of operation nodes that are cached by function \link[cgraph]{val} are ignored and re-computed. The values of all nodes that are computed are returned.
 #'
 #' @return environment, the value of node \code{name} including the value of all ancestors of \code{name}.
 #'
@@ -265,40 +235,6 @@ run <- function(name, values = list())
 
   session$graph$run(name, values)
 }
-
-#' Calculate Gradients
-#'
-#' Differentiate the active graph with respect to node \code{name} by reverse automatic differentiation.
-#'
-#' @param name character scalar or symbol, name of the node that is differentiated.
-#' @param values named list or environment, values that are subsituted for the nodes in the graph.
-#' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
-#'
-#' @note All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating node \code{name} in the graph using function \link[cgraph]{run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
-#'
-#' Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is to be differentiated.
-#'
-#' The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the nodes.
-#'
-#' @return environment, the gradients of all nodes with respect to target node \code{name}.
-#'
-#' @examples # Initialize a new computational graph.
-#' x <- cgraph$new()
-#'
-#' # Add some parameters.
-#' a <- parm(2, name = "a")
-#' b <- parm(4, name = "b")
-#'
-#' # Perform some operations on the parameters.
-#' c <- cg.sin(a) + cg.cos(b) - cg.tan(a)
-#'
-#' # Differentiate the graph with respect to c.
-#' grads <- gradients(c, run(c))
-#'
-#' # Retrieve the gradient of c with respect to a.
-#' grads$a
-#'
-#' @author Ron Triepels
 
 #' Calculate Gradients
 #'

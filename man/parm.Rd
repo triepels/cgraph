@@ -12,7 +12,7 @@ parm(value = NULL, name = NULL)
 \item{name}{character scalar, name of the node (optional). In case \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
 \value{
-cg.node, parameter.
+cg_node, parameter.
 }
 \description{
 Add a parameter node to the active graph.

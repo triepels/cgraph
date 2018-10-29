@@ -24,7 +24,7 @@ Differentiate node \code{x} with respect to node \code{y} by numerical different
 \note{
 All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time.
 
-The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The caluclated gradient has the same shape as the value of node \code{y}.
+The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The caluclated gradient has the same shape as node \code{y}.
 
 Numerical differentiation is subject to estimation error and can be very slow. Therefore, this function should only be used for testing purposes.
 }

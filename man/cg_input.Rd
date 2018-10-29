@@ -9,7 +9,7 @@
 \item{name}{character scalar, name of the node (optional). In case argument \code{name} is missing, the node is tried to be added to the graph under an auto-generated name.}
 }
 \value{
-cg.node, input.
+cg_node, input.
 }
 \description{
 Add an input node to the graph.

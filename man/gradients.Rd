@@ -7,12 +7,6 @@
 gradients(name, values = new.env(), index = 1)
 }
 \arguments{
-\item{name}{character scalar or symbol, name of the node that is differentiated.}
-
-\item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
-
-\item{index}{numeric scalar, index of the target node that is differentiated. Defaults to the first element.}
-
 \item{name}{character scalar, name of the node that is differentiated.}
 
 \item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
@@ -20,8 +14,6 @@ gradients(name, values = new.env(), index = 1)
 \item{index}{numeric scalar, index of the target node that is differentiated. Defaults to the first element.}
 }
 \value{
-environment, the gradients of all nodes with respect to target node \code{name}.
-
 environment, the gradients of all nodes with respect to target node \code{name}.
 }
 \description{
@@ -32,31 +24,9 @@ All nodes required to compute node \code{name} must have a value, or their value
 
 Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is to be differentiated.
 
-The gradients of all ancestor nodes of node \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the nodes.
-
-All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating node \code{name} in the graph using function \link[cgraph]{run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
-
-Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is to be differentiated.
-
 The gradients of all ancestors or \code{name} are returned. Constant nodes are not differentiated and their gradients are not returned. The gradients have the same shape as the values of the nodes.
 }
 \examples{
-# Initialize a new computational graph.
-x <- cgraph$new()
-
-# Add some parameters.
-a <- parm(2, name = "a")
-b <- parm(4, name = "b")
-
-# Perform some operations on the parameters.
-c <- cg.sin(a) + cg.cos(b) - cg.tan(a)
-
-# Differentiate the graph with respect to c.
-grads <- gradients(c, run(c))
-
-# Retrieve the gradient of c with respect to a.
-grads$a
-
 # Initialize a new computational graph.
 x <- cgraph$new()
 
@@ -75,10 +45,5 @@ grads$a
 
 }
 \author{
-Ron Triepels
-Calculate Gradients
-
-Differentiate the active graph with respect to node \code{name} by reverse automatic differentiation.
-
 Ron Triepels
 }
