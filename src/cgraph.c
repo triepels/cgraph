@@ -768,9 +768,9 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP args, SEXP name, SEXP graph)
   {
     SEXP parent = VECTOR_ELT(args, i);
 
-    cg_add_grad(parent, VECTOR_ELT(grads, i));
-
     cg_add_parent(node, cg_node_id(parent, graph));
+
+    cg_add_grad(parent, VECTOR_ELT(grads, i));
 
     cg_add_child(parent, node_id);
   }
