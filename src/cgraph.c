@@ -1403,11 +1403,18 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
   {
     SEXP node = PROTECT(cg_get_node_id(p_ids[i], graph));
 
-    SEXP node_value = PROTECT(cg_eval(node, values, graph));
+    int node_type = cg_get_type(node);
 
-    Rf_defineVar(cg_get_symbol(node), node_value, values);
+    if(node_type == CGOPR)
+    {
+      SEXP node_value = PROTECT(cg_eval(node, values, graph));
 
-    UNPROTECT(2);
+      Rf_defineVar(cg_get_symbol(node), node_value, values);
+
+      UNPROTECT(1);
+    }
+
+    UNPROTECT(1);
   }
 
   SET_ENCLOS(values, values_enclos);
