@@ -37,8 +37,6 @@ limitations under the License.
 
 SEXP cgraph(SEXP graph, SEXP values)
 {
-  SEXP nodes = PROTECT(Rf_allocVector(VECSXP, 0));
-
   if(!Rf_isEnvironment(graph))
   {
     Rf_errorcall(R_NilValue, "graph must be an environment");
@@ -48,6 +46,8 @@ SEXP cgraph(SEXP graph, SEXP values)
   {
     Rf_errorcall(R_NilValue, "values must be an environment");
   }
+
+  SEXP nodes = PROTECT(Rf_allocVector(VECSXP, 0));
 
   Rf_setAttrib(nodes, R_NamesSymbol, Rf_allocVector(STRSXP, 0));
 
@@ -972,7 +972,7 @@ int* cg_unset_backward_dep(int id, int* p_length, SEXP values, SEXP graph)
 
       int* p_node_parents = cg_get_parents(node, &m);
 
-      if(m > 0 && node_value == R_UnboundValue)
+      if(m > 0 && (current == id || node_value == R_UnboundValue))
       {
         for(int i = 0; i < m; i++)
         {
@@ -1361,16 +1361,16 @@ SEXP cg_set(SEXP name, SEXP value, SEXP graph)
 
   SEXP graph_values = PROTECT(cg_get_values(graph));
 
-  for(int i = 0; i < n; i++)
+  for(int i = n - 2; i >= 0; i--)
   {
     SEXP node = PROTECT(cg_get_node_id(p_ids[i], graph));
 
-    Rf_setVar(cg_get_symbol(node), R_UnboundValue, graph_values);
+    Rf_defineVar(cg_get_symbol(node), R_UnboundValue, graph_values);
 
     UNPROTECT(1);
   }
 
-  Rf_setVar(cg_get_symbol(name), value, graph_values);
+  Rf_defineVar(cg_get_symbol(name), value, graph_values);
 
   UNPROTECT(1);
 
