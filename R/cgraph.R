@@ -103,9 +103,7 @@ cgraph <- R6Class(
 #' @author Ron Triepels
 cgraph$public_methods$initialize <- function()
 {
-  values <- new.env(parent = getNamespace("cgraph"))
-
-  .Call("cgraph", self, values, PACKAGE = "cgraph")
+  .Call("cgraph", self, new.env(), PACKAGE = "cgraph")
 
   self$active()
 }
