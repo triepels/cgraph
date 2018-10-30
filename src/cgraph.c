@@ -414,19 +414,6 @@ int cg_add_child(SEXP node, int id)
   return index;
 }
 
-SEXP cg_gen_name(SEXP graph)
-{
-  char name[32];
-
-  SEXP nodes = PROTECT(cg_get_nodes(graph));
-
-  sprintf(name, "node%d", (int) Rf_xlength(nodes) + 1);
-
-  UNPROTECT(1);
-
-  return Rf_mkString(name);
-}
-
 SEXP cg_node(int type, const char* name)
 {
   SEXP node = PROTECT(Rf_allocVector(STRSXP, 1));
