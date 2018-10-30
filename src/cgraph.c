@@ -1346,7 +1346,7 @@ SEXP cg_get(SEXP name, SEXP graph)
   for(int i = 0; i < n; i++)
   {
     SEXP node = PROTECT(cg_get_node_id(p_ids[i], graph));
-    printf("GET: %s\n", CHAR(Rf_asChar(node)));
+
     REPROTECT(node_value = cg_eval(node, graph_values, graph), i_node_value);
 
     Rf_defineVar(cg_get_symbol(node), node_value, graph_values);
