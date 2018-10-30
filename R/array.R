@@ -479,6 +479,7 @@ rowSums_grad <- function(x, val, grad)
 #' @seealso \link[base:colSums]{colSums}
 #'
 #' @author Ron Triepels
+#' @export
 cg_colSums <- function(x, name = NULL)
 {
   cgraph::opr(name = name,
