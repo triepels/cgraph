@@ -103,7 +103,7 @@ const char* cg_get_name(SEXP node)
 {
   if(!Rf_isString(node) || Rf_asChar(node) == R_BlankString)
   {
-    Rf_errorcall(R_NilValue, "node has an invalid name");
+    Rf_errorcall(R_NilValue, "invalid node provided");
   }
 
   return CHAR(STRING_ELT(node, 0));
@@ -113,7 +113,7 @@ void cg_set_name(SEXP node, const char* name)
 {
   if(!Rf_isString(node))
   {
-    Rf_errorcall(R_NilValue, "node has an invalid name");
+    Rf_errorcall(R_NilValue, "invalid node provided");
   }
 
   if(strcmp(name, "") == 0)
