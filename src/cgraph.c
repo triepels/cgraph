@@ -974,20 +974,22 @@ int* cg_unset_backward_dep(int id, int* p_length, SEXP values, SEXP graph)
     {
       int m;
 
-      SEXP node_symbol = cg_get_symbol(node);
-
-      SEXP node_value = PROTECT(Rf_findVarInFrame3(values, node_symbol, FALSE));
-
       int* p_node_parents = cg_get_parents(node, &m);
 
-      if(m > 0 && (current == id || node_value == R_UnboundValue))
+      if(m > 0)
       {
         for(int i = 0; i < m; i++)
         {
-          if(p_visited[p_node_parents[i] - 1] == 0)
+          SEXP parent = PROTECT(cg_get_node_id(p_node_parents[i], graph));
+
+          SEXP parent_value = PROTECT(Rf_findVarInFrame3(values, cg_get_symbol(parent), FALSE));
+
+          if(p_visited[p_node_parents[i] - 1] == 0 && parent_value == R_UnboundValue)
           {
             stack_add(s, p_node_parents[i]);
           }
+
+          UNPROTECT(2);
         }
       }
       else
@@ -996,8 +998,6 @@ int* cg_unset_backward_dep(int id, int* p_length, SEXP values, SEXP graph)
 
         (*p_length)++;
       }
-
-      UNPROTECT(1);
     }
     else
     {
@@ -1346,7 +1346,7 @@ SEXP cg_get(SEXP name, SEXP graph)
   for(int i = 0; i < n; i++)
   {
     SEXP node = PROTECT(cg_get_node_id(p_ids[i], graph));
-
+    printf("GET: %s\n", CHAR(Rf_asChar(node)));
     REPROTECT(node_value = cg_eval(node, graph_values, graph), i_node_value);
 
     Rf_defineVar(cg_get_symbol(node), node_value, graph_values);
