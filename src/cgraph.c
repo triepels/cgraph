@@ -502,6 +502,27 @@ SEXP cg_get_node_id(int id, SEXP graph)
   return node;
 }
 
+SEXP cg_gen_name(SEXP graph)
+{
+  char name[32];
+
+  SEXP nodes = PROTECT(cg_get_nodes(graph));
+
+  int n = Rf_xlength(nodes), i = 0;
+
+  do
+  {
+    i++;
+
+    sprintf(name, "node%d", n + i);
+  }
+  while (cg_node_exists(name, graph));
+
+  UNPROTECT(1);
+
+  return Rf_mkString(name);
+}
+
 int cg_add_node(SEXP node, SEXP graph)
 {
   const char* node_name = cg_get_name(node);
