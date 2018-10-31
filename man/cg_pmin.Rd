@@ -20,10 +20,10 @@ cg.node, node of the operation.
 Calculate \code{pmin(x, y)}.
 }
 \note{
-Function \link[base:pmin]{pmin} is called without setting argument \code{na.rm}.
+Function \link[base:Extremes]{pmin} is called without setting argument \code{na.rm}.
 }
 \seealso{
-\link[base:pmin]{pmin}
+\link[base:Extremes]{pmin}
 }
 \author{
 Ron Triepels

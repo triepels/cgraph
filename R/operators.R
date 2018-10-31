@@ -1233,9 +1233,9 @@ cg_colMeans <- function(x, name = NULL)
 #'
 #' @return cg.node, node of the operation.
 #'
-#' @note Function \link[base:max]{max} is called without setting argument \code{na.rm}.
+#' @note Function \link[base:Extremes]{max} is called without setting argument \code{na.rm}.
 #'
-#' @seealso \link[base:max]{max}
+#' @seealso \link[base:Extremes]{max}
 #'
 #' @author Ron Triepels
 #' @export
@@ -1257,9 +1257,9 @@ cg_max <- function(x, name = NULL)
 #' @param x cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note Function \link[base:min]{min} is called without setting argument \code{na.rm}.
+#' @note Function \link[base:Extremes]{min} is called without setting argument \code{na.rm}.
 #'
-#' @seealso \link[base:min]{min}
+#' @seealso \link[base:Extremes]{min}
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -1284,9 +1284,9 @@ cg_min <- function(x, name = NULL)
 #' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note Function \link[base:pmax]{pmax} is called without setting argument \code{na.rm}.
+#' @note Function \link[base:Extremes]{pmax} is called without setting argument \code{na.rm}.
 #'
-#' @seealso \link[base:pmax]{pmax}
+#' @seealso \link[base:Extremes]{pmax}
 #'
 #' @return cg.node, node of the operation.
 #'
@@ -1312,9 +1312,9 @@ cg_pmax <- function(x, y, name = NULL)
 #' @param y cg.node, placeholder for a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @note Function \link[base:pmin]{pmin} is called without setting argument \code{na.rm}.
+#' @note Function \link[base:Extremes]{pmin} is called without setting argument \code{na.rm}.
 #'
-#' @seealso \link[base:pmin]{pmin}
+#' @seealso \link[base:Extremes]{pmin}
 #'
 #' @return cg.node, node of the operation.
 #'

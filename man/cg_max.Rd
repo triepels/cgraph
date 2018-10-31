@@ -18,10 +18,10 @@ cg.node, node of the operation.
 Calculate \code{max(x)}.
 }
 \note{
-Function \link[base:max]{max} is called without setting argument \code{na.rm}.
+Function \link[base:Extremes]{max} is called without setting argument \code{na.rm}.
 }
 \seealso{
-\link[base:max]{max}
+\link[base:Extremes]{max}
 }
 \author{
 Ron Triepels

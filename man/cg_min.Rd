@@ -18,10 +18,10 @@ cg.node, node of the operation.
 Calculate \code{min(x)}.
 }
 \note{
-Function \link[base:min]{min} is called without setting argument \code{na.rm}.
+Function \link[base:Extremes]{min} is called without setting argument \code{na.rm}.
 }
 \seealso{
-\link[base:min]{min}
+\link[base:Extremes]{min}
 }
 \author{
 Ron Triepels

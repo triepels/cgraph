@@ -20,10 +20,10 @@ cg.node, node of the operation.
 Calculate \code{pmax(x, y)}.
 }
 \note{
-Function \link[base:pmax]{pmax} is called without setting argument \code{na.rm}.
+Function \link[base:Extremes]{pmax} is called without setting argument \code{na.rm}.
 }
 \seealso{
-\link[base:pmax]{pmax}
+\link[base:Extremes]{pmax}
 }
 \author{
 Ron Triepels

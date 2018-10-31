@@ -16,8 +16,6 @@
 #'
 #' This is the default function library used by a computational graph. It implements all graph operators by base R functions.
 #'
-#' @seealso \link[base]{base}
-#'
 #' @export
 cg_default_library <- new.env(parent = emptyenv())
 
