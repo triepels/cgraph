@@ -495,3 +495,15 @@ plot.cgraph <- function(x, ...)
 {
   x$plot(...)
 }
+
+#' @export
+print.cgraph <- function(x, ...)
+{
+  cat("<cgraph>")
+}
+
+#' @export
+print.cg_node = function(x, ...)
+{
+  cat(sprintf("<cg_node: %s>", x))
+}
