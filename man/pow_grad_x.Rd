@@ -16,7 +16,7 @@
 numeric vector or array, gradient of the operation.
 }
 \description{
-Calculate the gradient of \code{x^y} with respect to \code{x}.
+Calculate the gradient of \code{x ^ y} with respect to \code{x}.
 }
 \author{
 Ron Triepels
