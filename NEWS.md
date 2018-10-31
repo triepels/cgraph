@@ -7,11 +7,11 @@ Comments:
 * Some naming conventions have changed. Individual names in the name of a function are now separated with an underscore (_) instead of a dot (.). For example, operator `cg.matmul` is now named `cg_matmul`. The same rule applies to class names. For example, class `cg.node` is now named `cg_node`.
 * Function `name` is removed. Names for nodes are now generated internally in the C-API.
 * Function `approx.gradients` is removed. A simliar function is still available as `cgraph:::approx_grad` in the package namespace. However, it should be noted that this function is not well-optimized and should only be used for testing purposes.
-* Calling `print` on a `cg_node` object no longer prints the value of the node. Use function `val` to retrieve the value of a node.
+* Calling `print` on a `cg_node` object no longer prints the value of the node. Use function `val` to evaluate a node.
 
 Features:
 
-* The initialization method of a cgraph object has a new argument `library` which can be used to specify which function library the graph must use.
+* The initialization method of a cgraph object has a new argument `library` which can be used to specify which function library the graph uses.
 * The calls of functions and their corresponding gradient functions are now build at run-time. This potentially allows operators to accept a variable number of arguments.
 * Added function `val` and `set` to retrieve or set the value of a node respectively.
 * A node can now also be named 'grad'. 'grad' is no longer a reserved word.
