@@ -90,7 +90,9 @@ cgraph <- R6Class(
 #'
 #' Initialize a computational graph.
 #'
-#' @details \code{$new()}
+#' @details \code{$new(library = cgraph::cg_default_library)}
+#'
+#' @param library environment, function library used by the graph. Defaults to \link[cgraph:cg_default_library]{cg_default_library}.
 #'
 #' @note The cgraph object is set to be the active graph.
 #'
@@ -101,9 +103,9 @@ cgraph <- R6Class(
 #'
 #' @name cg_initialize
 #' @author Ron Triepels
-cgraph$public_methods$initialize <- function()
+cgraph$public_methods$initialize <- function(library = cgraph::cg_default_library)
 {
-  .Call("cgraph", self, new.env(), PACKAGE = "cgraph")
+  .Call("cgraph", self, new.env(), library, PACKAGE = "cgraph")
 
   self$active()
 }

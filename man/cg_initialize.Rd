@@ -3,6 +3,9 @@
 \name{cg_initialize}
 \alias{cg_initialize}
 \title{Computational Graph}
+\arguments{
+\item{library}{environment, function library used by the graph. Defaults to \link[cgraph:cg_default_library]{cg_default_library}.}
+}
 \value{
 cgraph object.
 }
@@ -10,7 +13,7 @@ cgraph object.
 Initialize a computational graph.
 }
 \details{
-\code{$new()}
+\code{$new(library = cgraph::cg_default_library)}
 }
 \note{
 The cgraph object is set to be the active graph.

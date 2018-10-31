@@ -35,7 +35,7 @@ limitations under the License.
 #define CG_ParentsSymbol Rf_install("cg_parents")
 #define CG_ChilderenSymbol Rf_install("cg_childeren")
 
-SEXP cgraph(SEXP graph, SEXP values)
+SEXP cgraph(SEXP graph, SEXP values, SEXP library)
 {
   if(!Rf_isEnvironment(graph))
   {
@@ -47,9 +47,21 @@ SEXP cgraph(SEXP graph, SEXP values)
     Rf_errorcall(R_NilValue, "values must be an environment");
   }
 
+  if(!Rf_isEnvironment(library))
+  {
+    Rf_errorcall(R_NilValue, "library must be an environment");
+  }
+
+  if(library == values)
+  {
+    Rf_errorcall(R_NilValue, "library cannot be the same environment as values");
+  }
+
   SEXP nodes = PROTECT(Rf_allocVector(VECSXP, 0));
 
   Rf_setAttrib(nodes, R_NamesSymbol, Rf_allocVector(STRSXP, 0));
+
+  SET_ENCLOS(values, library);
 
   Rf_defineVar(CG_NodesSymbol, nodes, graph);
   Rf_defineVar(CG_ValuesSymbol, values, graph);

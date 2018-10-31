@@ -17,7 +17,7 @@ limitations under the License.
 #include <R_ext/Rdynload.h>
 
 // cgraph.c functions
-extern SEXP cgraph(SEXP, SEXP);
+extern SEXP cgraph(SEXP, SEXP, SEXP);
 extern SEXP cg_add_constant(SEXP, SEXP, SEXP);
 extern SEXP cg_add_input(SEXP, SEXP, SEXP);
 extern SEXP cg_add_operation(SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -38,7 +38,7 @@ extern SEXP sigmoid(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   // cgraph.c functions
-  {"cgraph",             (DL_FUNC) &cgraph,             2},
+  {"cgraph",             (DL_FUNC) &cgraph,             3},
   {"cg_add_constant",    (DL_FUNC) &cg_add_constant,    3},
   {"cg_add_input",       (DL_FUNC) &cg_add_input,       3},
   {"cg_add_operation",   (DL_FUNC) &cg_add_operation,   5},
