@@ -11,7 +11,8 @@ Comments:
 
 Features:
 
-* The calls of functions and their corresponding gradient functions are no longer build at compile-time but generated at run-time. This potentially allows operators to accept a variable number of arguments.
+* The initialization method of a cgraph object has a new argument `library` which can be used to specify which function library the graph must use.
+* The calls of functions and their corresponding gradient functions are now build at run-time. This potentially allows operators to accept a variable number of arguments.
 * Added function `val` and `set` to retrieve or set the value of a node respectively.
 * A node can now also be named 'grad'. 'grad' is no longer a reserved word.
 * Operator `cg_mean` now calls the base `mean` function.

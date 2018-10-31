@@ -217,7 +217,7 @@ set <- function(name, value)
 #'
 #' @note All nodes required to compute node \code{name} must have a value or their value must be able to be computed at run-time. Nodes can be assigned a value when they are created or by calling method \link[cgraph]{set}. Alternatively, argument \code{values} can be used to substitute values for nodes that do not have a value (e.g. inputs) or to fix their values.
 #'
-#' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of operation nodes that are cached by function \link[cgraph]{val} are ignored and re-computed. The values of all nodes that are computed are returned.
+#' Only those nodes needed to compute node \code{name} are evaluated and their values are returned. Values of operation nodes that are cached by function \link[cgraph]{val} are ignored and re-computed.
 #'
 #' @return environment, the value of node \code{name} including the value of all ancestors of \code{name}.
 #'
