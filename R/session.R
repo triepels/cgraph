@@ -16,7 +16,7 @@
 session <- new.env()
 
 # Active graph
-session$graph <- NULL
+session$active <- NULL
 
 #' Add Constant
 #'
@@ -39,12 +39,14 @@ session$graph <- NULL
 #' @export
 const <- function(value = NULL, name = NULL)
 {
-  if(is.null(session$graph))
+  active <- session$active
+
+  if(is.null(active))
   {
     stop("No active graph set", call. = FALSE)
   }
 
-  session$graph$const(value, name)
+  active$const(value, name)
 }
 
 #' Add Input
@@ -68,12 +70,14 @@ const <- function(value = NULL, name = NULL)
 #' @export
 input <- function(value = NULL, name = NULL)
 {
-  if(is.null(session$graph))
+  active <- session$active
+
+  if(is.null(active))
   {
     stop("No active graph set", call. = FALSE)
   }
 
-  session$graph$input(value, name)
+  active$input(value, name)
 }
 
 #' Add Parameter
@@ -97,12 +101,14 @@ input <- function(value = NULL, name = NULL)
 #' @export
 parm <- function(value = NULL, name = NULL)
 {
-  if(is.null(session$graph))
+  active <- session$active
+
+  if(is.null(active))
   {
     stop("No active graph set", call. = FALSE)
   }
 
-  session$graph$parm(value, name)
+  active$parm(value, name)
 }
 
 #' Add Operation
@@ -122,12 +128,14 @@ parm <- function(value = NULL, name = NULL)
 #' @export
 opr <- function(call, grads, args, name = NULL)
 {
-  if(is.null(session$graph))
+  active <- session$active
+
+  if(is.null(active))
   {
     stop("No active graph set", call. = FALSE)
   }
 
-  session$graph$opr(call, grads, args, name)
+  active$opr(call, grads, args, name)
 }
 
 #' Evaluate a Node in the Graph
@@ -153,12 +161,14 @@ opr <- function(call, grads, args, name = NULL)
 #' @export
 val <- function(name)
 {
-  if(is.null(session$graph))
+  active <- session$active
+
+  if(is.null(active))
   {
     stop("No active graph set", call. = FALSE)
   }
 
-  session$graph$val(name)
+  active$val(name)
 }
 
 #' Change the Value of a Node in the Graph
@@ -188,12 +198,14 @@ val <- function(name)
 #' @export
 set <- function(name, value)
 {
-  if(is.null(session$graph))
+  active <- session$active
+
+  if(is.null(active))
   {
     stop("No active graph set", call. = FALSE)
   }
 
-  session$graph$set(name, value)
+  active$set(name, value)
 }
 
 #' Evaluate the Graph
@@ -228,12 +240,14 @@ set <- function(name, value)
 #' @export
 run <- function(name, values = list())
 {
-  if(is.null(session$graph))
+  active <- session$active
+
+  if(is.null(active))
   {
     stop("No active graph set", call. = FALSE)
   }
 
-  session$graph$run(name, values)
+  active$run(name, values)
 }
 
 #' Calculate Gradients
@@ -272,10 +286,12 @@ run <- function(name, values = list())
 #' @export
 gradients <- function(name, values = new.env(), index = 1)
 {
-  if(is.null(session$graph))
+  active <- session$active
+
+  if(is.null(active))
   {
     stop("No active graph set", call. = FALSE)
   }
 
-  session$graph$gradients(name, values, index)
+  active$gradients(name, values, index)
 }

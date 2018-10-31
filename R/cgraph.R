@@ -301,7 +301,7 @@ cgraph$public_methods$opr <- function(call, grads, args, name = NULL)
 #' @author Ron Triepels
 cgraph$public_methods$active <- function()
 {
-  assign("graph", self, envir = session)
+  assign("active", self, envir = session)
 }
 
 #' Evaluate a Node in the Graph
