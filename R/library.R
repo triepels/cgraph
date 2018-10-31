@@ -284,17 +284,17 @@ cg_default_library$div_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
-    -grad * x / y^2
+    -grad * x / y ^ 2
   }
   else
   {
-    bsum(-grad * x / y^2, length(y))
+    bsum(-grad * x / y ^ 2, length(y))
   }
 }
 
 #' Power Gradient
 #'
-#' Calculate the gradient of \code{x^y} with respect to \code{x}.
+#' Calculate the gradient of \code{x ^ y} with respect to \code{x}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
@@ -321,7 +321,7 @@ cg_default_library$pow_grad_x <- function(x, y, val, grad)
 
 #' Power Gradient
 #'
-#' Calculate the gradient of \code{x^y} with respect to \code{y}.
+#' Calculate the gradient of \code{x ^ y} with respect to \code{y}.
 #'
 #' @param x numeric vector or array, value of \code{x}.
 #' @param y numeric vector or array, value of \code{y}.
@@ -338,11 +338,11 @@ cg_default_library$pow_grad_y <- function(x, y, val, grad)
 {
   if(is.array(y))
   {
-    grad * x^y * log(x)
+    grad * x ^ y * log(x)
   }
   else
   {
-    bsum(grad * x^y * log(x), length(y))
+    bsum(grad * x ^ y * log(x), length(y))
   }
 }
 
@@ -895,7 +895,7 @@ cg_default_library$cos_grad <- function(x, val, grad)
 #' @keywords internal
 cg_default_library$tan_grad <- function(x, val, grad)
 {
-  grad / cos(x)^2
+  grad / cos(x) ^ 2
 }
 
 #' Hyperbolic Sine Gradient
@@ -952,7 +952,7 @@ cg_default_library$cosh_grad <- function(x, val, grad)
 #' @keywords internal
 cg_default_library$tanh_grad <- function(x, val, grad)
 {
-  grad * (1 - val^2)
+  grad * (1 - val ^ 2)
 }
 
 #' Inverse Sine Gradient
@@ -971,7 +971,7 @@ cg_default_library$tanh_grad <- function(x, val, grad)
 #' @keywords internal
 cg_default_library$asin_grad <- function(x, val, grad)
 {
-  grad / sqrt(1 - x^2)
+  grad / sqrt(1 - x ^ 2)
 }
 
 #' Inverse Cosine Gradient
@@ -990,7 +990,7 @@ cg_default_library$asin_grad <- function(x, val, grad)
 #' @keywords internal
 cg_default_library$acos_grad <- function(x, val, grad)
 {
-  -grad / sqrt(1 - x^2)
+  -grad / sqrt(1 - x ^ 2)
 }
 
 #' Inverse Tangent Gradient
@@ -1009,7 +1009,7 @@ cg_default_library$acos_grad <- function(x, val, grad)
 #' @keywords internal
 cg_default_library$atan_grad <- function(x, val, grad)
 {
-  grad / (x^2 + 1)
+  grad / (x ^ 2 + 1)
 }
 
 #' Inverse Hyperbolic Sine Gradient
@@ -1028,7 +1028,7 @@ cg_default_library$atan_grad <- function(x, val, grad)
 #' @keywords internal
 cg_default_library$asinh_grad <- function(x, val, grad)
 {
-  grad / sqrt(x^2 + 1)
+  grad / sqrt(x ^ 2 + 1)
 }
 
 #' Inverse Hyperbolic Cosine Gradient
@@ -1047,7 +1047,7 @@ cg_default_library$asinh_grad <- function(x, val, grad)
 #' @keywords internal
 cg_default_library$acosh_grad <- function(x, val, grad)
 {
-  grad / sqrt(x^2 - 1)
+  grad / sqrt(x ^ 2 - 1)
 }
 
 #' Inverse Hyperbolic Tangent Gradient
@@ -1066,7 +1066,7 @@ cg_default_library$acosh_grad <- function(x, val, grad)
 #' @keywords internal
 cg_default_library$atanh_grad <- function(x, val, grad)
 {
-  grad / (1 - x^2)
+  grad / (1 - x ^ 2)
 }
 
 #
