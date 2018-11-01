@@ -17,6 +17,7 @@ Features:
 * A node can now also be named 'grad'. 'grad' is no longer a reserved word.
 * Operator `cg_mean` now calls the base `mean` function.
 * Operator `cg_crossprod` and `cg_tcrossprod` now allow argument `y` to be missing (similarly as the corresponding base functions).
+* Argument `dim` of operator `cg_reshape` now expects an `cg_node` object instead of an integer scalar or vector that holds the new array dimensions.
 
 Bug fixes:
 
