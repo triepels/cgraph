@@ -155,12 +155,12 @@ int cg_get_type(SEXP node)
 
 void cg_set_type(SEXP node, int type)
 {
-  SEXP node_type = PROTECT(Rf_ScalarInteger(type));
-
   if(type < 0 || type > 3)
   {
     Rf_errorcall(R_NilValue, "invalid type provided");
   }
+
+  SEXP node_type = PROTECT(Rf_ScalarInteger(type));
 
   Rf_setAttrib(node, CG_TypeSymbol, node_type);
 
@@ -1054,7 +1054,11 @@ int* cg_unset_backward_dep(int id, int* p_length, SEXP values, SEXP graph)
 
 SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
 {
-  SEXP call = R_NilValue;
+  int i_node_value;
+
+  SEXP node_value;
+
+  PROTECT_WITH_INDEX(node_value = R_NilValue, &i_node_value);
 
   if(!Rf_isEnvironment(values))
   {
@@ -1080,16 +1084,22 @@ SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
       i++;
     }
 
-    call = Rf_lcons(cg_get_call(node), args);
+    SEXP call = PROTECT(Rf_lcons(cg_get_call(node), args));
 
-    UNPROTECT(1);
+    REPROTECT(node_value = Rf_eval(call, values), i_node_value);
+
+    UNPROTECT(2);
   }
   else
   {
-    call = cg_get_symbol(node);
+    SEXP call = cg_get_symbol(node);
+
+    REPROTECT(node_value = Rf_eval(call, values), i_node_value);
   }
 
-  return Rf_eval(call, values);
+  UNPROTECT(1);
+
+  return node_value;
 }
 
 SEXP cg_init_gradient(SEXP node, SEXP values, SEXP index, SEXP graph)
@@ -1159,11 +1169,11 @@ SEXP cg_init_gradient(SEXP node, SEXP values, SEXP index, SEXP graph)
 
 SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 {
-  SEXP grad;
+  int i_node_grad;
 
-  int i_grad;
+  SEXP node_grad;
 
-  PROTECT_WITH_INDEX(grad = R_NilValue, &i_grad);
+  PROTECT_WITH_INDEX(node_grad = R_NilValue, &i_node_grad);
 
   if(!Rf_isEnvironment(values))
   {
@@ -1218,17 +1228,17 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
       SEXP call = PROTECT(Rf_lcons(cg_get_grad(node, i), args));
 
-      if(Rf_isNull(grad))
+      if(Rf_isNull(node_grad))
       {
-        REPROTECT(grad = Rf_eval(call, values), i_grad);
+        REPROTECT(node_grad = Rf_eval(call, values), i_node_grad);
 
-        l = length(grad);
+        l = length(node_grad);
       }
       else
       {
         SEXP value = PROTECT(Rf_eval(call, values));
 
-        switch(TYPEOF(grad))
+        switch(TYPEOF(node_grad))
         {
           case LGLSXP :
           case INTSXP :
@@ -1238,7 +1248,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
               case LGLSXP :
               case INTSXP :
               {
-                int* p_grad = INTEGER(grad);
+                int* p_grad = INTEGER(node_grad);
 
                 int* p_value = INTEGER(value);
 
@@ -1256,7 +1266,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
               }
               case REALSXP :
               {
-                int* p_grad = INTEGER(grad);
+                int* p_grad = INTEGER(node_grad);
 
                 double* p_value = REAL(value);
 
@@ -1287,7 +1297,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
               case LGLSXP :
               case INTSXP :
               {
-                double* p_grad = REAL(grad);
+                double* p_grad = REAL(node_grad);
 
                 int* p_value = INTEGER(value);
 
@@ -1305,7 +1315,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
               }
               case REALSXP :
               {
-                double* p_grad = REAL(grad);
+                double* p_grad = REAL(node_grad);
 
                 double* p_value = REAL(value);
 
@@ -1331,7 +1341,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
           }
           default :
           {
-            Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(grad)));
+            Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s'", Rf_type2char(TYPEOF(node_grad)));
           }
         }
 
@@ -1346,7 +1356,7 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 
   UNPROTECT(1);
 
-  return grad;
+  return node_grad;
 }
 
 SEXP cg_get(SEXP name, SEXP graph)
