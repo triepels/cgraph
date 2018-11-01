@@ -713,7 +713,7 @@ SEXP cg_get_parms(SEXP graph)
 
 SEXP cg_add_parms(SEXP parms, SEXP graph)
 {
-  SEXP names = Rf_getAttrib(parms, R_NamesSymbol);
+  SEXP names = PROTECT(Rf_getAttrib(parms, R_NamesSymbol));
 
   if(TYPEOF(parms) != VECSXP)
   {
@@ -739,6 +739,8 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
       UNPROTECT(1);
     }
   }
+
+  UNPROTECT(1);
 
   return R_NilValue;
 }
