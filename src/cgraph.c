@@ -1054,16 +1054,16 @@ int* cg_unset_backward_dep(int id, int* p_length, SEXP values, SEXP graph)
 
 SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
 {
-  int i_node_value;
-
   SEXP node_value;
-
-  PROTECT_WITH_INDEX(node_value = R_NilValue, &i_node_value);
 
   if(!Rf_isEnvironment(values))
   {
     Rf_errorcall(R_NilValue, "values must be an environment");
   }
+
+  int i_node_value;
+
+  PROTECT_WITH_INDEX(node_value = R_NilValue, &i_node_value);
 
   if(cg_get_type(node) == CGOPR)
   {
@@ -1104,8 +1104,6 @@ SEXP cg_eval(SEXP node, SEXP values, SEXP graph)
 
 SEXP cg_init_gradient(SEXP node, SEXP values, SEXP index, SEXP graph)
 {
-  int i_node_grad;
-
   SEXP node_grad = R_NilValue;
 
   if(!Rf_isNumeric(index))
@@ -1113,11 +1111,11 @@ SEXP cg_init_gradient(SEXP node, SEXP values, SEXP index, SEXP graph)
     Rf_errorcall(R_NilValue, "index must be an numeric scalar");
   }
 
+  int i_node_grad, x_index = Rf_asInteger(index);
+
   PROTECT_WITH_INDEX(node_grad = Rf_eval(cg_get_symbol(node), values), &i_node_grad);
 
   REPROTECT(node_grad = Rf_duplicate(node_grad), i_node_grad);
-
-  int x_index = Rf_asInteger(index);
 
   switch(TYPEOF(node_grad))
   {
@@ -1169,11 +1167,7 @@ SEXP cg_init_gradient(SEXP node, SEXP values, SEXP index, SEXP graph)
 
 SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
 {
-  int i_node_grad;
-
   SEXP node_grad;
-
-  PROTECT_WITH_INDEX(node_grad = R_NilValue, &i_node_grad);
 
   if(!Rf_isEnvironment(values))
   {
@@ -1185,9 +1179,11 @@ SEXP cg_eval_gradient(SEXP node, SEXP values, SEXP grads, SEXP graph)
     Rf_errorcall(R_NilValue, "grads must be an environment");
   }
 
-  int n, l = 0;
+  int i_node_grad, n, l = 0;
 
   int* p_node_childeren = cg_get_childeren(node, &n);
+
+  PROTECT_WITH_INDEX(node_grad = R_NilValue, &i_node_grad);
 
   for(int i = 0; i < n; i++)
   {
@@ -1391,11 +1387,11 @@ SEXP cg_get(SEXP name, SEXP graph)
 
 SEXP cg_set(SEXP name, SEXP value, SEXP graph)
 {
+  SEXP graph_values = PROTECT(cg_get_values(graph));
+
   int node_id = cg_node_id(name, graph), n;
 
   int* p_ids = cg_forward_dep(node_id, &n, graph);
-
-  SEXP graph_values = PROTECT(cg_get_values(graph));
 
   for(int i = n - 2; i >= 0; i--)
   {
@@ -1417,10 +1413,6 @@ SEXP cg_set(SEXP name, SEXP value, SEXP graph)
 
 SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 {
-  int node_id = cg_node_id(name, graph), n;
-
-  int* p_ids = cg_backward_dep(node_id, &n, graph);
-
   if(!Rf_isEnvironment(values))
   {
     Rf_errorcall(R_NilValue, "values must be an environment");
@@ -1434,6 +1426,10 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
   {
     SET_ENCLOS(values, graph_values);
   }
+
+  int node_id = cg_node_id(name, graph), n;
+
+  int* p_ids = cg_backward_dep(node_id, &n, graph);
 
   for(int i = 0; i < n; i++)
   {
@@ -1464,10 +1460,6 @@ SEXP cg_run(SEXP name, SEXP values, SEXP graph)
 
 SEXP cg_gradients(SEXP name, SEXP values, SEXP grads, SEXP index, SEXP graph)
 {
-  int node_id = cg_node_id(name, graph), n;
-
-  int* p_ids = cg_backward_dep(node_id, &n, graph);
-
   if(!Rf_isEnvironment(values))
   {
     Rf_errorcall(R_NilValue, "values must be an environment");
@@ -1486,6 +1478,10 @@ SEXP cg_gradients(SEXP name, SEXP values, SEXP grads, SEXP index, SEXP graph)
   {
     SET_ENCLOS(values, graph_values);
   }
+
+  int node_id = cg_node_id(name, graph), n;
+
+  int* p_ids = cg_backward_dep(node_id, &n, graph);
 
   if(n > 0)
   {
