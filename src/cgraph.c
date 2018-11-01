@@ -155,12 +155,16 @@ int cg_get_type(SEXP node)
 
 void cg_set_type(SEXP node, int type)
 {
+  SEXP node_type = PROTECT(Rf_ScalarInteger(type));
+
   if(type < 0 || type > 3)
   {
     Rf_errorcall(R_NilValue, "invalid type provided");
   }
 
-  Rf_setAttrib(node, CG_TypeSymbol, Rf_ScalarInteger(type));
+  Rf_setAttrib(node, CG_TypeSymbol, node_type);
+
+  UNPROTECT(1);
 }
 
 SEXP cg_get_call(SEXP node)
