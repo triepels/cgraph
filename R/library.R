@@ -26,17 +26,17 @@ cg_default_library <- new.env(parent = emptyenv())
 #
 
 # Base functions
-assign("+", `+`, envir = cg_default_library)
-assign("-", `-`, envir = cg_default_library)
-assign("*", `*`, envir = cg_default_library)
-assign("/", `/`, envir = cg_default_library)
-assign("^", `^`, envir = cg_default_library)
-assign("sqrt", sqrt, envir = cg_default_library)
-assign("exp", exp, envir = cg_default_library)
-assign("log", log, envir = cg_default_library)
-assign("log2", log2, envir = cg_default_library)
-assign("log10", log10, envir = cg_default_library)
-assign("abs", abs, envir = cg_default_library)
+assign("+", base::`+`, envir = cg_default_library)
+assign("-", base::`-`, envir = cg_default_library)
+assign("*", base::`*`, envir = cg_default_library)
+assign("/", base::`/`, envir = cg_default_library)
+assign("^", base::`^`, envir = cg_default_library)
+assign("sqrt", base::sqrt, envir = cg_default_library)
+assign("exp", base::exp, envir = cg_default_library)
+assign("log", base::log, envir = cg_default_library)
+assign("log2", base::log2, envir = cg_default_library)
+assign("log10", base::log10, envir = cg_default_library)
+assign("abs", base::abs, envir = cg_default_library)
 
 #' Positive Gradient
 #'
@@ -463,13 +463,13 @@ cg_default_library$abs_grad <- function(x, val, grad)
 # Logical Functions
 
 # Base functions
-assign("!", `!`, envir = cg_default_library)
-assign("==", `==`, envir = cg_default_library)
-assign("!=", `!=`, envir = cg_default_library)
-assign("<", `<`, envir = cg_default_library)
-assign(">", `>`, envir = cg_default_library)
-assign("<=", `<=`, envir = cg_default_library)
-assign(">=", `>=`, envir = cg_default_library)
+assign("!", base::`!`, envir = cg_default_library)
+assign("==", base::`==`, envir = cg_default_library)
+assign("!=", base::`!=`, envir = cg_default_library)
+assign("<", base::`<`, envir = cg_default_library)
+assign(">", base::`>`, envir = cg_default_library)
+assign("<=", base::`<=`, envir = cg_default_library)
+assign(">=", base::`>=`, envir = cg_default_library)
 
 #' Not Gradient
 #'
@@ -828,18 +828,18 @@ cg_default_library$greater_equal_grad_y <- function(x, y, val, grad)
 #
 
 # Base functions
-assign("sin", sin, envir = cg_default_library)
-assign("cos", cos, envir = cg_default_library)
-assign("tan", tan, envir = cg_default_library)
-assign("sinh", sinh, envir = cg_default_library)
-assign("cosh", cosh, envir = cg_default_library)
-assign("tanh", tanh, envir = cg_default_library)
-assign("asin", asin, envir = cg_default_library)
-assign("acos", acos, envir = cg_default_library)
-assign("atan", atan, envir = cg_default_library)
-assign("asinh", asinh, envir = cg_default_library)
-assign("acosh", acosh, envir = cg_default_library)
-assign("atanh", atanh, envir = cg_default_library)
+assign("sin", base::sin, envir = cg_default_library)
+assign("cos", base::cos, envir = cg_default_library)
+assign("tan", base::tan, envir = cg_default_library)
+assign("sinh", base::sinh, envir = cg_default_library)
+assign("cosh", base::cosh, envir = cg_default_library)
+assign("tanh", base::tanh, envir = cg_default_library)
+assign("asin", base::asin, envir = cg_default_library)
+assign("acos", base::acos, envir = cg_default_library)
+assign("atan", base::atan, envir = cg_default_library)
+assign("asinh", base::asinh, envir = cg_default_library)
+assign("acosh", base::acosh, envir = cg_default_library)
+assign("atanh", base::atanh, envir = cg_default_library)
 
 #' Sine Gradient
 #'
@@ -1076,20 +1076,27 @@ cg_default_library$atanh_grad <- function(x, val, grad)
 #
 
 # Base functions
-assign("%*%", `%*%`, envir = cg_default_library)
-assign("crossprod", crossprod, envir = cg_default_library)
-assign("tcrossprod", tcrossprod, envir = cg_default_library)
-assign("sum", sum, envir = cg_default_library)
-assign("prod", prod, envir = cg_default_library)
-assign("rowSums", rowSums, envir = cg_default_library)
-assign("colSums", colSums, envir = cg_default_library)
-assign("mean", mean, envir = cg_default_library)
-assign("rowMeans", rowMeans, envir = cg_default_library)
-assign("colMeans", colMeans, envir = cg_default_library)
-assign("max", max, envir = cg_default_library)
-assign("min", min, envir = cg_default_library)
-assign("pmax", pmax, envir = cg_default_library)
-assign("pmin", pmin, envir = cg_default_library)
+assign("%*%", base::`%*%`, envir = cg_default_library)
+assign("crossprod", base::crossprod, envir = cg_default_library)
+assign("tcrossprod", base::tcrossprod, envir = cg_default_library)
+assign("sum", base::sum, envir = cg_default_library)
+assign("prod", base::prod, envir = cg_default_library)
+assign("rowSums", base::rowSums, envir = cg_default_library)
+assign("colSums", base::colSums, envir = cg_default_library)
+assign("rowMeans", base::rowMeans, envir = cg_default_library)
+assign("colMeans", base::colMeans, envir = cg_default_library)
+assign("max", base::max, envir = cg_default_library)
+assign("min", base::min, envir = cg_default_library)
+assign("pmax", base::pmax, envir = cg_default_library)
+assign("pmin", base::pmin, envir = cg_default_library)
+
+# Base S3 methods (for compatibility with R versions before 3.5)
+assign("mean", base::mean, envir = cg_default_library)
+assign("mean.Date", base::mean.Date, cg_default_library)
+assign("mean.default", base::mean.default, cg_default_library)
+assign("mean.difftime", base::mean.difftime, cg_default_library)
+assign("mean.POSIXct", base::mean.POSIXct, cg_default_library)
+assign("mean.POSIXlt", base::mean.POSIXlt, cg_default_library)
 
 #' Matrix Multiplication Gradient
 #'
@@ -1597,9 +1604,13 @@ cg_default_library$pmin_grad_y <- function(x, y, val, grad)
 #
 
 # Base functions
-assign("as.double", as.double, envir = cg_default_library)
-assign("array", array, envir = cg_default_library)
-assign("t", t, envir = cg_default_library)
+assign("as.double", base::as.double, envir = cg_default_library)
+assign("array", base::array, envir = cg_default_library)
+
+# Base S3 methods (for compatibility with R versions before 3.5)
+assign("t", base::t, envir = cg_default_library)
+assign("t.default", base::t.default, cg_default_library)
+assign("t.data.frame", base::t.data.frame, cg_default_library)
 
 #' Coerce to a Numeric Vector Gradient
 #'
