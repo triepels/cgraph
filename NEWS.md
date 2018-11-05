@@ -1,3 +1,10 @@
+cgraph 3.0.1
+----------------------------------------------------------------
+
+Bug fixes:
+
+* Fixed a bug that caused S3 methods called by the graph operators to dispatch incorrectly on R versions before 3.5.
+
 cgraph 3.0.0
 ----------------------------------------------------------------
 
