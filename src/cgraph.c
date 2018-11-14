@@ -140,6 +140,11 @@ void cg_set_name(SEXP node, const char* name)
     Rf_errorcall(R_NilValue, "invalid node provided");
   }
 
+  if(LENGTH(node) == 0)
+  {
+    SETLENGTH(node, 1);
+  }
+
   if(strcmp(name, "") == 0)
   {
     Rf_errorcall(R_NilValue, "the name of a node must be a non-blank character scalar");
