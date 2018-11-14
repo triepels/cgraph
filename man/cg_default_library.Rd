@@ -4,7 +4,7 @@
 \name{cg_default_library}
 \alias{cg_default_library}
 \title{Default Function Library}
-\format{An object of class \code{environment} of length 119.}
+\format{An object of class \code{environment} of length 126.}
 \usage{
 cg_default_library
 }
