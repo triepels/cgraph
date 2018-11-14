@@ -113,7 +113,6 @@ SEXP cg_get_values(SEXP graph)
 
 const char* cg_get_name(SEXP node)
 {
-  if(!Rf_isString(node) || Rf_asChar(node) == R_BlankString)
   if(!Rf_isString(node))
   {
     Rf_errorcall(R_NilValue, "invalid node provided");
