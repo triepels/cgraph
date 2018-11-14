@@ -114,11 +114,24 @@ SEXP cg_get_values(SEXP graph)
 const char* cg_get_name(SEXP node)
 {
   if(!Rf_isString(node) || Rf_asChar(node) == R_BlankString)
+  if(!Rf_isString(node))
   {
     Rf_errorcall(R_NilValue, "invalid node provided");
   }
 
-  return CHAR(STRING_ELT(node, 0));
+  if(LENGTH(node) == 0)
+  {
+    Rf_errorcall(R_NilValue, "the provided node does not have a name");
+  }
+
+  SEXP name = STRING_ELT(node, 0);
+
+  if(name == R_BlankString)
+  {
+    Rf_errorcall(R_NilValue, "the provided node has an invalid name");
+  }
+
+  return CHAR(name);
 }
 
 void cg_set_name(SEXP node, const char* name)
