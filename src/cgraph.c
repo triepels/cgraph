@@ -766,6 +766,35 @@ SEXP cg_add_parms(SEXP parms, SEXP graph)
   return R_NilValue;
 }
 
+int is_cg_node(SEXP x)
+{
+  SEXP x_class = Rf_getAttrib(x, R_ClassSymbol);
+
+  if(!Rf_isString(x))
+  {
+    return FALSE;
+  }
+
+  if(!Rf_isString(x_class))
+  {
+    return FALSE;
+  }
+
+  int n = LENGTH(x_class), match = 0;
+
+  for(int i = 0; i < n; i++)
+  {
+    if(strcmp(CHAR(STRING_ELT(x_class, i)), "cg_node") == 0)
+    {
+      match = 1;
+
+      break;
+    }
+  }
+
+  return match;
+}
+
 SEXP cg_add_operation(SEXP call, SEXP grads, SEXP args, SEXP name, SEXP graph)
 {
   SEXP node_name = R_NilValue;
@@ -783,6 +812,28 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP args, SEXP name, SEXP graph)
   if(LENGTH(grads) != LENGTH(args))
   {
     Rf_errorcall(R_NilValue, "grads and args must be of the same length");
+  }
+
+  int n = LENGTH(args), m = 0;
+
+  SEXP parents = PROTECT(Rf_allocVector(VECSXP, n));
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP arg = VECTOR_ELT(args, i);
+
+    if(is_cg_node(arg))
+    {
+      SET_VECTOR_ELT(parents, i, arg);
+    }
+    else
+    {
+      SEXP parent = PROTECT(cg_add_constant(arg, R_NilValue, graph));
+
+      SET_VECTOR_ELT(parents, i, parent);
+
+      m++;
+    }
   }
 
   if(Rf_isNull(name))
@@ -805,11 +856,9 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP args, SEXP name, SEXP graph)
 
   int node_id = cg_add_node(node, graph);
 
-  int n = LENGTH(args);
-
   for(int i = 0; i < n; i++)
   {
-    SEXP parent = VECTOR_ELT(args, i);
+    SEXP parent = VECTOR_ELT(parents, i);
 
     cg_add_parent(node, cg_node_id(parent, graph));
 
@@ -818,7 +867,7 @@ SEXP cg_add_operation(SEXP call, SEXP grads, SEXP args, SEXP name, SEXP graph)
     cg_add_child(parent, node_id);
   }
 
-  UNPROTECT(2);
+  UNPROTECT(3 + m);
 
   return node;
 }
