@@ -40,7 +40,6 @@
 #' \item{$run}{evaluate a node in the graph, see \link[cgraph]{cg_run}.}
 #' \item{$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg_gradients}.}
 #' \item{$adj_mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg_adj_mat}.}
-#' \item{$plot}{plot the topology of the graph, see \link[cgraph]{cg_plot}.}
 #' }
 #'
 #' @note Some of the methods listed above have a wrapper function that calls the method on the current active graph. For example, a parameter can be added to the current active graph by calling \link[cgraph]{parm} instead of calling \link[cgraph]{cg_parm} on the currently active cgraph object. Similarly, nodes can be evaluated or changed by calling \link[cgraph]{val} or \link[cgraph]{set} instead of calling method \link[cgraph]{cg_val} or \link[cgraph]{cg_set} respectively.
@@ -471,29 +470,14 @@ cgraph$public_methods$adj_mat <- function()
   .Call("cg_adj_mat", self, PACKAGE = "cgraph")
 }
 
-#' Plot
-#'
-#' Plot the topology of the graph.
-#'
-#' @details \code{$plot(...)}
-#'
-#' @param ... additional arguments that can be passed on to the plot function of the Rgraphiz package.
-#'
-#' @note A visual representation of the graph might be usefull for debugging purposes. This functions requires the Rgraphviz package.
-#'
-#' @return none.
-#'
-#' @name cg_plot
-#' @author Ron Triepels
-cgraph$public_methods$plot <- function(...)
-{
-  Rgraphviz::plot(new("graphAM", adjMat = self$adj_mat(), edgemode = "directed"), ...)
-}
-
 #' @export
 plot.cgraph <- function(x, ...)
 {
-  x$plot(...)
+  graph <- graph::graphAM(x$adj_mat(), edgemode = "directed")
+
+  graph <- Rgraphviz::layoutGraph(graph)
+
+  Rgraphviz::renderGraph(graph, ...)
 }
 
 #' @export

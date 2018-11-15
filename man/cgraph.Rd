@@ -38,7 +38,6 @@ Some of the methods listed above have a wrapper function that calls the method o
 \item{$run}{evaluate a node in the graph, see \link[cgraph]{cg_run}.}
 \item{$gradients}{differentiate the graph by reverse automatic differentiation, see \link[cgraph]{cg_gradients}.}
 \item{$adj_mat}{retrieve the adjacency matrix of the graph, see \link[cgraph]{cg_adj_mat}.}
-\item{$plot}{plot the topology of the graph, see \link[cgraph]{cg_plot}.}
 }
 }
 
