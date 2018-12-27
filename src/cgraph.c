@@ -880,7 +880,7 @@ int* cg_forward_dep(int id, int* p_length, SEXP graph)
 
   int* p_ids = malloc(n * sizeof(int));
 
-  int* p_visited = calloc(n, sizeof(int));
+  int* p_ordered = calloc(n, sizeof(int));
 
   stack *s = stack_allocate(n);
 
@@ -894,58 +894,44 @@ int* cg_forward_dep(int id, int* p_length, SEXP graph)
 
     SEXP node = PROTECT(cg_get_node_id(current, graph));
 
-    if(p_visited[current - 1] == 0)
+    if(p_ordered[current - 1])
     {
-      int m;
+      stack_remove(s);
+    }
+    else
+    {
+      int can_traverse = 0, m;
 
-      int* node_childeren = cg_get_childeren(node, &m);
+      int* p_node_childeren = cg_get_childeren(node, &m);
 
-      if(m > 0)
+      for(int i = 0; i < m; i++)
       {
-        for(int i = 0; i < m; i++)
+        if(p_ordered[p_node_childeren[i] - 1] == 0)
         {
-          if(p_visited[node_childeren[i] - 1] == 0)
-          {
-            stack_add(s, node_childeren[i]);
-          }
+          stack_add(s, p_node_childeren[i]);
+
+          can_traverse = 1;
         }
       }
-      else
+
+      if(!can_traverse)
       {
-        p_ids[*p_length] = stack_get(s);
+        stack_remove(s);
+
+        p_ids[*p_length] = current;
+
+        p_ordered[current - 1] = 1;
 
         (*p_length)++;
       }
     }
-    else
-    {
-      if(p_visited[current - 1] == 1)
-      {
-        if(cg_has_childeren(node))
-        {
-          p_ids[*p_length] = stack_get(s);
-
-          (*p_length)++;
-        }
-        else
-        {
-          stack_remove(s);
-        }
-      }
-      else
-      {
-        stack_remove(s);
-      }
-    }
-
-    p_visited[current - 1] += 1;
 
     UNPROTECT(1);
   }
 
   stack_destroy(s);
 
-  free(p_visited);
+  free(p_ordered);
 
   UNPROTECT(1);
 
@@ -960,7 +946,7 @@ int* cg_backward_dep(int id, int* p_length, SEXP graph)
 
   int* p_ids = malloc(n * sizeof(int));
 
-  int* p_visited = calloc(n, sizeof(int));
+  int* p_ordered = calloc(n, sizeof(int));
 
   stack *s = stack_allocate(n);
 
@@ -974,58 +960,44 @@ int* cg_backward_dep(int id, int* p_length, SEXP graph)
 
     SEXP node = PROTECT(cg_get_node_id(current, graph));
 
-    if(p_visited[current - 1] == 0)
+    if(p_ordered[current - 1])
     {
-      int m;
+      stack_remove(s);
+    }
+    else
+    {
+      int can_traverse = 0, m;
 
-      int* node_parents = cg_get_parents(node, &m);
+      int* p_node_parents = cg_get_parents(node, &m);
 
-      if(m > 0)
+      for(int i = 0; i < m; i++)
       {
-        for(int i = 0; i < m; i++)
+        if(p_ordered[p_node_parents[i] - 1] == 0)
         {
-          if(p_visited[node_parents[i] - 1] == 0)
-          {
-            stack_add(s, node_parents[i]);
-          }
+          stack_add(s, p_node_parents[i]);
+
+          can_traverse = 1;
         }
       }
-      else
+
+      if(!can_traverse)
       {
-        p_ids[*p_length] = stack_get(s);
+        stack_remove(s);
+
+        p_ids[*p_length] = current;
+
+        p_ordered[current - 1] = 1;
 
         (*p_length)++;
       }
     }
-    else
-    {
-      if(p_visited[current - 1] == 1)
-      {
-        if(cg_has_parents(node))
-        {
-          p_ids[*p_length] = stack_get(s);
-
-          (*p_length)++;
-        }
-        else
-        {
-          stack_remove(s);
-        }
-      }
-      else
-      {
-        stack_remove(s);
-      }
-    }
-
-    p_visited[current - 1] += 1;
 
     UNPROTECT(1);
   }
 
   stack_destroy(s);
 
-  free(p_visited);
+  free(p_ordered);
 
   UNPROTECT(1);
 
@@ -1040,7 +1012,7 @@ int* cg_unset_backward_dep(int id, int* p_length, SEXP values, SEXP graph)
 
   int* p_ids = malloc(n * sizeof(int));
 
-  int* p_visited = calloc(n, sizeof(int));
+  int* p_ordered = calloc(n, sizeof(int));
 
   stack *s = stack_allocate(n);
 
@@ -1054,64 +1026,50 @@ int* cg_unset_backward_dep(int id, int* p_length, SEXP values, SEXP graph)
 
     SEXP node = PROTECT(cg_get_node_id(current, graph));
 
-    if(p_visited[current - 1] == 0)
+    if(p_ordered[current - 1])
     {
-      int m;
+      stack_remove(s);
+    }
+    else
+    {
+      int can_traverse = 0, m;
 
       int* p_node_parents = cg_get_parents(node, &m);
 
-      if(m > 0)
+      for(int i = 0; i < m; i++)
       {
-        for(int i = 0; i < m; i++)
+        SEXP parent = PROTECT(cg_get_node_id(p_node_parents[i], graph));
+
+        SEXP parent_value = PROTECT(Rf_findVarInFrame3(values, cg_get_symbol(parent), FALSE));
+
+        if(p_ordered[p_node_parents[i] - 1] == 0 && parent_value == R_UnboundValue)
         {
-          SEXP parent = PROTECT(cg_get_node_id(p_node_parents[i], graph));
+          stack_add(s, p_node_parents[i]);
 
-          SEXP parent_value = PROTECT(Rf_findVarInFrame3(values, cg_get_symbol(parent), FALSE));
-
-          if(p_visited[p_node_parents[i] - 1] == 0 && parent_value == R_UnboundValue)
-          {
-            stack_add(s, p_node_parents[i]);
-          }
-
-          UNPROTECT(2);
+          can_traverse = 1;
         }
+
+        UNPROTECT(2);
       }
-      else
+
+      if(!can_traverse)
       {
-        p_ids[*p_length] = stack_get(s);
+        stack_remove(s);
+
+        p_ids[*p_length] = current;
+
+        p_ordered[current - 1] = 1;
 
         (*p_length)++;
       }
     }
-    else
-    {
-      if(p_visited[current - 1] == 1)
-      {
-        if(cg_has_parents(node))
-        {
-          p_ids[*p_length] = stack_get(s);
-
-          (*p_length)++;
-        }
-        else
-        {
-          stack_remove(s);
-        }
-      }
-      else
-      {
-        stack_remove(s);
-      }
-    }
-
-    p_visited[current - 1] += 1;
 
     UNPROTECT(1);
   }
 
   stack_destroy(s);
 
-  free(p_visited);
+  free(p_ordered);
 
   UNPROTECT(1);
 
