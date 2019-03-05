@@ -38,12 +38,12 @@ int cg_node_id(SEXP node);
 
 void cg_node_set_id(SEXP node, const int id);
 
-// Note: this function allocates with unique = TRUE
+// Note: this function allocates when unique = TRUE
 SEXP cg_node_inputs(SEXP node, int unique);
 
 void cg_node_add_input(SEXP node, SEXP input);
 
-// Note: this function allocates with unique = TRUE
+// Note: this function allocates when unique = TRUE
 SEXP cg_node_outputs(SEXP node, int unique);
 
 void cg_node_add_output(SEXP node, SEXP output);
