@@ -30,6 +30,26 @@ bsum <- function(x, block_size = 1)
   .Call("bsum", x, block_size, PACKAGE = "cgraph")
 }
 
+#' Approximate Gradients
+#'
+#' Differentiate a graph with respect to a given target node by numerical differentiation.
+#'
+#' @param graph cg_graph object, graph that is differentiated.
+#' @param target cg_node object, node in the graph that is differentiated.
+#' @param values named list or environment, values that are subsituted for the input nodes in the graph.
+#' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
+#' @param eps numeric scalar, step size. Defaults to 1e-4.
+#'
+#' @note All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time.
+#'
+#' The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the value of the target node is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The gradients have the same shape as the values of the nodes.
+#'
+#' Numerical differentiation is subject to estimation error and can be very slow. Therefore, this function should only be used for testing purposes.
+#'
+#' @return environment, the gradients of all ancestors of the node (including the target node itself) with respect to the target node.
+#'
+#' @author Ron Triepels
+#' @keywords internal
 approx_gradients <- function(graph, target, values = new.env(parent = emptyenv()), index = 1, eps = 1e-4)
 {
   if(is.list(values))

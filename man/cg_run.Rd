@@ -11,13 +11,13 @@ cg_run(graph, target, values = new.env(parent = emptyenv()))
 
 \item{target}{cg_node object, node in the graph that is evaluated.}
 
-\item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
+\item{values}{named list or environment, values that are subsituted for the input nodes in the graph.}
 }
 \value{
 environment, the value of the node including the value of all ancestors of the node in the graph.
 }
 \description{
-Evaluate a node in a graph.
+Evaluate a given target node in a graph.
 }
 \note{
 All nodes required to compute the node must have a value or their value must be able to be computed at run-time. Argument \code{values} can be used to substitute values for input nodes that do not have a value. Only those nodes needed to compute the node are evaluated and their values are returned.

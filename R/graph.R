@@ -202,11 +202,11 @@ cg_operator <- function(fun, inputs, name = NULL)
 
 #' Evaluate the Graph
 #'
-#' Evaluate node in a graph.
+#' Evaluate a given target node in a graph.
 #'
 #' @param graph cg_graph object, graph that is evaluated.
 #' @param target cg_node object, node in the graph that is evaluated.
-#' @param values named list or environment, values that are subsituted for the nodes in the graph.
+#' @param values named list or environment, values that are subsituted for the input nodes in the graph.
 #'
 #' @note All nodes required to compute the node must have a value or their value must be able to be computed at run-time. Argument \code{values} can be used to substitute values for input nodes that do not have a value. Only those nodes needed to compute the node are evaluated and their values are returned.
 #'
@@ -241,11 +241,11 @@ cg_run <- function(graph, target, values = new.env(parent = emptyenv()))
 
 #' Calculate Gradients
 #'
-#' Differentiate the graph with respect to a node by reverse automatic differentiation.
+#' Differentiate a graph with respect to a given target node by reverse automatic differentiation.
 #'
 #' @param graph cg_graph object, graph that is differentiated.
 #' @param target cg_node object, node in the graph that is differentiated.
-#' @param values named list or environment, values that are subsituted for the nodes in the graph.
+#' @param values named list or environment, values that are subsituted for the input nodes in the graph.
 #' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
 #'
 #' @note All nodes required to compute the node must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating function \link[cgraph]{cg_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.

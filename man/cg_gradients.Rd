@@ -12,7 +12,7 @@ cg_gradients(graph, target, values = new.env(parent = emptyenv()),
 
 \item{target}{cg_node object, node in the graph that is differentiated.}
 
-\item{values}{named list or environment, values that are subsituted for the nodes in the graph.}
+\item{values}{named list or environment, values that are subsituted for the input nodes in the graph.}
 
 \item{index}{numeric scalar, index of the target node that is differentiated. Defaults to the first element.}
 }
@@ -20,7 +20,7 @@ cg_gradients(graph, target, values = new.env(parent = emptyenv()),
 environment, the gradients of all ancestors of the node (including the target node itself) with respect to the target node.
 }
 \description{
-Differentiate the graph with respect to a node by reverse automatic differentiation.
+Differentiate a graph with respect to a given target node by reverse automatic differentiation.
 }
 \note{
 All nodes required to compute the node must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating function \link[cgraph]{cg_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
