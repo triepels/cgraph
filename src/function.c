@@ -91,6 +91,11 @@ void cg_function_set_grads(SEXP function, SEXP grads)
 
 void cg_function_add_grad(SEXP function, SEXP grad)
 {
+  if(!Rf_isFunction(grad))
+  {
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a function");
+  }
+
   int index;
 
   SEXP grads = R_NilValue;
