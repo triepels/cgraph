@@ -175,26 +175,26 @@ SEXP cg_graph_get_node(SEXP graph, const int id)
   return node;
 }
 
-int* cg_graph_forward_dep(SEXP graph, SEXP target, int *length)
+SEXP cg_graph_forward_dep(SEXP graph, SEXP target)
 {
   SEXP nodes = cg_graph_nodes(graph);
 
   R_len_t n = Rf_xlength(nodes);
 
-  int *ids = malloc(n * sizeof(int));
+  SEXP dep = PROTECT(Rf_allocVector(VECSXP, n));
 
   int *visited = calloc(n, sizeof(int));
 
-  if(ids == NULL || visited == NULL)
+  if(visited == NULL)
   {
-    Rf_errorcall(R_NilValue, "unable to allocate memory");
+    Rf_errorcall(R_NilValue, "unable to allocate array of %d elements", n);
   }
 
   cg_stack *stack = cg_stack_allocate(n);
 
   cg_stack_push(stack, cg_node_id(target));
 
-  (*length) = 0;
+  int m = 0;
 
   while(!cg_stack_is_empty(stack))
   {
@@ -204,13 +204,13 @@ int* cg_graph_forward_dep(SEXP graph, SEXP target, int *length)
 
     SEXP outputs = PROTECT(cg_node_outputs(node, FALSE));
 
-    R_len_t m = Rf_xlength(outputs);
+    R_len_t p = Rf_xlength(outputs);
 
     if(visited[current - 1] == 0)
     {
-      if(m > 0)
+      if(p > 0)
       {
-        for(int i = 0; i < m; i++)
+        for(int i = 0; i < p; i++)
         {
           SEXP output = VECTOR_ELT(outputs, i);
 
@@ -233,18 +233,18 @@ int* cg_graph_forward_dep(SEXP graph, SEXP target, int *length)
       {
         cg_stack_pop(stack);
 
-        ids[*length] = current;
+        SET_VECTOR_ELT(dep, m, node);
 
-        (*length)++;
+        m++;
       }
     }
     else
     {
-      if(visited[current - 1] == 1 & m > 0)
+      if(visited[current - 1] == 1 & p > 0)
       {
-        ids[*length] = current;
+        SET_VECTOR_ELT(dep, m, node);
 
-        (*length)++;
+        m++;
       }
 
       cg_stack_pop(stack);
@@ -257,22 +257,24 @@ int* cg_graph_forward_dep(SEXP graph, SEXP target, int *length)
 
   cg_stack_destroy(stack);
 
-  free(visited);
+  SETLENGTH(dep, m);
 
-  return ids;
+  UNPROTECT(1);
+
+  return dep;
 }
 
-int* cg_graph_backward_dep(SEXP graph, SEXP target, int *length)
+SEXP cg_graph_backward_dep(SEXP graph, SEXP target)
 {
   SEXP nodes = cg_graph_nodes(graph);
 
   R_len_t n = Rf_xlength(nodes);
 
-  int *ids = malloc(n * sizeof(int));
+  SEXP dep = PROTECT(Rf_allocVector(VECSXP, n));
 
   int *visited = calloc(n, sizeof(int));
 
-  if(ids == NULL || visited == NULL)
+  if(visited == NULL)
   {
     Rf_errorcall(R_NilValue, "unable to allocate memory");
   }
@@ -281,7 +283,7 @@ int* cg_graph_backward_dep(SEXP graph, SEXP target, int *length)
 
   cg_stack_push(stack, cg_node_id(target));
 
-  (*length) = 0;
+  int m = 0;
 
   while(!cg_stack_is_empty(stack))
   {
@@ -291,13 +293,13 @@ int* cg_graph_backward_dep(SEXP graph, SEXP target, int *length)
 
     SEXP inputs = PROTECT(cg_node_inputs(node, FALSE));
 
-    R_len_t m = Rf_xlength(inputs);
+    R_len_t p = Rf_xlength(inputs);
 
     if(visited[current - 1] == 0)
     {
-      if(m > 0)
+      if(p > 0)
       {
-        for(int i = 0; i < m; i++)
+        for(int i = 0; i < p; i++)
         {
           SEXP input = VECTOR_ELT(inputs, i);
 
@@ -320,18 +322,18 @@ int* cg_graph_backward_dep(SEXP graph, SEXP target, int *length)
       {
         cg_stack_pop(stack);
 
-        ids[*length] = current;
+        SET_VECTOR_ELT(dep, m, node);
 
-        (*length)++;
+        m++;
       }
     }
     else
     {
-      if(visited[current - 1] == 1 & m > 0)
+      if(visited[current - 1] == 1 & p > 0)
       {
-        ids[*length] = current;
+        SET_VECTOR_ELT(dep, m, node);
 
-        (*length)++;
+        m++;
       }
 
       cg_stack_pop(stack);
@@ -344,9 +346,11 @@ int* cg_graph_backward_dep(SEXP graph, SEXP target, int *length)
 
   cg_stack_destroy(stack);
 
-  free(visited);
+  SETLENGTH(dep, m);
 
-  return ids;
+  UNPROTECT(1);
+
+  return dep;
 }
 
 /*
@@ -370,15 +374,13 @@ SEXP cg_graph_run(SEXP graph, SEXP target, SEXP values)
     Rf_errorcall(R_NilValue, "argument 'values' must be an environment");
   }
 
-  int n;
+  SEXP dep = PROTECT(cg_graph_backward_dep(graph, target));
 
-  int *ids = cg_graph_backward_dep(graph, target, &n);
-
-  SEXP nodes = cg_graph_nodes(graph);
+  R_len_t n = Rf_xlength(dep);
 
   for(int i = 0; i < n; i++)
   {
-    SEXP node = VECTOR_ELT(nodes, ids[i] - 1);
+    SEXP node = VECTOR_ELT(dep, i);
 
     if(!cg_is(node, "cg_input"))
     {
@@ -386,7 +388,7 @@ SEXP cg_graph_run(SEXP graph, SEXP target, SEXP values)
     }
   }
 
-  free(ids);
+  UNPROTECT(1);
 
   return values;
 }
@@ -418,15 +420,15 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
     Rf_errorcall(R_NilValue, "argument 'index' must be a numeric scalar");
   }
 
-  int n, k = Rf_asInteger(index);
+  int k = Rf_asInteger(index);
 
-  int *ids = cg_graph_backward_dep(graph, target, &n);
+  SEXP dep = PROTECT(cg_graph_backward_dep(graph, target));
 
-  SEXP nodes = cg_graph_nodes(graph);
+  R_len_t n = Rf_xlength(dep);
 
   if(n > 0)
   {
-    SEXP root = VECTOR_ELT(nodes, ids[n - 1] - 1);
+    SEXP root = VECTOR_ELT(dep, n - 1);
 
     SEXP symbol = cg_node_symbol(root);
 
@@ -457,7 +459,7 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
 
     for(int i = n - 2; i >= 0; i--)
     {
-      SEXP node = VECTOR_ELT(nodes, ids[i] - 1);
+      SEXP node = VECTOR_ELT(dep, i);
 
       if(cg_is(node, "cg_operator") || cg_is(node, "cg_parameter"))
       {
@@ -468,7 +470,7 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
     UNPROTECT(1);
   }
 
-  free(ids);
+  UNPROTECT(1);
 
   return gradients;
 }

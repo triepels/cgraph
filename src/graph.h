@@ -36,9 +36,9 @@ void cg_graph_add_node(SEXP graph, SEXP node);
 
 SEXP cg_graph_get_node(SEXP graph, const int id);
 
-int* cg_graph_forward_dep(SEXP graph, SEXP target, int *length);
+SEXP cg_graph_forward_dep(SEXP graph, SEXP target);
 
-int* cg_graph_backward_dep(SEXP graph, SEXP target, int *length);
+SEXP cg_graph_backward_dep(SEXP graph, SEXP target);
 
 /*
  * PUBLIC METHODS

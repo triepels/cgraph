@@ -155,15 +155,13 @@ SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP
     Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at index %d", cg_node_name(target), k);
   }
 
-  int n;
+  SEXP dep = PROTECT(cg_graph_backward_dep(graph, target));
 
-  int *ids = cg_graph_backward_dep(graph, target, &n);
-
-  SEXP nodes = cg_graph_nodes(graph);
+  R_len_t n = Rf_xlength(dep);
 
   for(int i = 0; i < n; i++)
   {
-    SEXP node = VECTOR_ELT(nodes, ids[i] - 1);
+    SEXP node = VECTOR_ELT(dep, i);
 
     if(cg_is(node, "cg_parameter"))
     {
@@ -225,11 +223,9 @@ SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP
     }
   }
 
-  free(ids);
-
   cg_graph_run(graph, target, values);
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 
   return gradients;
 }
