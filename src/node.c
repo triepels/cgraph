@@ -323,6 +323,8 @@ void cg_node_set_function(SEXP node, SEXP function)
 
 void cg_node_eval(SEXP node, SEXP values)
 {
+  SEXP symbol = cg_node_symbol(node);
+
   SEXP inputs = PROTECT(cg_node_inputs(node, FALSE));
 
   if(Rf_xlength(inputs) > 0)
@@ -344,7 +346,7 @@ void cg_node_eval(SEXP node, SEXP values)
 
     SEXP value = PROTECT(Rf_eval(call, values));
 
-    Rf_defineVar(cg_node_symbol(node), value, values);
+    Rf_defineVar(symbol, value, values);
 
     UNPROTECT(4);
   }
@@ -354,7 +356,7 @@ void cg_node_eval(SEXP node, SEXP values)
 
     if(!Rf_isNull(value))
     {
-      Rf_defineVar(cg_node_symbol(node), cg_node_value(node), values);
+      Rf_defineVar(symbol, cg_node_value(node), values);
     }
   }
 
