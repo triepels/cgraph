@@ -4,21 +4,21 @@
 \alias{bsum}
 \title{Block Summation}
 \usage{
-bsum(x, n = 1)
+bsum(x, block_size = 1)
 }
 \arguments{
 \item{x, }{numeric vector or array, the object that is summed.}
 
-\item{n, }{numeric scalar, block size. Defaults to 1.}
+\item{block_size, }{numeric scalar, the size of each block. Defaults to 1.}
 }
 \value{
-numeric vector, a \code{n}-dimensional vector, where the 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2nd element of the blocks, and so on.
+numeric vector. Each 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2nd element of the blocks, and so on.
 }
 \description{
-Divide a vector or array in consecutive blocks of \code{n} elements and sum the elements at each position in these blocks.
+Divide a vector or array in consecutive fixed-sized blocks and sum the elements at each position in these blocks.
 }
 \note{
-If \code{x} is an array and \code{n} is equal to the size of \code{x}'s first dimension, then \link[cgraph]{bsum} behaves as \link[base:colSums]{rowSums}.
+If \code{x} is an array and \code{block_size} is equal to the size of \code{x}'s first dimension, then \link[cgraph]{bsum} behaves as \link[base:colSums]{rowSums}.
 }
 \author{
 Ron Triepels

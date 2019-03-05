@@ -1,5 +1,5 @@
 /*
-Copyright 2018 Ron Triepels
+Copyright 2019 Ron Triepels
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,80 +19,217 @@ limitations under the License.
 #include <R.h>
 #include <Rinternals.h>
 
-#include <inttypes.h>
+#include "node.h"
+#include "class.h"
+#include "graph.h"
+#include "internal.h"
 
-SEXP bsum(SEXP x, SEXP n)
+/*
+ * PUBLIC METHODS
+ */
+
+SEXP bsum(SEXP x, SEXP block_size)
 {
-  if(!Rf_isNumeric(n))
+  if(!(Rf_isLogical(x) || Rf_isNumeric(x)))
   {
-    Rf_errorcall(R_NilValue, "n must be a numerical scalar");
+    Rf_errorcall(R_NilValue, "argument 'x' should be a numerical vector or array");
   }
 
-  int x_n = Rf_asInteger(n);
+  if(!Rf_isNumeric(block_size))
+  {
+    Rf_errorcall(R_NilValue, "argument 'n' should be a numerical scalar");
+  }
 
-  if(x_n < 0)
+  int s = Rf_asInteger(block_size);
+
+  if(s < 0)
   {
     Rf_errorcall(R_NilValue, "invalid block size");
   }
 
-  SEXP y = R_NilValue;
+  SEXP y = PROTECT(Rf_allocVector(REALSXP, s));
+
+  double *b = REAL(y);
+
+  memset(b, 0, s * sizeof(double));
+
+  R_len_t n = Rf_xlength(x);
 
   switch(TYPEOF(x))
   {
+    case REALSXP :
+    {
+      const double *a = REAL_RO(x);
+
+      for(int i = 0, j = 0; i < n; i++,
+          j = (++j == s) ? 0 : j)
+      {
+        b[j] += a[i];
+      }
+
+      break;
+    }
     case LGLSXP :
     case INTSXP :
     {
-      int* p_x;
-      int* p_y;
+      const int *a = INTEGER_RO(x);
 
-      y = PROTECT(Rf_allocVector(INTSXP, x_n));
-
-      p_x = INTEGER(x);
-      p_y = INTEGER(y);
-
-      memset(p_y, 0, x_n * sizeof(int));
-
-      int k = LENGTH(x), j = 0;
-
-      for(int i = 0; i < k; i++)
+      for(int i = 0, j = 0; i < n; i++,
+          j = (++j == s) ? 0 : j)
       {
-        p_y[j] += p_x[i];
-
-        j = j < x_n - 1 ? j + 1 : 0;
+        b[j] += a[i];
       }
 
       break;
-    }
-    case REALSXP :
-    {
-      double* p_x;
-      double* p_y;
-
-      y = PROTECT(Rf_allocVector(REALSXP, x_n));
-
-      p_x = REAL(x);
-      p_y = REAL(y);
-
-      memset(p_y, 0, x_n * sizeof(double));
-
-      int k = LENGTH(x), j = 0;
-
-      for(int i = 0; i < k; i++)
-      {
-        p_y[j] += p_x[i];
-
-        j = j < x_n - 1 ? j + 1 : 0;
-      }
-
-      break;
-    }
-    default :
-    {
-      Rf_errorcall(R_NilValue, "invalid object of type '%s' provided", Rf_type2char(TYPEOF(x)));
     }
   }
 
   UNPROTECT(1);
 
   return y;
+}
+
+SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP index, SEXP epsilon)
+{
+  if(!cg_is(graph, "cg_graph"))
+  {
+    Rf_errorcall(R_NilValue, "argument 'graph' must be a cg_graph object");
+  }
+
+  if(!cg_is(target, "cg_node"))
+  {
+    Rf_errorcall(R_NilValue, "argument 'target' must be a cg_node object");
+  }
+
+  if(!Rf_isEnvironment(values))
+  {
+    Rf_errorcall(R_NilValue, "argument 'values' must be an environment");
+  }
+
+  if(!Rf_isEnvironment(gradients))
+  {
+    Rf_errorcall(R_NilValue, "argument 'gradients' must be an environment");
+  }
+
+  if(!Rf_isNumeric(index))
+  {
+    Rf_errorcall(R_NilValue, "argument 'index' must be a numeric scalar");
+  }
+
+  if(!Rf_isNumeric(epsilon))
+  {
+    Rf_errorcall(R_NilValue, "argument 'epsilon' must be a numeric scalar");
+  }
+
+  int k = Rf_asInteger(index);
+
+  double eps = Rf_asReal(epsilon);
+
+  if(eps < 0)
+  {
+    Rf_errorcall(R_NilValue, "argument 'epsilon' must be non-negative");
+  }
+
+  int target_index;
+
+  SEXP target_value = R_NilValue;
+
+  SEXP target_symbol = cg_node_symbol(target);
+
+  PROTECT_WITH_INDEX(target_value = Rf_findVarInFrame(values, target_symbol), &target_index);
+
+  if(target_value == R_UnboundValue)
+  {
+    Rf_errorcall(R_NilValue, "cannot find value of node '%s'", cg_node_name(target));
+  }
+
+  if(!Rf_isReal(target_value))
+  {
+    REPROTECT(target_value = Rf_coerceVector(target_value, REALSXP), target_index);
+
+    cg_node_set_value(target, target_value);
+  }
+
+  if(k < 1 || k > Rf_xlength(target_value))
+  {
+    Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at index %d", cg_node_name(target), k);
+  }
+
+  int n;
+
+  int *ids = cg_graph_backward_dep(graph, target, &n);
+
+  SEXP nodes = cg_graph_nodes(graph);
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP node = VECTOR_ELT(nodes, ids[i] - 1);
+
+    if(cg_is(node, "cg_parameter"))
+    {
+      int node_index;
+
+      SEXP node_value = R_NilValue;
+
+      SEXP node_symbol = cg_node_symbol(node);
+
+      PROTECT_WITH_INDEX(node_value = Rf_findVarInFrame(values, node_symbol), &node_index);
+
+      if(node_value == R_UnboundValue)
+      {
+        Rf_errorcall(R_NilValue, "cannot find value of node '%s'", cg_node_name(node));
+      }
+
+      if(!Rf_isReal(node_value))
+      {
+        REPROTECT(node_value = Rf_coerceVector(node_value, REALSXP), node_index);
+
+        cg_node_set_value(node, node_value);
+      }
+
+      R_len_t m = Rf_xlength(node_value);
+
+      SEXP grad = PROTECT(Rf_allocVector(REALSXP, m));
+
+      double *x = REAL(node_value);
+      double *y = REAL(grad);
+
+      for(int j = 0; j < m; j++)
+      {
+        x[j] += eps;
+
+        cg_graph_run(graph, target, values);
+
+        REPROTECT(target_value = Rf_findVarInFrame(values, target_symbol), target_index);
+
+        double y1 = REAL_ELT(target_value, k - 1);
+
+        x[j] -= 2 * eps;
+
+        cg_graph_run(graph, target, values);
+
+        REPROTECT(target_value = Rf_findVarInFrame(values, target_symbol), target_index);
+
+        double y2 = REAL_ELT(target_value, k - 1);
+
+        x[j] += eps;
+
+        y[j] = (y1 - y2) / (2 * eps);
+      }
+
+      SHALLOW_DUPLICATE_ATTRIB(grad, node_value);
+
+      Rf_defineVar(node_symbol, grad, gradients);
+
+      UNPROTECT(2);
+    }
+  }
+
+  free(ids);
+
+  cg_graph_run(graph, target, values);
+
+  UNPROTECT(1);
+
+  return gradients;
 }

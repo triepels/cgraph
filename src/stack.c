@@ -1,5 +1,5 @@
 /*
-Copyright 2018 Ron Triepels
+Copyright 2019 Ron Triepels
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,106 +14,84 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#define R_NO_REMAP
+
 #include <R.h>
 #include <Rinternals.h>
 
-#include <stdlib.h>
-
 #include "stack.h"
 
-stack* stack_allocate(int size)
+/*
+ * PUBLIC METHODS
+ */
+
+cg_stack* cg_stack_allocate(const int size)
 {
-  stack *s;
+  cg_stack *stack = malloc(sizeof(cg_stack));
 
-  int *data;
+  int *data = malloc(size * sizeof(int));
 
-  if(size < 0)
+  if(stack == NULL || data == NULL)
   {
-    Rf_errorcall(R_NilValue, "invalid stack size provided");
+    Rf_errorcall(R_NilValue, "unable to allocate stack of '%d' elements", size);
   }
 
-  s = malloc(sizeof(stack));
+  stack->top = -1;
+  stack->size = size;
+  stack->data = data;
 
-  data = malloc(size * sizeof(int));
+  return stack;
+}
 
-  if(s == NULL || data == NULL)
+void cg_stack_destroy(cg_stack *stack)
+{
+  free(stack->data);
+  free(stack);
+}
+
+int cg_stack_is_empty(const cg_stack *stack)
+{
+  return stack->top < 0;
+}
+
+int cg_stack_is_full(const cg_stack *stack)
+{
+  return stack->top >= stack->size - 1;
+}
+
+void cg_stack_push(cg_stack *stack, const int x)
+{
+  if(cg_stack_is_full(stack))
   {
-    Rf_errorcall(R_NilValue, "unable to allocate stack of %d elements", size);
-  }
+    stack->size = (stack->size == 0) ? 1 : 2 * stack->size;
 
-  s->top = -1;
-  s->size = size;
-  s->data = data;
+    stack->data = realloc(stack->data, stack->size * sizeof(int));
 
-  return s;
-}
-
-void stack_destroy(stack *s)
-{
-  free(s->data);
-  free(s);
-}
-
-int stack_is_empty(stack *s)
-{
-  return s->top < 0;
-}
-
-int stack_is_full(stack *s)
-{
-  return s->top >= s->size - 1;
-}
-
-void stack_add(stack *s, int x)
-{
-  if(stack_is_full(s))
-  {
-    if(s->size == 0)
+    if(stack->data == NULL)
     {
-      s->size = 1;
-    }
-    else
-    {
-      s->size *= 2;
-    }
-
-    s->data = realloc(s->data, s->size * sizeof(int));
-
-    if(s->data == NULL)
-    {
-      Rf_errorcall(R_NilValue, "unable to reallocate stack of %d elements", s->size);
+      Rf_errorcall(R_NilValue, "unable to reallocate stack of %d elements", stack->size);
     }
   }
 
-  s->data[++s->top] = x;
+  stack->data[++stack->top] = x;
 }
 
-int stack_current(stack *s)
+int cg_stack_top(const cg_stack *stack)
 {
-  if(stack_is_empty(s))
+  if(cg_stack_is_empty(stack))
   {
-    Rf_errorcall(R_NilValue, "unable to retrieve the current element of the stack because it is empty");
+    Rf_errorcall(R_NilValue, "unable to retrieve top element because the stack is empty");
   }
 
-  return s->data[s->top];
+  return stack->data[stack->top];
 }
 
-void stack_remove(stack *s)
+void cg_stack_pop(cg_stack *stack)
 {
-  if(stack_is_empty(s))
+  if(cg_stack_is_empty(stack))
   {
-    Rf_errorcall(R_NilValue, "unable to remove the top element of the stack because it is empty");
+    Rf_errorcall(R_NilValue, "unable to pop the top element because the stack is empty");
   }
 
-  s->top--;
-}
-
-int stack_get(stack *s)
-{
-  if(stack_is_empty(s))
-  {
-    Rf_errorcall(R_NilValue, "unable to get the first element of the stack because it is empty");
-  }
-
-  return s->data[s->top--];
+  stack->top--;
 }

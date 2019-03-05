@@ -1,5 +1,5 @@
 /*
-Copyright 2018 Ron Triepels
+Copyright 2019 Ron Triepels
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,24 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#ifndef STACK_H
+#define STACK_H
+
+#define R_NO_REMAP
+
+#include <R.h>
+#include <Rinternals.h>
+
+/*
+ * PUBLIC STRUCTS
+ */
+
 typedef struct {
   int top;
   int size;
   int *data;
-} stack;
+} cg_stack;
 
-stack* stack_allocate(int size);
+/*
+ * PUBLIC METHODS
+ */
 
-void stack_destroy(stack *s);
+cg_stack* cg_stack_allocate(const int size);
 
-int stack_is_empty(stack *s);
+void cg_stack_destroy(cg_stack *stack);
 
-int stack_is_full(stack *s);
+int cg_stack_is_empty(const cg_stack *stack);
 
-void stack_add(stack *s, int x);
+int cg_stack_is_full(const cg_stack *stack);
 
-int stack_current(stack *s);
+void cg_stack_push(cg_stack *stack, const int x);
 
-void stack_remove(stack *s);
+int cg_stack_top(const cg_stack *stack);
 
-int stack_get(stack *s);
+void cg_stack_pop(cg_stack *stack);
+
+#endif

@@ -1,7 +1,7 @@
 Package: cgraph
 Type: Package
 Title: Computational Graphs
-Version: 3.0.1
+Version: 4.0.0
 Author: Ron Triepels
 Maintainer: Ron Triepels <dev@cgraph.org>
 URL: https://cgraph.org/
@@ -10,6 +10,5 @@ Description: Allows to create, evaluate, and differentiate computational graphs 
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
-Imports: R6
-Suggests: Rgraphviz, testthat
+Suggests: testthat
 RoxygenNote: 6.1.0
