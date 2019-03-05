@@ -276,7 +276,7 @@ SEXP cg_graph_backward_dep(SEXP graph, SEXP target)
 
   if(visited == NULL)
   {
-    Rf_errorcall(R_NilValue, "unable to allocate memory");
+    Rf_errorcall(R_NilValue, "unable to allocate array of %d elements", n);
   }
 
   cg_stack *stack = cg_stack_allocate(n);
