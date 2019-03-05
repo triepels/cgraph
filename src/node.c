@@ -248,11 +248,15 @@ void cg_node_add_output(SEXP node, SEXP output)
     Rf_errorcall(R_NilValue, "argument 'output' must be a cg_node object");
   }
 
-  SEXP outputs = Rf_findVarInFrame(node, CG_OUTPUTS_SYMBOL);
+  int index;
+
+  SEXP outputs = R_NilValue;
+
+  PROTECT_WITH_INDEX(outputs = Rf_findVarInFrame(node, CG_OUTPUTS_SYMBOL), &index);
 
   if(TYPEOF(outputs) != VECSXP)
   {
-    outputs = PROTECT(Rf_allocVector(VECSXP, 1));
+    REPROTECT(outputs = Rf_allocVector(VECSXP, 1), index);
 
     SET_VECTOR_ELT(outputs, 0, output);
   }
@@ -260,7 +264,7 @@ void cg_node_add_output(SEXP node, SEXP output)
   {
     R_len_t n = Rf_xlength(outputs);
 
-    outputs = PROTECT(Rf_lengthgets(outputs, n + 1));
+    REPROTECT(outputs = Rf_lengthgets(outputs, n + 1), index);
 
     SET_VECTOR_ELT(outputs, n, output);
   }
