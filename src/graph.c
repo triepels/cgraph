@@ -114,17 +114,21 @@ void cg_graph_add_node(SEXP graph, SEXP node)
     Rf_errorcall(R_NilValue, "'%s' is already defined in the graph", name);
   }
 
-  SEXP nodes = Rf_findVarInFrame(graph, CG_NODES_SYMBOL);
+  int index_nodes, index_names;
 
-  SEXP names = Rf_getAttrib(nodes, R_NamesSymbol);
+  SEXP nodes = R_NilValue, names = R_NilValue;
+
+  PROTECT_WITH_INDEX(nodes = Rf_findVarInFrame(graph, CG_NODES_SYMBOL), &index_nodes);
+
+  PROTECT_WITH_INDEX(names = Rf_getAttrib(nodes, R_NamesSymbol), &index_names);
 
   R_len_t n = Rf_xlength(nodes);
 
   if(TYPEOF(nodes) != VECSXP)
   {
-    nodes = PROTECT(Rf_allocVector(VECSXP, 1));
+    REPROTECT(nodes = Rf_allocVector(VECSXP, 1), index_nodes);
 
-    names = PROTECT(Rf_mkString(name));
+    REPROTECT(names = Rf_mkString(name), index_names);
 
     SET_VECTOR_ELT(nodes, 0, node);
 
@@ -134,9 +138,9 @@ void cg_graph_add_node(SEXP graph, SEXP node)
   }
   else
   {
-    nodes = PROTECT(Rf_lengthgets(nodes, n + 1));
+    REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), index_nodes);
 
-    names = PROTECT(Rf_lengthgets(names, n + 1));
+    REPROTECT(names = Rf_lengthgets(names, n + 1), index_names);
 
     SET_VECTOR_ELT(nodes, n, node);
 
