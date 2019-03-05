@@ -162,11 +162,15 @@ void cg_node_add_input(SEXP node, SEXP input)
     Rf_errorcall(R_NilValue, "argument 'input' must be a cg_node object");
   }
 
-  SEXP inputs = Rf_findVarInFrame(node, CG_INPUTS_SYMBOL);
+  int index;
+
+  SEXP inputs = R_NilValue;
+
+  PROTECT_WITH_INDEX(inputs = Rf_findVarInFrame(node, CG_INPUTS_SYMBOL), &index);
 
   if(TYPEOF(inputs) != VECSXP)
   {
-    inputs = PROTECT(Rf_allocVector(VECSXP, 1));
+    REPROTECT(inputs = Rf_allocVector(VECSXP, 1), index);
 
     SET_VECTOR_ELT(inputs, 0, input);
   }
@@ -174,7 +178,7 @@ void cg_node_add_input(SEXP node, SEXP input)
   {
     R_len_t n = Rf_xlength(inputs);
 
-    inputs = PROTECT(Rf_lengthgets(inputs, n + 1));
+    REPROTECT(inputs = Rf_lengthgets(inputs, n + 1), index);
 
     SET_VECTOR_ELT(inputs, n, input);
   }
