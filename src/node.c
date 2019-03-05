@@ -85,16 +85,16 @@ int cg_node_id(SEXP node)
 
 void cg_node_set_id(SEXP node, const int id)
 {
-  SEXP node_id = Rf_findVarInFrame(node, CG_ID_SYMBOL);
+  if(id < 1)
+  {
+    Rf_errorcall(R_NilValue, "argument 'id' must be higher than or equal to 1");
+  }
 
-  if(!Rf_isInteger(node_id))
-  {
-    Rf_defineVar(CG_ID_SYMBOL, Rf_ScalarInteger(id), node);
-  }
-  else
-  {
-    INTEGER(node_id)[0] = id;
-  }
+  SEXP node_id = PROTECT(Rf_ScalarInteger(id));
+
+  Rf_defineVar(CG_ID_SYMBOL, node_id, node);
+
+  UNPROTECT(1);
 }
 
 SEXP cg_node_inputs(SEXP node, int unique)
