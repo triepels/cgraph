@@ -104,15 +104,19 @@ void cg_node_set_id(SEXP node, const int id)
 
 SEXP cg_node_inputs(SEXP node, int unique)
 {
-  SEXP inputs = Rf_findVarInFrame(node, CG_INPUTS_SYMBOL);
+  SEXP inputs = PROTECT(Rf_findVarInFrame(node, CG_INPUTS_SYMBOL));
 
   if(TYPEOF(inputs) != VECSXP)
   {
+    UNPROTECT(1);
+
     return R_NilValue;
   }
 
   if(!unique)
   {
+    UNPROTECT(1);
+
     return inputs;
   }
   else
@@ -149,7 +153,7 @@ SEXP cg_node_inputs(SEXP node, int unique)
 
     SETLENGTH(unique_inputs, m);
 
-    UNPROTECT(1);
+    UNPROTECT(2);
 
     return unique_inputs;
   }
