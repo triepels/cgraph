@@ -379,15 +379,15 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
 
     SEXP output_symbol = cg_node_symbol(output);
 
-    SEXP output_gradient = Rf_findVarInFrame(gradients, output_symbol);
+    SEXP output_gradient = PROTECT(Rf_findVarInFrame(gradients, output_symbol));
 
     if(output_gradient != R_UnboundValue)
     {
-      SEXP output_inputs = cg_node_inputs(output, FALSE);
+      SEXP output_inputs = PROTECT(cg_node_inputs(output, FALSE));
 
-      SEXP output_function = cg_node_function(output);
+      SEXP output_function = PROTECT(cg_node_function(output));
 
-      SEXP output_function_grads = cg_function_grads(output_function);
+      SEXP output_function_grads = PROTECT(cg_function_grads(output_function));
 
       R_len_t p = Rf_xlength(output_inputs);
 
@@ -529,7 +529,11 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
           UNPROTECT(3);
         }
       }
+
+      UNPROTECT(3);
     }
+
+    UNPROTECT(1);
   }
 
   Rf_defineVar(cg_node_symbol(node), gradient, gradients);
