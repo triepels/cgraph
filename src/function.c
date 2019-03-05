@@ -49,7 +49,7 @@ void cg_function_set_def(SEXP function, SEXP def)
 {
   if(!Rf_isFunction(def))
   {
-    Rf_errorcall(R_NilValue, "argument 'def' should be a function");
+    Rf_errorcall(R_NilValue, "argument 'def' must be a function");
   }
 
   Rf_defineVar(CG_DEF_SYMBOL, def, function);
@@ -71,7 +71,7 @@ void cg_function_set_grads(SEXP function, SEXP grads)
 {
   if(TYPEOF(grads) != VECSXP)
   {
-    Rf_errorcall(R_NilValue, "argument 'grads' should be a list of gradient functions");
+    Rf_errorcall(R_NilValue, "argument 'grads' must be a list of gradient functions");
   }
 
   R_len_t n = Rf_xlength(grads);

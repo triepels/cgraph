@@ -51,7 +51,7 @@ cgraph 2.0.2
 
 Documentation:
 
-* The documentation of function `const`, `input`, `parm`, and `opr` now correctly states that argument `name` should be a character scalar (not a symbol).
+* The documentation of function `const`, `input`, `parm`, and `opr` now correctly states that argument `name` must be a character scalar (not a symbol).
 
 Bug fixes:
 

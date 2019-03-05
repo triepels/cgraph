@@ -32,12 +32,12 @@ SEXP bsum(SEXP x, SEXP block_size)
 {
   if(!(Rf_isLogical(x) || Rf_isNumeric(x)))
   {
-    Rf_errorcall(R_NilValue, "argument 'x' should be a numerical vector or array");
+    Rf_errorcall(R_NilValue, "argument 'x' must be a numerical vector or array");
   }
 
   if(!Rf_isNumeric(block_size))
   {
-    Rf_errorcall(R_NilValue, "argument 'n' should be a numerical scalar");
+    Rf_errorcall(R_NilValue, "argument 'n' must be a numerical scalar");
   }
 
   int s = Rf_asInteger(block_size);

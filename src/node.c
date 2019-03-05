@@ -159,7 +159,7 @@ void cg_node_add_input(SEXP node, SEXP input)
 {
   if(!cg_is(input, "cg_node"))
   {
-    Rf_errorcall(R_NilValue, "argument 'input' should be a cg_node object");
+    Rf_errorcall(R_NilValue, "argument 'input' must be a cg_node object");
   }
 
   SEXP inputs = Rf_findVarInFrame(node, CG_INPUTS_SYMBOL);
@@ -241,7 +241,7 @@ void cg_node_add_output(SEXP node, SEXP output)
 {
   if(!cg_is(output, "cg_node"))
   {
-    Rf_errorcall(R_NilValue, "argument 'output' should be a cg_node object");
+    Rf_errorcall(R_NilValue, "argument 'output' must be a cg_node object");
   }
 
   SEXP outputs = Rf_findVarInFrame(node, CG_OUTPUTS_SYMBOL);
@@ -299,7 +299,7 @@ void cg_node_set_function(SEXP node, SEXP function)
 {
   if(!cg_is(function, "cg_function"))
   {
-    Rf_errorcall(R_NilValue, "argument 'function' should be a cg_function object");
+    Rf_errorcall(R_NilValue, "argument 'function' must be a cg_function object");
   }
 
   Rf_defineVar(CG_FUN_SYMBOL, function, node);

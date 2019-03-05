@@ -29,7 +29,7 @@ SEXP sigmoid(SEXP x)
 {
   if(!(Rf_isLogical(x) || Rf_isNumeric(x)))
   {
-    Rf_errorcall(R_NilValue, "argument 'x' should be a numerical vector or array");
+    Rf_errorcall(R_NilValue, "argument 'x' must be a numerical vector or array");
   }
 
   R_len_t n = Rf_xlength(x);
