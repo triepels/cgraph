@@ -289,7 +289,7 @@ int* cg_graph_backward_dep(SEXP graph, SEXP target, int *length)
 
     SEXP node = cg_graph_get_node(graph, current);
 
-    SEXP inputs = cg_node_inputs(node, FALSE);
+    SEXP inputs = PROTECT(cg_node_inputs(node, FALSE));
 
     R_len_t m = Rf_xlength(inputs);
 
@@ -338,6 +338,8 @@ int* cg_graph_backward_dep(SEXP graph, SEXP target, int *length)
     }
 
     visited[current - 1]++;
+
+    UNPROTECT(1);
   }
 
   cg_stack_destroy(stack);
