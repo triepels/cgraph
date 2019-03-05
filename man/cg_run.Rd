@@ -33,7 +33,7 @@ a <- cg_input(name = "a")
 b <- cg_pow(a, 2, name = "b")
 
 # Evaluate b at a = 2
-values <- cg_run(b, list(a = 2))
+values <- cg_run(x, b, list(a = 2))
 
 # Retrieve the value of b
 values$b

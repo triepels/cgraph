@@ -40,8 +40,8 @@ b <- cg_parameter(4, name = "b")
 # Perform some operations on the parameters
 c <- cg_sin(a) + cg_cos(b) - cg_tan(a)
 
-# Differentiate the graph with respect to c.
-grads <- cg_gradients(c, cg_run(c))
+# Differentiate the graph with respect to c
+grads <- cg_gradients(x, c, cg_run(x, c))
 
 # Retrieve the gradient of c with respect to a
 grads$a
