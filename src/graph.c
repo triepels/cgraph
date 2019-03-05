@@ -601,8 +601,6 @@ SEXP cg_graph_add_operator(SEXP graph, SEXP function, SEXP inputs, SEXP name)
 
   R_xlen_t n = Rf_xlength(inputs);
 
-  int m = 0;
-
   for(int i = 0; i < n; i++)
   {
     SEXP input = VECTOR_ELT(inputs, i);
@@ -613,7 +611,7 @@ SEXP cg_graph_add_operator(SEXP graph, SEXP function, SEXP inputs, SEXP name)
 
       SET_VECTOR_ELT(inputs, i, input);
 
-      m++;
+      UNPROTECT(1);
     }
   }
 
@@ -634,7 +632,7 @@ SEXP cg_graph_add_operator(SEXP graph, SEXP function, SEXP inputs, SEXP name)
 
   cg_graph_add_node(graph, op);
 
-  UNPROTECT(1 + m);
+  UNPROTECT(1);
 
   return op;
 }
