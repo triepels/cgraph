@@ -432,7 +432,7 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
 
     SEXP symbol = cg_node_symbol(root);
 
-    SEXP value = Rf_findVarInFrame(values, symbol);
+    SEXP value = PROTECT(Rf_findVarInFrame(values, symbol));
 
     if(!(Rf_isLogical(value) || Rf_isNumeric(value)))
     {
@@ -467,7 +467,7 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
       }
     }
 
-    UNPROTECT(1);
+    UNPROTECT(2);
   }
 
   UNPROTECT(1);
