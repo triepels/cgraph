@@ -77,7 +77,9 @@ char* cg_graph_gen_name(SEXP graph)
 
 int cg_graph_node_exists(SEXP graph, const char *name)
 {
-  SEXP nodes = Rf_findVarInFrame(graph, CG_NODES_SYMBOL);
+  int exists = FALSE;
+
+  SEXP nodes = PROTECT(Rf_findVarInFrame(graph, CG_NODES_SYMBOL));
 
   if(TYPEOF(nodes) == VECSXP)
   {
@@ -91,12 +93,16 @@ int cg_graph_node_exists(SEXP graph, const char *name)
 
       if(strcmp(CHAR(node_name), name) == 0)
       {
-        return TRUE;
+        exists = TRUE;
+
+        break;
       }
     }
   }
 
-  return FALSE;
+  UNPROTECT(1);
+
+  return exists;
 }
 
 void cg_graph_add_node(SEXP graph, SEXP node)
