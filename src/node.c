@@ -54,21 +54,16 @@ const char* cg_node_name(SEXP node)
 
 void cg_node_set_name(SEXP node, const char *name)
 {
-  SEXP node_name = Rf_findVarInFrame(node, CG_NAME_SYMBOL);
-
   if(strcmp(name, "") == 0)
   {
     Rf_errorcall(R_NilValue, "argument 'name' must be a non-blank character scalar");
   }
 
-  if(!Rf_isString(node_name))
-  {
-    Rf_defineVar(CG_NAME_SYMBOL, Rf_mkString(name), node);
-  }
-  else
-  {
-    SET_STRING_ELT(node_name, 0, Rf_mkChar(name));
-  }
+  SEXP node_name = PROTECT(Rf_mkString(name));
+
+  Rf_defineVar(CG_NAME_SYMBOL, node_name, node);
+
+  UNPROTECT(1);
 }
 
 SEXP cg_node_symbol(SEXP node)
