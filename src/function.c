@@ -91,11 +91,15 @@ void cg_function_set_grads(SEXP function, SEXP grads)
 
 void cg_function_add_grad(SEXP function, SEXP grad)
 {
-  SEXP grads = Rf_findVarInFrame(function, CG_DEF_SYMBOL);
+  int index;
+
+  SEXP grads = R_NilValue;
+
+  PROTECT_WITH_INDEX(grads = Rf_findVarInFrame(function, CG_DEF_SYMBOL), &index);
 
   if(TYPEOF(grads) != VECSXP)
   {
-    grads = PROTECT(Rf_allocVector(VECSXP, 1));
+    REPROTECT(grads = Rf_allocVector(VECSXP, 1), index);
 
     SET_VECTOR_ELT(grads, 0, grad);
   }
@@ -103,7 +107,7 @@ void cg_function_add_grad(SEXP function, SEXP grad)
   {
     R_len_t n = Rf_xlength(grads);
 
-    grads = PROTECT(Rf_lengthgets(grads, n + 1));
+    REPROTECT(grads = Rf_lengthgets(grads, n + 1), index);
 
     SET_VECTOR_ELT(grads, n, grad);
   }
