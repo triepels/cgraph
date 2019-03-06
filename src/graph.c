@@ -240,7 +240,7 @@ SEXP cg_graph_forward_dep(SEXP graph, SEXP target)
     }
     else
     {
-      if(visited[current - 1] == 1 & p > 0)
+      if(visited[current - 1] == 1 && p > 0)
       {
         SET_VECTOR_ELT(dep, m, node);
 
@@ -329,7 +329,7 @@ SEXP cg_graph_backward_dep(SEXP graph, SEXP target)
     }
     else
     {
-      if(visited[current - 1] == 1 & p > 0)
+      if(visited[current - 1] == 1 && p > 0)
       {
         SET_VECTOR_ELT(dep, m, node);
 
