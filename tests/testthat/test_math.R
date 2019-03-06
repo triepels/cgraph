@@ -13,10 +13,10 @@ test_that("Math 1",
   c <- (a + b) * (a - b) * (a / b)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -39,10 +39,10 @@ test_that("Math 2",
   c <- a^b + cg_sqrt(a)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -65,10 +65,10 @@ test_that("Math 3",
   c <- cg_exp(a) + cg_ln(b) + cg_log2(a) + cg_log10(b)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -91,10 +91,10 @@ test_that("Math 4",
   c <- cg_abs(-a / b)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -117,10 +117,10 @@ test_that("Math 5",
   c <- cg_sin(a) + cg_cos(b) - cg_tan(a)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -143,10 +143,10 @@ test_that("Math 6",
   c <- cg_sinh(a) + cg_cosh(b) - cg_tanh(a)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -169,10 +169,10 @@ test_that("Math 7",
   c <- cg_asin(a) + cg_acos(b) - cg_atan(a)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -195,10 +195,10 @@ test_that("Math 8",
   c <- cg_asinh(a) + cg_acosh(b) - cg_atanh(a)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -221,10 +221,10 @@ test_that("Math 9",
   c <- cg_sigmoid(a) * cg_sigmoid(b)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)

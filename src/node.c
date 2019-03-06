@@ -20,7 +20,9 @@ limitations under the License.
 #include <Rinternals.h>
 
 #include "node.h"
+#include "graph.h"
 #include "class.h"
+#include "session.h"
 #include "function.h"
 
 /*
@@ -567,52 +569,154 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
  * CONSTRUCTORS
  */
 
-SEXP cg_constant(SEXP value, const char *name)
+SEXP cg_constant(SEXP value, SEXP name)
 {
+  SEXP graph = PROTECT(cg_session_graph());
+
+  if(!Rf_isNull(name) && !Rf_isValidString(name))
+  {
+    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
+  }
+
   SEXP constant = PROTECT(cg_class2("cg_constant", "cg_node"));
 
-  cg_node_set_name(constant, name);
+  if(Rf_isNull(name))
+  {
+    char *gen_name = cg_graph_gen_name(graph);
+
+    cg_node_set_name(constant, gen_name);
+
+    free(gen_name);
+  }
+  else
+  {
+    cg_node_set_name(constant, CHAR(STRING_ELT(name, 0)));
+  }
 
   cg_node_set_value(constant, value);
 
-  UNPROTECT(1);
+  cg_graph_add_node(graph, constant);
+
+  UNPROTECT(2);
 
   return constant;
 }
 
-SEXP cg_parameter(SEXP value, const char *name)
+SEXP cg_parameter(SEXP value, SEXP name)
 {
+  SEXP graph = PROTECT(cg_session_graph());
+
+  if(!Rf_isNull(name) && !Rf_isValidString(name))
+  {
+    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
+  }
+
   SEXP parameter = PROTECT(cg_class2("cg_parameter", "cg_node"));
 
-  cg_node_set_name(parameter, name);
+  if(Rf_isNull(name))
+  {
+    char *gen_name = cg_graph_gen_name(graph);
+
+    cg_node_set_name(parameter, gen_name);
+
+    free(gen_name);
+  }
+  else
+  {
+    cg_node_set_name(parameter, CHAR(STRING_ELT(name, 0)));
+  }
 
   cg_node_set_value(parameter, value);
 
-  UNPROTECT(1);
+  cg_graph_add_node(graph, parameter);
+
+  UNPROTECT(2);
 
   return parameter;
 }
 
-SEXP cg_input(const char *name)
+SEXP cg_input(SEXP name)
 {
+  SEXP graph = PROTECT(cg_session_graph());
+
+  if(!Rf_isNull(name) && !Rf_isValidString(name))
+  {
+    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
+  }
+
   SEXP input = PROTECT(cg_class2("cg_input", "cg_node"));
 
-  cg_node_set_name(input, name);
+  if(Rf_isNull(name))
+  {
+    char *gen_name = cg_graph_gen_name(graph);
 
-  UNPROTECT(1);
+    cg_node_set_name(input, gen_name);
+
+    free(gen_name);
+  }
+  else
+  {
+    cg_node_set_name(input, CHAR(STRING_ELT(name, 0)));
+  }
+
+  cg_graph_add_node(graph, input);
+
+  UNPROTECT(2);
 
   return input;
 }
 
-SEXP cg_operator(SEXP function, SEXP inputs, const char *name)
+SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 {
+  SEXP graph = PROTECT(cg_session_graph());
+
+  if(!cg_is(function, "cg_function"))
+  {
+    Rf_errorcall(R_NilValue, "argument 'function' must be a cg_function object");
+  }
+
+  if(TYPEOF(inputs) != VECSXP)
+  {
+    Rf_errorcall(R_NilValue, "argument 'inputs' must be a list");
+  }
+
+  if(!Rf_isNull(name) && !Rf_isValidString(name))
+  {
+    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
+  }
+
+  R_xlen_t n = Rf_xlength(inputs);
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP input = VECTOR_ELT(inputs, i);
+
+    if(!cg_is(input, "cg_node"))
+    {
+      input = PROTECT(cg_constant(input, R_NilValue));
+
+      SET_VECTOR_ELT(inputs, i, input);
+
+      UNPROTECT(1);
+    }
+  }
+
   SEXP op = PROTECT(cg_class2("cg_operator", "cg_node"));
 
-  cg_node_set_name(op, name);
+  if(Rf_isNull(name))
+  {
+    char *gen_name = cg_graph_gen_name(graph);
+
+    cg_node_set_name(op, gen_name);
+
+    free(gen_name);
+  }
+  else
+  {
+    cg_node_set_name(op, CHAR(STRING_ELT(name, 0)));
+  }
 
   cg_node_set_function(op, function);
-
-  R_len_t n = Rf_xlength(inputs);
 
   for(int i = 0; i < n; i++)
   {
@@ -623,7 +727,9 @@ SEXP cg_operator(SEXP function, SEXP inputs, const char *name)
     cg_node_add_output(input, op);
   }
 
-  UNPROTECT(1);
+  cg_graph_add_node(graph, op);
+
+  UNPROTECT(2);
 
   return op;
 }

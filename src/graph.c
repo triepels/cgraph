@@ -23,6 +23,7 @@ limitations under the License.
 #include "class.h"
 #include "graph.h"
 #include "stack.h"
+#include "session.h"
 
 /*
  * SYMBOLS
@@ -475,173 +476,17 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
   return gradients;
 }
 
-SEXP cg_graph_add_constant(SEXP graph, SEXP value, SEXP name)
-{
-  if(!cg_is(graph, "cg_graph"))
-  {
-    Rf_errorcall(R_NilValue, "argument 'graph' must be a cg_graph object");
-  }
-
-  if(!Rf_isNull(name) && !Rf_isValidString(name))
-  {
-    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
-  }
-
-  SEXP constant = R_NilValue;
-
-  if(Rf_isNull(name))
-  {
-    char *gen_name = cg_graph_gen_name(graph);
-
-    constant = PROTECT(cg_constant(value, gen_name));
-
-    free(gen_name);
-  }
-  else
-  {
-    constant = PROTECT(cg_constant(value, CHAR(STRING_ELT(name, 0))));
-  }
-
-  cg_graph_add_node(graph, constant);
-
-  UNPROTECT(1);
-
-  return constant;
-}
-
-SEXP cg_graph_add_parameter(SEXP graph, SEXP value, SEXP name)
-{
-  if(!cg_is(graph, "cg_graph"))
-  {
-    Rf_errorcall(R_NilValue, "argument 'graph' must be a cg_graph object");
-  }
-
-  if(!Rf_isNull(name) && !Rf_isValidString(name))
-  {
-    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
-  }
-
-  SEXP parameter = R_NilValue;
-
-  if(Rf_isNull(name))
-  {
-    char *gen_name = cg_graph_gen_name(graph);
-
-    parameter = PROTECT(cg_parameter(value, gen_name));
-
-    free(gen_name);
-  }
-  else
-  {
-    parameter = PROTECT(cg_parameter(value, CHAR(STRING_ELT(name, 0))));
-  }
-
-  cg_graph_add_node(graph, parameter);
-
-  UNPROTECT(1);
-
-  return parameter;
-}
-
-SEXP cg_graph_add_input(SEXP graph, SEXP name)
-{
-  if(!cg_is(graph, "cg_graph"))
-  {
-    Rf_errorcall(R_NilValue, "argument 'graph' must be a cg_graph object");
-  }
-
-  if(!Rf_isNull(name) && !Rf_isValidString(name))
-  {
-    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
-  }
-
-  SEXP input = R_NilValue;
-
-  if(Rf_isNull(name))
-  {
-    char *gen_name = cg_graph_gen_name(graph);
-
-    input = PROTECT(cg_input(gen_name));
-
-    free(gen_name);
-  }
-  else
-  {
-    input = PROTECT(cg_input(CHAR(STRING_ELT(name, 0))));
-  }
-
-  cg_graph_add_node(graph, input);
-
-  UNPROTECT(1);
-
-  return input;
-}
-
-SEXP cg_graph_add_operator(SEXP graph, SEXP function, SEXP inputs, SEXP name)
-{
-  if(!cg_is(graph, "cg_graph"))
-  {
-    Rf_errorcall(R_NilValue, "argument 'graph' must be a cg_graph object");
-  }
-
-  if(!cg_is(function, "cg_function"))
-  {
-    Rf_errorcall(R_NilValue, "argument 'function' must be a cg_function object");
-  }
-
-  if(TYPEOF(inputs) != VECSXP)
-  {
-    Rf_errorcall(R_NilValue, "argument 'inputs' must be a list");
-  }
-
-  if(!Rf_isNull(name) && !Rf_isValidString(name))
-  {
-    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
-  }
-
-  R_xlen_t n = Rf_xlength(inputs);
-
-  for(int i = 0; i < n; i++)
-  {
-    SEXP input = VECTOR_ELT(inputs, i);
-
-    if(!cg_is(input, "cg_node"))
-    {
-      input = PROTECT(cg_graph_add_constant(graph, input, R_NilValue));
-
-      SET_VECTOR_ELT(inputs, i, input);
-
-      UNPROTECT(1);
-    }
-  }
-
-  SEXP op = R_NilValue;
-
-  if(Rf_isNull(name))
-  {
-    char *gen_name = cg_graph_gen_name(graph);
-
-    op = PROTECT(cg_operator(function, inputs, gen_name));
-
-    free(gen_name);
-  }
-  else
-  {
-    op = PROTECT(cg_operator(function, inputs, CHAR(STRING_ELT(name, 0))));
-  }
-
-  cg_graph_add_node(graph, op);
-
-  UNPROTECT(1);
-
-  return op;
-}
-
 /*
  * PUBLIC CONSTRUCTORS
  */
 
 SEXP cg_graph()
 {
-  return cg_class1("cg_graph");
+  SEXP graph = PROTECT(cg_class1("cg_graph"));
+
+  cg_session_set_graph(graph);
+
+  UNPROTECT(1);
+
+  return graph;
 }

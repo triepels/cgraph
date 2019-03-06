@@ -21,8 +21,10 @@ limitations under the License.
 #include <R_ext/Rdynload.h>
 
 #include "math.h"
+#include "node.h"
 #include "class.h"
 #include "graph.h"
+#include "session.h"
 #include "function.h"
 #include "internal.h"
 
@@ -31,16 +33,20 @@ limitations under the License.
  */
 
 static const R_CallMethodDef CallEntries[] = {
+  // Node
+  {"cg_constant", (DL_FUNC) &cg_constant, 2},
+  {"cg_parameter", (DL_FUNC) &cg_parameter, 2},
+  {"cg_input", (DL_FUNC) &cg_input, 1},
+  {"cg_operator", (DL_FUNC) &cg_operator, 3},
   // Graph
   {"cg_graph", (DL_FUNC) &cg_graph, 0},
-  {"cg_constant", (DL_FUNC) &cg_graph_add_constant, 3},
-  {"cg_parameter", (DL_FUNC) &cg_graph_add_parameter, 3},
-  {"cg_input", (DL_FUNC) &cg_graph_add_input, 2},
-  {"cg_operator", (DL_FUNC) &cg_graph_add_operator, 4},
-  {"cg_run", (DL_FUNC) &cg_graph_run, 3},
-  {"cg_gradients", (DL_FUNC) &cg_graph_gradients, 5},
+  {"cg_graph_run", (DL_FUNC) &cg_graph_run, 3},
+  {"cg_graph_gradients", (DL_FUNC) &cg_graph_gradients, 5},
   // Function
   {"cg_function", (DL_FUNC) &cg_function, 2},
+  // Session
+  {"cg_session_graph", (DL_FUNC) &cg_session_graph, 0},
+  {"cg_session_set_graph", (DL_FUNC) &cg_session_set_graph, 1},
   // Internal
   {"bsum", (DL_FUNC) &bsum, 2},
   {"approx_gradients", (DL_FUNC) &approx_gradients, 6},
@@ -53,4 +59,6 @@ void R_init_cgraph(DllInfo *dll)
 {
   R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
   R_useDynamicSymbols(dll, FALSE);
+
+  cg_session();
 }

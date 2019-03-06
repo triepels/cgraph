@@ -24,10 +24,10 @@ test_that("Operators with equivalent inputs",
   b <- (a + a) + (a - a) + (a * a) + (a / a)
 
   # Evaluate graph
-  values <- cg_run(x, b)
+  values <- cg_graph_run(x, b)
 
   # Calculate gradients
-  grads <- cg_gradients(x, b, values)
+  grads <- cg_graph_gradients(x, b, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, b, values)
@@ -50,10 +50,10 @@ test_that("Graph with multiple outputs",
   d <- a / b
 
   # Evaluate node c in the graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -63,10 +63,10 @@ test_that("Graph with multiple outputs",
   expect_equivalent(grads$b, approx$b, tolerance = 1e-4)
 
   # Evaluate node d in the graph
-  values <- cg_run(x, d)
+  values <- cg_graph_run(x, d)
 
   # Calculate gradients
-  grads <- cg_gradients(x, d, values)
+  grads <- cg_graph_gradients(x, d, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, d, values)
@@ -91,10 +91,10 @@ test_that("Large graph (10000 operators)",
   }
 
   # Evaluate the graph
-  values <- cg_run(x, a)
+  values <- cg_graph_run(x, a)
 
   # Calculate gradients
-  grads <- cg_gradients(x, a, values)
+  grads <- cg_graph_gradients(x, a, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, a, values)

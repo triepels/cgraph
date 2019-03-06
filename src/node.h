@@ -62,12 +62,12 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients);
  * PRIVATE CONSTRUCTORS
  */
 
-SEXP cg_constant(SEXP value, const char *name);
+SEXP cg_constant(SEXP value, SEXP name);
 
-SEXP cg_parameter(SEXP value, const char *name);
+SEXP cg_parameter(SEXP value, SEXP name);
 
-SEXP cg_input(const char *name);
+SEXP cg_input(SEXP name);
 
-SEXP cg_operator(SEXP function, SEXP inputs, const char *name);
+SEXP cg_operator(SEXP function, SEXP inputs, SEXP name);
 
 #endif

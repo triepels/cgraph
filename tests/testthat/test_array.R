@@ -13,10 +13,10 @@ test_that("Array 1",
   c <- cg_prod(cg_matmul(a, b)) * cg_sum(cg_matmul(a, b))
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -39,10 +39,10 @@ test_that("Array 2",
   c <- cg_mean(cg_crossprod(a, b) + cg_tcrossprod(a, b) + cg_crossprod(a) + cg_tcrossprod(b))
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -65,10 +65,10 @@ test_that("Array 3",
   c <- cg_rowsums(cg_linear(a, b, cg_colsums(b)))
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -91,10 +91,10 @@ test_that("Array 4",
   c <- cg_max(a) * cg_min(b)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -117,10 +117,10 @@ test_that("Array 5",
   c <- cg_pmax(a, b) * cg_pmin(a, b)
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -143,10 +143,10 @@ test_that("Array 6",
   c <- cg_sum(a + cg_as_numeric(cg_t(b)))
 
   # Evaluate graph
-  values <- cg_run(x, c)
+  values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
