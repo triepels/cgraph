@@ -351,7 +351,7 @@ void cg_node_eval(SEXP node, SEXP values)
 
     if(!Rf_isNull(value))
     {
-      Rf_defineVar(symbol, cg_node_value(node), values);
+      Rf_defineVar(symbol, value, values);
     }
   }
 
@@ -368,7 +368,7 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
 
   SEXP outputs = PROTECT(cg_node_outputs(node, TRUE));
 
-  R_len_t n, m = Rf_xlength(outputs);
+  R_len_t n = 0, m = Rf_xlength(outputs);
 
   for(int j = 0; j < m; j++)
   {
