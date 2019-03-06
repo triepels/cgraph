@@ -64,7 +64,7 @@ cg_graph_run <- function(graph, target, values = new.env())
 {
   if(is.list(values))
   {
-    values <- list2env(values, parent = emptyenv())
+    values <- list2env(values)
   }
 
   .Call("cg_graph_run", graph, target, values, PACKAGE = "cgraph")
@@ -109,7 +109,7 @@ cg_graph_gradients <- function(graph, target, values = new.env(), index = 1)
 {
   if(is.list(values))
   {
-    values <- list2env(values, parent = emptyenv())
+    values <- list2env(values)
   }
 
   .Call("cg_graph_gradients", graph, target, values, new.env(), index, PACKAGE = "cgraph")
