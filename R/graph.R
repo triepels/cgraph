@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' @useDynLib cgraph
-NULL
-
 # Session environment that stores the active graph
 session <- new.env()
 
@@ -30,6 +27,7 @@ session <- new.env()
 #' x <- cg_graph()
 #'
 #' @author Ron Triepels
+#' @useDynLib cgraph
 #' @export
 cg_graph <- function()
 {
