@@ -338,6 +338,12 @@ void cg_node_eval(SEXP node, SEXP values)
 
       SEXP input_value = PROTECT(Rf_findVarInFrame(values, cg_node_symbol(input)));
 
+      if(input_value == R_UnboundValue)
+      {
+        Rf_errorcall(R_NilValue, "unable to retrieve value of node '%s'",
+          cg_node_name(input));
+      }
+
       SETCAR(arg, input_value);
 
       UNPROTECT(1);
@@ -353,12 +359,7 @@ void cg_node_eval(SEXP node, SEXP values)
   }
   else
   {
-    SEXP value = cg_node_value(node);
-
-    if(!Rf_isNull(value))
-    {
-      Rf_defineVar(symbol, value, values);
-    }
+    Rf_defineVar(symbol, cg_node_value(node), values);
   }
 
   UNPROTECT(1);
@@ -431,6 +432,12 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
             SEXP input = VECTOR_ELT(output_inputs, l);
 
             SEXP input_value = PROTECT(Rf_findVarInFrame(values, cg_node_symbol(input)));
+
+            if(input_value == R_UnboundValue)
+            {
+              Rf_errorcall(R_NilValue, "unable to retrieve value of node '%s'",
+                cg_node_name(input));
+            }
 
             SETCAR(args, input_value);
 
