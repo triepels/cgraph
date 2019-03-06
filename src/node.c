@@ -334,12 +334,18 @@ void cg_node_eval(SEXP node, SEXP values)
 
     for(SEXP arg = args; arg != R_NilValue; arg = CDR(arg))
     {
-      SETCAR(arg, cg_node_symbol(VECTOR_ELT(inputs, i)));
+      SEXP input = VECTOR_ELT(inputs, i);
+
+      SEXP input_value = PROTECT(Rf_findVarInFrame(values, cg_node_symbol(input)));
+
+      SETCAR(arg, input_value);
+
+      UNPROTECT(1);
 
       i++;
     }
 
-    SEXP value = PROTECT(Rf_eval(call, values));
+    SEXP value = PROTECT(Rf_eval(call, R_EmptyEnv));
 
     Rf_defineVar(symbol, value, values);
 
@@ -380,6 +386,14 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
 
     if(output_gradient != R_UnboundValue)
     {
+      SEXP output_value = PROTECT(Rf_findVarInFrame(values, output_symbol));
+
+      if(output_value == R_UnboundValue)
+      {
+        Rf_errorcall(R_NilValue, "unable to retrieve value of node '%s'",
+          cg_node_name(output));
+      }
+
       SEXP output_inputs = PROTECT(cg_node_inputs(output, FALSE));
 
       SEXP output_function = PROTECT(cg_node_function(output));
@@ -416,20 +430,24 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
           {
             SEXP input = VECTOR_ELT(output_inputs, l);
 
-            SETCAR(args, cg_node_symbol(input));
+            SEXP input_value = PROTECT(Rf_findVarInFrame(values, cg_node_symbol(input)));
+
+            SETCAR(args, input_value);
 
             args = CDR(args);
+
+            UNPROTECT(1);
           }
 
           SET_TAG(args, Rf_install("val"));
 
-          SETCAR(args, output_symbol);
+          SETCAR(args, output_value);
 
           SET_TAG(CDR(args), Rf_install("grad"));
 
           SETCADR(args, output_gradient);
 
-          SEXP result = PROTECT(Rf_eval(call, values));
+          SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
 
           if(!(Rf_isLogical(result) || Rf_isNumeric(result)))
           {
@@ -527,7 +545,7 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
         }
       }
 
-      UNPROTECT(3);
+      UNPROTECT(4);
     }
 
     UNPROTECT(1);
