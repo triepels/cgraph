@@ -340,7 +340,7 @@ void cg_node_eval(SEXP node, SEXP values)
 
       if(input_value == R_UnboundValue)
       {
-        Rf_errorcall(R_NilValue, "unable to retrieve value of node '%s'",
+        Rf_errorcall(R_NilValue, "node '%s' has no value",
           cg_node_name(input));
       }
 
@@ -391,7 +391,7 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
 
       if(output_value == R_UnboundValue)
       {
-        Rf_errorcall(R_NilValue, "unable to retrieve value of node '%s'",
+        Rf_errorcall(R_NilValue, "node '%s' has no value",
           cg_node_name(output));
       }
 
@@ -435,7 +435,7 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
 
             if(input_value == R_UnboundValue)
             {
-              Rf_errorcall(R_NilValue, "unable to retrieve value of node '%s'",
+              Rf_errorcall(R_NilValue, "node '%s' has no value",
                 cg_node_name(input));
             }
 
