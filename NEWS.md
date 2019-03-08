@@ -1,3 +1,28 @@
+cgraph 4.0.0
+----------------------------------------------------------------
+
+Comments:
+
+* The C-API has been completely reworked.
+* Package `R6` has been removed from the `Imports` section in the package description.
+* Package `Rgraphviz` has been removed from the `Suggests` section in the package description.
+* The R6 class `cgraph` is removed. To create a new computational graph, use function `cg_graph` instead.
+* Method `get_parms` and `add_parms` are no longer available.
+* Method `active` is no longer available. The active graph can now be retrieved and changed by function `cg_session_graph` and `cg_session_set_graph` respectively.
+* Method `adj_mat` is no longer available.
+* Function `const`, `input`, `parm`, and `opr` have been renamed to `cg_constant`, `cg_input`, `cg_parameter`, and `cg_operator`.
+* Function `val` and `set` are removed. The value of a constant or parameter node can be changed directly by calling `x$value` where `x` is the environment of a `cg_node` object.
+* Function `run` and `gradients` have been renamed to `cg_graph_run` and `cg_graph_gradients` respectively.
+
+Features:
+
+* The function that is called by an operator node is no longer stored as a symbol in a `cg_node` object. Instead. each function now has its own global `cg_function` object and can be linked to an operator node. This significantly reduces the size of a `cg_graph` object.
+
+Bug fixes:
+
+* Fixed a bug that caused a node to be evaluated to its corresponding `cg_node` environment rather than its value when calling `cg_graph_run` and `cg_graph_gradients`.
+* Fixed a bug that caused a segfault when calling function `cg_graph_run` and `cg_graph_gradients` on a `cg_graph` object which contains nodes with an invalid id.
+
 cgraph 3.0.1
 ----------------------------------------------------------------
 
