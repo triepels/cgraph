@@ -27,9 +27,12 @@ Any objects that are supplied to argument \code{inputs} that are not cg_node obj
 x <- cg_graph()
 
 # Create a custom negation function
-f <- cg_function(def = function(x) -x, grads = list(function(x, val, grad) -grad))
+f <- cg_function(
+    def = function(x) -x,
+    grads = list(function(x, val, grad) -grad)
+)
 
-# Add a negation operator with name 'a' to the graph.
+# Add a an operator with the negation function to the graph.
 a <- cg_operator(f, list(10), name = "a")
 
 }
