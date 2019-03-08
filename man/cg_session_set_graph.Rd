@@ -28,7 +28,7 @@ x <- cg_graph()
 y <- cg_graph()
 
 # Set x to be the active graph
-cg_session_set_graph(y)
+cg_session_set_graph(x)
 
 }
 \author{
