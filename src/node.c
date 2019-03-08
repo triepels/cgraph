@@ -571,7 +571,7 @@ void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients)
 
 SEXP cg_constant(SEXP value, SEXP name)
 {
-  SEXP graph = PROTECT(cg_session_graph());
+  SEXP graph = cg_session_graph();
 
   if(!Rf_isNull(name) && !Rf_isValidString(name))
   {
@@ -597,14 +597,14 @@ SEXP cg_constant(SEXP value, SEXP name)
 
   cg_graph_add_node(graph, constant);
 
-  UNPROTECT(2);
+  UNPROTECT(1);
 
   return constant;
 }
 
 SEXP cg_parameter(SEXP value, SEXP name)
 {
-  SEXP graph = PROTECT(cg_session_graph());
+  SEXP graph = cg_session_graph();
 
   if(!Rf_isNull(name) && !Rf_isValidString(name))
   {
@@ -630,14 +630,14 @@ SEXP cg_parameter(SEXP value, SEXP name)
 
   cg_graph_add_node(graph, parameter);
 
-  UNPROTECT(2);
+  UNPROTECT(1);
 
   return parameter;
 }
 
 SEXP cg_input(SEXP name)
 {
-  SEXP graph = PROTECT(cg_session_graph());
+  SEXP graph = cg_session_graph();
 
   if(!Rf_isNull(name) && !Rf_isValidString(name))
   {
@@ -661,14 +661,14 @@ SEXP cg_input(SEXP name)
 
   cg_graph_add_node(graph, input);
 
-  UNPROTECT(2);
+  UNPROTECT(1);
 
   return input;
 }
 
 SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 {
-  SEXP graph = PROTECT(cg_session_graph());
+  SEXP graph = cg_session_graph();
 
   if(!cg_is(function, "cg_function"))
   {
@@ -729,7 +729,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   cg_graph_add_node(graph, op);
 
-  UNPROTECT(2);
+  UNPROTECT(1);
 
   return op;
 }

@@ -34,7 +34,7 @@ limitations under the License.
 
 SEXP cg_session_get()
 {
-  SEXP env = R_FindNamespace(Rf_mkString("cgraph"));
+  SEXP env = PROTECT(R_FindNamespace(Rf_mkString("cgraph")));
 
   SEXP session = PROTECT(Rf_eval(CG_SESSION_SYMBOL, env));
 
@@ -43,7 +43,7 @@ SEXP cg_session_get()
     Rf_errorcall(R_NilValue, "invalid session");
   }
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 
   return session;
 }
@@ -92,11 +92,11 @@ SEXP cg_session()
 {
   SEXP session = PROTECT(cg_class1("cg_session"));
 
-  SEXP env = R_FindNamespace(Rf_mkString("cgraph"));
+  SEXP env = PROTECT(R_FindNamespace(Rf_mkString("cgraph")));
 
   Rf_defineVar(CG_SESSION_SYMBOL, session, env);
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 
   return session;
 }
