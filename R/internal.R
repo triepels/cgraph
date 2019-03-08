@@ -40,7 +40,7 @@ bsum <- function(x, block_size = 1)
 #' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
 #' @param eps numeric scalar, step size. Defaults to 1e-4.
 #'
-#' @note All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time.
+#' @note All nodes required to compute the target node must have a value, or their value must be able to be computed at run-time. The values of the nodes can be obtained by first evaluating function \link[cgraph]{cg_graph_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
 #'
 #' The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the value of the target node is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The gradients have the same shape as the values of the nodes.
 #'
@@ -50,12 +50,12 @@ bsum <- function(x, block_size = 1)
 #'
 #' @author Ron Triepels
 #' @keywords internal
-approx_gradients <- function(graph, target, values = new.env(parent = emptyenv()), index = 1, eps = 1e-4)
+approx_gradients <- function(graph, target, values = new.env(), index = 1, eps = 1e-4)
 {
   if(is.list(values))
   {
     values <- list2env(values)
   }
 
-  .Call("approx_gradients", graph, target, values, new.env(parent = emptyenv()), index, eps, PACKAGE = "cgraph")
+  .Call("approx_gradients", graph, target, values, new.env(), index, eps, PACKAGE = "cgraph")
 }

@@ -19,12 +19,15 @@
 #' @param def function, the definition of the function.
 #' @param grads list of functions, the gradient functions with respect to each input (optional).
 #'
-#' @note If the function consumes any inputs, then the gradient function with respect to these inputs must be provided to argument \code{grads}. These gradients must be a function of each input's gradient and have as arguments the inputs of the function including argument \code{val} and \code{grad}. These latter two arguments evaluate to the value of the function and its gradient respectively at run-time.
+#' @note If the function consumes any inputs, then the gradient function with respect to these inputs must be provided to argument \code{grads}. These gradients must be a function of each input's gradient and take as arguments the inputs of the function including argument \code{val} and \code{grad}. These latter two arguments evaluate to the value of the function and its gradient respectively at run-time.
 #'
 #' @return cg_function object.
 #'
 #' @examples #' # Create a custom negation function
-#' f <- cg_function(def = function(x) -x, grads = list(function(x, val, grad) -grad))
+#' f <- cg_function(
+#'     def = function(x) -x,
+#'     grads = list(function(x, val, grad) -grad)
+#' )
 #'
 #' @export
 #' @author Ron Triepels

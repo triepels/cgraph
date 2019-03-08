@@ -20,7 +20,7 @@ environment, the value of the node including the value of all ancestors of the n
 Evaluate a given target node in a graph.
 }
 \note{
-All nodes required to compute the node must have a value or their value must be able to be computed at run-time. Argument \code{values} can be used to substitute values for input nodes that do not have a value. Only those nodes needed to compute the node are evaluated and their values are returned.
+All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Argument \code{values} can be used to substitute values for input nodes that do not have a value. Only those nodes needed to compute the node are evaluated and their values are returned.
 }
 \examples{
 # Initialize a computational graph

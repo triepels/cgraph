@@ -25,7 +25,7 @@ environment, the gradients of all ancestors of the node (including the target no
 Differentiate a graph with respect to a given target node by numerical differentiation.
 }
 \note{
-All nodes required to compute node \code{name} must have a value, or their value must be able to be computed at run-time.
+All nodes required to compute the target node must have a value, or their value must be able to be computed at run-time. The values of the nodes can be obtained by first evaluating function \link[cgraph]{cg_graph_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
 
 The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the value of the target node is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The gradients have the same shape as the values of the nodes.
 

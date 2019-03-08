@@ -39,7 +39,7 @@ cg_graph <- function()
 #' @param target cg_node object, node in the graph that is evaluated.
 #' @param values named list or environment, values that are subsituted for the input nodes in the graph.
 #'
-#' @note All nodes required to compute the node must have a value or their value must be able to be computed at run-time. Argument \code{values} can be used to substitute values for input nodes that do not have a value. Only those nodes needed to compute the node are evaluated and their values are returned.
+#' @note All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Argument \code{values} can be used to substitute values for input nodes that do not have a value. Only those nodes needed to compute the node are evaluated and their values are returned.
 #'
 #' @return environment, the value of the node including the value of all ancestors of the node in the graph.
 #'
@@ -79,7 +79,7 @@ cg_graph_run <- function(graph, target, values = new.env())
 #' @param values named list or environment, values that are subsituted for the input nodes in the graph.
 #' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
 #'
-#' @note All nodes required to compute the node must have a value, or their value must be able to be computed at run-time. The values of nodes can be obtained by first evaluating function \link[cgraph]{cg_graph_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
+#' @note All nodes required to compute the target node must have a value, or their value must be able to be computed at run-time. The values of the nodes can be obtained by first evaluating function \link[cgraph]{cg_graph_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
 #'
 #' Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated.
 #'
