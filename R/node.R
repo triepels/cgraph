@@ -73,11 +73,11 @@ cg_input <- function(name = NULL)
 #'
 #' Add an operation node to the active graph.
 #'
-#' @param fun cg_function object, function executed by the node.
+#' @param fun cg_function object, function evaluated by the node.
 #' @param inputs list, the nodes that are consumed by the operation.
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
 #'
-#' @note Any objects that are supplied to argument \code{inputs} that are not cg_node objects are automatically converted to constant nodes.
+#' @note Any objects that are supplied to argument \code{inputs} that are not cg_node objects are implicitly converted to cg_constant objects.
 #'
 #' @return cg_node object.
 #'

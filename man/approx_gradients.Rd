@@ -4,8 +4,8 @@
 \alias{approx_gradients}
 \title{Approximate Gradients}
 \usage{
-approx_gradients(graph, target, values = new.env(parent = emptyenv()),
-  index = 1, eps = 1e-04)
+approx_gradients(graph, target, values = new.env(), index = 1,
+  eps = 1e-04)
 }
 \arguments{
 \item{graph}{cg_graph object, graph that is differentiated.}

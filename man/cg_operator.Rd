@@ -7,7 +7,7 @@
 cg_operator(fun, inputs, name = NULL)
 }
 \arguments{
-\item{fun}{cg_function object, function executed by the node.}
+\item{fun}{cg_function object, function evaluated by the node.}
 
 \item{inputs}{list, the nodes that are consumed by the operation.}
 
@@ -20,7 +20,7 @@ cg_node object.
 Add an operation node to the active graph.
 }
 \note{
-Any objects that are supplied to argument \code{inputs} that are not cg_node objects are automatically converted to constant nodes.
+Any objects that are supplied to argument \code{inputs} that are not cg_node objects are implicitly converted to cg_constant objects.
 }
 \examples{
 # Initialize a computational graph
