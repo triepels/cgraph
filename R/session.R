@@ -42,7 +42,7 @@ cg_session_graph <- function()
 #' @export
 cg_session_set_graph <- function(graph)
 {
-  .Call("cg_session_set_graph", graph, PACKAGE = "cgraph")
+  invisible(.Call("cg_session_set_graph", graph, PACKAGE = "cgraph"))
 }
 
 #' @export
