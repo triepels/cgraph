@@ -16,7 +16,7 @@ Comments:
 
 Features:
 
-* The function that is called by an operator node is no longer stored as a symbol in a `cg_node` object. Instead. each function now has its own global `cg_function` object and can be linked to an operator node. This significantly reduces the size of a `cg_graph` object.
+* The function that is called by an operator node is no longer stored as a symbol in the environment of the operator. Instead. each function now has its own global `cg_function` object which can be linked to an operator node. This significantly reduces the size of a `cg_graph` object.
 
 Bug fixes:
 
