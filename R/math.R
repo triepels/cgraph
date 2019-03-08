@@ -879,7 +879,7 @@ delayedAssign("atanh", cg_function(
 
 #' Sigmoid
 #'
-#' Calculate \code{1 / (1 + e^-x)}.
+#' Calculate \code{1 / (1 + exp(-x))}.
 #'
 #' @param x either a cg_node object or a numeric vector or array.
 #' @param name character scalar, name of the operation (optional).

@@ -15,7 +15,7 @@ cg_sigmoid(x, name = NULL)
 cg_operator object, node of the operation.
 }
 \description{
-Calculate \code{1 / (1 + e^-x)}.
+Calculate \code{1 / (1 + exp(-x))}.
 }
 \author{
 Ron Triepels
