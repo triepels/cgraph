@@ -1,3 +1,10 @@
+cgraph 4.0.1
+----------------------------------------------------------------
+
+Bug fixes:
+* Function 'cg_session_set_graph' no longer prints `NULL` to the console when the active graph is changed. 
+* Operator `cg_sigmoid` now works correctly when argument `x` is a logical or integer vector or array.
+
 cgraph 4.0.0
 ----------------------------------------------------------------
 
@@ -10,13 +17,13 @@ Comments:
 * Method `get_parms` and `add_parms` are no longer available.
 * Method `active` is no longer available. The active graph can now be retrieved and changed by function `cg_session_graph` and `cg_session_set_graph` respectively.
 * Method `adj_mat` is no longer available.
-* Function `const`, `input`, `parm`, and `opr` have been renamed to `cg_constant`, `cg_input`, `cg_parameter`, and `cg_operator`.
+* Function `const`, `input`, `parm`, and `opr` have been renamed to `cg_constant`, `cg_input`, `cg_parameter`, and `cg_operator` respectively.
 * Function `val` and `set` are removed. The value of a constant or parameter node can be changed directly by calling `x$value` where `x` is the environment of a `cg_node` object.
 * Function `run` and `gradients` have been renamed to `cg_graph_run` and `cg_graph_gradients` respectively.
 
 Features:
 
-* The function that is called by an operator node is no longer stored as a symbol in the environment of the operator. Instead. each function now has its own global `cg_function` object which can be linked to an operator node. This significantly reduces the size of a `cg_graph` object.
+* The function that is called by an operator node is no longer stored as a symbol in the environment of the operator. Instead, each function now has its own global `cg_function` object which can be linked to an operator node. This significantly reduces the size of a `cg_graph` object.
 
 Bug fixes:
 
