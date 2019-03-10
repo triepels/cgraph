@@ -56,14 +56,14 @@ SEXP cg_session_graph()
 {
   SEXP session = PROTECT(cg_session_get());
 
-  SEXP graph = Rf_findVarInFrame(session, CG_GRAPH_SYMBOL);
+  SEXP graph = PROTECT(Rf_findVarInFrame(session, CG_GRAPH_SYMBOL));
 
   if(graph == R_UnboundValue)
   {
     Rf_errorcall(R_NilValue, "no active graph has been set");
   }
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 
   return graph;
 }
