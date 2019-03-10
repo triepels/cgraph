@@ -54,6 +54,24 @@ SEXP sigmoid(SEXP x)
 
         b[i] = (b[i] > max) ? max : b[i];
       }
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      const int *a = INTEGER_RO(x);
+
+      for(int i = 0; i < n; i++)
+      {
+        b[i] = 1 / (1 + exp(-a[i]));
+
+        b[i] = (b[i] < min) ? min : b[i];
+
+        b[i] = (b[i] > max) ? max : b[i];
+      }
+
+      break;
     }
   }
 
