@@ -200,7 +200,7 @@ SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP
 
         REPROTECT(target_value = Rf_findVarInFrame(values, target_symbol), target_index);
 
-        double y1 = REAL_ELT(target_value, k - 1);
+        double y1 = REAL(target_value)[k - 1];
 
         x[j] -= 2 * eps;
 
@@ -208,7 +208,7 @@ SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP
 
         REPROTECT(target_value = Rf_findVarInFrame(values, target_symbol), target_index);
 
-        double y2 = REAL_ELT(target_value, k - 1);
+        double y2 = REAL(target_value)[k - 1];
 
         x[j] += eps;
 
