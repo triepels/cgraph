@@ -2,6 +2,7 @@ cgraph 4.0.1
 ----------------------------------------------------------------
 
 Bug fixes:
+* Fixed an bug that caused an error when installing `cgraph` on R versions before 3.5.
 * Function 'cg_session_set_graph' no longer prints `NULL` to the console when the active graph is changed. 
 * Operator `cg_sigmoid` now works correctly when argument `x` is a logical or integer vector or array.
 
@@ -11,8 +12,6 @@ cgraph 4.0.0
 Comments:
 
 * The C-API has been completely reworked.
-* Package `R6` has been removed from the `Imports` section in the package description.
-* Package `Rgraphviz` has been removed from the `Suggests` section in the package description.
 * The R6 class `cgraph` is removed. To create a new computational graph, use function `cg_graph` instead.
 * Method `get_parms` and `add_parms` are no longer available.
 * Method `active` is no longer available. The active graph can now be retrieved and changed by function `cg_session_graph` and `cg_session_set_graph` respectively.
@@ -24,6 +23,11 @@ Comments:
 Features:
 
 * The function that is called by an operator node is no longer stored as a symbol in the environment of the operator. Instead, each function now has its own global `cg_function` object which can be linked to an operator node. This significantly reduces the size of a `cg_graph` object.
+
+Documentation:
+
+* Package `R6` has been removed from the `Imports` section in the package description.
+* Package `Rgraphviz` has been removed from the `Suggests` section in the package description.
 
 Bug fixes:
 
