@@ -59,7 +59,7 @@ SEXP bsum(SEXP x, SEXP block_size)
   {
     case REALSXP :
     {
-      const double *a = REAL_RO(x);
+      double *a = REAL(x);
 
       for(int i = 0, j = 0; i < n; i++,
           j = (++j == s) ? 0 : j)
@@ -72,7 +72,7 @@ SEXP bsum(SEXP x, SEXP block_size)
     case LGLSXP :
     case INTSXP :
     {
-      const int *a = INTEGER_RO(x);
+      int *a = INTEGER(x);
 
       for(int i = 0, j = 0; i < n; i++,
           j = (++j == s) ? 0 : j)

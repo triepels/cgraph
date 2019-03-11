@@ -44,7 +44,7 @@ SEXP sigmoid(SEXP x)
   {
     case REALSXP :
     {
-      const double *a = REAL_RO(x);
+      double *a = REAL(x);
 
       for(int i = 0; i < n; i++)
       {
@@ -60,7 +60,7 @@ SEXP sigmoid(SEXP x)
     case LGLSXP :
     case INTSXP :
     {
-      const int *a = INTEGER_RO(x);
+      int *a = INTEGER(x);
 
       for(int i = 0; i < n; i++)
       {
