@@ -2,6 +2,7 @@ cgraph 4.0.1
 ----------------------------------------------------------------
 
 Bug fixes:
+
 * Fixed an bug that caused an error when installing `cgraph` on R versions before 3.5.
 * Function 'cg_session_set_graph' no longer prints `NULL` to the console when the active graph is changed. 
 * Operator `cg_sigmoid` now works correctly when argument `x` is a logical or integer vector or array.
