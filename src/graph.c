@@ -60,7 +60,7 @@ char* cg_graph_gen_name(SEXP graph)
 
   if(TYPEOF(nodes) != VECSXP)
   {
-    strcpy(name, "x1");
+    strcpy(name, "v1");
   }
   else
   {
@@ -68,7 +68,7 @@ char* cg_graph_gen_name(SEXP graph)
 
     do
     {
-      sprintf(name, "x%d", ++n);
+      sprintf(name, "v%d", ++n);
 
     } while (cg_graph_node_exists(graph, name));
   }
