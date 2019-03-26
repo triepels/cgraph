@@ -260,6 +260,8 @@ SEXP cg_graph_forward_dep(SEXP graph, SEXP target)
 
   SETLENGTH(dep, m);
 
+  free(visited);
+
   UNPROTECT(1);
 
   return dep;
@@ -348,6 +350,8 @@ SEXP cg_graph_backward_dep(SEXP graph, SEXP target)
   cg_stack_destroy(stack);
 
   SETLENGTH(dep, m);
+
+  free(visited);
 
   UNPROTECT(1);
 
