@@ -92,11 +92,29 @@ void cg_node_set_id(SEXP node, const int id)
     Rf_errorcall(R_NilValue, "argument 'id' must be higher than or equal to 1");
   }
 
-  SEXP node_id = PROTECT(Rf_ScalarInteger(id));
+  Rf_defineVar(CG_ID_SYMBOL, Rf_ScalarInteger(id), node);
+}
 
-  Rf_defineVar(CG_ID_SYMBOL, node_id, node);
+int cg_node_type(SEXP node)
+{
+  SEXP type = Rf_findVarInFrame(node, CG_TYPE_SYMBOL);
 
-  UNPROTECT(1);
+  if(!Rf_isInteger(type) || Rf_xlength(type) < 1)
+  {
+    Rf_errorcall(R_NilValue, "node '%s' has no type", cg_node_name(node));
+  }
+
+  return INTEGER(type)[0];
+}
+
+void cg_node_set_type(SEXP node, const int type)
+{
+  if(type < 0 || type > 3)
+  {
+    Rf_errorcall(R_NilValue, "argument 'type' must be a valid type");
+  }
+
+  Rf_defineVar(CG_TYPE_SYMBOL, Rf_ScalarInteger(type), node);
 }
 
 SEXP cg_node_inputs(SEXP node, int unique)
@@ -578,28 +596,30 @@ SEXP cg_constant(SEXP value, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
   }
 
-  SEXP constant = PROTECT(cg_class2("cg_constant", "cg_node"));
+  SEXP node = PROTECT(cg_class1("cg_node"));
+
+  cg_node_set_type(node, CGCST);
 
   if(Rf_isNull(name))
   {
     char *gen_name = cg_graph_gen_name(graph);
 
-    cg_node_set_name(constant, gen_name);
+    cg_node_set_name(node, gen_name);
 
     free(gen_name);
   }
   else
   {
-    cg_node_set_name(constant, CHAR(STRING_ELT(name, 0)));
+    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
   }
 
-  cg_node_set_value(constant, value);
+  cg_node_set_value(node, value);
 
-  cg_graph_add_node(graph, constant);
+  cg_graph_add_node(graph, node);
 
   UNPROTECT(2);
 
-  return constant;
+  return node;
 }
 
 SEXP cg_parameter(SEXP value, SEXP name)
@@ -611,28 +631,30 @@ SEXP cg_parameter(SEXP value, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
   }
 
-  SEXP parameter = PROTECT(cg_class2("cg_parameter", "cg_node"));
+  SEXP node = PROTECT(cg_class1("cg_node"));
+
+  cg_node_set_type(node, CGPRM);
 
   if(Rf_isNull(name))
   {
     char *gen_name = cg_graph_gen_name(graph);
 
-    cg_node_set_name(parameter, gen_name);
+    cg_node_set_name(node, gen_name);
 
     free(gen_name);
   }
   else
   {
-    cg_node_set_name(parameter, CHAR(STRING_ELT(name, 0)));
+    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
   }
 
-  cg_node_set_value(parameter, value);
+  cg_node_set_value(node, value);
 
-  cg_graph_add_node(graph, parameter);
+  cg_graph_add_node(graph, node);
 
   UNPROTECT(2);
 
-  return parameter;
+  return node;
 }
 
 SEXP cg_input(SEXP name)
@@ -644,26 +666,28 @@ SEXP cg_input(SEXP name)
     Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
   }
 
-  SEXP input = PROTECT(cg_class2("cg_input", "cg_node"));
+  SEXP node = PROTECT(cg_class1("cg_node"));
+
+  cg_node_set_type(node, CGIPT);
 
   if(Rf_isNull(name))
   {
     char *gen_name = cg_graph_gen_name(graph);
 
-    cg_node_set_name(input, gen_name);
+    cg_node_set_name(node, gen_name);
 
     free(gen_name);
   }
   else
   {
-    cg_node_set_name(input, CHAR(STRING_ELT(name, 0)));
+    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
   }
 
-  cg_graph_add_node(graph, input);
+  cg_graph_add_node(graph, node);
 
   UNPROTECT(2);
 
-  return input;
+  return node;
 }
 
 SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
@@ -701,35 +725,37 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     }
   }
 
-  SEXP op = PROTECT(cg_class2("cg_operator", "cg_node"));
+  SEXP node = PROTECT(cg_class1("cg_node"));
+
+  cg_node_set_type(node, CGOPR);
 
   if(Rf_isNull(name))
   {
     char *gen_name = cg_graph_gen_name(graph);
 
-    cg_node_set_name(op, gen_name);
+    cg_node_set_name(node, gen_name);
 
     free(gen_name);
   }
   else
   {
-    cg_node_set_name(op, CHAR(STRING_ELT(name, 0)));
+    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
   }
 
-  cg_node_set_function(op, function);
+  cg_node_set_function(node, function);
 
   for(int i = 0; i < n; i++)
   {
     SEXP input = VECTOR_ELT(inputs, i);
 
-    cg_node_add_input(op, input);
+    cg_node_add_input(node, input);
 
-    cg_node_add_output(input, op);
+    cg_node_add_output(input, node);
   }
 
-  cg_graph_add_node(graph, op);
+  cg_graph_add_node(graph, node);
 
   UNPROTECT(2);
 
-  return op;
+  return node;
 }

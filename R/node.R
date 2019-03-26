@@ -101,25 +101,7 @@ cg_operator <- function(fun, inputs, name = NULL)
 }
 
 #' @export
-print.cg_constant <- function(x, ...)
+print.cg_node <- function(x, ...)
 {
-  cat(sprintf("<cg_constant: %s>\n", x$name))
-}
-
-#' @export
-print.cg_parameter <- function(x, ...)
-{
-  cat(sprintf("<cg_parameter: %s>\n", x$name))
-}
-
-#' @export
-print.cg_input <- function(x, ...)
-{
-  cat(sprintf("<cg_input: %s>\n", x$name))
-}
-
-#' @export
-print.cg_operator <- function(x, ...)
-{
-  cat(sprintf("<cg_operator: %s>\n", x$name))
+  cat(sprintf("<cg_node: %s>\n", x$name))
 }

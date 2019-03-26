@@ -163,7 +163,7 @@ SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP
   {
     SEXP node = VECTOR_ELT(dep, i);
 
-    if(cg_is(node, "cg_parameter"))
+    if(cg_node_type(node) == CGPRM)
     {
       int node_index;
 

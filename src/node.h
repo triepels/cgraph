@@ -25,6 +25,15 @@ limitations under the License.
 #include "class.h"
 
 /*
+ * TYPES
+ */
+
+#define CGCST 0
+#define CGPRM 1
+#define CGIPT 2
+#define CGOPR 3
+
+/*
  * PRIVATE METHODS
  */
 
@@ -37,6 +46,10 @@ SEXP cg_node_symbol(SEXP node);
 int cg_node_id(SEXP node);
 
 void cg_node_set_id(SEXP node, const int id);
+
+int cg_node_type(SEXP node);
+
+void cg_node_set_type(SEXP node, const int type);
 
 SEXP cg_node_inputs(SEXP node, int unique);
 

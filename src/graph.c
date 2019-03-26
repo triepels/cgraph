@@ -387,7 +387,7 @@ SEXP cg_graph_run(SEXP graph, SEXP target, SEXP values)
   {
     SEXP node = VECTOR_ELT(dep, i);
 
-    if(!cg_is(node, "cg_input"))
+    if(cg_node_type(node) != CGIPT)
     {
       cg_node_eval(node, values);
     }
@@ -466,7 +466,9 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
     {
       SEXP node = VECTOR_ELT(dep, i);
 
-      if(cg_is(node, "cg_operator") || cg_is(node, "cg_parameter"))
+      int type = cg_node_type(node);
+
+      if(type == CGOPR || type == CGPRM)
       {
         cg_node_eval_gradient(node, values, gradients);
       }
