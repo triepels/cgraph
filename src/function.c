@@ -89,39 +89,6 @@ void cg_function_set_grads(SEXP function, SEXP grads)
   Rf_defineVar(CG_GRADS_SYMBOL, grads, function);
 }
 
-void cg_function_add_grad(SEXP function, SEXP grad)
-{
-  if(!Rf_isFunction(grad))
-  {
-    Rf_errorcall(R_NilValue, "argument 'grad' must be a function");
-  }
-
-  int index;
-
-  SEXP grads = R_NilValue;
-
-  PROTECT_WITH_INDEX(grads = Rf_findVarInFrame(function, CG_DEF_SYMBOL), &index);
-
-  if(TYPEOF(grads) != VECSXP)
-  {
-    REPROTECT(grads = Rf_allocVector(VECSXP, 1), index);
-
-    SET_VECTOR_ELT(grads, 0, grad);
-  }
-  else
-  {
-    R_len_t n = Rf_xlength(grads);
-
-    REPROTECT(grads = Rf_lengthgets(grads, n + 1), index);
-
-    SET_VECTOR_ELT(grads, n, grad);
-  }
-
-  Rf_defineVar(CG_GRADS_SYMBOL, grads, function);
-
-  UNPROTECT(1);
-}
-
 /*
  * PUBLIC CONSTRUCTORS
  */
