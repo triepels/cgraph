@@ -30,9 +30,8 @@ limitations under the License.
  */
 
 #define CG_ID_SYMBOL Rf_install("id")
-#define CG_NAME_SYMBOL Rf_install("name")
-#define CG_INPUTS_SYMBOL Rf_install("inputs")
 #define CG_TYPE_SYMBOL Rf_install("type")
+#define CG_NAME_SYMBOL Rf_install("name")
 #define CG_INPUTS_SYMBOL Rf_install("inputs")
 #define CG_OUTPUTS_SYMBOL Rf_install("outputs")
 #define CG_VALUE_SYMBOL Rf_install("value")
