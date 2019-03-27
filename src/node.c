@@ -341,17 +341,17 @@ void cg_node_eval(SEXP node, SEXP values)
 
   SEXP inputs = PROTECT(cg_node_inputs(node, FALSE));
 
-  if(Rf_xlength(inputs) > 0)
+  R_len_t n = Rf_xlength(inputs);
+
+  if(n > 0)
   {
     SEXP function = PROTECT(cg_node_function(node));
 
-    SEXP args = PROTECT(Rf_allocVector(LISTSXP, Rf_xlength(inputs)));
+    SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
 
     SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
 
-    int i = 0;
-
-    for(SEXP arg = args; arg != R_NilValue; arg = CDR(arg))
+    for(int i = 0; i < n; i++)
     {
       SEXP input = VECTOR_ELT(inputs, i);
 
@@ -363,11 +363,11 @@ void cg_node_eval(SEXP node, SEXP values)
           cg_node_name(input));
       }
 
-      SETCAR(arg, input_value);
+      SETCAR(args, input_value);
+
+      args = CDR(args);
 
       UNPROTECT(1);
-
-      i++;
     }
 
     SEXP value = PROTECT(Rf_eval(call, R_EmptyEnv));
