@@ -37,7 +37,7 @@ SEXP bsum(SEXP x, SEXP block_size)
 
   if(!Rf_isNumeric(block_size))
   {
-    Rf_errorcall(R_NilValue, "argument 'n' must be a numerical scalar");
+    Rf_errorcall(R_NilValue, "argument 'block_size' must be a numerical scalar");
   }
 
   int s = Rf_asInteger(block_size);
