@@ -40,18 +40,18 @@ SEXP bsum(SEXP x, SEXP block_size)
     Rf_errorcall(R_NilValue, "argument 'block_size' must be a numerical scalar");
   }
 
-  int s = Rf_asInteger(block_size);
+  int m = Rf_asInteger(block_size);
 
-  if(s < 0)
+  if(m < 0)
   {
     Rf_errorcall(R_NilValue, "invalid block size");
   }
 
-  SEXP y = PROTECT(Rf_allocVector(REALSXP, s));
+  SEXP y = PROTECT(Rf_allocVector(REALSXP, m));
 
   double *b = REAL(y);
 
-  memset(b, 0, s * sizeof(double));
+  memset(b, 0, m * sizeof(double));
 
   R_len_t n = Rf_xlength(x);
 
@@ -62,7 +62,7 @@ SEXP bsum(SEXP x, SEXP block_size)
       double *a = REAL(x);
 
       for(int i = 0, j = 0; i < n; i++,
-          j = (++j == s) ? 0 : j)
+          j = (++j == m) ? 0 : j)
       {
         b[j] += a[i];
       }
@@ -75,7 +75,7 @@ SEXP bsum(SEXP x, SEXP block_size)
       int *a = INTEGER(x);
 
       for(int i = 0, j = 0; i < n; i++,
-          j = (++j == s) ? 0 : j)
+          j = (++j == m) ? 0 : j)
       {
         b[j] += a[i];
       }
