@@ -77,11 +77,11 @@ cg_graph_run <- function(graph, target, values = new.env())
 #' @param graph cg_graph object, graph that is differentiated.
 #' @param target cg_node object, node in the graph that is differentiated.
 #' @param values named list or environment, values that are subsituted for the input nodes in the graph.
-#' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
+#' @param index numeric scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).
 #'
 #' @note All nodes required to compute the target node must have a value, or their value must be able to be computed at run-time. The values of the nodes can be obtained by first evaluating function \link[cgraph]{cg_graph_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
 #'
-#' Currently, the cgraph package can only differentiate scalar target nodes. In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated.
+#' In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated.
 #'
 #' The gradients of all ancestors of the node are returned. The gradients have the same shape as the values of the nodes.
 #'
@@ -105,7 +105,7 @@ cg_graph_run <- function(graph, target, values = new.env())
 #'
 #' @author Ron Triepels
 #' @export
-cg_graph_gradients <- function(graph, target, values = new.env(), index = 1)
+cg_graph_gradients <- function(graph, target, values = new.env(), index = NULL)
 {
   if(is.list(values))
   {
