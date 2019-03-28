@@ -68,7 +68,7 @@ test_that("Array 3",
   values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_graph_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values, index = 1)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
@@ -120,7 +120,7 @@ test_that("Array 5",
   values <- cg_graph_run(x, c)
 
   # Calculate gradients
-  grads <- cg_graph_gradients(x, c, values)
+  grads <- cg_graph_gradients(x, c, values, index = 1)
 
   # Approximate gradients
   approx <- approx_gradients(x, c, values)
