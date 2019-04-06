@@ -1,10 +1,24 @@
+cgraph 4.0.2
+----------------------------------------------------------------
+
+Features:
+
+* The default name of a node is now `v` follwed by the node id.
+* The classes for the node types (i.e. constant, parameter, input, and operator) are removed. Instead, the node type is stored as an integer attribute in a `cg_node` object for efficiency reasons.
+* Argument `index` of function `cg_graph_gradients` can now also be `NULL` to differentiate nodes element-wise. This is now also the default behavior.
+
+Bug fixes:
+
+* Fixed memory leak when performing a forward pass and backward pass using function `cg_graph_run` and `cg_graph_gradients` respectively.
+* Function `bsum` now prints a correct error message when argument `block_size` is not a numerical scalar.
+
 cgraph 4.0.1
 ----------------------------------------------------------------
 
 Bug fixes:
 
 * Fixed an bug that caused an error when installing `cgraph` on R versions before 3.5.
-* Function 'cg_session_set_graph' no longer prints `NULL` to the console when the active graph is changed. 
+* Function `cg_session_set_graph` no longer prints `NULL` to the console when the active graph is changed. 
 * Operator `cg_sigmoid` now works correctly when argument `x` is a logical or integer vector or array.
 
 cgraph 4.0.0
