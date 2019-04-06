@@ -33,7 +33,7 @@ Comments:
 * Method `adj_mat` is removed.
 * S3 overloaded method `print` is removed.
 * Function `const`, `input`, `parm`, and `opr` have been renamed to `cg_constant`, `cg_input`, `cg_parameter`, and `cg_operator` respectively.
-* Function `val` and `set` are removed. The value of a constant or parameter node can be changed directly by calling `x$value` where `x` is the environment of a `cg_node` object.
+* Function `val` and `set` are removed. The value of a constant or parameter node can be retrieved or changed directly by calling `x$value` where `x` is the environment of a `cg_node` object.
 * Function `run` and `gradients` have been renamed to `cg_graph_run` and `cg_graph_gradients` respectively.
 
 Features:
