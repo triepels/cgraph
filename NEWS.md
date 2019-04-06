@@ -3,7 +3,7 @@ cgraph 4.0.2
 
 Features:
 
-* The default name of a node is now `v` follwed by the node id.
+* The default name of a node is now `v` followed by the node id.
 * The classes for the node types (i.e. constant, parameter, input, and operator) are removed. Instead, the node type is stored as an integer attribute in a `cg_node` object for efficiency reasons.
 * Argument `index` of function `cg_graph_gradients` can now also be `NULL` to differentiate nodes element-wise. This is now also the default behavior.
 
