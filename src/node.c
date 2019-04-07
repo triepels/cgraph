@@ -91,7 +91,11 @@ void cg_node_set_id(SEXP node, const int id)
     Rf_errorcall(R_NilValue, "argument 'id' must be higher than or equal to 1");
   }
 
-  Rf_defineVar(CG_ID_SYMBOL, Rf_ScalarInteger(id), node);
+  SEXP node_id = PROTECT(Rf_ScalarInteger(id));
+
+  Rf_defineVar(CG_ID_SYMBOL, node_id, node);
+
+  UNPROTECT(1);
 }
 
 int cg_node_type(SEXP node)
@@ -113,7 +117,11 @@ void cg_node_set_type(SEXP node, const int type)
     Rf_errorcall(R_NilValue, "argument 'type' must be a valid type");
   }
 
-  Rf_defineVar(CG_TYPE_SYMBOL, Rf_ScalarInteger(type), node);
+  SEXP node_type = PROTECT(Rf_ScalarInteger(type));
+
+  Rf_defineVar(CG_TYPE_SYMBOL, node_type, node);
+
+  UNPROTECT(1);
 }
 
 SEXP cg_node_inputs(SEXP node, int unique)
