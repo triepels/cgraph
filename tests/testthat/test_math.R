@@ -36,7 +36,7 @@ test_that("Math 2",
   b <- cg_parameter(0.4, name = "b")
 
   # Create test expression
-  c <- a^b + cg_sqrt(a)
+  c <- a^b + cg_square(a - b) + cg_sqrt(a)
 
   # Evaluate graph
   values <- cg_graph_run(x, c)

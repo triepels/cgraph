@@ -355,6 +355,47 @@ delayedAssign("pow", cg_function(
   cg_pow(x, y)
 }
 
+#' Square
+#'
+#' Calculate \code{x ^ 2}.
+#'
+#' @param x either a cg_node object or a numeric vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object, node of the operation.
+#'
+#' @note This function is equivalent to \code{cg_pow(x, 2)}.
+#'
+#' @seealso \link[base:Arithmetic]{square}
+#'
+#' @author Ron Triepels
+#' @export
+cg_square <- function(x, name = NULL)
+{
+  cg_operator(square, list(x), name)
+}
+
+# Function definition
+delayedAssign("square", cg_function(
+  def = function(x)
+  {
+    x ^ 2
+  },
+  grads = list(
+    function(x, val, grad)
+    {
+      if(is.array(x))
+      {
+        2 * grad * x
+      }
+      else
+      {
+        bsum(2 * grad * x, length(x))
+      }
+    }
+  )
+))
+
 #' Square Root
 #'
 #' Calculate \code{sqrt(x)}.
