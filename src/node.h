@@ -51,13 +51,9 @@ int cg_node_type(SEXP node);
 
 void cg_node_set_type(SEXP node, const int type);
 
-SEXP cg_node_inputs(SEXP node, int unique);
+SEXP cg_node_inputs(SEXP node);
 
 void cg_node_add_input(SEXP node, SEXP input);
-
-SEXP cg_node_outputs(SEXP node, int unique);
-
-void cg_node_add_output(SEXP node, SEXP output);
 
 SEXP cg_node_value(SEXP node);
 
@@ -68,6 +64,8 @@ SEXP cg_node_function(SEXP node);
 void cg_node_set_function(SEXP node, SEXP function);
 
 void cg_node_eval(SEXP node, SEXP values);
+
+void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients);
 
 void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients);
 
