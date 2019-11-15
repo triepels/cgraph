@@ -352,7 +352,7 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
       {
         if(TYPEOF(result) != TYPEOF(input_grad))
         {
-          Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' and '%s' for node '%s'",
+          Rf_errorcall(R_NilValue, "cannot accumulate gradients of type '%s' and '%s' for node '%s'",
                        Rf_type2char(TYPEOF(input_grad)), Rf_type2char(TYPEOF(result)), cg_node_name(input));
         }
 
@@ -360,7 +360,7 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
 
         if(Rf_xlength(result) != m)
         {
-          Rf_errorcall(R_NilValue, "cannot accumulate gradient of length %d and %d for node '%s'",
+          Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
                        m, Rf_xlength(result), cg_node_name(node));
         }
 

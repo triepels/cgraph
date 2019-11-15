@@ -51,11 +51,6 @@ char* cg_graph_gen_name(SEXP graph)
 {
   char *name = R_alloc(1, 32 * sizeof(char));
 
-  if(name == NULL)
-  {
-    Rf_errorcall(R_NilValue, "unable to allocate %d bytes", 32 * sizeof(char));
-  }
-
   SEXP nodes = Rf_findVarInFrame(graph, CG_NODES_SYMBOL);
 
   if(TYPEOF(nodes) != VECSXP)
