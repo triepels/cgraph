@@ -216,53 +216,80 @@ void cg_node_eval(SEXP node, SEXP values)
 {
   SEXP symbol = cg_node_symbol(node);
 
-  SEXP inputs = PROTECT(cg_node_inputs(node));
-
-  R_len_t n = Rf_xlength(inputs);
-
-  if(n > 0)
+  switch(cg_node_type(node))
   {
-    SEXP function = PROTECT(cg_node_function(node));
-
-    SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
-
-    SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
-
-    for(int i = 0; i < n; i++)
+    case CGCST :
+    case CGPRM :
     {
-      SEXP input = VECTOR_ELT(inputs, i);
+      SEXP value = PROTECT(cg_node_value(node));
 
-      SEXP input_value = PROTECT(Rf_findVarInFrame(values, cg_node_symbol(input)));
-
-      if(input_value == R_UnboundValue)
-      {
-        Rf_errorcall(R_NilValue, "node '%s' has no value",
-          cg_node_name(input));
-      }
-
-      SETCAR(args, input_value);
-
-      args = CDR(args);
+      Rf_defineVar(symbol, value, values);
 
       UNPROTECT(1);
+
+      break;
     }
+    case CGOPR :
+    {
+      SEXP inputs = PROTECT(cg_node_inputs(node));
 
-    SEXP value = PROTECT(Rf_eval(call, R_EmptyEnv));
+      R_len_t n = Rf_xlength(inputs);
 
-    Rf_defineVar(symbol, value, values);
+      if(n < 1)
+      {
+        Rf_errorcall(R_NilValue, "node '%s' has no inputs",
+                     cg_node_name(node));
+      }
 
-    UNPROTECT(4);
+      SEXP function = PROTECT(cg_node_function(node));
+
+      SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
+
+      SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
+
+      for(int i = 0; i < n; i++)
+      {
+        SEXP input = VECTOR_ELT(inputs, i);
+
+        SEXP input_value = PROTECT(Rf_findVarInFrame(values, cg_node_symbol(input)));
+
+        if(input_value == R_UnboundValue)
+        {
+          Rf_errorcall(R_NilValue, "node '%s' has no value",
+                       cg_node_name(input));
+        }
+
+        SETCAR(args, input_value);
+
+        args = CDR(args);
+
+        UNPROTECT(1);
+      }
+
+      SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
+
+      Rf_defineVar(symbol, result, values);
+
+      UNPROTECT(5);
+
+      break;
+    }
+    default :
+    {
+      Rf_errorcall(R_NilValue, "unable to evaluate node with type %d",
+                   cg_node_type(node));
+    }
   }
-  else
-  {
-    Rf_defineVar(symbol, cg_node_value(node), values);
-  }
-
-  UNPROTECT(1);
 }
 
 void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
 {
+  if(cg_node_type(node) != CGOPR)
+  {
+    Rf_errorcall(R_NilValue, "unable to differentiate node with type %d",
+                 cg_node_type(node));
+  }
+
   SEXP symbol = cg_node_symbol(node);
 
   SEXP value = PROTECT(Rf_findVarInFrame(values, symbol));
@@ -281,126 +308,128 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
                  cg_node_name(node));
   }
 
+  SEXP function = PROTECT(cg_node_function(node));
+
+  SEXP function_grads = PROTECT(cg_function_grads(function));
+
   SEXP inputs = PROTECT(cg_node_inputs(node));
 
   R_len_t n = Rf_xlength(inputs);
 
-  if(n > 0)
+  if(Rf_xlength(function_grads) != n)
   {
-    SEXP function = PROTECT(cg_node_function(node));
+    Rf_errorcall(R_NilValue, "node '%s' expects %d inputs but %d are provided",
+                 cg_node_name(node), Rf_xlength(function_grads), n);
+  }
 
-    SEXP function_grads = PROTECT(cg_function_grads(function));
+  SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 2));
 
-    if(Rf_xlength(function_grads) != n)
+  SEXP arg = args;
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP input = VECTOR_ELT(inputs, i);
+
+    SEXP input_value = PROTECT(Rf_findVarInFrame(values, cg_node_symbol(input)));
+
+    if(input_value == R_UnboundValue)
     {
-      Rf_errorcall(R_NilValue, "invalid number of inputs (%d) provided to node '%s'",
-                   Rf_xlength(function_grads), cg_node_name(node));
+      Rf_errorcall(R_NilValue, "node '%s' has no value",
+                   cg_node_name(input));
     }
 
-    SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 2));
+    SETCAR(arg, input_value);
 
-    SEXP arg = args;
+    arg = CDR(arg);
 
-    for(int i = 0; i < n; i++)
+    UNPROTECT(1);
+  }
+
+  SET_TAG(arg, Rf_install("val"));
+
+  SETCAR(arg, value);
+
+  SET_TAG(CDR(arg), Rf_install("grad"));
+
+  SETCADR(arg, grad);
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP input = VECTOR_ELT(inputs, i);
+
+    int type = cg_node_type(input);
+
+    if(type == CGCST || type == CGIPT)
     {
-      SEXP input = VECTOR_ELT(inputs, i);
-
-      SEXP input_value = PROTECT(Rf_findVarInFrame(values, cg_node_symbol(input)));
-
-      if(input_value == R_UnboundValue)
-      {
-        Rf_errorcall(R_NilValue, "node '%s' has no value",
-                     cg_node_name(input));
-      }
-
-      SETCAR(arg, input_value);
-
-      arg = CDR(arg);
-
-      UNPROTECT(1);
+      continue;
     }
 
-    SET_TAG(arg, Rf_install("val"));
+    SEXP input_grad = PROTECT(Rf_findVarInFrame(gradients, cg_node_symbol(input)));
 
-    SETCAR(arg, value);
+    SEXP call = PROTECT(Rf_lcons(VECTOR_ELT(function_grads, i), args));
 
-    SET_TAG(CDR(arg), Rf_install("grad"));
+    SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
 
-    SETCADR(arg, grad);
-
-    for(int i = 0; i < n; i++)
+    if(!(Rf_isLogical(result) || Rf_isNumeric(result)))
     {
-      SEXP input = VECTOR_ELT(inputs, i);
+      Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(result)), cg_node_name(node));
+    }
 
-      SEXP input_grad = PROTECT(Rf_findVarInFrame(gradients, cg_node_symbol(input)));
-
-      SEXP call = PROTECT(Rf_lcons(VECTOR_ELT(function_grads, i), args));
-
-      SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
-
-      if(!(Rf_isLogical(result) || Rf_isNumeric(result)))
+    if(input_grad == R_UnboundValue)
+    {
+      Rf_defineVar(cg_node_symbol(input), result, gradients);
+    }
+    else
+    {
+      if(TYPEOF(result) != TYPEOF(input_grad))
       {
-        Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
-                     Rf_type2char(TYPEOF(result)), cg_node_name(node));
+        Rf_errorcall(R_NilValue, "cannot accumulate gradients of type '%s' and '%s' for node '%s'",
+                     Rf_type2char(TYPEOF(input_grad)), Rf_type2char(TYPEOF(result)), cg_node_name(input));
       }
 
-      if(input_grad == R_UnboundValue)
+      R_len_t m = Rf_xlength(input_grad);
+
+      if(Rf_xlength(result) != m)
       {
-        Rf_defineVar(cg_node_symbol(input), result, gradients);
+        Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
+                     m, Rf_xlength(result), cg_node_name(node));
       }
-      else
+
+      switch(TYPEOF(result))
       {
-        if(TYPEOF(result) != TYPEOF(input_grad))
+        case REALSXP :
         {
-          Rf_errorcall(R_NilValue, "cannot accumulate gradients of type '%s' and '%s' for node '%s'",
-                       Rf_type2char(TYPEOF(input_grad)), Rf_type2char(TYPEOF(result)), cg_node_name(input));
-        }
+          double *x = REAL(result);
+          double *y = REAL(input_grad);
 
-        R_len_t m = Rf_xlength(input_grad);
-
-        if(Rf_xlength(result) != m)
-        {
-          Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
-                       m, Rf_xlength(result), cg_node_name(node));
-        }
-
-        switch(TYPEOF(result))
-        {
-          case REALSXP :
+          for(int j = 0; j < m; j++)
           {
-            double *x = REAL(result);
-            double *y = REAL(input_grad);
-
-            for(int j = 0; j < m; j++)
-            {
-              y[j] += x[j];
-            }
-
-            break;
+            y[j] += x[j];
           }
-          case LGLSXP :
-          case INTSXP :
+
+          break;
+        }
+        case LGLSXP :
+        case INTSXP :
+        {
+          int *x = INTEGER(result);
+          int *y = INTEGER(input_grad);
+
+          for(int j = 0; j < m; j++)
           {
-            int *x = INTEGER(result);
-            int *y = INTEGER(input_grad);
-
-            for(int j = 0; j < m; j++)
-            {
-              y[j] += x[j];
-            }
-
-            break;
+            y[j] += x[j];
           }
+
+          break;
         }
       }
-
-      UNPROTECT(3);
     }
 
     UNPROTECT(3);
   }
 
-  UNPROTECT(3);
+  UNPROTECT(6);
 }
 
 /*

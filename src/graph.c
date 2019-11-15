@@ -371,9 +371,7 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
     {
       SEXP node = VECTOR_ELT(nodes, i);
 
-      int type = cg_node_type(node);
-
-      if(type != CGCST && type != CGIPT)
+      if(cg_node_type(node) == CGOPR)
       {
         cg_node_eval_gradients(node, values, gradients);
       }
