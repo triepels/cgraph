@@ -32,13 +32,6 @@ limitations under the License.
  * LIBRARY INITIALIZATION
  */
 
-SEXP test(SEXP node, SEXP values, SEXP gradients)
-{
-  cg_node_eval_gradients(node, values, gradients);
-
-  return R_NilValue;
-}
-
 static const R_CallMethodDef CallEntries[] = {
   // Node
   {"cg_constant", (DL_FUNC) &cg_constant, 2},
@@ -60,7 +53,7 @@ static const R_CallMethodDef CallEntries[] = {
   // Math
   {"sigmoid", (DL_FUNC) &sigmoid, 1},
   // Test
-  {"test", (DL_FUNC) &test, 3},
+  {"test", (DL_FUNC) &test, 2},
   {NULL, NULL, 0}
 };
 
