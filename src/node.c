@@ -422,11 +422,7 @@ SEXP cg_constant(SEXP value, SEXP name)
 
   if(Rf_isNull(name))
   {
-    char *gen_name = cg_graph_gen_name(graph);
-
-    cg_node_set_name(node, gen_name);
-
-    free(gen_name);
+    cg_node_set_name(node, cg_graph_gen_name(graph));
   }
   else
   {
@@ -457,11 +453,7 @@ SEXP cg_parameter(SEXP value, SEXP name)
 
   if(Rf_isNull(name))
   {
-    char *gen_name = cg_graph_gen_name(graph);
-
-    cg_node_set_name(node, gen_name);
-
-    free(gen_name);
+    cg_node_set_name(node, cg_graph_gen_name(graph));
   }
   else
   {
@@ -492,11 +484,7 @@ SEXP cg_input(SEXP name)
 
   if(Rf_isNull(name))
   {
-    char *gen_name = cg_graph_gen_name(graph);
-
-    cg_node_set_name(node, gen_name);
-
-    free(gen_name);
+    cg_node_set_name(node, cg_graph_gen_name(graph));
   }
   else
   {
@@ -551,11 +539,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   if(Rf_isNull(name))
   {
-    char *gen_name = cg_graph_gen_name(graph);
-
-    cg_node_set_name(node, gen_name);
-
-    free(gen_name);
+    cg_node_set_name(node, cg_graph_gen_name(graph));
   }
   else
   {
@@ -566,9 +550,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   for(int i = 0; i < n; i++)
   {
-    SEXP input = VECTOR_ELT(inputs, i);
-
-    cg_node_add_input(node, input);
+    cg_node_add_input(node, VECTOR_ELT(inputs, i));
   }
 
   cg_graph_add_node(graph, node);

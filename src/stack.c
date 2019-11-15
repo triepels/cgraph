@@ -25,16 +25,11 @@ limitations under the License.
  * PUBLIC METHODS
  */
 
-cg_stack* cg_stack_allocate(const int size)
+cg_stack_t* cg_stack_allocate(const int size)
 {
-  cg_stack *stack = malloc(sizeof(cg_stack));
+  cg_stack_t *stack = (cg_stack_t*)R_alloc(1, sizeof(cg_stack_t));
 
-  int *data = malloc(size * sizeof(int));
-
-  if(stack == NULL || data == NULL)
-  {
-    Rf_errorcall(R_NilValue, "unable to allocate stack of '%d' elements", size);
-  }
+  int *data = (int*)R_alloc(size, sizeof(int));
 
   stack->top = -1;
   stack->size = size;
@@ -43,40 +38,32 @@ cg_stack* cg_stack_allocate(const int size)
   return stack;
 }
 
-void cg_stack_destroy(cg_stack *stack)
-{
-  free(stack->data);
-  free(stack);
-}
-
-int cg_stack_is_empty(const cg_stack *stack)
+int cg_stack_is_empty(const cg_stack_t *stack)
 {
   return stack->top < 0;
 }
 
-int cg_stack_is_full(const cg_stack *stack)
+int cg_stack_is_full(const cg_stack_t *stack)
 {
   return stack->top >= stack->size - 1;
 }
 
-void cg_stack_push(cg_stack *stack, const int x)
+void cg_stack_push(cg_stack_t *stack, const int x)
 {
   if(cg_stack_is_full(stack))
   {
-    stack->size = (stack->size == 0) ? 1 : 2 * stack->size;
+    int size = (stack->size > 0) ? 2 * stack->size : 1;
 
-    stack->data = realloc(stack->data, stack->size * sizeof(int));
+    int *data = R_Realloc(stack->data, size, int);
 
-    if(stack->data == NULL)
-    {
-      Rf_errorcall(R_NilValue, "unable to reallocate stack of %d elements", stack->size);
-    }
+    stack->data = data;
+    stack->size = size;
   }
 
   stack->data[++stack->top] = x;
 }
 
-int cg_stack_top(const cg_stack *stack)
+int cg_stack_top(const cg_stack_t *stack)
 {
   if(cg_stack_is_empty(stack))
   {
@@ -86,7 +73,7 @@ int cg_stack_top(const cg_stack *stack)
   return stack->data[stack->top];
 }
 
-void cg_stack_pop(cg_stack *stack)
+void cg_stack_pop(cg_stack_t *stack)
 {
   if(cg_stack_is_empty(stack))
   {

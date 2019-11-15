@@ -49,11 +49,11 @@ SEXP cg_graph_nodes(SEXP graph)
 
 char* cg_graph_gen_name(SEXP graph)
 {
-  char *name = malloc(32 * sizeof(char));
+  char *name = R_alloc(1, 32 * sizeof(char));
 
   if(name == NULL)
   {
-    Rf_errorcall(R_NilValue, "unable to allocate name");
+    Rf_errorcall(R_NilValue, "unable to allocate %d bytes", 32 * sizeof(char));
   }
 
   SEXP nodes = Rf_findVarInFrame(graph, CG_NODES_SYMBOL);
@@ -184,14 +184,14 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
 
   SEXP out = PROTECT(Rf_allocVector(VECSXP, n));
 
-  int *visited = calloc(n, sizeof(int));
+  int *visited = (int*)R_alloc(n, sizeof(int));
 
-  if(visited == NULL)
+  for(int i = 0; i < n; i++)
   {
-    Rf_errorcall(R_NilValue, "unable to allocate %d bytes", n * sizeof(int));
+    visited[i] = 0;
   }
 
-  cg_stack *stack = cg_stack_allocate(n);
+  cg_stack_t *stack = cg_stack_allocate(n);
 
   int id = cg_node_id(target);
 
@@ -221,10 +221,6 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
 
       if(input_id < 1 || input_id > n)
       {
-        cg_stack_destroy(stack);
-
-        free(visited);
-
         Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
       }
 
@@ -253,10 +249,6 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
   }
 
   SETLENGTH(out, k);
-
-  cg_stack_destroy(stack);
-
-  free(visited);
 
   UNPROTECT(1);
 

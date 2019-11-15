@@ -30,24 +30,22 @@ typedef struct {
   int top;
   int size;
   int *data;
-} cg_stack;
+} cg_stack_t;
 
 /*
  * PUBLIC METHODS
  */
 
-cg_stack* cg_stack_allocate(const int size);
+cg_stack_t* cg_stack_allocate(const int size);
 
-void cg_stack_destroy(cg_stack *stack);
+int cg_stack_is_empty(const cg_stack_t *stack);
 
-int cg_stack_is_empty(const cg_stack *stack);
+int cg_stack_is_full(const cg_stack_t *stack);
 
-int cg_stack_is_full(const cg_stack *stack);
+void cg_stack_push(cg_stack_t *stack, const int x);
 
-void cg_stack_push(cg_stack *stack, const int x);
+int cg_stack_top(const cg_stack_t *stack);
 
-int cg_stack_top(const cg_stack *stack);
-
-void cg_stack_pop(cg_stack *stack);
+void cg_stack_pop(cg_stack_t *stack);
 
 #endif
