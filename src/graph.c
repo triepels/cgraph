@@ -221,6 +221,10 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
 
       if(input_id < 1 || input_id > n)
       {
+        cg_stack_destroy(stack);
+
+        free(visited);
+
         Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
       }
 
@@ -248,9 +252,11 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
     UNPROTECT(1);
   }
 
+  SETLENGTH(out, k);
+
   cg_stack_destroy(stack);
 
-  SETLENGTH(out, k);
+  free(visited);
 
   UNPROTECT(1);
 
