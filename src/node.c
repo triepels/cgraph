@@ -231,17 +231,17 @@ void cg_node_eval(SEXP node, SEXP values)
     }
     case CGOPR :
     {
+      SEXP function = PROTECT(cg_node_function(node));
+
       SEXP inputs = PROTECT(cg_node_inputs(node));
 
       R_len_t n = Rf_xlength(inputs);
 
-      if(n < 1)
+      if(cg_function_arity(function) != n)
       {
-        Rf_errorcall(R_NilValue, "node '%s' has no inputs",
-                     cg_node_name(node));
+        Rf_errorcall(R_NilValue, "node '%s' expects %d input(s) but %d are provided",
+                     cg_node_name(node), cg_function_arity(function), n);
       }
-
-      SEXP function = PROTECT(cg_node_function(node));
 
       SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
 
@@ -310,16 +310,14 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
 
   SEXP function = PROTECT(cg_node_function(node));
 
-  SEXP function_grads = PROTECT(cg_function_grads(function));
-
   SEXP inputs = PROTECT(cg_node_inputs(node));
 
   R_len_t n = Rf_xlength(inputs);
 
-  if(Rf_xlength(function_grads) != n)
+  if(cg_function_arity(function) != n)
   {
-    Rf_errorcall(R_NilValue, "node '%s' expects %d inputs but %d are provided",
-                 cg_node_name(node), Rf_xlength(function_grads), n);
+    Rf_errorcall(R_NilValue, "node '%s' expects %d input(s) but %d are provided",
+                 cg_node_name(node), cg_function_arity(function), n);
   }
 
   SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 2));
@@ -352,6 +350,8 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
   SET_TAG(CDR(arg), Rf_install("grad"));
 
   SETCADR(arg, grad);
+
+  SEXP function_grads = PROTECT(cg_function_grads(function));
 
   for(int i = 0; i < n; i++)
   {

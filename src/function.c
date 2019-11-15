@@ -89,6 +89,18 @@ void cg_function_set_grads(SEXP function, SEXP grads)
   Rf_defineVar(CG_GRADS_SYMBOL, grads, function);
 }
 
+int cg_function_arity(SEXP function)
+{
+  SEXP grads = Rf_findVarInFrame(function, CG_GRADS_SYMBOL);
+
+  if(TYPEOF(grads) != VECSXP)
+  {
+    return 0;
+  }
+
+  return Rf_xlength(grads);
+}
+
 /*
  * PUBLIC CONSTRUCTORS
  */
