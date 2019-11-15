@@ -193,7 +193,11 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
 
   cg_stack *stack = cg_stack_allocate(n);
 
-  cg_stack_push(stack, cg_node_id(target));
+  int id = cg_node_id(target);
+
+  cg_stack_push(stack, id);
+
+  visited[id - 1] = 1;
 
   int k = 0;
 
@@ -201,7 +205,7 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
   {
     int done = 1;
 
-    int id = cg_stack_top(stack);
+    id = cg_stack_top(stack);
 
     SEXP node = cg_graph_get_node(graph, id);
 
@@ -217,20 +221,18 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
 
       if(input_id < 1 || input_id > n)
       {
-        Rf_warningcall(R_NilValue, "unable to retrieve node with id %d", input_id);
+        Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
       }
-      else
+
+      if(!visited[input_id - 1])
       {
-        if(!visited[input_id - 1])
-        {
-          cg_stack_push(stack, input_id);
+        cg_stack_push(stack, input_id);
 
-          visited[input_id - 1] = 1;
+        visited[input_id - 1] = 1;
 
-          done = 0;
+        done = 0;
 
-          break;
-        }
+        break;
       }
     }
 
@@ -238,7 +240,9 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
     {
       cg_stack_pop(stack);
 
-      SET_VECTOR_ELT(out, k++, node);
+      SET_VECTOR_ELT(out, k, node);
+
+      k++;
     }
 
     UNPROTECT(1);
