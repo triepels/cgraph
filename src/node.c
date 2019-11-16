@@ -33,7 +33,6 @@ limitations under the License.
 #define CG_TYPE_SYMBOL Rf_install("type")
 #define CG_NAME_SYMBOL Rf_install("name")
 #define CG_INPUTS_SYMBOL Rf_install("inputs")
-#define CG_OUTPUTS_SYMBOL Rf_install("outputs")
 #define CG_VALUE_SYMBOL Rf_install("value")
 #define CG_FUN_SYMBOL Rf_install("fun")
 
@@ -231,17 +230,11 @@ void cg_node_eval(SEXP node, SEXP values)
     }
     case CGOPR :
     {
-      SEXP function = PROTECT(cg_node_function(node));
-
       SEXP inputs = PROTECT(cg_node_inputs(node));
 
-      R_len_t n = Rf_xlength(inputs);
+      SEXP function = PROTECT(cg_node_function(node));
 
-      if(cg_function_arity(function) != n)
-      {
-        Rf_errorcall(R_NilValue, "node '%s' expects %d input(s) but %d are provided",
-                     cg_node_name(node), cg_function_arity(function), n);
-      }
+      R_len_t n = Rf_xlength(inputs);
 
       SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
 
@@ -308,16 +301,18 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
                  cg_node_name(node));
   }
 
+  SEXP inputs = PROTECT(cg_node_inputs(node));
+
   SEXP function = PROTECT(cg_node_function(node));
 
-  SEXP inputs = PROTECT(cg_node_inputs(node));
+  SEXP function_grads = PROTECT(cg_function_grads(function));
 
   R_len_t n = Rf_xlength(inputs);
 
-  if(cg_function_arity(function) != n)
+  if(n != Rf_xlength(function_grads))
   {
-    Rf_errorcall(R_NilValue, "node '%s' expects %d input(s) but %d are provided",
-                 cg_node_name(node), cg_function_arity(function), n);
+    Rf_errorcall(R_NilValue, "node '%s' has an invalid number of inputs (%d)",
+                 cg_node_name(node), n);
   }
 
   SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 2));
@@ -350,8 +345,6 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
   SET_TAG(CDR(arg), Rf_install("grad"));
 
   SETCADR(arg, grad);
-
-  SEXP function_grads = PROTECT(cg_function_grads(function));
 
   for(int i = 0; i < n; i++)
   {

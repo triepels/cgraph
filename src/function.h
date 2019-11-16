@@ -34,8 +34,6 @@ SEXP cg_function_grads(SEXP function);
 
 void cg_function_set_grads(SEXP function, SEXP grads);
 
-int cg_function_arity(SEXP function);
-
 /*
  * PUBLIC CONSTRUCTORS
  */
