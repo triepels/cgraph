@@ -357,8 +357,6 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
       continue;
     }
 
-    SEXP input_grad = PROTECT(Rf_findVarInFrame(gradients, cg_node_symbol(input)));
-
     SEXP call = PROTECT(Rf_lcons(VECTOR_ELT(function_grads, i), args));
 
     SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
@@ -368,6 +366,8 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
       Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
                    Rf_type2char(TYPEOF(result)), cg_node_name(node));
     }
+
+    SEXP input_grad = PROTECT(Rf_findVarInFrame(gradients, cg_node_symbol(input)));
 
     if(input_grad == R_UnboundValue)
     {
@@ -386,7 +386,7 @@ void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
       if(Rf_xlength(result) != m)
       {
         Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
-                     m, Rf_xlength(result), cg_node_name(node));
+                     Rf_xlength(result), m, cg_node_name(node));
       }
 
       switch(TYPEOF(result))
