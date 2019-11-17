@@ -53,7 +53,7 @@ SEXP bsum(SEXP x, SEXP block_size)
 
   memset(b, 0, m * sizeof(double));
 
-  R_len_t n = Rf_xlength(x);
+  R_len_t n = XLENGTH(x);
 
   switch(TYPEOF(x))
   {
@@ -150,14 +150,14 @@ SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP
     cg_node_set_value(target, target_value);
   }
 
-  if(k < 1 || k > Rf_xlength(target_value))
+  if(k < 1 || k > XLENGTH(target_value))
   {
     Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at index %d", cg_node_name(target), k);
   }
 
   SEXP nodes = PROTECT(cg_graph_reverse_dfs(graph, target));
 
-  R_len_t n = Rf_xlength(nodes);
+  R_len_t n = XLENGTH(nodes);
 
   for(int i = 0; i < n; i++)
   {
@@ -185,7 +185,7 @@ SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP
         cg_node_set_value(node, node_value);
       }
 
-      R_len_t m = Rf_xlength(node_value);
+      R_len_t m = XLENGTH(node_value);
 
       SEXP grad = PROTECT(Rf_allocVector(REALSXP, m));
 

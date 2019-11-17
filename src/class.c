@@ -34,7 +34,12 @@ int cg_is(SEXP env, const char *class_name)
 
   SEXP class_attrib = Rf_getAttrib(env, R_ClassSymbol);
 
-  int n = Rf_xlength(class_attrib);
+  if(Rf_isNull(class_attrib))
+  {
+    return FALSE;
+  }
+
+  int n = XLENGTH(class_attrib);
 
   for(int i = 0; i < n; i++)
   {

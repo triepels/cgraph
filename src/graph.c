@@ -59,7 +59,7 @@ char* cg_graph_gen_name(SEXP graph)
   }
   else
   {
-    R_len_t n = Rf_xlength(nodes);
+    R_len_t n = XLENGTH(nodes);
 
     do
     {
@@ -81,7 +81,7 @@ int cg_graph_node_exists(SEXP graph, const char *name)
   {
     SEXP names = Rf_getAttrib(nodes, R_NamesSymbol);
 
-    R_len_t n = Rf_xlength(names);
+    R_len_t n = XLENGTH(names);
 
     for(int i = 0; i < n; i++)
     {
@@ -118,8 +118,6 @@ void cg_graph_add_node(SEXP graph, SEXP node)
 
   PROTECT_WITH_INDEX(names = Rf_getAttrib(nodes, R_NamesSymbol), &index_names);
 
-  R_len_t n = Rf_xlength(nodes);
-
   if(TYPEOF(nodes) != VECSXP)
   {
     REPROTECT(nodes = Rf_allocVector(VECSXP, 1), index_nodes);
@@ -134,6 +132,8 @@ void cg_graph_add_node(SEXP graph, SEXP node)
   }
   else
   {
+    R_len_t n = XLENGTH(nodes);
+
     REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), index_nodes);
 
     REPROTECT(names = Rf_lengthgets(names, n + 1), index_names);
@@ -156,7 +156,7 @@ SEXP cg_graph_get_node(SEXP graph, const int id)
 {
   SEXP nodes = cg_graph_nodes(graph);
 
-  if(id < 1 || id > Rf_xlength(nodes))
+  if(id < 1 || id > XLENGTH(nodes))
   {
     Rf_errorcall(R_NilValue, "cannot find node with id %d", id);
   }
@@ -175,7 +175,7 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
 {
   SEXP nodes = cg_graph_nodes(graph);
 
-  R_len_t n = Rf_xlength(nodes);
+  R_len_t n = XLENGTH(nodes);
 
   SEXP out = PROTECT(Rf_allocVector(VECSXP, n));
 
@@ -206,28 +206,31 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
 
     SEXP inputs = PROTECT(cg_node_inputs(node));
 
-    R_len_t m = Rf_xlength(inputs);
-
-    for(int i = 0; i < m; i++)
+    if(!Rf_isNull(inputs))
     {
-      SEXP input = VECTOR_ELT(inputs, i);
+      R_len_t m = XLENGTH(inputs);
 
-      int input_id = cg_node_id(input);
-
-      if(input_id < 1 || input_id > n)
+      for(int i = 0; i < m; i++)
       {
-        Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
-      }
+        SEXP input = VECTOR_ELT(inputs, i);
 
-      if(!visited[input_id - 1])
-      {
-        cg_stack_push(stack, input_id);
+        int input_id = cg_node_id(input);
 
-        visited[input_id - 1] = 1;
+        if(input_id < 1 || input_id > n)
+        {
+          Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
+        }
 
-        done = 0;
+        if(!visited[input_id - 1])
+        {
+          cg_stack_push(stack, input_id);
 
-        break;
+          visited[input_id - 1] = 1;
+
+          done = 0;
+
+          break;
+        }
       }
     }
 
@@ -273,7 +276,7 @@ SEXP cg_graph_run(SEXP graph, SEXP target, SEXP values)
 
   SEXP nodes = PROTECT(cg_graph_reverse_dfs(graph, target));
 
-  R_len_t n = Rf_xlength(nodes);
+  R_len_t n = XLENGTH(nodes);
 
   for(int i = 0; i < n; i++)
   {
@@ -312,14 +315,14 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
     Rf_errorcall(R_NilValue, "argument 'gradients' must be an environment");
   }
 
-  if(!Rf_isNull(index) && (!Rf_isNumeric(index) || Rf_xlength(index) < 1))
+  if(!Rf_isNull(index) && (!Rf_isNumeric(index) || XLENGTH(index) < 1))
   {
     Rf_errorcall(R_NilValue, "argument 'index' must be NULL or a numeric scalar");
   }
 
   SEXP nodes = PROTECT(cg_graph_reverse_dfs(graph, target));
 
-  R_len_t n = Rf_xlength(nodes);
+  R_len_t n = XLENGTH(nodes);
 
   if(n > 0)
   {
@@ -335,7 +338,7 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
                    Rf_type2char(TYPEOF(value)), cg_node_name(target));
     }
 
-    R_len_t m = Rf_xlength(value);
+    R_len_t m = XLENGTH(value);
 
     SEXP gradient = PROTECT(Rf_allocVector(REALSXP, m));
 

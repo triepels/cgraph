@@ -74,7 +74,7 @@ void cg_function_set_grads(SEXP function, SEXP grads)
     Rf_errorcall(R_NilValue, "argument 'grads' must be a list of gradient functions");
   }
 
-  R_len_t n = Rf_xlength(grads);
+  R_len_t n = XLENGTH(grads);
 
   for(int i = 0; i < n; i++)
   {

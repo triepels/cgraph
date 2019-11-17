@@ -32,7 +32,7 @@ SEXP sigmoid(SEXP x)
     Rf_errorcall(R_NilValue, "argument 'x' must be a numerical vector or array");
   }
 
-  R_len_t n = Rf_xlength(x);
+  R_len_t n = XLENGTH(x);
 
   SEXP y = PROTECT(Rf_allocVector(REALSXP, n));
 
