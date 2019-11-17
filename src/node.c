@@ -574,9 +574,9 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     }
     else
     {
-      input = PROTECT(cg_constant(input, R_NilValue));
+      SEXP node = PROTECT(cg_constant(input, R_NilValue));
 
-      SET_VECTOR_ELT(inputs, i, input);
+      SET_VECTOR_ELT(inputs, i, node);
 
       SETCAR(args, input);
 
