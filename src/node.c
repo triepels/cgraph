@@ -44,7 +44,7 @@ const char* cg_node_name(SEXP node)
 {
   SEXP name = Rf_findVarInFrame(node, CG_NAME_SYMBOL);
 
-  if(!Rf_isString(name) || XLENGTH(name) == 0)
+  if(!IS_SCALAR(name, STRSXP))
   {
     Rf_errorcall(R_NilValue, "node has no name");
   }
@@ -75,7 +75,7 @@ int cg_node_id(SEXP node)
 {
   SEXP id = Rf_findVarInFrame(node, CG_ID_SYMBOL);
 
-  if(!Rf_isInteger(id) || XLENGTH(id) < 1)
+  if(!IS_SCALAR(id, INTSXP))
   {
     Rf_errorcall(R_NilValue, "node '%s' has no id", cg_node_name(node));
   }
@@ -101,7 +101,7 @@ int cg_node_type(SEXP node)
 {
   SEXP type = Rf_findVarInFrame(node, CG_TYPE_SYMBOL);
 
-  if(!Rf_isInteger(type) || XLENGTH(type) < 1)
+  if(!IS_SCALAR(type, INTSXP))
   {
     Rf_errorcall(R_NilValue, "node '%s' has no type", cg_node_name(node));
   }
