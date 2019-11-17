@@ -356,7 +356,14 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
 
   memset(y, 0, m * sizeof(double));
 
-  if(!Rf_isNull(index))
+  if(Rf_isNull(index))
+  {
+    for(int i = 0; i < m; i++)
+    {
+      y[i] = 1;
+    }
+  }
+  else
   {
     int k = Rf_asInteger(index);
 
@@ -367,13 +374,6 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
     }
 
     y[k - 1] = 1;
-  }
-  else
-  {
-    for(int i = 0; i < m; i++)
-    {
-      y[i] = 1;
-    }
   }
 
   SHALLOW_DUPLICATE_ATTRIB(gradient, value);

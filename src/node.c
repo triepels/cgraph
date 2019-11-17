@@ -574,10 +574,6 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
       if(Rf_isNull(value))
       {
         eval = 0;
-
-        UNPROTECT(1);
-
-        break;
       }
 
       SETCAR(args, value);
