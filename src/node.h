@@ -67,8 +67,6 @@ void cg_node_eval(SEXP node, SEXP values);
 
 void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients);
 
-void cg_node_eval_gradient(SEXP node, SEXP values, SEXP gradients);
-
 /*
  * PRIVATE CONSTRUCTORS
  */
