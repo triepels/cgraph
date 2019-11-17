@@ -178,7 +178,7 @@ SEXP cg_node_value(SEXP node)
 
   if(value == R_UnboundValue)
   {
-    Rf_errorcall(R_NilValue, "node '%s' has no value", cg_node_name(node));
+    return R_NilValue;
   }
 
   return value;
@@ -541,18 +541,41 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   R_xlen_t n = Rf_xlength(inputs);
 
+  SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
+
+  SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
+
+  int eval = 1;
+
   for(int i = 0; i < n; i++)
   {
     SEXP input = VECTOR_ELT(inputs, i);
 
-    if(!cg_is(input, "cg_node"))
+    if(cg_is(input, "cg_node"))
+    {
+      SEXP value = cg_node_value(input);
+
+      if(Rf_isNull(value))
+      {
+        eval = 0;
+
+        break;
+      }
+
+      SETCAR(args, value);
+    }
+    else
     {
       input = PROTECT(cg_constant(input, R_NilValue));
 
       SET_VECTOR_ELT(inputs, i, input);
 
+      SETCAR(args, input);
+
       UNPROTECT(1);
     }
+
+    args = CDR(args);
   }
 
   SEXP node = PROTECT(cg_class1("cg_node"));
@@ -575,9 +598,18 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     cg_node_add_input(node, VECTOR_ELT(inputs, i));
   }
 
+  if(eval)
+  {
+    SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
+
+    cg_node_set_value(node, result);
+
+    UNPROTECT(1);
+  }
+
   cg_graph_add_node(graph, node);
 
-  UNPROTECT(2);
+  UNPROTECT(4);
 
   return node;
 }
