@@ -174,12 +174,16 @@ void cg_node_add_input(SEXP node, SEXP input)
 
 SEXP cg_node_value(SEXP node)
 {
-  SEXP value = Rf_findVarInFrame(node, CG_VALUE_SYMBOL);
+  SEXP value = PROTECT(Rf_findVarInFrame(node, CG_VALUE_SYMBOL));
 
   if(value == R_UnboundValue)
   {
+    UNPROTECT(1);
+
     return R_NilValue;
   }
+
+  UNPROTECT(1);
 
   return value;
 }
@@ -553,16 +557,20 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
     if(cg_is(input, "cg_node"))
     {
-      SEXP value = cg_node_value(input);
+      SEXP value = PROTECT(cg_node_value(input));
 
       if(Rf_isNull(value))
       {
         eval = 0;
 
+        UNPROTECT(1);
+
         break;
       }
 
       SETCAR(args, value);
+
+      UNPROTECT(1);
     }
     else
     {
