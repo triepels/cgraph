@@ -344,7 +344,7 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
 
     SEXP value = PROTECT(Rf_findVarInFrame(values, symbol));
 
-    if(!(Rf_isLogical(value) || Rf_isNumeric(value)))
+    if(!Rf_isNumeric(value))
     {
       Rf_errorcall(R_NilValue, "cannot differentiate type '%s' for node '%s'",
                    Rf_type2char(TYPEOF(value)), cg_node_name(target));
