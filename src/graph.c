@@ -336,66 +336,61 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
 
   R_len_t n = XLENGTH(nodes);
 
-  if(n > 0)
+  SEXP root = VECTOR_ELT(nodes, n - 1);
+
+  SEXP symbol = cg_node_symbol(root);
+
+  SEXP value = PROTECT(Rf_findVarInFrame(values, symbol));
+
+  if(!Rf_isNumeric(value))
   {
-    SEXP root = VECTOR_ELT(nodes, n - 1);
-
-    SEXP symbol = cg_node_symbol(root);
-
-    SEXP value = PROTECT(Rf_findVarInFrame(values, symbol));
-
-    if(!Rf_isNumeric(value))
-    {
-      Rf_errorcall(R_NilValue, "cannot differentiate type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(value)), cg_node_name(target));
-    }
-
-    R_len_t m = XLENGTH(value);
-
-    SEXP gradient = PROTECT(Rf_allocVector(REALSXP, m));
-
-    double *y = REAL(gradient);
-
-    memset(y, 0, m * sizeof(double));
-
-    if(!Rf_isNull(index))
-    {
-      int k = Rf_asInteger(index);
-
-      if(k < 1 || k > m)
-      {
-        Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at index %d",
-                     cg_node_name(root), k);
-      }
-
-      y[k - 1] = 1;
-    }
-    else
-    {
-      for(int i = 0; i < m; i++)
-      {
-        y[i] = 1;
-      }
-    }
-
-    SHALLOW_DUPLICATE_ATTRIB(gradient, value);
-
-    Rf_defineVar(symbol, gradient, gradients);
-
-    for(int i = n - 1; i >= 0; i--)
-    {
-      SEXP node = VECTOR_ELT(nodes, i);
-
-      if(cg_node_type(node) == CGOPR)
-      {
-        cg_node_eval_gradients(node, values, gradients);
-      }
-    }
-
-    UNPROTECT(2);
+    Rf_errorcall(R_NilValue, "cannot differentiate type '%s' for node '%s'",
+                 Rf_type2char(TYPEOF(value)), cg_node_name(target));
   }
 
-  UNPROTECT(1);
+  R_len_t m = XLENGTH(value);
+
+  SEXP gradient = PROTECT(Rf_allocVector(REALSXP, m));
+
+  double *y = REAL(gradient);
+
+  memset(y, 0, m * sizeof(double));
+
+  if(!Rf_isNull(index))
+  {
+    int k = Rf_asInteger(index);
+
+    if(k < 1 || k > m)
+    {
+      Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at index %d",
+                   cg_node_name(root), k);
+    }
+
+    y[k - 1] = 1;
+  }
+  else
+  {
+    for(int i = 0; i < m; i++)
+    {
+      y[i] = 1;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(gradient, value);
+
+  Rf_defineVar(symbol, gradient, gradients);
+
+  for(int i = n - 1; i >= 0; i--)
+  {
+    SEXP node = VECTOR_ELT(nodes, i);
+
+    if(cg_node_type(node) == CGOPR)
+    {
+      cg_node_eval_gradients(node, values, gradients);
+    }
+  }
+
+  UNPROTECT(3);
 
   return gradients;
 }
