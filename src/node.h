@@ -59,13 +59,17 @@ SEXP cg_node_value(SEXP node);
 
 void cg_node_set_value(SEXP node, SEXP value);
 
+SEXP cg_node_grad(SEXP node);
+
+void cg_node_set_grad(SEXP node, SEXP value);
+
 SEXP cg_node_function(SEXP node);
 
 void cg_node_set_function(SEXP node, SEXP function);
 
-void cg_node_eval(SEXP node, SEXP values);
+void cg_node_eval(SEXP node, SEXP values); /* NOTE: DEPRECATED */
 
-void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients);
+void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients); /* NOTE: DEPRECATED */
 
 /*
  * PRIVATE CONSTRUCTORS

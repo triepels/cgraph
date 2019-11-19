@@ -29,7 +29,7 @@ cg_stack_t* cg_stack_allocate(const int size)
 {
   cg_stack_t *stack = (cg_stack_t*)R_alloc(1, sizeof(cg_stack_t));
 
-  int *data = (int*)R_alloc(size, sizeof(int));
+  SEXP *data = (SEXP*)R_alloc(size, sizeof(SEXP));
 
   stack->top = -1;
   stack->size = size;
@@ -48,13 +48,13 @@ int cg_stack_is_full(const cg_stack_t *stack)
   return stack->top >= stack->size - 1;
 }
 
-void cg_stack_push(cg_stack_t *stack, const int x)
+void cg_stack_push(cg_stack_t *stack, const SEXP x)
 {
   if(cg_stack_is_full(stack))
   {
     int size = (stack->size > 0) ? 2 * stack->size : 1;
 
-    int *data = R_Realloc(stack->data, size, int);
+    SEXP *data = R_Realloc(stack->data, size, SEXP);
 
     stack->data = data;
     stack->size = size;
@@ -63,7 +63,7 @@ void cg_stack_push(cg_stack_t *stack, const int x)
   stack->data[++stack->top] = x;
 }
 
-int cg_stack_top(const cg_stack_t *stack)
+SEXP cg_stack_top(const cg_stack_t *stack)
 {
   if(cg_stack_is_empty(stack))
   {

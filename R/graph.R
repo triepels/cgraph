@@ -31,6 +31,84 @@ cg_graph <- function()
   .Call("cg_graph", PACKAGE = "cgraph")
 }
 
+#' Forward Pass
+#'
+#' Perform a forward pass to evaluate a given target node in a graph.
+#'
+#' @param graph cg_graph object, graph that is evaluated.
+#' @param target cg_node object, node in the graph that is evaluated.
+#'
+#' @note All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Only those nodes needed to compute the target node (including the target itself) are evaluated. The value of a node can be retrieved via the \code{values} data member of a \code{cg_node} object.
+#'
+#' @return nothing.
+#'
+#' @examples # Initialize a computational graph
+#' graph <- cg_graph()
+#'
+#' # Add an input
+#' a <- cg_input(name = "a")
+#'
+#' # Square the input (i.e. b = a^2)
+#' b <- cg_pow(a, 2, name = "b")
+#'
+#' # Set a equal to 2
+#' a$value <- 2
+#'
+#' # Evaluate the grap by performing a forward pass
+#' cg_graph_forward(graph, b)
+#'
+#' # Retrieve the value of b
+#' b$value
+#'
+#' @author Ron Triepels
+#' @export
+cg_graph_forward <- function(graph, target)
+{
+  invisible(.Call("cg_graph_forward", graph, target, PACKAGE = "cgraph"))
+}
+
+#' Backward Pass
+#'
+#' Perform a backward pass to evaluate the partial derivatives of a given target node with respect to the nodes in a graph.
+#'
+#' @param graph cg_graph object, graph that is differentiated.
+#' @param target cg_node object, node in the graph that is differentiated.
+#'
+#' @note All nodes required to compute the target node must first have been evaluated by calling \link[cgraph:cg_graph_forward]{cg_graph_forward}. Only those nodes on which the target node directly or indirectly depend are differentiated. In case the target node evaluates to a vector or array, it is differentiated element-wise. The derivatives have the same shape as the values of the nodes. They can be retrieved via the \code{grad} data member of a \code{cg_node} object.
+#'
+#' @return nothing.
+#'
+#' @examples # Initialize a computational graph
+#' graph <- cg_graph()
+#'
+#' # Add an input
+#' a <- cg_input(name = "a")
+#'
+#' # Add a parameter
+#' b <- cg_parameter(4, name = "b")
+#'
+#' # Perform some operations
+#' c <- cg_sin(a) + cg_cos(b) - cg_tan(a)
+#'
+#' # Set a equal to 2
+#' a$value <- 2
+#'
+#' # Evaluate the graph by performing a forward pass
+#' cg_graph_forward(graph, c)
+#'
+#' # Differentiate the graph by performing a backward pass
+#' cg_graph_backward(graph, c)
+#'
+#' # Retrieve the derivative of c with respect to b
+#' b$grad
+#'
+#' @author Ron Triepels
+#' @export
+cg_graph_backward <- function(graph, target)
+{
+  invisible(.Call("cg_graph_backward", graph, target, PACKAGE = "cgraph"))
+}
+
 #' Evaluate the Graph
 #'
 #' Evaluate a given target node in a graph.
@@ -39,7 +117,9 @@ cg_graph <- function()
 #' @param target cg_node object, node in the graph that is evaluated.
 #' @param values named list or environment, values that are subsituted for the input nodes in the graph.
 #'
-#' @note All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Argument \code{values} can be used to substitute values for input nodes that do not have a value. Only those nodes needed to compute the node are evaluated and their values are returned.
+#' @note This function is deprecated and will be removed in the next major release. Please use function \link[cgraph:cg_graph_forward]{cg_graph_forward} to evaluate a graph instead.
+#'
+#' All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Argument \code{values} can be used to substitute values for input nodes that do not have a value. Only those nodes needed to compute the node are evaluated and their values are returned.
 #'
 #' @return environment, the value of the node including the value of all ancestors of the node in the graph.
 #'
@@ -62,6 +142,8 @@ cg_graph <- function()
 #' @export
 cg_graph_run <- function(graph, target, values = new.env())
 {
+  .Deprecated("cg_graph_forward")
+
   if(is.list(values))
   {
     values <- list2env(values)
@@ -79,7 +161,9 @@ cg_graph_run <- function(graph, target, values = new.env())
 #' @param values named list or environment, values that are subsituted for the input nodes in the graph.
 #' @param index numeric scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).
 #'
-#' @note All nodes required to compute the target node must have a value, or their value must be able to be computed at run-time. The values of the nodes can be obtained by first evaluating function \link[cgraph]{cg_graph_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
+#' @note This function is deprecated and will be removed in the next major release. Please use function \link[cgraph:cg_graph_backward]{cg_graph_backward} to differentiate a graph instead.
+#'
+#' All nodes required to compute the target node must have a value, or their value must be able to be computed at run-time. The values of the nodes can be obtained by first evaluating function \link[cgraph]{cg_graph_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
 #'
 #' In case the value of target node \code{name} is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated.
 #'
@@ -107,6 +191,8 @@ cg_graph_run <- function(graph, target, values = new.env())
 #' @export
 cg_graph_gradients <- function(graph, target, values = new.env(), index = NULL)
 {
+  .Deprecated("cg_graph_backward")
+
   if(is.list(values))
   {
     values <- list2env(values)

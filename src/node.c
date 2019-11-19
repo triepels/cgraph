@@ -34,6 +34,7 @@ limitations under the License.
 #define CG_NAME_SYMBOL Rf_install("name")
 #define CG_INPUTS_SYMBOL Rf_install("inputs")
 #define CG_VALUE_SYMBOL Rf_install("value")
+#define CG_GRAD_SYMBOL Rf_install("grad")
 #define CG_FUN_SYMBOL Rf_install("fun")
 
 /*
@@ -193,6 +194,27 @@ void cg_node_set_value(SEXP node, SEXP value)
   Rf_defineVar(CG_VALUE_SYMBOL, value, node);
 }
 
+SEXP cg_node_grad(SEXP node)
+{
+  SEXP grad = PROTECT(Rf_findVarInFrame(node, CG_GRAD_SYMBOL));
+
+  if(grad == R_UnboundValue)
+  {
+    UNPROTECT(1);
+
+    return R_NilValue;
+  }
+
+  UNPROTECT(1);
+
+  return grad;
+}
+
+void cg_node_set_grad(SEXP node, SEXP grad)
+{
+  Rf_defineVar(CG_GRAD_SYMBOL, grad, node);
+}
+
 SEXP cg_node_function(SEXP node)
 {
   SEXP function = Rf_findVarInFrame(node, CG_FUN_SYMBOL);
@@ -215,6 +237,7 @@ void cg_node_set_function(SEXP node, SEXP function)
   Rf_defineVar(CG_FUN_SYMBOL, function, node);
 }
 
+/* NOTE: DEPRECATED. WILL BE REMOVED IN THE NEXT MAJOR RELEASE */
 void cg_node_eval(SEXP node, SEXP values)
 {
   SEXP symbol = cg_node_symbol(node);
@@ -285,6 +308,7 @@ void cg_node_eval(SEXP node, SEXP values)
   }
 }
 
+/* NOTE: DEPRECATED. WILL BE REMOVED IN THE NEXT MAJOR RELEASE */
 void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients)
 {
   if(cg_node_type(node) != CGOPR)

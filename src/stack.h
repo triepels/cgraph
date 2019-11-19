@@ -29,7 +29,7 @@ limitations under the License.
 typedef struct {
   int top;
   int size;
-  int *data;
+  SEXP *data;
 } cg_stack_t;
 
 /*
@@ -42,9 +42,9 @@ int cg_stack_is_empty(const cg_stack_t *stack);
 
 int cg_stack_is_full(const cg_stack_t *stack);
 
-void cg_stack_push(cg_stack_t *stack, const int x);
+void cg_stack_push(cg_stack_t *stack, const SEXP x);
 
-int cg_stack_top(const cg_stack_t *stack);
+SEXP cg_stack_top(const cg_stack_t *stack);
 
 void cg_stack_pop(cg_stack_t *stack);
 
