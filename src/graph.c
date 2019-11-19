@@ -50,6 +50,7 @@ SEXP cg_graph_nodes(SEXP graph)
   return nodes;
 }
 
+/* NOTE: DEPRECATED. WILL BE REMOVED IN THE NEXT MAJOR RELEASE */
 char* cg_graph_gen_name(SEXP graph)
 {
   char *name = R_alloc(1, 32 * sizeof(char));

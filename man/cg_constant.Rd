@@ -18,14 +18,16 @@ cg_node object.
 Add a constant node to the active graph.
 }
 \note{
+Argument \code{name} is deprecated and will be removed in the next major release.
+
 Constant nodes are ignored when differentiating a graph.
 }
 \examples{
 # Initialize a computational graph
-x <- cg_graph()
+graph <- cg_graph()
 
-# Add a constant with value 1 and name 'a' to the graph.
-a <- cg_constant(1, name = "a")
+# Add a constant with value 1 to the graph.
+a <- cg_constant(1)
 
 }
 \author{

@@ -28,7 +28,7 @@ limitations under the License.
 
 SEXP cg_graph_nodes(SEXP graph);
 
-char* cg_graph_gen_name(SEXP graph);
+char* cg_graph_gen_name(SEXP graph); /* NOTE: DEPRECATED */
 
 int cg_graph_node_exists(SEXP graph, const char *name);
 
@@ -36,7 +36,7 @@ void cg_graph_add_node(SEXP graph, SEXP node);
 
 SEXP cg_graph_get_node(SEXP graph, const int id);
 
-SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target);
+SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target); /* NOTE: DEPRECATED */
 
 /*
  * PUBLIC METHODS

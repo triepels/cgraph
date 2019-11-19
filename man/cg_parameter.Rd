@@ -18,14 +18,16 @@ cg_node object.
 Add a parameter node to the active graph.
 }
 \note{
+Argument \code{name} is deprecated and will be removed in the next major release.
+
 Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
 }
 \examples{
 # Initialize a computational graph
-x <- cg_graph()
+graph <- cg_graph()
 
-# Add a parameter with value 1 and name 'a' to the graph.
-a <- cg_parameter(1, name = "a")
+# Add a parameter with value 1 to the graph.
+a <- cg_parameter(1)
 
 }
 \author{

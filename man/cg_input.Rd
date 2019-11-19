@@ -16,13 +16,15 @@ cg_node object.
 Add an input node to the active graph.
 }
 \note{
+Argument \code{name} is deprecated and will be removed in the next major release.
+
 Inputs cannot be assigned a fixed value but behave as placeholders. Values can be assigned to inputs when evaluating or differentiating a graph (see \link[cgraph]{cg_graph_run} and \link[cgraph]{cg_graph_gradients} for more details).
 }
 \examples{
 # Initialize a computational graph
-x <- cg_graph()
+graph <- cg_graph()
 
-# Add a parameter with name 'a' to the graph.
+# Add an input to the graph.
 a <- cg_input(name = "a")
 
 }
