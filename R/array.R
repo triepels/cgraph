@@ -228,7 +228,7 @@ delayedAssign("sum", cg_function(
 #'
 #' @return cg_operator object, node of the operation.
 #'
-#' @note Function \link[base:prod]{prod} is called changing the default value of argument \code{na.rm}.
+#' @note Function \link[base:prod]{prod} is called without changing the default value of argument \code{na.rm}.
 #'
 #' @seealso \link[base:prod]{prod}
 #'

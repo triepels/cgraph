@@ -20,7 +20,7 @@ Calculate \code{prod(x)}.
 \note{
 In contrast to the base \link[base:prod]{prod} function, this function only accepts a single argument.
 
-Function \link[base:prod]{prod} is called changing the default value of argument \code{na.rm}.
+Function \link[base:prod]{prod} is called without changing the default value of argument \code{na.rm}.
 }
 \seealso{
 \link[base:prod]{prod}
