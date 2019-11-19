@@ -111,5 +111,5 @@ cg_operator <- function(fun, inputs, name = NULL)
 #' @export
 print.cg_node <- function(x, ...)
 {
-  invisible(.Call("cg_node_print", x, PACKAGE = "cgraph"))
+  cat(sprintf("<cg_node: %s>\n", x$name))
 }

@@ -104,10 +104,3 @@ SEXP cg_function(SEXP def, SEXP grads)
 
   return function;
 }
-
-SEXP cg_function_print(SEXP function)
-{
-  Rprintf("<cg_function>");
-
-  return R_NilValue;
-}

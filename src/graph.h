@@ -56,6 +56,4 @@ SEXP cg_graph_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SE
 
 SEXP cg_graph();
 
-SEXP cg_graph_print(SEXP graph);
-
 #endif
