@@ -244,6 +244,8 @@ void cg_graph_init_target_grad(SEXP graph, SEXP target, SEXP index)
   SHALLOW_DUPLICATE_ATTRIB(grad, value);
 
   cg_node_set_grad(target, grad);
+
+  UNPROTECT(2);
 }
 
 void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*enter)(SEXP node), void(*leave)(SEXP node))
