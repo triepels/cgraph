@@ -3,7 +3,7 @@ context("Graph")
 test_that("Duplicate nodes",
 {
   # Initialize graph
-  x <- cg_graph()
+  graph <- cg_graph()
 
   # Create parameter
   a <- cg_parameter(1, name = "a")
@@ -15,7 +15,7 @@ test_that("Duplicate nodes",
 test_that("Operators with equivalent inputs",
 {
   # Initialize graph
-  x <- cg_graph()
+  graph <- cg_graph()
 
   # Create parameter
   a <- cg_parameter(2, name = "a")
@@ -23,23 +23,20 @@ test_that("Operators with equivalent inputs",
   # Create test expression
   b <- (a + a) + (a - a) + (a * a) + (a / a)
 
-  # Evaluate graph
-  values <- cg_graph_run(x, b)
+  # Perform forward pass
+  cg_graph_forward(graph, b)
 
-  # Calculate gradients
-  grads <- cg_graph_gradients(x, b, values)
-
-  # Approximate gradients
-  approx <- approx_gradients(x, b, values)
+  # Perform backward pass
+  cg_graph_backward(graph, b)
 
   # Check gradients
-  expect_equivalent(grads$a, approx$a, tolerance = 1e-4)
+  expect_equivalent(a$grad, approx_gradient(graph, b, a), tolerance = 1e-4)
 })
 
 test_that("Graph with multiple outputs",
 {
   # Initialize graph
-  x <- cg_graph()
+  graph <- cg_graph()
 
   # Create parameters
   a <- cg_parameter(2, name = "a")
@@ -49,56 +46,50 @@ test_that("Graph with multiple outputs",
   c <- a * b
   d <- a / b
 
-  # Evaluate node c in the graph
-  values <- cg_graph_run(x, c)
+  # Perform forward pass
+  cg_graph_forward(graph, c)
 
-  # Calculate gradients
-  grads <- cg_graph_gradients(x, c, values)
-
-  # Approximate gradients
-  approx <- approx_gradients(x, c, values)
+  # Perform backward pass
+  cg_graph_backward(graph, c)
 
   # Check gradients
-  expect_equivalent(grads$a, approx$a, tolerance = 1e-4)
-  expect_equivalent(grads$b, approx$b, tolerance = 1e-4)
+  expect_equivalent(a$grad, approx_gradient(graph, c, a), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 
-  # Evaluate node d in the graph
-  values <- cg_graph_run(x, d)
+  # Perform forward pass
+  cg_graph_forward(graph, d)
 
-  # Calculate gradients
-  grads <- cg_graph_gradients(x, d, values)
-
-  # Approximate gradients
-  approx <- approx_gradients(x, d, values)
+  # Perform backward pass
+  cg_graph_backward(graph, d)
 
   # Check gradients
-  expect_equivalent(grads$a, approx$a, tolerance = 1e-4)
-  expect_equivalent(grads$b, approx$b, tolerance = 1e-4)
+  expect_equivalent(a$grad, approx_gradient(graph, d, a), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, d, b), tolerance = 1e-4)
 })
 
 test_that("Large graph (10000 operators)",
 {
   # Initialize graph
-  x <- cg_graph()
+  graph <- cg_graph()
 
   # Create parameters
   a <- cg_parameter(2, name = "a")
 
-  # Generate test expressions
-  for(i in 1:10000)
+  # Generate test expression
+  b <- cg_abs(a)
+
+  # Generate some more test expressions
+  for(i in 1:9999)
   {
-    a <- cg_abs(a)
+    b <- cg_abs(b)
   }
 
-  # Evaluate the graph
-  values <- cg_graph_run(x, a)
+  # Perform forward pass
+  cg_graph_forward(graph, b)
 
-  # Calculate gradients
-  grads <- cg_graph_gradients(x, a, values)
-
-  # Approximate gradients
-  approx <- approx_gradients(x, a, values)
+  # Perform backward pass
+  cg_graph_backward(graph, b)
 
   # Check gradients
-  expect_equivalent(grads$a, approx$a, tolerance = 1e-4)
+  expect_equivalent(a$grad, approx_gradient(graph, b, a), tolerance = 1e-4)
 })
