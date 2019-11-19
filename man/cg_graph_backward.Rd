@@ -20,7 +20,7 @@ nothing.
 Perform a backward pass to evaluate the partial derivatives of a given target node with respect to the nodes in a graph.
 }
 \note{
-All nodes required to compute the target node must first have been evaluated by calling \link[cgraph:cg_graph_forward]{cg_graph_forward}. The target node is only differenated with respect to the nodes on which it directly or indirectly depends.
+All nodes required to compute the target node must first have been evaluated by calling \link[cgraph:cg_graph_forward]{cg_graph_forward}. The target node is only differenated with respect to those nodes on which it directly or indirectly depends.
 
 In case the value of the target node is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated.
 
