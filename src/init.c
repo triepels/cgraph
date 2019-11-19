@@ -42,7 +42,7 @@ static const R_CallMethodDef CallEntries[] = {
   // Graph
   {"cg_graph", (DL_FUNC) &cg_graph, 0},
   {"cg_graph_forward", (DL_FUNC) &cg_graph_forward, 2},
-  {"cg_graph_backward", (DL_FUNC) &cg_graph_backward, 2},
+  {"cg_graph_backward", (DL_FUNC) &cg_graph_backward, 3},
   {"cg_graph_run", (DL_FUNC) &cg_graph_run, 3}, /* NOTE: DEPRECATED */
   {"cg_graph_gradients", (DL_FUNC) &cg_graph_gradients, 5}, /* NOTE: DEPRECATED */
   {"cg_graph_print", (DL_FUNC) &cg_graph_print, 1},

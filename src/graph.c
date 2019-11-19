@@ -190,7 +190,63 @@ SEXP cg_graph_get_node(SEXP graph, const int id)
   return node;
 }
 
-void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*enter)(SEXP node, int *visited, int k), void(*leave)(SEXP node, int *visited, int k))
+void cg_graph_clear_grads(SEXP graph)
+{
+  SEXP nodes = PROTECT(cg_graph_nodes(graph));
+
+  R_len_t n = XLENGTH(nodes);
+
+  for(int i = 0; i < n; i++)
+  {
+    cg_node_set_grad(VECTOR_ELT(nodes, i), R_NilValue);
+  }
+
+  UNPROTECT(1);
+}
+
+void cg_graph_init_target_grad(SEXP graph, SEXP target, SEXP index)
+{
+  SEXP value = PROTECT(cg_node_value(target));
+
+  if(!Rf_isNumeric(value))
+  {
+    Rf_errorcall(R_NilValue, "cannot differentiate type '%s' for node '%s'",
+                 Rf_type2char(TYPEOF(value)), cg_node_name(target));
+  }
+
+  R_len_t n = XLENGTH(value);
+
+  SEXP grad = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *x = REAL(grad);
+
+  memset(x, 0, n * sizeof(double));
+
+  if(!Rf_isNull(index))
+  {
+    int k = Rf_asInteger(index);
+
+    if(k < 1 || k > n)
+    {
+      Rf_errorcall(R_NilValue, "argument 'index' must be between 1 and %d", n);
+    }
+
+    x[k - 1] = 1;
+  }
+  else
+  {
+    for(int i = 0; i < n; i++)
+    {
+      x[i] = 1;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(grad, value);
+
+  cg_node_set_grad(target, grad);
+}
+
+void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*enter)(SEXP node), void(*leave)(SEXP node))
 {
   SEXP nodes = PROTECT(cg_graph_nodes(graph));
 
@@ -215,7 +271,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
   if(enter != NULL)
   {
-    enter(target, visited, n);
+    enter(target);
   }
 
   while(!cg_stack_is_empty(stack))
@@ -245,7 +301,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
         {
           if(enter != NULL)
           {
-            enter(input, visited, n);
+            enter(input);
           }
 
           cg_stack_push(stack, input);
@@ -263,7 +319,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
     {
       if(leave != NULL)
       {
-        leave(node, visited, n);
+        leave(node);
       }
 
       cg_stack_pop(stack);
@@ -372,7 +428,7 @@ static int filter(SEXP node)
   return 0;
 }
 
-static void forward(SEXP node, int *visited, int k)
+static void forward(SEXP node)
 {
   SEXP inputs = PROTECT(cg_node_inputs(node));
 
@@ -438,7 +494,7 @@ SEXP cg_graph_forward(SEXP graph, SEXP target)
   return R_NilValue;
 }
 
-static void backward(SEXP node, int *visited, int k)
+static void backward(SEXP node)
 {
   SEXP value = PROTECT(cg_node_value(node));
 
@@ -526,21 +582,14 @@ static void backward(SEXP node, int *visited, int k)
                    Rf_type2char(TYPEOF(result)), cg_node_name(node));
     }
 
-    int input_id = cg_node_id(input);
+    SEXP input_grad = PROTECT(cg_node_grad(input));
 
-    if(input_id < 1 || input_id > k)
-    {
-      Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
-    }
-
-    if(!visited[input_id - 1])
+    if(Rf_isNull(input_grad))
     {
       cg_node_set_grad(input, result);
     }
     else
     {
-      SEXP input_grad = PROTECT(cg_node_grad(input));
-
       if(TYPEOF(result) != TYPEOF(input_grad))
       {
         Rf_errorcall(R_NilValue, "cannot accumulate gradients of type '%s' and '%s' for node '%s'",
@@ -583,17 +632,15 @@ static void backward(SEXP node, int *visited, int k)
           break;
         }
       }
-
-      UNPROTECT(1);
     }
 
-    UNPROTECT(2);
+    UNPROTECT(3);
   }
 
   UNPROTECT(6);
 }
 
-SEXP cg_graph_backward(SEXP graph, SEXP target)
+SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 {
   if(!cg_is(graph, "cg_graph"))
   {
@@ -610,30 +657,14 @@ SEXP cg_graph_backward(SEXP graph, SEXP target)
     Rf_errorcall(R_NilValue, "argument 'target' must be an operator node");
   }
 
-  SEXP value = PROTECT(cg_node_value(target));
-
-  if(!Rf_isNumeric(value))
+  if(!Rf_isNull(index) && (!Rf_isNumeric(index) || XLENGTH(index) < 1))
   {
-    Rf_errorcall(R_NilValue, "cannot differentiate type '%s' for node '%s'",
-                 Rf_type2char(TYPEOF(value)), cg_node_name(target));
+    Rf_errorcall(R_NilValue, "argument 'index' must be NULL or a numeric scalar");
   }
 
-  R_len_t n = XLENGTH(value);
+  cg_graph_clear_grads(graph);
 
-  SEXP grad = PROTECT(Rf_allocVector(REALSXP, n));
-
-  double *x = REAL(grad);
-
-  memset(x, 0, n * sizeof(double));
-
-  for(int i = 0; i < n; i++)
-  {
-    x[i] = 1;
-  }
-
-  SHALLOW_DUPLICATE_ATTRIB(grad, value);
-
-  cg_node_set_grad(target, grad);
+  cg_graph_init_target_grad(graph, target, index);
 
   cg_graph_reverse_dfs_from(graph, target, filter, backward, NULL);
 

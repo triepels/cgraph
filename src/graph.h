@@ -44,7 +44,7 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target); /* NOTE: DEPRECATED */
 
 SEXP cg_graph_forward(SEXP graph, SEXP target);
 
-SEXP cg_graph_backward(SEXP graph, SEXP target);
+SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index);
 
 SEXP cg_graph_run(SEXP graph, SEXP target, SEXP values); /* NOTE: DEPRECATED */
 
