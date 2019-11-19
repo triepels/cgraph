@@ -42,7 +42,7 @@ cg_graph <- function()
 #'
 #' The value of a node can be retrieved via the \code{values} data member of a \code{cg_node} object.
 #'
-#' @return nothing.
+#' @return none.
 #'
 #' @examples # Initialize a computational graph
 #' graph <- cg_graph()
@@ -83,7 +83,7 @@ cg_graph_forward <- function(graph, target)
 #'
 #' The derivatives have the same shape as the values of the nodes. They can be retrieved via the \code{grad} data member of a \code{cg_node} object.
 #'
-#' @return nothing.
+#' @return none.
 #'
 #' @examples # Initialize a computational graph
 #' graph <- cg_graph()

@@ -14,7 +14,7 @@ cg_graph_backward(graph, target, index = NULL)
 \item{index}{numeric scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).}
 }
 \value{
-nothing.
+none.
 }
 \description{
 Perform a backward pass to evaluate the partial derivatives of a given target node with respect to the nodes in a graph.
