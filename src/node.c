@@ -31,7 +31,7 @@ limitations under the License.
 
 #define CG_ID_SYMBOL Rf_install("id")
 #define CG_TYPE_SYMBOL Rf_install("type")
-#define CG_NAME_SYMBOL Rf_install("name") /* NOTE: DEPRECATED */
+#define CG_NAME_SYMBOL Rf_install("name")
 #define CG_INPUTS_SYMBOL Rf_install("inputs")
 #define CG_VALUE_SYMBOL Rf_install("value")
 #define CG_GRAD_SYMBOL Rf_install("grad")
@@ -41,7 +41,6 @@ limitations under the License.
  * METHODS
  */
 
-/* NOTE: DEPRECATED. WILL BE REMOVED IN THE NEXT MAJOR RELEASE */
 const char* cg_node_name(SEXP node)
 {
   SEXP name = Rf_findVarInFrame(node, CG_NAME_SYMBOL);
@@ -54,7 +53,6 @@ const char* cg_node_name(SEXP node)
   return CHAR(STRING_ELT(name, 0));
 }
 
-/* NOTE: DEPRECATED. WILL BE REMOVED IN THE NEXT MAJOR RELEASE */
 void cg_node_set_name(SEXP node, const char *name)
 {
   if(strcmp(name, "") == 0)

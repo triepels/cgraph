@@ -28,7 +28,7 @@ limitations under the License.
 
 SEXP cg_graph_nodes(SEXP graph);
 
-char* cg_graph_gen_name(SEXP graph); /* NOTE: DEPRECATED */
+char* cg_graph_gen_name(SEXP graph);
 
 int cg_graph_node_exists(SEXP graph, const char *name);
 

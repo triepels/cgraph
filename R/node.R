@@ -14,18 +14,13 @@
 #' @examples # Initialize a computational graph
 #' graph <- cg_graph()
 #'
-#' # Add a constant with value 1 to the graph.
-#' a <- cg_constant(1)
+#' # Add a constant with value 1 and name 'a' to the graph.
+#' a <- cg_constant(1, name = "a")
 #'
 #' @author Ron Triepels
 #' @export
 cg_constant <- function(value, name = NULL)
 {
-  if(!missing(name))
-  {
-    warning("argument 'name' is deprecated")
-  }
-
   .Call("cg_constant", value, name, PACKAGE = "cgraph")
 }
 
@@ -45,18 +40,13 @@ cg_constant <- function(value, name = NULL)
 #' @examples # Initialize a computational graph
 #' graph <- cg_graph()
 #'
-#' # Add a parameter with value 1 to the graph.
-#' a <- cg_parameter(1)
+#' # Add a parameter with value 1 and name 'a' to the graph.
+#' a <- cg_parameter(1, name = "a")
 #'
 #' @author Ron Triepels
 #' @export
 cg_parameter <- function(value, name = NULL)
 {
-  if(!missing(name))
-  {
-    warning("argument 'name' is deprecated")
-  }
-
   .Call("cg_parameter", value, name, PACKAGE = "cgraph")
 }
 
@@ -82,11 +72,6 @@ cg_parameter <- function(value, name = NULL)
 #' @export
 cg_input <- function(name = NULL)
 {
-  if(!missing(name))
-  {
-    warning("argument 'name' is deprecated")
-  }
-
   .Call("cg_input", name, PACKAGE = "cgraph")
 }
 
@@ -114,17 +99,12 @@ cg_input <- function(name = NULL)
 #' )
 #'
 #' # Add a an operator with the negation function to the graph.
-#' a <- cg_operator(f, list(10))
+#' a <- cg_operator(f, list(10), name = "a")
 #'
 #' @author Ron Triepels
 #' @export
 cg_operator <- function(fun, inputs, name = NULL)
 {
-  if(!missing(name))
-  {
-    warning("argument 'name' is deprecated")
-  }
-
   .Call("cg_operator", fun, inputs, name, PACKAGE = "cgraph")
 }
 
