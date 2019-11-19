@@ -30,7 +30,7 @@ limitations under the License.
 
 SEXP bsum(SEXP x, SEXP block_size)
 {
-  if(!(Rf_isLogical(x) || Rf_isNumeric(x)))
+  if(!Rf_isNumeric(x))
   {
     Rf_errorcall(R_NilValue, "argument 'x' must be a numerical vector or array");
   }
