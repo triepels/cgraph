@@ -668,16 +668,16 @@ SEXP cg_node_print(SEXP node)
   switch(cg_node_type(node))
   {
     case CGCST :
-      Rprintf("<cg_constant:%d>", cg_node_id(node));
+      Rprintf("<cg_constant: %s>", cg_node_name(node));
       break;
     case CGPRM :
-      Rprintf("<cg_parameter:%d>", cg_node_id(node));
+      Rprintf("<cg_parameter: %s>", cg_node_name(node));
       break;
     case CGIPT :
-      Rprintf("<cg_input:%d>", cg_node_id(node));
+      Rprintf("<cg_input: %s>", cg_node_name(node));
       break;
     case CGOPR :
-      Rprintf("<cg_operator:%d>", cg_node_id(node));
+      Rprintf("<cg_operator: %s>", cg_node_name(node));
       break;
   }
 
