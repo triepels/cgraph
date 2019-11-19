@@ -30,32 +30,27 @@ bsum <- function(x, block_size = 1)
   .Call("bsum", x, block_size, PACKAGE = "cgraph")
 }
 
-#' Approximate Gradients
+#' Approximate Gradient
 #'
-#' Differentiate a graph with respect to a given target node by numerical differentiation.
+#' Differentiate a target node with respect to a given node by numerical differentiation.
 #'
 #' @param graph cg_graph object, graph that is differentiated.
 #' @param target cg_node object, node in the graph that is differentiated.
-#' @param values named list or environment, values that are subsituted for the input nodes in the graph.
+#' @param node cg_node object, node with respect to which the target node is differentiated.
 #' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
 #' @param eps numeric scalar, step size. Defaults to 1e-4.
 #'
-#' @note All nodes required to compute the target node must have a value, or their value must be able to be computed at run-time. The values of the nodes can be obtained by first evaluating function \link[cgraph]{cg_graph_run}. The values obtained by this function for the nodes can then be supplied to argument \code{values}.
+#' @note All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Only those nodes needed to compute the target node (including the target itself) are evaluated.
 #'
-#' The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the value of the target node is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The gradients have the same shape as the values of the nodes.
+#' The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the target node evaluates to a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The derivative has the same shape as the value of node supplied to argument \code{node}.
 #'
 #' Numerical differentiation is subject to estimation error and can be very slow. Therefore, this function should only be used for testing purposes.
 #'
-#' @return environment, the gradients of all ancestors of the node (including the target node itself) with respect to the target node.
+#' @return the derivative of the node supplied to argument \code{node} with respect to the node supplied to argument \code{target}.
 #'
 #' @author Ron Triepels
 #' @keywords internal
-approx_gradients <- function(graph, target, values = new.env(), index = 1, eps = 1e-4)
+approx_gradient <- function(graph, target, node, index = 1, eps = 1e-4)
 {
-  if(is.list(values))
-  {
-    values <- list2env(values)
-  }
-
-  .Call("approx_gradients", graph, target, values, new.env(), index, eps, PACKAGE = "cgraph")
+  .Call("approx_gradient", graph, target, node, index, eps, PACKAGE = "cgraph")
 }

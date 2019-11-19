@@ -55,7 +55,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_session_print", (DL_FUNC) &cg_session_print, 1},
   // Internal
   {"bsum", (DL_FUNC) &bsum, 2},
-  {"approx_gradients", (DL_FUNC) &approx_gradients, 6},
+  {"approx_gradient", (DL_FUNC) &approx_gradient, 5},
   // Math
   {"sigmoid", (DL_FUNC) &sigmoid, 1},
   {NULL, NULL, 0}

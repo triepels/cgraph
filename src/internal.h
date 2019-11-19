@@ -28,6 +28,6 @@ limitations under the License.
 
 SEXP bsum(SEXP x, SEXP block_size);
 
-SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP index, SEXP eps);
+SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilon);
 
 #endif

@@ -89,7 +89,7 @@ SEXP bsum(SEXP x, SEXP block_size)
   return y;
 }
 
-SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP index, SEXP epsilon)
+SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilon)
 {
   if(!cg_is(graph, "cg_graph"))
   {
@@ -99,16 +99,6 @@ SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP
   if(!cg_is(target, "cg_node"))
   {
     Rf_errorcall(R_NilValue, "argument 'target' must be a cg_node object");
-  }
-
-  if(!Rf_isEnvironment(values))
-  {
-    Rf_errorcall(R_NilValue, "argument 'values' must be an environment");
-  }
-
-  if(!Rf_isEnvironment(gradients))
-  {
-    Rf_errorcall(R_NilValue, "argument 'gradients' must be an environment");
   }
 
   if(!Rf_isNumeric(index))
@@ -121,111 +111,71 @@ SEXP approx_gradients(SEXP graph, SEXP target, SEXP values, SEXP gradients, SEXP
     Rf_errorcall(R_NilValue, "argument 'epsilon' must be a numeric scalar");
   }
 
-  int k = Rf_asInteger(index);
-
-  double eps = Rf_asReal(epsilon);
-
-  if(eps < 0)
-  {
-    Rf_errorcall(R_NilValue, "argument 'epsilon' must be non-negative");
-  }
-
   int target_index;
 
   SEXP target_value = R_NilValue;
 
-  SEXP target_symbol = cg_node_symbol(target);
-
-  PROTECT_WITH_INDEX(target_value = Rf_findVarInFrame(values, target_symbol), &target_index);
-
-  if(target_value == R_UnboundValue)
-  {
-    Rf_errorcall(R_NilValue, "cannot find value of node '%s'", cg_node_name(target));
-  }
+  PROTECT_WITH_INDEX(target_value = cg_node_value(target), &target_index);
 
   if(!Rf_isReal(target_value))
   {
-    REPROTECT(target_value = Rf_coerceVector(target_value, REALSXP), target_index);
-
-    cg_node_set_value(target, target_value);
+    Rf_errorcall(R_NilValue, "node '%s' does not evaluate to a real vector or array",
+                 cg_node_name(target));
   }
+
+  int k = Rf_asInteger(index);
 
   if(k < 1 || k > XLENGTH(target_value))
   {
-    Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at index %d", cg_node_name(target), k);
+    Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at index %d",
+                 cg_node_name(target), k);
   }
 
-  SEXP nodes = PROTECT(cg_graph_reverse_dfs(graph, target));
+  SEXP node_value = PROTECT(cg_node_value(node));
 
-  R_len_t n = XLENGTH(nodes);
+  if(!Rf_isReal(node_value))
+  {
+    Rf_errorcall(R_NilValue, "node '%s' does not evaluate to a real vector or array",
+                 cg_node_name(node));
+  }
+
+  int n = XLENGTH(node_value);
+
+  SEXP grad = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *x = REAL(node_value);
+  double *y = REAL(grad);
+
+  double eps = Rf_asReal(epsilon);
 
   for(int i = 0; i < n; i++)
   {
-    SEXP node = VECTOR_ELT(nodes, i);
+    x[i] += eps;
 
-    if(cg_node_type(node) == CGPRM)
-    {
-      int node_index;
+    cg_graph_forward(graph, target);
 
-      SEXP node_value = R_NilValue;
+    REPROTECT(target_value = cg_node_value(target), target_index);
 
-      SEXP node_symbol = cg_node_symbol(node);
+    double t1 = REAL(target_value)[k - 1];
 
-      PROTECT_WITH_INDEX(node_value = Rf_findVarInFrame(values, node_symbol), &node_index);
+    x[i] -= 2 * eps;
 
-      if(node_value == R_UnboundValue)
-      {
-        Rf_errorcall(R_NilValue, "cannot find value of node '%s'", cg_node_name(node));
-      }
+    cg_graph_forward(graph, target);
 
-      if(!Rf_isReal(node_value))
-      {
-        REPROTECT(node_value = Rf_coerceVector(node_value, REALSXP), node_index);
+    REPROTECT(target_value = cg_node_value(target), target_index);
 
-        cg_node_set_value(node, node_value);
-      }
+    double t2 = REAL(target_value)[k - 1];
 
-      R_len_t m = XLENGTH(node_value);
+    x[i] += eps;
 
-      SEXP grad = PROTECT(Rf_allocVector(REALSXP, m));
-
-      double *x = REAL(node_value);
-      double *y = REAL(grad);
-
-      for(int j = 0; j < m; j++)
-      {
-        x[j] += eps;
-
-        cg_graph_run(graph, target, values);
-
-        REPROTECT(target_value = Rf_findVarInFrame(values, target_symbol), target_index);
-
-        double y1 = REAL(target_value)[k - 1];
-
-        x[j] -= 2 * eps;
-
-        cg_graph_run(graph, target, values);
-
-        REPROTECT(target_value = Rf_findVarInFrame(values, target_symbol), target_index);
-
-        double y2 = REAL(target_value)[k - 1];
-
-        x[j] += eps;
-
-        y[j] = (y1 - y2) / (2 * eps);
-      }
-
-      SHALLOW_DUPLICATE_ATTRIB(grad, node_value);
-
-      Rf_defineVar(node_symbol, grad, gradients);
-
-      UNPROTECT(2);
-    }
+    y[i] = (t1 - t2) / (2 * eps);
   }
 
-  cg_graph_run(graph, target, values);
+  SHALLOW_DUPLICATE_ATTRIB(grad, node_value);
 
-  UNPROTECT(2);
+  cg_graph_forward(graph, target);
 
-  return gradients;
+  UNPROTECT(3);
+
+  return grad;
 }
