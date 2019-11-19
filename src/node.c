@@ -580,20 +580,31 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
   }
 
+  int can_eval = 1;
+
   R_xlen_t n = XLENGTH(inputs);
 
   for(int i = 0; i < n; i++)
   {
     SEXP input = VECTOR_ELT(inputs, i);
 
-    if(!cg_is(input, "cg_node"))
+    if(cg_is(input, "cg_node"))
+    {
+      SEXP value = PROTECT(cg_node_value(input));
+
+      if(Rf_isNull(value))
+      {
+        can_eval = 0;
+      }
+    }
+    else
     {
       SEXP node = PROTECT(cg_constant(input, R_NilValue));
 
       SET_VECTOR_ELT(inputs, i, node);
-
-      UNPROTECT(1);
     }
+
+    UNPROTECT(1);
   }
 
   SEXP node = PROTECT(cg_class1("cg_node"));
@@ -614,6 +625,35 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
   for(int i = 0; i < n; i++)
   {
     cg_node_add_input(node, VECTOR_ELT(inputs, i));
+  }
+
+  if(can_eval)
+  {
+    SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
+
+    SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
+
+    for(int i = 0; i < n; i++)
+    {
+      SEXP input = VECTOR_ELT(inputs, i);
+
+      if(cg_is(input, "cg_node"))
+      {
+        SETCAR(args, cg_node_value(input));
+      }
+      else
+      {
+        SETCAR(args, input);
+      }
+
+      args = CDR(args);
+    }
+
+    SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
+
+    cg_node_set_value(node, result);
+
+    UNPROTECT(3);
   }
 
   cg_graph_add_node(graph, node);
