@@ -42,4 +42,6 @@ SEXP cg_session_set_graph(SEXP graph);
 
 SEXP cg_session();
 
+SEXP cg_session_print(SEXP session);
+
 #endif

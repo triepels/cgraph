@@ -100,3 +100,10 @@ SEXP cg_session()
 
   return session;
 }
+
+SEXP cg_session_print(SEXP session)
+{
+  Rprintf("<cg_session>");
+
+  return R_NilValue;
+}

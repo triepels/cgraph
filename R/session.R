@@ -48,5 +48,5 @@ cg_session_set_graph <- function(graph)
 #' @export
 print.cg_session <- function(x, ...)
 {
-  cat("<cg_session>")
+  invisible(.Call("cg_session_print", x, PACKAGE = "cgraph"))
 }

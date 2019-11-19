@@ -624,3 +624,24 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   return node;
 }
+
+SEXP cg_node_print(SEXP node)
+{
+  switch(cg_node_type(node))
+  {
+    case CGCST :
+      Rprintf("<cg_constant:%d>", cg_node_id(node));
+      break;
+    case CGPRM :
+      Rprintf("<cg_parameter:%d>", cg_node_id(node));
+      break;
+    case CGIPT :
+      Rprintf("<cg_input:%d>", cg_node_id(node));
+      break;
+    case CGOPR :
+      Rprintf("<cg_operator:%d>", cg_node_id(node));
+      break;
+  }
+
+  return R_NilValue;
+}

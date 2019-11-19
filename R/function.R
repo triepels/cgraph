@@ -39,5 +39,5 @@ cg_function <- function(def, grads = list())
 #' @export
 print.cg_function <- function(x, ...)
 {
-  cat("<cg_function>\n")
+  invisible(.Call("cg_function_print", x, PACKAGE = "cgraph"))
 }

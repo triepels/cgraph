@@ -38,17 +38,21 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_parameter", (DL_FUNC) &cg_parameter, 2},
   {"cg_input", (DL_FUNC) &cg_input, 1},
   {"cg_operator", (DL_FUNC) &cg_operator, 3},
+  {"cg_node_print", (DL_FUNC) &cg_node_print, 1},
   // Graph
   {"cg_graph", (DL_FUNC) &cg_graph, 0},
   {"cg_graph_forward", (DL_FUNC) &cg_graph_forward, 2},
   {"cg_graph_backward", (DL_FUNC) &cg_graph_backward, 2},
   {"cg_graph_run", (DL_FUNC) &cg_graph_run, 3}, /* NOTE: DEPRECATED */
   {"cg_graph_gradients", (DL_FUNC) &cg_graph_gradients, 5}, /* NOTE: DEPRECATED */
+  {"cg_graph_print", (DL_FUNC) &cg_graph_print, 1},
   // Function
   {"cg_function", (DL_FUNC) &cg_function, 2},
+  {"cg_function_print", (DL_FUNC) &cg_function_print, 1},
   // Session
   {"cg_session_graph", (DL_FUNC) &cg_session_graph, 0},
   {"cg_session_set_graph", (DL_FUNC) &cg_session_set_graph, 1},
+  {"cg_session_print", (DL_FUNC) &cg_session_print, 1},
   // Internal
   {"bsum", (DL_FUNC) &bsum, 2},
   {"approx_gradients", (DL_FUNC) &approx_gradients, 6},

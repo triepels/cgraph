@@ -204,5 +204,5 @@ cg_graph_gradients <- function(graph, target, values = new.env(), index = NULL)
 #' @export
 print.cg_graph <- function(x, ...)
 {
-  cat("<cg_graph>\n")
+  invisible(.Call("cg_graph_print", x, PACKAGE = "cgraph"))
 }

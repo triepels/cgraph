@@ -83,4 +83,6 @@ SEXP cg_input(SEXP name);
 
 SEXP cg_operator(SEXP function, SEXP inputs, SEXP name);
 
+SEXP cg_node_print(SEXP node);
+
 #endif

@@ -785,3 +785,10 @@ SEXP cg_graph()
 
   return graph;
 }
+
+SEXP cg_graph_print(SEXP graph)
+{
+  Rprintf("<cg_graph>");
+
+  return R_NilValue;
+}
