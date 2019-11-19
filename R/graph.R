@@ -21,7 +21,7 @@
 #' @return cg_graph object.
 #'
 #' @examples # Initialize a computational graph
-#' x <- cg_graph()
+#' graph <- cg_graph()
 #'
 #' @author Ron Triepels
 #' @useDynLib cgraph

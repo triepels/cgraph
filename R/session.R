@@ -5,7 +5,7 @@
 #' @return cg_graph object, the graph that is currently active.
 #'
 #' @examples # Initialize a computational graph
-#' x <- cg_graph()
+#' graph <- cg_graph()
 #'
 #' # Retrieve the graph from the session
 #' cg_session_graph()
@@ -30,13 +30,13 @@ cg_session_graph <- function()
 #' @return none.
 #'
 #' @examples # Initialize a computational graph
-#' x <- cg_graph()
+#' graph1 <- cg_graph()
 #'
 #' # Initialize another computational graph. It becomes the active graph.
-#' y <- cg_graph()
+#' graph2 <- cg_graph()
 #'
-#' # Set x to be the active graph
-#' cg_session_set_graph(x)
+#' # Set graph1 to be the active graph
+#' cg_session_set_graph(graph1)
 #'
 #' @author Ron Triepels
 #' @export

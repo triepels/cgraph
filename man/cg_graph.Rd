@@ -17,7 +17,7 @@ The graph is automatically set to be the active graph.
 }
 \examples{
 # Initialize a computational graph
-x <- cg_graph()
+graph <- cg_graph()
 
 }
 \author{

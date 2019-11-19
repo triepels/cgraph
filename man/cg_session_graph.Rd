@@ -14,7 +14,7 @@ Get the graph that is currently active.
 }
 \examples{
 # Initialize a computational graph
-x <- cg_graph()
+graph <- cg_graph()
 
 # Retrieve the graph from the session
 cg_session_graph()

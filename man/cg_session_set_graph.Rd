@@ -22,13 +22,13 @@ Only one graph can be active at a time. The active graph can be changed by calli
 }
 \examples{
 # Initialize a computational graph
-x <- cg_graph()
+graph1 <- cg_graph()
 
 # Initialize another computational graph. It becomes the active graph.
-y <- cg_graph()
+graph2 <- cg_graph()
 
-# Set x to be the active graph
-cg_session_set_graph(x)
+# Set graph1 to be the active graph
+cg_session_set_graph(graph1)
 
 }
 \author{
