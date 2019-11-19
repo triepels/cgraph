@@ -130,21 +130,6 @@ cg_graph_backward <- function(graph, target, index = NULL)
 #'
 #' @return environment, the value of the node including the value of all ancestors of the node in the graph.
 #'
-#' @examples # Initialize a computational graph
-#' x <- cg_graph()
-#'
-#' # Add an input
-#' a <- cg_input(name = "a")
-#'
-#' # Square the input (i.e. b = a^2)
-#' b <- cg_pow(a, 2, name = "b")
-#'
-#' # Evaluate b at a = 2
-#' values <- cg_graph_run(x, b, list(a = 2))
-#'
-#' # Retrieve the value of b
-#' values$b
-#'
 #' @author Ron Triepels
 #' @export
 cg_graph_run <- function(graph, target, values = new.env())
@@ -177,22 +162,6 @@ cg_graph_run <- function(graph, target, values = new.env())
 #' The gradients of all ancestors of the node are returned. The gradients have the same shape as the values of the nodes.
 #'
 #' @return environment, the gradients of all ancestors of the node (including the target node itself) with respect to the target node.
-#'
-#' @examples # Initialize a computational graph
-#' x <- cg_graph()
-#'
-#' # Add some parameters
-#' a <- cg_parameter(2, name = "a")
-#' b <- cg_parameter(4, name = "b")
-#'
-#' # Perform some operations on the parameters
-#' c <- cg_sin(a) + cg_cos(b) - cg_tan(a)
-#'
-#' # Differentiate the graph with respect to c
-#' grads <- cg_graph_gradients(x, c, cg_graph_run(x, c))
-#'
-#' # Retrieve the gradient of c with respect to a
-#' grads$a
 #'
 #' @author Ron Triepels
 #' @export

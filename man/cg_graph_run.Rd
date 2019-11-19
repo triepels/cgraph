@@ -24,23 +24,6 @@ This function is deprecated and will be removed in the next major release. Pleas
 
 All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Argument \code{values} can be used to substitute values for input nodes that do not have a value. Only those nodes needed to compute the node are evaluated and their values are returned.
 }
-\examples{
-# Initialize a computational graph
-x <- cg_graph()
-
-# Add an input
-a <- cg_input(name = "a")
-
-# Square the input (i.e. b = a^2)
-b <- cg_pow(a, 2, name = "b")
-
-# Evaluate b at a = 2
-values <- cg_graph_run(x, b, list(a = 2))
-
-# Retrieve the value of b
-values$b
-
-}
 \author{
 Ron Triepels
 }

@@ -30,24 +30,6 @@ In case the value of target node \code{name} is a vector or an array, argument \
 
 The gradients of all ancestors of the node are returned. The gradients have the same shape as the values of the nodes.
 }
-\examples{
-# Initialize a computational graph
-x <- cg_graph()
-
-# Add some parameters
-a <- cg_parameter(2, name = "a")
-b <- cg_parameter(4, name = "b")
-
-# Perform some operations on the parameters
-c <- cg_sin(a) + cg_cos(b) - cg_tan(a)
-
-# Differentiate the graph with respect to c
-grads <- cg_graph_gradients(x, c, cg_graph_run(x, c))
-
-# Retrieve the gradient of c with respect to a
-grads$a
-
-}
 \author{
 Ron Triepels
 }
