@@ -18,7 +18,8 @@ The latest stable version can be installed from CRAN by:
 The latest development version can be installed from Github by:
 
 ```{r eval = F}
-  devtools::install_github("triepels/cgraph")
+  # install.packages("remotes")
+  remotes::install_github("triepels/cgraph")
 ```
 
 Notice, the development version may contain code that is experimental and not thoroughly tested.
