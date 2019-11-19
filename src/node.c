@@ -67,6 +67,7 @@ void cg_node_set_name(SEXP node, const char *name)
   UNPROTECT(1);
 }
 
+/* NOTE: DEPRECATED. WILL BE REMOVED IN THE NEXT MAJOR RELEASE */
 SEXP cg_node_symbol(SEXP node)
 {
   return Rf_install(cg_node_name(node));

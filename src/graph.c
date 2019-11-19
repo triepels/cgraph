@@ -38,12 +38,14 @@ limitations under the License.
 
 SEXP cg_graph_nodes(SEXP graph)
 {
-  SEXP nodes = Rf_findVarInFrame(graph, CG_NODES_SYMBOL);
+  SEXP nodes = PROTECT(Rf_findVarInFrame(graph, CG_NODES_SYMBOL));
 
   if(TYPEOF(nodes) != VECSXP)
   {
     Rf_errorcall(R_NilValue, "graph does not have any nodes");
   }
+
+  UNPROTECT(1);
 
   return nodes;
 }
@@ -52,7 +54,7 @@ char* cg_graph_gen_name(SEXP graph)
 {
   char *name = R_alloc(1, 32 * sizeof(char));
 
-  SEXP nodes = Rf_findVarInFrame(graph, CG_NODES_SYMBOL);
+  SEXP nodes = PROTECT(Rf_findVarInFrame(graph, CG_NODES_SYMBOL));
 
   if(TYPEOF(nodes) != VECSXP)
   {
@@ -68,6 +70,8 @@ char* cg_graph_gen_name(SEXP graph)
 
     } while (cg_graph_node_exists(graph, name));
   }
+
+  UNPROTECT(1);
 
   return name;
 }
@@ -167,7 +171,7 @@ void cg_graph_add_node(SEXP graph, SEXP node)
 
 SEXP cg_graph_get_node(SEXP graph, const int id)
 {
-  SEXP nodes = cg_graph_nodes(graph);
+  SEXP nodes = PROTECT(cg_graph_nodes(graph));
 
   if(id < 1 || id > XLENGTH(nodes))
   {
@@ -180,6 +184,8 @@ SEXP cg_graph_get_node(SEXP graph, const int id)
   {
     Rf_errorcall(R_NilValue, "invalid node at index %d", id);
   }
+
+  UNPROTECT(1);
 
   return node;
 }
@@ -272,7 +278,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 /* NOTE: DEPRECATED. WILL BE REMOVED IN THE NEXT MAJOR RELEASE */
 SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
 {
-  SEXP nodes = cg_graph_nodes(graph);
+  SEXP nodes = PROTECT(cg_graph_nodes(graph));
 
   R_len_t n = XLENGTH(nodes);
 
@@ -347,7 +353,7 @@ SEXP cg_graph_reverse_dfs(SEXP graph, SEXP target)
 
   SETLENGTH(out, k);
 
-  UNPROTECT(1);
+  UNPROTECT(2);
 
   return out;
 }

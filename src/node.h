@@ -41,7 +41,7 @@ const char* cg_node_name(SEXP node);
 
 void cg_node_set_name(SEXP node, const char *name);
 
-SEXP cg_node_symbol(SEXP node);
+SEXP cg_node_symbol(SEXP node); /* NOTE: DEPRECATED */
 
 int cg_node_id(SEXP node);
 
