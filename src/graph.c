@@ -668,8 +668,6 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   cg_graph_reverse_dfs_from(graph, target, filter, backward, NULL);
 
-  UNPROTECT(2);
-
   return R_NilValue;
 }
 
