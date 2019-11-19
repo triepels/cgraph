@@ -9,7 +9,7 @@ You can install cgraph by running one of the following commands in the R command
 
 The latest stable version can be installed from CRAN by:
 
-```{r eval = F}
+```r
   install.packages("cgraph")
 ```
 
@@ -17,7 +17,7 @@ The latest stable version can be installed from CRAN by:
 
 The latest development version can be installed from Github by:
 
-```{r eval = F}
+```r
   # install.packages("remotes")
   remotes::install_github("triepels/cgraph")
 ```
