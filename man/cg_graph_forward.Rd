@@ -18,7 +18,9 @@ nothing.
 Perform a forward pass to evaluate a given target node in a graph.
 }
 \note{
-All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Only those nodes needed to compute the target node (including the target itself) are evaluated. The value of a node can be retrieved via the \code{values} data member of a \code{cg_node} object.
+All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Only those nodes needed to compute the target node (including the target itself) are evaluated.
+
+The value of a node can be retrieved via the \code{values} data member of a \code{cg_node} object.
 }
 \examples{
 # Initialize a computational graph

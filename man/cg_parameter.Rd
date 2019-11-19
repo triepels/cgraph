@@ -26,8 +26,8 @@ Parameters are assumed to be subject to some optimization process. Hence, their 
 # Initialize a computational graph
 graph <- cg_graph()
 
-# Add a parameter with value 1 to the graph.
-a <- cg_parameter(1)
+# Add a parameter with value 1 and name 'a' to the graph.
+a <- cg_parameter(1, name = "a")
 
 }
 \author{

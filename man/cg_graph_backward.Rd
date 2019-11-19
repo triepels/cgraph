@@ -4,12 +4,14 @@
 \alias{cg_graph_backward}
 \title{Backward Pass}
 \usage{
-cg_graph_backward(graph, target)
+cg_graph_backward(graph, target, index = NULL)
 }
 \arguments{
 \item{graph}{cg_graph object, graph that is differentiated.}
 
 \item{target}{cg_node object, node in the graph that is differentiated.}
+
+\item{index}{numeric scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).}
 }
 \value{
 nothing.
@@ -18,7 +20,11 @@ nothing.
 Perform a backward pass to evaluate the partial derivatives of a given target node with respect to the nodes in a graph.
 }
 \note{
-All nodes required to compute the target node must first have been evaluated by calling \link[cgraph:cg_graph_forward]{cg_graph_forward}. Only those nodes on which the target node directly or indirectly depend are differentiated. In case the target node evaluates to a vector or array, it is differentiated element-wise. The derivatives have the same shape as the values of the nodes. They can be retrieved via the \code{grad} data member of a \code{cg_node} object.
+All nodes required to compute the target node must first have been evaluated by calling \link[cgraph:cg_graph_forward]{cg_graph_forward}. Only those nodes on which the target node directly or indirectly depend are differentiated.
+
+In case the value of the target node is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated.
+
+The derivatives have the same shape as the values of the nodes. They can be retrieved via the \code{grad} data member of a \code{cg_node} object.
 }
 \examples{
 # Initialize a computational graph

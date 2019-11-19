@@ -26,8 +26,8 @@ Constant nodes are ignored when differentiating a graph.
 # Initialize a computational graph
 graph <- cg_graph()
 
-# Add a constant with value 1 to the graph.
-a <- cg_constant(1)
+# Add a constant with value 1 and name 'a' to the graph.
+a <- cg_constant(1, name = "a")
 
 }
 \author{

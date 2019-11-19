@@ -35,7 +35,7 @@ f <- cg_function(
 )
 
 # Add a an operator with the negation function to the graph.
-a <- cg_operator(f, list(10))
+a <- cg_operator(f, list(10), name = "a")
 
 }
 \author{
