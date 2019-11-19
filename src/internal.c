@@ -119,8 +119,9 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
   if(!Rf_isReal(target_value))
   {
-    Rf_errorcall(R_NilValue, "node '%s' does not evaluate to a real vector or array",
-                 cg_node_name(target));
+    REPROTECT(target_value = Rf_coerceVector(target_value, REALSXP), target_index);
+
+    cg_node_set_value(target, target_value);
   }
 
   int k = Rf_asInteger(index);
@@ -131,12 +132,17 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
                  cg_node_name(target), k);
   }
 
-  SEXP node_value = PROTECT(cg_node_value(node));
+  int node_index;
+
+  SEXP node_value = R_NilValue;
+
+  PROTECT_WITH_INDEX(node_value = cg_node_value(node), &node_index);
 
   if(!Rf_isReal(node_value))
   {
-    Rf_errorcall(R_NilValue, "node '%s' does not evaluate to a real vector or array",
-                 cg_node_name(node));
+    REPROTECT(node_value = Rf_coerceVector(node_value, REALSXP), node_index);
+
+    cg_node_set_value(node, node_value);
   }
 
   int n = XLENGTH(node_value);
