@@ -5,9 +5,7 @@
 #' @param value numeric vector or array, value of the node.
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
 #'
-#' @note Argument \code{name} is deprecated and will be removed in the next major release.
-#'
-#' Constant nodes are ignored when differentiating a graph.
+#' @note Constant nodes are ignored when differentiating a graph.
 #'
 #' @return cg_node object.
 #'
@@ -31,9 +29,7 @@ cg_constant <- function(value, name = NULL)
 #' @param value numeric vector or array, value of the node.
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
 #'
-#' @note Argument \code{name} is deprecated and will be removed in the next major release.
-#'
-#' Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
+#' @note Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
 #'
 #' @return cg_node object.
 #'
@@ -56,17 +52,18 @@ cg_parameter <- function(value, name = NULL)
 #'
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
 #'
-#' @note Argument \code{name} is deprecated and will be removed in the next major release.
-#'
-#' Inputs cannot be assigned a fixed value but behave as placeholders. Values can be assigned to inputs when evaluating or differentiating a graph (see \link[cgraph]{cg_graph_run} and \link[cgraph]{cg_graph_gradients} for more details).
+#' @note Inputs cannot be assigned a value upon creation. Instead, they behave as placeholders. You can use data member \code{value} of a cg_input object to retrieve or change their value.
 #'
 #' @return cg_node object.
 #'
 #' @examples # Initialize a computational graph
 #' graph <- cg_graph()
 #'
-#' # Add an input to the graph.
+#' # Add an input named to the graph.
 #' a <- cg_input(name = "a")
+#'
+#' # Set the value of a to 2
+#' a$value <- 2
 #'
 #' @author Ron Triepels
 #' @export

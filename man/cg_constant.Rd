@@ -18,8 +18,6 @@ cg_node object.
 Add a constant node to the active graph.
 }
 \note{
-Argument \code{name} is deprecated and will be removed in the next major release.
-
 Constant nodes are ignored when differentiating a graph.
 }
 \examples{

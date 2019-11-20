@@ -18,8 +18,6 @@ cg_node object.
 Add a parameter node to the active graph.
 }
 \note{
-Argument \code{name} is deprecated and will be removed in the next major release.
-
 Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
 }
 \examples{
