@@ -554,6 +554,8 @@ SEXP cg_input(SEXP name)
     cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
   }
 
+  cg_node_set_value(node, R_NilValue);
+
   cg_graph_add_node(graph, node);
 
   UNPROTECT(2);
