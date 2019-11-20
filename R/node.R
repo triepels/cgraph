@@ -59,10 +59,10 @@ cg_parameter <- function(value, name = NULL)
 #' @examples # Initialize a computational graph
 #' graph <- cg_graph()
 #'
-#' # Add an input named to the graph.
+#' # Add an input with name 'a' to the graph.
 #' a <- cg_input(name = "a")
 #'
-#' # Set the value of a to 2
+#' # Set the value to 2
 #' a$value <- 2
 #'
 #' @author Ron Triepels

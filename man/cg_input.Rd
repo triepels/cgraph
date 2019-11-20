@@ -22,10 +22,10 @@ Inputs cannot be assigned a value upon creation. Instead, they behave as placeho
 # Initialize a computational graph
 graph <- cg_graph()
 
-# Add an input to the graph.
+# Add an input with name 'a' to the graph.
 a <- cg_input(name = "a")
 
-# Set the value of a to 2
+# Set the value to 2
 a$value <- 2
 
 }
