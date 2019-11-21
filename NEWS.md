@@ -17,6 +17,7 @@ Bug fixes:
 
 Documenation:
 
+* Fixed typos in the documentation of several functions.
 * The examples of function `cg_graph_run` and `cg_graph_gradients` have been removed to avoid deprecation warnings in the CRAN check.
 
 cgraph 4.0.3
