@@ -3,7 +3,7 @@ cgraph 5.0.0
 
 Features:
 
-* Added operator `cg_squared`.
+* Added operator `cg_square`.
 * Operators are now evaluated eagerly. This means that, when an operator is added to a computational graph, it is immediately evaluated (if possible). Eager execution makes it easier to debug a computational graph and enables the user to change its control flow at run-time.
 * Added function `cg_graph_forward` and `cg_graph_backward` to perform a forward pass and backward pass respectively. These functions are similar to function `cg_graph_run` and `cg_graph_gradients` but do not use environments to store the values and derivatives of nodes. Instead, the value and derivative of a node are stored 'locally' at each node and can be retrieved by data member `value` and `grad`.
 
