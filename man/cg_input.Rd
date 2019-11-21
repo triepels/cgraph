@@ -16,7 +16,7 @@ cg_node object.
 Add an input node to the active graph.
 }
 \note{
-Inputs cannot be assigned a value upon creation. Instead, they behave as placeholders. You can use data member \code{value} of a cg_input object to retrieve or change their value.
+Inputs cannot be assigned a value upon creation. Instead, they behave as placeholders. You can use data member \code{value} of a cg_node object to retrieve or change its value.
 }
 \examples{
 # Initialize a computational graph

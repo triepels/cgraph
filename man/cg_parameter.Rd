@@ -18,7 +18,7 @@ cg_node object.
 Add a parameter node to the active graph.
 }
 \note{
-Parameters are assumed to be subject to some optimization process. Hence, their value might change over time.
+Parameters are assumed to be subject to some optimization process. Hence, their value might change over time. You can use data member \code{value} of a cg_node object to retrieve or change its value.
 }
 \examples{
 # Initialize a computational graph

@@ -35,7 +35,7 @@ b <- cg_pow(a, 2, name = "b")
 # Set a equal to 2
 a$value <- 2
 
-# Evaluate the graph by performing a forward pass
+# Perform forward pass
 cg_graph_forward(graph, b)
 
 # Retrieve the value of b

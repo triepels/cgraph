@@ -22,7 +22,7 @@ Add an operation node to the active graph.
 \note{
 Argument \code{name} is deprecated and will be removed in the next major release.
 
-Any objects that are supplied to argument \code{inputs} that are not cg_node objects are implicitly converted to cg_constant objects.
+Any objects that are supplied to argument \code{inputs} that are not cg_node objects are implicitly coerced to cg_constant objects.
 }
 \examples{
 # Initialize a computational graph
