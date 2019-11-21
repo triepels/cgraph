@@ -657,6 +657,10 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
     UNPROTECT(3);
   }
+  else
+  {
+    cg_node_set_value(node, R_NilValue);
+  }
 
   cg_graph_add_node(graph, node);
 
