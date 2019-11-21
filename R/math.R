@@ -943,7 +943,7 @@ delayedAssign("sigmoid", cg_function(
   grads = list(
     function(x, val, grad)
     {
-      grad * val * (1 - val)
+      .Call("sigmoid_grad", x, val, grad, PACKAGE = "cgraph")
     }
   )
 ))

@@ -54,6 +54,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"approx_gradient", (DL_FUNC) &approx_gradient, 5},
   // Math
   {"sigmoid", (DL_FUNC) &sigmoid, 1},
+  {"sigmoid_grad", (DL_FUNC) &sigmoid_grad, 3},
   {NULL, NULL, 0}
 };
 

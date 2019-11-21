@@ -28,4 +28,6 @@ limitations under the License.
 
 SEXP sigmoid(SEXP x);
 
+SEXP sigmoid_grad(SEXP x, SEXP val, SEXP grad);
+
 #endif
