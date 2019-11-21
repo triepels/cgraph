@@ -1,3 +1,20 @@
+cgraph 5.0.0
+----------------------------------------------------------------
+
+Features:
+
+* Added operator `cg_squared`.
+* Operators are now evaluated eagerly. This means that, when an operator is added to a computational graph, it is immediately evaluated (if possible). Eager execution makes it easier to debug a computational graph and enables the user to change its control flow at run-time.
+* Added function `cg_graph_forward` and `cg_graph_backward` to perform a forward pass and backward pass respectively. These functions are similar to function `cg_graph_run` and `cg_graph_gradients` but do not use environments to store the values and derivatives of nodes. Instead, the value and derivative of a node are stored 'locally' at each node and can be retrieved by data member `value` and `grad`.
+
+Comments:
+
+* Function `cg_graph_run` and `cg_graph_gradients` are deprecated and will be removed in the next major release. Use function `cg_graph_forward` and `cg_graph_backward` to perform a forward pass and backward pass instead.
+
+Bug fixes:
+
+* Fixed several memory leaks and protection bugs.
+
 cgraph 4.0.3
 ----------------------------------------------------------------
 
@@ -42,6 +59,7 @@ Comments:
 * Function `const`, `input`, `parm`, and `opr` have been renamed to `cg_constant`, `cg_input`, `cg_parameter`, and `cg_operator` respectively.
 * Function `val` and `set` are removed. The value of a constant or parameter node can be retrieved or changed directly by calling `x$value` where `x` is the environment of a `cg_node` object.
 * Function `run` and `gradients` have been renamed to `cg_graph_run` and `cg_graph_gradients` respectively.
+* Removed logical operators `!`, `==`, `!=`, `<`, `>`, `<=`, and `>=`.
 
 Features:
 
@@ -72,7 +90,7 @@ Comments:
 * Large parts of the C-API have been reworked.
 * Some naming conventions have changed. Individual names in the name of a function are now separated with an underscore (_) instead of a dot (.). For example, operator `cg.matmul` is now named `cg_matmul`. The same rule applies to class names. For example, class `cg.node` is now named `cg_node`.
 * Function `name` is removed. Names for nodes are now generated internally in the C-API.
-* Function `approx.gradients` is removed. A simliar function is still available as `cgraph:::approx_grad` in the package namespace. However, it should be noted that this function is not well-optimized and should only be used for testing purposes.
+* Function `approx.gradients` is removed. A similar function is still available as `cgraph:::approx_grad` in the package namespace. However, it should be noted that this function is not well-optimized and should only be used for testing purposes.
 * Calling `print` on a `cg_node` object no longer prints the value of the node. Use function `val` to evaluate a node.
 
 Features:

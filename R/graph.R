@@ -56,7 +56,7 @@ cg_graph <- function()
 #' # Set a equal to 2
 #' a$value <- 2
 #'
-#' # Evaluate the grap by performing a forward pass
+#' # Evaluate the graph by performing a forward pass
 #' cg_graph_forward(graph, b)
 #'
 #' # Retrieve the value of b
