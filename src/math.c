@@ -109,9 +109,9 @@ SEXP sigmoid_grad(SEXP x, SEXP val, SEXP grad)
 
   SEXP out = PROTECT(Rf_allocVector(REALSXP, n));
 
-  double *po = REAL(out);
   double *pv = REAL(val);
   double *pg = REAL(grad);
+  double *po = REAL(out);
 
   for(int i = 0; i < n; i++)
   {
