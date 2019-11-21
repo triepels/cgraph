@@ -15,6 +15,10 @@ Bug fixes:
 
 * Fixed several memory leaks and protection bugs.
 
+Documenation:
+
+* The examples of function `cg_graph_run` and `cg_graph_gradients` have been removed to avoid deprecation warnings in the CRAN check.
+
 cgraph 4.0.3
 ----------------------------------------------------------------
 

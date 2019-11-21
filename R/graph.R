@@ -56,7 +56,7 @@ cg_graph <- function()
 #' # Set a equal to 2
 #' a$value <- 2
 #'
-#' # Evaluate the graph by performing a forward pass
+#' # Perform forward pass
 #' cg_graph_forward(graph, b)
 #'
 #' # Retrieve the value of b
@@ -100,10 +100,10 @@ cg_graph_forward <- function(graph, target)
 #' # Set a equal to 2
 #' a$value <- 2
 #'
-#' # Evaluate the graph by performing a forward pass
+#' # Perform forward pass
 #' cg_graph_forward(graph, c)
 #'
-#' # Differentiate the graph by performing a backward pass
+#' # Perform backward pass
 #' cg_graph_backward(graph, c)
 #'
 #' # Retrieve the derivative of c with respect to b
