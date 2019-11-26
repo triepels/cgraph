@@ -1,3 +1,10 @@
+cgraph 5.0.1
+----------------------------------------------------------------
+
+Bug fixed:
+
+* Fixed a bug in function `cg_graph_backward` which could lead to a computational graph being traversed in an incorrect order.
+
 cgraph 5.0.0
 ----------------------------------------------------------------
 
