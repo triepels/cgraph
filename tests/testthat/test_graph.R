@@ -67,7 +67,7 @@ test_that("Graph with multiple outputs",
   expect_equivalent(b$grad, approx_gradient(graph, d, b), tolerance = 1e-4)
 })
 
-test_that("Graph with more complex structure",
+test_that("Reverse DFS algorithm check",
 {
   # Initialize graph
   graph <- cg_graph()
