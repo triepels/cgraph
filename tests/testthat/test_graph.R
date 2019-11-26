@@ -67,6 +67,30 @@ test_that("Graph with multiple outputs",
   expect_equivalent(b$grad, approx_gradient(graph, d, b), tolerance = 1e-4)
 })
 
+test_that("Graph with more complex structure",
+{
+  # Initialize graph
+  graph <- cg_graph()
+
+  # Create parameters
+  a <- cg_parameter(2, "a")
+  b <- cg_parameter(2, "b")
+
+  # Create test expressions
+  c <- cg_sin(b, "c")
+  d <- cg_add(cg_sin(a) + c, cg_sin(c), "d")
+
+  # Perform forward pass
+  cg_graph_forward(graph, d)
+
+  # Perform backward pass
+  cg_graph_backward(graph, d)
+
+  # Check gradients
+  expect_equivalent(a$grad, approx_gradient(graph, d, a), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, d, b), tolerance = 1e-4)
+})
+
 test_that("Large graph (10000 operators)",
 {
   # Initialize graph

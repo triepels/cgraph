@@ -248,22 +248,24 @@ void cg_graph_init_target_grad(SEXP graph, SEXP target, SEXP index)
   UNPROTECT(2);
 }
 
-void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*enter)(SEXP node), void(*leave)(SEXP node))
+void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int reverse, int (*filter)(SEXP node), void (*exec)(SEXP node))
 {
   SEXP nodes = PROTECT(cg_graph_nodes(graph));
 
-  R_len_t n = XLENGTH(nodes);
-
-  int *visited = (int*)R_alloc(n, sizeof(int));
-
-  memset(visited, 0, n * sizeof(int));
-
   int id = cg_node_id(target);
+
+  R_len_t n = XLENGTH(nodes);
 
   if(id < 1 || id > n)
   {
     Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", id);
   }
+
+  int *visited = (int*)R_alloc(n, sizeof(int));
+
+  memset(visited, 0, n * sizeof(int));
+
+  SEXP *queue = (SEXP*)R_alloc(n, sizeof(SEXP));
 
   cg_stack_t *stack = cg_stack_allocate(n);
 
@@ -271,10 +273,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
   visited[id - 1] = 1;
 
-  if(enter != NULL)
-  {
-    enter(target);
-  }
+  int k = 0;
 
   while(!cg_stack_is_empty(stack))
   {
@@ -301,11 +300,6 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
         if(!visited[input_id - 1] && filter(input))
         {
-          if(enter != NULL)
-          {
-            enter(input);
-          }
-
           cg_stack_push(stack, input);
 
           visited[input_id - 1] = 1;
@@ -319,15 +313,27 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
     if(!can_traverse)
     {
-      if(leave != NULL)
-      {
-        leave(node);
-      }
-
       cg_stack_pop(stack);
+
+      queue[k++] = node;
     }
 
     UNPROTECT(1);
+  }
+
+  if(reverse)
+  {
+    for(int i = k - 1; i >= 0; i--)
+    {
+      exec(queue[i]);
+    }
+  }
+  else
+  {
+    for(int i = 0; i < k; i++)
+    {
+      exec(queue[i]);
+    }
   }
 
   UNPROTECT(1);
@@ -491,7 +497,7 @@ SEXP cg_graph_forward(SEXP graph, SEXP target)
     Rf_errorcall(R_NilValue, "argument 'target' must be an operator node");
   }
 
-  cg_graph_reverse_dfs_from(graph, target, filter, NULL, forward);
+  cg_graph_reverse_dfs_from(graph, target, 0, filter, forward);
 
   return R_NilValue;
 }
@@ -668,7 +674,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   cg_graph_init_target_grad(graph, target, index);
 
-  cg_graph_reverse_dfs_from(graph, target, filter, backward, NULL);
+  cg_graph_reverse_dfs_from(graph, target, 1, filter, backward);
 
   return R_NilValue;
 }
