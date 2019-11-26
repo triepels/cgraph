@@ -78,7 +78,7 @@ test_that("Reverse DFS algorithm check",
 
   # Create test expressions
   c <- cg_sin(b)
-  d <- cg_add(cg_sin(a) + c, cg_sin(c), "d")
+  d <- cg_add(cg_sin(a) + c, cg_sin(c))
 
   # Perform forward pass
   cg_graph_forward(graph, d)
