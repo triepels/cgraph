@@ -32,7 +32,7 @@ cgraph 4.0.3
 
 Bug fixes:
 
-* Fixed protection bugs in the C-API thanks to `rchk`.
+* Fixed several protection bugs in the C-API thanks to `rchk`.
 
 cgraph 4.0.2
 ----------------------------------------------------------------
