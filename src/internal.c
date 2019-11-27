@@ -47,11 +47,11 @@ SEXP bsum(SEXP x, SEXP block_size)
     Rf_errorcall(R_NilValue, "invalid block size");
   }
 
-  SEXP y = PROTECT(Rf_allocVector(REALSXP, m));
+  SEXP out = PROTECT(Rf_allocVector(REALSXP, m));
 
-  double *b = REAL(y);
+  double *po = REAL(out);
 
-  memset(b, 0, m * sizeof(double));
+  memset(po, 0, m * sizeof(double));
 
   R_len_t n = XLENGTH(x);
 
@@ -59,12 +59,12 @@ SEXP bsum(SEXP x, SEXP block_size)
   {
     case REALSXP :
     {
-      double *a = REAL(x);
+      double *px = REAL(x);
 
       for(int i = 0, j = 0; i < n; i++,
           j = (++j == m) ? 0 : j)
       {
-        b[j] += a[i];
+        po[j] += px[i];
       }
 
       break;
@@ -72,12 +72,12 @@ SEXP bsum(SEXP x, SEXP block_size)
     case LGLSXP :
     case INTSXP :
     {
-      int *a = INTEGER(x);
+      int *px = INTEGER(x);
 
       for(int i = 0, j = 0; i < n; i++,
           j = (++j == m) ? 0 : j)
       {
-        b[j] += a[i];
+        po[j] += px[i];
       }
 
       break;
@@ -86,7 +86,7 @@ SEXP bsum(SEXP x, SEXP block_size)
 
   UNPROTECT(1);
 
-  return y;
+  return out;
 }
 
 SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilon)
