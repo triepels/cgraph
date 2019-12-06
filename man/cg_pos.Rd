@@ -4,12 +4,12 @@
 \alias{cg_pos}
 \title{Positive}
 \usage{
-cg_pos(x, name = NULL)
+cg_pos(n1, name = NULL)
 }
 \arguments{
-\item{x}{either a cg_node object or a numeric vector or array.}
-
 \item{name}{character scalar, name of the operation (optional).}
+
+\item{x}{either a cg_node object or a numeric vector or array.}
 }
 \value{
 cg_operator object, node of the operation.

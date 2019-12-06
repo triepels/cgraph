@@ -4,14 +4,14 @@
 \alias{cg_add}
 \title{Add}
 \usage{
-cg_add(x, y, name = NULL)
+cg_add(n1, n2, name = NULL)
 }
 \arguments{
+\item{name}{character scalar, name of the operation (optional).}
+
 \item{x}{either a cg_node object or a numeric vector or array.}
 
 \item{y}{either a cg_node object or a numeric vector or array.}
-
-\item{name}{character scalar, name of the operation (optional).}
 }
 \value{
 cg_operator object, node of the operation.

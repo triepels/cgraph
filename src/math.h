@@ -26,6 +26,37 @@ limitations under the License.
  * PUBLIC METHODS
  */
 
+SEXP cg_math_pos(SEXP a1);
+SEXP cg_math_pos_grad(SEXP grad);
+
+SEXP cg_math_neg(SEXP a1);
+SEXP cg_math_neg_grad(SEXP grad);
+
+SEXP cg_math_add(SEXP a1, SEXP a2);
+SEXP cg_math_add_grad(SEXP a1, SEXP grad);
+
+SEXP cg_math_sub(SEXP a1, SEXP a2);
+SEXP cg_math_sub_grad(SEXP a2, SEXP grad);
+
+SEXP cg_math_mul(SEXP a1, SEXP a2);
+SEXP cg_math_mul_grad1(SEXP a1, SEXP a2, SEXP grad);
+SEXP cg_math_mul_grad2(SEXP a1, SEXP a2, SEXP grad);
+
+SEXP cg_math_div(SEXP a1, SEXP a2);
+SEXP cg_math_div_grad1(SEXP a1, SEXP a2, SEXP grad);
+SEXP cg_math_div_grad2(SEXP a1, SEXP a2, SEXP grad);
+
+SEXP cg_math_pow(SEXP a1, SEXP a2);
+SEXP cg_math_pow_grad1(SEXP a1, SEXP a2, SEXP grad);
+SEXP cg_math_pow_grad2(SEXP a1, SEXP a2, SEXP grad);
+
+SEXP cg_math_square(SEXP a1);
+SEXP cg_math_square_grad(SEXP a1, SEXP grad);
+
+SEXP cg_math_sqrt(SEXP a1);
+
+SEXP math_sin(SEXP a1);
+
 SEXP sigmoid(SEXP x);
 
 SEXP sigmoid_grad(SEXP x, SEXP val, SEXP grad);

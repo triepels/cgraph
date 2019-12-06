@@ -25,18 +25,21 @@
 #'
 #' @author Ron Triepels
 #' @export
-cg_pos <- function(x, name = NULL)
+cg_pos <- function(n1, name = NULL)
 {
-  cg_operator(pos, list(x), name)
+  cg_operator(pos, list(n1), name)
 }
 
 # Function definition
 delayedAssign("pos", cg_function(
-  def = base::`+`,
+  def = function(a1)
+  {
+    .Call("cg_math_pos", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      grad
+      .Call("cg_math_pos_grad", grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -54,18 +57,21 @@ delayedAssign("pos", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_neg <- function(x, name = NULL)
+cg_neg <- function(n1, name = NULL)
 {
-  cg_operator(neg, list(x), name)
+  cg_operator(neg, list(n1), name)
 }
 
 # Function definition
 delayedAssign("neg", cg_function(
-  def = base::`-`,
+  def = function(a1)
+  {
+    .Call("cg_math_neg", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      -grad
+      .Call("cg_math_neg_grad", grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -84,50 +90,39 @@ delayedAssign("neg", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_add <- function(x, y, name = NULL)
+cg_add <- function(n1, n2, name = NULL)
 {
-  cg_operator(add, list(x, y), name)
+  cg_operator(add, list(n1, n2), name)
 }
 
 # Function definition
 delayedAssign("add", cg_function(
-  def = base::`+`,
+  def = function(a1, a2)
+  {
+    .Call("cg_math_add", a1, a2, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(x))
-      {
-        grad
-      }
-      else
-      {
-        bsum(grad, length(x))
-      }
+      .Call("cg_math_add_grad", a1, grad, PACKAGE = "cgraph")
     },
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(y))
-      {
-        grad
-      }
-      else
-      {
-        bsum(grad, length(y))
-      }
+      .Call("cg_math_add_grad", a2, grad, PACKAGE = "cgraph")
     }
   )
 ))
 
 #' @export
-`+.cg_node` <- function(x, y)
+`+.cg_node` <- function(n1, n2)
 {
-  if(missing(y))
+  if(missing(n2))
   {
-    cg_pos(x)
+    cg_pos(n1)
   }
   else
   {
-    cg_add(x, y)
+    cg_add(n1, n2)
   }
 }
 
@@ -145,51 +140,40 @@ delayedAssign("add", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_sub <- function(x, y, name = NULL)
+cg_sub <- function(n1, n2, name = NULL)
 {
-  cg_operator(sub, list(x, y), name)
+  cg_operator(sub, list(n1, n2), name)
 }
 
 # Function definition
 delayedAssign("sub", cg_function(
-  def = base::`-`,
+  def = function(a1, a2)
+  {
+    .Call("cg_math_sub", a1, a2, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(x))
-      {
-        grad
-      }
-      else
-      {
-        bsum(grad, length(x))
-      }
+      .Call("cg_math_add_grad", a1, grad, PACKAGE = "cgraph")
     },
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(y))
-      {
-        -grad
-      }
-      else
-      {
-        bsum(-grad, length(y))
-      }
+      .Call("cg_math_sub_grad", a2, grad, PACKAGE = "cgraph")
     }
   )
 ))
 
 #' @export
 #' @author Ron Triepels
-`-.cg_node` <- function(x, y)
+`-.cg_node` <- function(n1, n2)
 {
-  if(missing(y))
+  if(missing(n2))
   {
-    cg_neg(x)
+    cg_neg(n1)
   }
   else
   {
-    cg_sub(x, y)
+    cg_sub(n1, n2)
   }
 }
 
@@ -207,44 +191,33 @@ delayedAssign("sub", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_mul <- function(x, y, name = NULL)
+cg_mul <- function(n1, n2, name = NULL)
 {
-  cg_operator(mul, list(x, y), name)
+  cg_operator(mul, list(n1, n2), name)
 }
 
 # Function definition
 delayedAssign("mul", cg_function(
-  def = base::`*`,
+  def = function(a1, a2)
+  {
+    .Call("cg_math_mul", a1, a2, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(x))
-      {
-        grad * y
-      }
-      else
-      {
-        bsum(grad * y, length(x))
-      }
+      .Call("cg_math_mul_grad1", a1, a2, grad, PACKAGE = "cgraph")
     },
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(y))
-      {
-        grad * x
-      }
-      else
-      {
-        bsum(grad * x, length(y))
-      }
+      .Call("cg_math_mul_grad2", a1, a2, grad, PACKAGE = "cgraph")
     }
   )
 ))
 
 #' @export
-`*.cg_node` <- function(x, y)
+`*.cg_node` <- function(n1, n2)
 {
-  cg_mul(x, y)
+  cg_mul(n1, n2)
 }
 
 #' Divide
@@ -261,44 +234,33 @@ delayedAssign("mul", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_div <- function(x, y, name = NULL)
+cg_div <- function(n1, n2, name = NULL)
 {
-  cg_operator(div, list(x, y), name)
+  cg_operator(div, list(n1, n2), name)
 }
 
 # Function definition
 delayedAssign("div", cg_function(
-  def = base::`/`,
+  def = function(a1, a2)
+  {
+    .Call("cg_math_div", a1, a2, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(x))
-      {
-        grad / y
-      }
-      else
-      {
-        bsum(grad / y, length(x))
-      }
+      .Call("cg_math_div_grad1", a1, a2, grad, PACKAGE = "cgraph")
     },
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(y))
-      {
-        -grad * x / y ^ 2
-      }
-      else
-      {
-        bsum(-grad * x / y ^ 2, length(y))
-      }
+      .Call("cg_math_div_grad2", a1, a2, grad, PACKAGE = "cgraph")
     }
   )
 ))
 
 #' @export
-`/.cg_node` <- function(x, y)
+`/.cg_node` <- function(n1, n2)
 {
-  cg_div(x, y)
+  cg_div(n1, n2)
 }
 
 #' Power
@@ -315,44 +277,33 @@ delayedAssign("div", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_pow <- function(x, y, name = NULL)
+cg_pow <- function(n1, n2, name = NULL)
 {
-  cg_operator(pow, list(x, y), name)
+  cg_operator(pow, list(n1, n2), name)
 }
 
 # Function definition
 delayedAssign("pow", cg_function(
-  def = base::`^`,
+  def = function(a1, a2)
+  {
+    .Call("cg_math_pow", a1, a2, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(x))
-      {
-        grad * y * x ^ (y - 1)
-      }
-      else
-      {
-        bsum(grad * y * x ^ (y - 1), length(x))
-      }
+      .Call("cg_math_pow_grad1", a1, a2, grad, PACKAGE = "cgraph")
     },
-    function(x, y, val, grad)
+    function(a1, a2, val, grad)
     {
-      if(is.array(y))
-      {
-        grad * x ^ y * log(x)
-      }
-      else
-      {
-        bsum(grad * x ^ y * log(x), length(y))
-      }
+      .Call("cg_math_pow_grad2", a1, a2, grad, PACKAGE = "cgraph")
     }
   )
 ))
 
 #' @export
-`^.cg_node` <- function(x, y)
+`^.cg_node` <- function(n1, n2)
 {
-  cg_pow(x, y)
+  cg_pow(n1, n2)
 }
 
 #' Square
@@ -370,28 +321,21 @@ delayedAssign("pow", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_square <- function(x, name = NULL)
+cg_square <- function(n1, name = NULL)
 {
-  cg_operator(square, list(x), name)
+  cg_operator(square, list(n1), name)
 }
 
 # Function definition
 delayedAssign("square", cg_function(
-  def = function(x)
+  def = function(a1)
   {
-    x * x
+    .Call("cg_math_square", a1, PACKAGE = "cgraph")
   },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      if(is.array(x))
-      {
-        2 * grad * x
-      }
-      else
-      {
-        bsum(2 * grad * x, length(x))
-      }
+      .Call("cg_math_square_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
