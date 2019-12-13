@@ -25,152 +25,121 @@ limitations under the License.
  * PUBLIC METHODS
  */
 
-#define MAX_LENGTH2(a1, a2) XLENGTH(a1) >= XLENGTH(a2) ? XLENGTH(a1) : XLENGTH(a2)
+#define INC(i, n) (++i < n) ? i : 0
 
-#define MATH1(a0, a1, i0, i1, expr)\
+#define MAX2(x0, x1) (x0 >= x1 ? x0 : x1)
+#define MAX3(x0, x1, x2) MAX2(MAX2(x0, x1), x2)
+#define MAX4(x0, x1, x2, x3) MAX2(MAX2(MAX2(x0, x1), x2), x3)
+
+#define MATH2(n0, n1, i0, i1, expr)\
   do{\
-    R_len_t n0_ = XLENGTH(a0);\
-    R_len_t n1_ = XLENGTH(a1);\
-    if(n0_ == n1_)\
-      for(; i0 < n0_; i0++, i1++)\
+    if(n0 == n1)\
+      for(; i0 < n0; i0++, i1++)\
         expr;\
     else\
-      for(; i0 < n0_; i0++,\
-          i1 = (++i1 < n1_) ? i1 : 0)\
+    {\
+      for(int i_ = 0; i_ < MAX2(n0, n1); i_++,\
+          i0 = INC(i0, n0), i1 = INC(i1, n1))\
         expr;\
+    }\
   }while(0)
 
-#define MATH2(a0, a1, a2, i0, i1, i2, expr)\
+#define MATH3(n0, n1, n2, i0, i1, i2, expr)\
   do{\
-    R_len_t n0_ = XLENGTH(a0);\
-    R_len_t n1_ = XLENGTH(a1);\
-    R_len_t n2_ = XLENGTH(a2);\
-    if(n0_ == n1_ && n0_ == n2_)\
-      for(; i0 < n0_; i0++, i1++, i2++)\
-        expr;\
-    else if(n1_ == 1)\
-      for(; i0 < n0_; i0++, i2++)\
-        expr;\
-    else if(n2_ == 1)\
-      for(; i0 < n0_; i0++, i1++)\
+    if(n0 == n1 && n0 == n2)\
+      for(; i0 < n0; i0++, i1++, i2++)\
         expr;\
     else\
-      for(; i0 < n0_; i0++,\
-          i1 = (++i1 < n1_) ? i1 : 0, i2 = (++i2 < n2_) ? i2 : 0)\
-        expr;\
+    {\
+      if(n0 == 1)\
+        for(int i_ = 0; i_ < MAX3(n0, n1, n2); i_++,\
+            i1 = INC(i1, n1), i2 = INC(i2, n2))\
+          expr;\
+      else if(n1 == 1)\
+        for(int i_ = 0; i_ < MAX3(n0, n1, n2); i_++,\
+            i0 = INC(i0, n0), i2 = INC(i2, n2))\
+          expr;\
+      else if(n2 == 1)\
+        for(int i_ = 0; i_ < MAX3(n0, n1, n2); i_++,\
+            i0 = INC(i0, n0), i1 = INC(i1, n1))\
+          expr;\
+      else\
+        for(int i_ = 0; i_ < MAX3(n0, n1, n2); i_++,\
+            i0 = INC(i0, n0), i1 = INC(i1, n1), i2 = INC(i2, n2))\
+          expr;\
+    }\
   }while(0)
 
-#define MATH3(a0, a1, a2, a3, i0, i1, i2, i3, expr)\
+#define MATH4(n0, n1, n2, n3, i0, i1, i2, i3, expr)\
   do{\
-    R_len_t n0_ = XLENGTH(a0);\
-    R_len_t n1_ = XLENGTH(a1);\
-    R_len_t n2_ = XLENGTH(a2);\
-    R_len_t n3_ = XLENGTH(a3);\
-    if(n0_ == n1_ && n0_ == n2_ && n0_ == n3_)\
-      for(; i0 < n0_; i0++, i1++, i2++, i3++)\
-        expr;\
-    else if(n1_ == 1 && n2_ == 1)\
-      for(; i0 < n0_; i0++, i3++)\
-        expr;\
-    else if(n2_ == 1 && n3_ == 1)\
-      for(; i0 < n0_; i0++, i1++)\
-        expr;\
-    else if(n1_ == 1 && n3_ == 1)\
-      for(; i0 < n0_; i0++, i2++)\
-        expr;\
-    else if(n1_ == 1)\
-      for(; i0 < n0_; i0++, i2++, i3++)\
-        expr;\
-    else if(n2_ == 1)\
-      for(; i0 < n0_; i0++, i1++, i3++)\
-        expr;\
-    else if(n3_ == 1)\
-      for(; i0 < n0_; i0++, i1++, i2++)\
+    if(n0 == n1 && n0 == n2 && n0 == n3)\
+      for(; i0 < n0; i0++, i1++, i2++, i3++)\
         expr;\
     else\
-      for(; i0 < n0_; i0++,\
-          i1 = (++i1 < n1_) ? i1 : 0, i2 = (++i2 < n2_) ? i2 : 0, i3 = (++i3 < n3_) ? i3 : 0)\
-        expr;\
+    {\
+      if(n0 == 1)\
+        for(int i_ = 0; i_ < MAX4(n0, n1, n2, n3); i_++,\
+            i1 = INC(i1, n1), i2 = INC(i2, n2), i3 = INC(i3, n3))\
+          expr;\
+      else if(n1 == 1)\
+        for(int i_ = 0; i_ < MAX4(n0, n1, n2, n3); i_++,\
+            i0 = INC(i0, n0), i2 = INC(i2, n2), i3 = INC(i3, n3))\
+          expr;\
+      else if(n2 == 1)\
+        for(int i_ = 0; i_ < MAX4(n0, n1, n2, n3); i_++,\
+            i0 = INC(i0, n0), i1 = INC(i1, n1), i3 = INC(i3, n3))\
+          expr;\
+      else if(n3 == 1)\
+        for(int i_ = 0; i_ < MAX4(n0, n1, n2, n3); i_++,\
+            i0 = INC(i0, n0), i1 = INC(i1, n1), i2 = INC(i2, n2))\
+          expr;\
+      else\
+        for(int i_ = 0; i_ < MAX4(n0, n1, n2, n3); i_++,\
+            i0 = INC(i0, n0), i1 = INC(i1, n1), i2 = INC(i2, n2), i3 = INC(i3, n3))\
+          expr;\
+    }\
   }while(0)
 
 SEXP cg_math_pos(SEXP a1)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
-  return Rf_lazy_duplicate(a1);
+  return Rf_duplicate(a1);
 }
 
-SEXP cg_math_pos_grad(SEXP grad)
+SEXP cg_math_pos_grad(SEXP a1, SEXP grad)
 {
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
-  return Rf_lazy_duplicate(grad);
-}
+  SEXP a0 = PROTECT(Rf_duplicate(grad));
 
-SEXP cg_math_neg(SEXP a1)
-{
-  if(!Rf_isNumeric(a1))
-  {
-    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
-
-  R_len_t n = XLENGTH(a1);
-
-  SEXP a0 = PROTECT(Rf_duplicate(a1));
-
-  switch(TYPEOF(a1))
-  {
-    case REALSXP :
-    {
-      double *p0 = REAL(a0);
-
-      for(int i0 = 0; i0 < n; i0++)
-        p0[i0] = -p0[i0];
-
-      break;
-    }
-    case LGLSXP :
-    case INTSXP :
-    {
-      int *p0 = INTEGER(a0);
-
-      for(int i0 = 0; i0 < n; i0++)
-        p0[i0] = -p0[i0];
-
-      break;
-    }
-  }
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
 
   UNPROTECT(1);
 
   return a0;
 }
 
-SEXP cg_math_neg_grad(SEXP grad)
+SEXP cg_math_neg(SEXP a1)
 {
-  if(!Rf_isReal(grad))
-  {
-    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
 
-  R_len_t n = XLENGTH(grad);
+  R_len_t n = XLENGTH(a1);
 
-  SEXP a0 = PROTECT(Rf_duplicate(grad));
+  SEXP a0 = PROTECT(Rf_allocVector(TYPEOF(a1), n));
 
-  switch(TYPEOF(grad))
+  switch(TYPEOF(a1))
   {
     case REALSXP :
     {
       double *p0 = REAL(a0);
+      double *p1 = REAL(a1);
 
-      for(int i0 = 0; i0 < n; i0++)
-        p0[i0] = -p0[i0];
+      for(int i = 0; i < n; i++)
+        p0[i] = -p1[i];
 
       break;
     }
@@ -178,13 +147,44 @@ SEXP cg_math_neg_grad(SEXP grad)
     case INTSXP :
     {
       int *p0 = INTEGER(a0);
+      int *p1 = INTEGER(a1);
 
-      for(int i0 = 0; i0 < n; i0++)
-        p0[i0] = -p0[i0];
+      for(int i = 0; i < n; i++)
+        p0[i] = -p1[i];
 
       break;
     }
   }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_neg_grad(SEXP a1, SEXP grad)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  if(XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1' and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+  double *pg = REAL(grad);
+
+  for(int i = 0; i < n; i++)
+    p0[i] = -pg[i];
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
 
   UNPROTECT(1);
 
@@ -194,18 +194,14 @@ SEXP cg_math_neg_grad(SEXP grad)
 SEXP cg_math_add(SEXP a1, SEXP a2)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   SEXP a0;
 
-  R_len_t n = MAX_LENGTH2(a1, a2);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), n0 = MAX2(n1, n2);
 
   int i0 = 0, i1 = 0, i2 = 0;
 
@@ -213,7 +209,7 @@ SEXP cg_math_add(SEXP a1, SEXP a2)
   {
     case REALSXP :
     {
-      a0 = PROTECT(Rf_allocVector(REALSXP, n));
+      PROTECT(a0 = Rf_allocVector(REALSXP, n0));
 
       double *p0 = REAL(a0);
       double *p1 = REAL(a1);
@@ -224,7 +220,7 @@ SEXP cg_math_add(SEXP a1, SEXP a2)
         {
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] + p2[i2]);
 
           break;
@@ -234,7 +230,7 @@ SEXP cg_math_add(SEXP a1, SEXP a2)
         {
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] + p2[i2]);
 
           break;
@@ -251,12 +247,12 @@ SEXP cg_math_add(SEXP a1, SEXP a2)
       {
         case REALSXP :
         {
-          a0 = PROTECT(Rf_allocVector(REALSXP, n));
+          PROTECT(a0 = Rf_allocVector(REALSXP, n0));
 
           double *p0 = REAL(a0);
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] + p2[i2]);
 
           break;
@@ -264,12 +260,12 @@ SEXP cg_math_add(SEXP a1, SEXP a2)
         case LGLSXP :
         case INTSXP :
         {
-          a0 = PROTECT(Rf_allocVector(INTSXP, n));
+          PROTECT(a0 = Rf_allocVector(INTSXP, n0));
 
           int *p0 = INTEGER(a0);
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] + p2[i2]);
 
           break;
@@ -279,14 +275,10 @@ SEXP cg_math_add(SEXP a1, SEXP a2)
     }
   }
 
-  if(n == XLENGTH(a1))
-  {
+  if(n0 == n1)
     SHALLOW_DUPLICATE_ATTRIB(a0, a1);
-  }
-  else
-  {
+  else if(n0 == n2)
     SHALLOW_DUPLICATE_ATTRIB(a0, a2);
-  }
 
   UNPROTECT(1);
 
@@ -296,28 +288,24 @@ SEXP cg_math_add(SEXP a1, SEXP a2)
 SEXP cg_math_add_grad(SEXP a1, SEXP grad)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
-  R_len_t n = XLENGTH(a1);
+  R_len_t n1 = XLENGTH(a1), ng = XLENGTH(grad);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n1));
 
   double *p0 = REAL(a0);
   double *pg = REAL(grad);
 
-  memset(p0, 0, n * sizeof(double));
+  memset(p0, 0, n1 * sizeof(double));
 
-  int i0 = 0, ig = 0;
+  int i1 = 0, ig = 0;
 
-  MATH1(a0, grad, i0, ig,
-        p0[i0] += pg[ig]);
+  MATH2(n1, ng, i1, ig,
+        p0[i1] += pg[ig]);
 
   SHALLOW_DUPLICATE_ATTRIB(a0, a1);
 
@@ -329,18 +317,14 @@ SEXP cg_math_add_grad(SEXP a1, SEXP grad)
 SEXP cg_math_sub(SEXP a1, SEXP a2)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   SEXP a0;
 
-  R_len_t n = MAX_LENGTH2(a1, a2);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), n0 = MAX2(n1, n2);
 
   int i0 = 0, i1 = 0, i2 = 0;
 
@@ -348,7 +332,7 @@ SEXP cg_math_sub(SEXP a1, SEXP a2)
   {
     case REALSXP :
     {
-      a0 = PROTECT(Rf_allocVector(REALSXP, n));
+      PROTECT(a0 = Rf_allocVector(REALSXP, n0));
 
       double *p0 = REAL(a0);
       double *p1 = REAL(a1);
@@ -359,7 +343,7 @@ SEXP cg_math_sub(SEXP a1, SEXP a2)
         {
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] - p2[i2]);
 
           break;
@@ -369,7 +353,7 @@ SEXP cg_math_sub(SEXP a1, SEXP a2)
         {
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] - p2[i2]);
 
           break;
@@ -386,12 +370,12 @@ SEXP cg_math_sub(SEXP a1, SEXP a2)
       {
         case REALSXP :
         {
-          a0 = PROTECT(Rf_allocVector(REALSXP, n));
+          PROTECT(a0 = Rf_allocVector(REALSXP, n0));
 
           double *p0 = REAL(a0);
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] - p2[i2]);
 
           break;
@@ -399,12 +383,12 @@ SEXP cg_math_sub(SEXP a1, SEXP a2)
         case LGLSXP :
         case INTSXP :
         {
-          a0 = PROTECT(Rf_allocVector(INTSXP, n));
+          PROTECT(a0 = Rf_allocVector(INTSXP, n0));
 
           int *p0 = INTEGER(a0);
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] - p2[i2]);
 
           break;
@@ -414,14 +398,10 @@ SEXP cg_math_sub(SEXP a1, SEXP a2)
     }
   }
 
-  if(n == XLENGTH(a1))
-  {
+  if(n0 == n1)
     SHALLOW_DUPLICATE_ATTRIB(a0, a1);
-  }
-  else
-  {
+  else if(n0 == n2)
     SHALLOW_DUPLICATE_ATTRIB(a0, a2);
-  }
 
   UNPROTECT(1);
 
@@ -431,28 +411,24 @@ SEXP cg_math_sub(SEXP a1, SEXP a2)
 SEXP cg_math_sub_grad(SEXP a2, SEXP grad)
 {
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
-  R_len_t n = XLENGTH(a2);
+  R_len_t n2 = XLENGTH(a2), ng = XLENGTH(grad);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n2));
 
   double *p0 = REAL(a0);
   double *pg = REAL(grad);
 
-  memset(p0, 0, n * sizeof(double));
+  memset(p0, 0, n2 * sizeof(double));
 
-  int i0 = 0, ig = 0;
+  int i2 = 0, ig = 0;
 
-  MATH1(a0, grad, i0, ig,
-        p0[i0] += -pg[ig]);
+  MATH2(n2, ng, i2, ig,
+        p0[i2] += -pg[ig]);
 
   SHALLOW_DUPLICATE_ATTRIB(a0, a2);
 
@@ -464,18 +440,14 @@ SEXP cg_math_sub_grad(SEXP a2, SEXP grad)
 SEXP cg_math_mul(SEXP a1, SEXP a2)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   SEXP a0;
 
-  R_len_t n = MAX_LENGTH2(a1, a2);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), n0 = MAX2(n1, n2);
 
   int i0 = 0, i1 = 0, i2 = 0;
 
@@ -483,7 +455,7 @@ SEXP cg_math_mul(SEXP a1, SEXP a2)
   {
     case REALSXP :
     {
-      a0 = PROTECT(Rf_allocVector(REALSXP, n));
+      PROTECT(a0 = Rf_allocVector(REALSXP, n0));
 
       double *p0 = REAL(a0);
       double *p1 = REAL(a1);
@@ -494,7 +466,7 @@ SEXP cg_math_mul(SEXP a1, SEXP a2)
         {
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] * p2[i2]);
 
           break;
@@ -504,7 +476,7 @@ SEXP cg_math_mul(SEXP a1, SEXP a2)
         {
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] * p2[i2]);
 
           break;
@@ -521,12 +493,12 @@ SEXP cg_math_mul(SEXP a1, SEXP a2)
       {
         case REALSXP :
         {
-          a0 = PROTECT(Rf_allocVector(REALSXP, n));
+          PROTECT(a0 = Rf_allocVector(REALSXP, n0));
 
           double *p0 = REAL(a0);
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] * p2[i2]);
 
           break;
@@ -534,12 +506,12 @@ SEXP cg_math_mul(SEXP a1, SEXP a2)
         case LGLSXP :
         case INTSXP :
         {
-          a0 = PROTECT(Rf_allocVector(INTSXP, n));
+          PROTECT(a0 = Rf_allocVector(INTSXP, n0));
 
           int *p0 = INTEGER(a0);
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] * p2[i2]);
 
           break;
@@ -549,14 +521,10 @@ SEXP cg_math_mul(SEXP a1, SEXP a2)
     }
   }
 
-  if(n == XLENGTH(a1))
-  {
+  if(n0 == n1)
     SHALLOW_DUPLICATE_ATTRIB(a0, a1);
-  }
-  else
-  {
+  else if(n0 == n2)
     SHALLOW_DUPLICATE_ATTRIB(a0, a2);
-  }
 
   UNPROTECT(1);
 
@@ -566,28 +534,24 @@ SEXP cg_math_mul(SEXP a1, SEXP a2)
 SEXP cg_math_mul_grad1(SEXP a1, SEXP a2, SEXP grad)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
-  R_len_t n = XLENGTH(a1);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), ng = XLENGTH(grad);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n1));
 
-  int i0 = 0, i2 = 0, ig = 0;
+  int i1 = 0, i2 = 0, ig = 0;
 
   double *p0 = REAL(a0);
   double *pg = REAL(grad);
+
+  memset(p0, 0, n1 * sizeof(double));
 
   switch(TYPEOF(a2))
   {
@@ -595,8 +559,8 @@ SEXP cg_math_mul_grad1(SEXP a1, SEXP a2, SEXP grad)
     {
       double *p2 = REAL(a2);
 
-      MATH2(a0, a2, grad, i0, i2, ig,
-            p0[i0] = pg[ig] * p2[i2]);
+      MATH3(n1, n2, ng, i1, i2, ig,
+            p0[i1] += pg[ig] * p2[i2]);
 
       break;
     }
@@ -605,8 +569,8 @@ SEXP cg_math_mul_grad1(SEXP a1, SEXP a2, SEXP grad)
     {
       int *p2 = INTEGER(a2);
 
-      MATH2(a0, a2, grad, i0, i2, ig,
-            p0[i0] = pg[ig] * p2[i2]);
+      MATH3(n1, n2, ng, i1, i2, ig,
+            p0[i1] += pg[ig] * p2[i2]);
 
       break;
     }
@@ -622,28 +586,24 @@ SEXP cg_math_mul_grad1(SEXP a1, SEXP a2, SEXP grad)
 SEXP cg_math_mul_grad2(SEXP a1, SEXP a2, SEXP grad)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
-  R_len_t n = XLENGTH(a2);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), ng = XLENGTH(grad);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n2));
 
-  int i0 = 0, i1 = 0, ig = 0;
+  int i1 = 0, i2 = 0, ig = 0;
 
   double *p0 = REAL(a0);
   double *pg = REAL(grad);
+
+  memset(p0, 0, n2 * sizeof(double));
 
   switch(TYPEOF(a1))
   {
@@ -651,8 +611,8 @@ SEXP cg_math_mul_grad2(SEXP a1, SEXP a2, SEXP grad)
     {
       double *p1 = REAL(a1);
 
-      MATH2(a0, a1, grad, i0, i1, ig,
-            p0[i0] = pg[ig] * p1[i1]);
+      MATH3(n1, n2, ng, i1, i2, ig,
+            p0[i2] += pg[ig] * p1[i1]);
 
       break;
     }
@@ -661,8 +621,8 @@ SEXP cg_math_mul_grad2(SEXP a1, SEXP a2, SEXP grad)
     {
       int *p1 = INTEGER(a1);
 
-      MATH2(a0, a1, grad, i0, i1, ig,
-            p0[i0] = pg[ig] * p1[i1]);
+      MATH3(n1, n2, ng, i1, i2, ig,
+            p0[i2] += pg[ig] * p1[i1]);
 
       break;
     }
@@ -678,18 +638,14 @@ SEXP cg_math_mul_grad2(SEXP a1, SEXP a2, SEXP grad)
 SEXP cg_math_div(SEXP a1, SEXP a2)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
-  R_len_t n = MAX_LENGTH2(a1, a2);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), n0 = MAX2(n1, n2);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n0));
 
   int i0 = 0, i1 = 0, i2 = 0;
 
@@ -707,7 +663,7 @@ SEXP cg_math_div(SEXP a1, SEXP a2)
         {
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] / p2[i2]);
 
           break;
@@ -717,7 +673,7 @@ SEXP cg_math_div(SEXP a1, SEXP a2)
         {
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] / p2[i2]);
 
           break;
@@ -736,7 +692,7 @@ SEXP cg_math_div(SEXP a1, SEXP a2)
         {
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] / p2[i2]);
 
           break;
@@ -746,7 +702,7 @@ SEXP cg_math_div(SEXP a1, SEXP a2)
         {
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = p1[i1] / p2[i2]);
 
           break;
@@ -756,14 +712,10 @@ SEXP cg_math_div(SEXP a1, SEXP a2)
     }
   }
 
-  if(n == XLENGTH(a1))
-  {
+  if(n0 == n1)
     SHALLOW_DUPLICATE_ATTRIB(a0, a1);
-  }
-  else
-  {
+  else if(n0 == n2)
     SHALLOW_DUPLICATE_ATTRIB(a0, a2);
-  }
 
   UNPROTECT(1);
 
@@ -773,28 +725,24 @@ SEXP cg_math_div(SEXP a1, SEXP a2)
 SEXP cg_math_div_grad1(SEXP a1, SEXP a2, SEXP grad)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
-  R_len_t n = XLENGTH(a1);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), ng = XLENGTH(grad);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n1));
 
-  int i0 = 0, i2 = 0, ig = 0;
+  int i1 = 0, i2 = 0, ig = 0;
 
   double *p0 = REAL(a0);
   double *pg = REAL(grad);
+
+  memset(p0, 0, n1 * sizeof(double));
 
   switch(TYPEOF(a2))
   {
@@ -802,8 +750,8 @@ SEXP cg_math_div_grad1(SEXP a1, SEXP a2, SEXP grad)
     {
       double *p2 = REAL(a2);
 
-      MATH2(a0, a2, grad, i0, i2, ig,
-            p0[i0] = pg[ig] / p2[i2]);
+      MATH3(n1, n2, ng, i1, i2, ig,
+            p0[i1] += pg[ig] / p2[i2]);
 
       break;
     }
@@ -812,8 +760,8 @@ SEXP cg_math_div_grad1(SEXP a1, SEXP a2, SEXP grad)
     {
       int *p2 = INTEGER(a2);
 
-      MATH2(a0, a2, grad, i0, i2, ig,
-            p0[i0] = pg[ig] / p2[i2]);
+      MATH3(n1, n2, ng, i1, i2, ig,
+            p0[i1] += pg[ig] / p2[i2]);
 
       break;
     }
@@ -829,28 +777,24 @@ SEXP cg_math_div_grad1(SEXP a1, SEXP a2, SEXP grad)
 SEXP cg_math_div_grad2(SEXP a1, SEXP a2, SEXP grad)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
-  R_len_t n = XLENGTH(a2);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), ng = XLENGTH(grad);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n2));
 
-  int i0 = 0, i1 = 0, i2 = 0, ig = 0;
+  int i1 = 0, i2 = 0, ig = 0;
 
   double *p0 = REAL(a0);
   double *pg = REAL(grad);
+
+  memset(p0, 0, n2 * sizeof(double));
 
   switch(TYPEOF(a1))
   {
@@ -864,8 +808,8 @@ SEXP cg_math_div_grad2(SEXP a1, SEXP a2, SEXP grad)
         {
           double *p2 = REAL(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = -pg[ig] * p1[i1] / (p2[i2] * p2[i2]));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i2] += -pg[ig] * p1[i1] / (p2[i2] * p2[i2]));
 
           break;
         }
@@ -874,8 +818,8 @@ SEXP cg_math_div_grad2(SEXP a1, SEXP a2, SEXP grad)
         {
           int *p2 = INTEGER(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = -pg[ig] * p1[i1] / (p2[i2] * p2[i2]));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i2] += -pg[ig] * p1[i1] / (p2[i2] * p2[i2]));
 
           break;
         }
@@ -893,8 +837,8 @@ SEXP cg_math_div_grad2(SEXP a1, SEXP a2, SEXP grad)
         {
           double *p2 = REAL(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = -pg[ig] * p1[i1] / (p2[i2] * p2[i2]));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i2] += -pg[ig] * p1[i1] / (p2[i2] * p2[i2]));
 
           break;
         }
@@ -903,8 +847,8 @@ SEXP cg_math_div_grad2(SEXP a1, SEXP a2, SEXP grad)
         {
           int *p2 = INTEGER(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = -pg[ig] * p1[i1] / (p2[i2] * p2[i2]));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i2] += -pg[ig] * p1[i1] / (p2[i2] * p2[i2]));
 
           break;
         }
@@ -923,18 +867,14 @@ SEXP cg_math_div_grad2(SEXP a1, SEXP a2, SEXP grad)
 SEXP cg_math_pow(SEXP a1, SEXP a2)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   SEXP a0;
 
-  R_len_t n = MAX_LENGTH2(a1, a2);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), n0 = MAX2(n1, n2);
 
   int i0 = 0, i1 = 0, i2 = 0;
 
@@ -942,7 +882,7 @@ SEXP cg_math_pow(SEXP a1, SEXP a2)
   {
     case REALSXP :
     {
-      a0 = PROTECT(Rf_allocVector(REALSXP, n));
+      PROTECT(a0 = Rf_allocVector(REALSXP, n0));
 
       double *p0 = REAL(a0);
       double *p1 = REAL(a1);
@@ -953,7 +893,7 @@ SEXP cg_math_pow(SEXP a1, SEXP a2)
         {
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = pow(p1[i1], p2[i2]));
 
           break;
@@ -963,7 +903,7 @@ SEXP cg_math_pow(SEXP a1, SEXP a2)
         {
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = pow(p1[i1], p2[i2]));
 
           break;
@@ -980,12 +920,12 @@ SEXP cg_math_pow(SEXP a1, SEXP a2)
       {
         case REALSXP :
         {
-          a0 = PROTECT(Rf_allocVector(REALSXP, n));
+          PROTECT(a0 = Rf_allocVector(REALSXP, n0));
 
           double *p0 = REAL(a0);
           double *p2 = REAL(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = pow(p1[i1], p2[i2]));
 
           break;
@@ -993,12 +933,12 @@ SEXP cg_math_pow(SEXP a1, SEXP a2)
         case LGLSXP :
         case INTSXP :
         {
-          a0 = PROTECT(Rf_allocVector(INTSXP, n));
+          PROTECT(a0 = Rf_allocVector(INTSXP, n0));
 
           int *p0 = INTEGER(a0);
           int *p2 = INTEGER(a2);
 
-          MATH2(a0, a1, a2, i0, i1, i2,
+          MATH3(n0, n1, n2, i0, i1, i2,
                 p0[i0] = pow(p1[i1], p2[i2]));
 
           break;
@@ -1008,11 +948,11 @@ SEXP cg_math_pow(SEXP a1, SEXP a2)
     }
   }
 
-  if(n == XLENGTH(a1))
+  if(n0 == n1)
   {
     SHALLOW_DUPLICATE_ATTRIB(a0, a1);
   }
-  else
+  else if(n0 == n2)
   {
     SHALLOW_DUPLICATE_ATTRIB(a0, a2);
   }
@@ -1025,28 +965,24 @@ SEXP cg_math_pow(SEXP a1, SEXP a2)
 SEXP cg_math_pow_grad1(SEXP a1, SEXP a2, SEXP grad)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
-  R_len_t n = XLENGTH(a1);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), ng = XLENGTH(grad);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n1));
 
-  int i0 = 0, i1 = 0, i2 = 0, ig = 0;
+  int i1 = 0, i2 = 0, ig = 0;
 
   double *p0 = REAL(a0);
   double *pg = REAL(grad);
+
+  memset(p0, 0, n1 * sizeof(double));
 
   switch(TYPEOF(a1))
   {
@@ -1060,8 +996,8 @@ SEXP cg_math_pow_grad1(SEXP a1, SEXP a2, SEXP grad)
         {
           double *p2 = REAL(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = pg[ig] * p2[i2] * pow(p1[i1], p2[i2] - 1));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i1] += pg[ig] * p2[i2] * pow(p1[i1], p2[i2] - 1));
 
           break;
         }
@@ -1070,8 +1006,8 @@ SEXP cg_math_pow_grad1(SEXP a1, SEXP a2, SEXP grad)
         {
           int *p2 = INTEGER(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = pg[ig] * p2[i2] * pow(p1[i1], p2[i2] - 1));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i1] += pg[ig] * p2[i2] * pow(p1[i1], p2[i2] - 1));
 
           break;
         }
@@ -1089,8 +1025,8 @@ SEXP cg_math_pow_grad1(SEXP a1, SEXP a2, SEXP grad)
         {
           double *p2 = REAL(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = pg[ig] * p2[i2] * pow(p1[i1], p2[i2] - 1));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i1] += pg[ig] * p2[i2] * pow(p1[i1], p2[i2] - 1));
 
           break;
         }
@@ -1099,8 +1035,8 @@ SEXP cg_math_pow_grad1(SEXP a1, SEXP a2, SEXP grad)
         {
           int *p2 = INTEGER(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = pg[ig] * p2[i2] * pow(p1[i1], p2[i2] - 1));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i1] += pg[ig] * p2[i2] * pow(p1[i1], p2[i2] - 1));
 
           break;
         }
@@ -1119,28 +1055,24 @@ SEXP cg_math_pow_grad1(SEXP a1, SEXP a2, SEXP grad)
 SEXP cg_math_pow_grad2(SEXP a1, SEXP a2, SEXP grad)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isNumeric(a2))
-  {
     Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
-  }
 
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
-  R_len_t n = XLENGTH(a2);
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), ng = XLENGTH(grad);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n2));
 
-  int i0 = 0, i1 = 0, i2 = 0, ig = 0;
+  int i1 = 0, i2 = 0, ig = 0;
 
   double *p0 = REAL(a0);
   double *pg = REAL(grad);
+
+  memset(p0, 0, n2 * sizeof(double));
 
   switch(TYPEOF(a1))
   {
@@ -1154,8 +1086,8 @@ SEXP cg_math_pow_grad2(SEXP a1, SEXP a2, SEXP grad)
         {
           double *p2 = REAL(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = pg[ig] * pow(p1[i1], p2[i2]) * log(p1[i1]));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i2] += pg[ig] * pow(p1[i1], p2[i2]) * log(p1[i1]));
 
           break;
         }
@@ -1164,8 +1096,8 @@ SEXP cg_math_pow_grad2(SEXP a1, SEXP a2, SEXP grad)
         {
           int *p2 = INTEGER(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = pg[ig] * pow(p1[i1], p2[i2]) * log(p1[i1]));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i2] += pg[ig] * pow(p1[i1], p2[i2]) * log(p1[i1]));
 
           break;
         }
@@ -1183,8 +1115,8 @@ SEXP cg_math_pow_grad2(SEXP a1, SEXP a2, SEXP grad)
         {
           double *p2 = REAL(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = pg[ig] * pow(p1[i1], p2[i2]) * log(p1[i1]));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i2] += pg[ig] * pow(p1[i1], p2[i2]) * log(p1[i1]));
 
           break;
         }
@@ -1193,8 +1125,8 @@ SEXP cg_math_pow_grad2(SEXP a1, SEXP a2, SEXP grad)
         {
           int *p2 = INTEGER(a2);
 
-          MATH3(a0, a1, a2, grad, i0, i1, i2, ig,
-                p0[i0] = pg[ig] * pow(p1[i1], p2[i2]) * log(p1[i1]));
+          MATH3(n1, n2, ng, i1, i2, ig,
+                p0[i2] += pg[ig] * pow(p1[i1], p2[i2]) * log(p1[i1]));
 
           break;
         }
@@ -1213,9 +1145,7 @@ SEXP cg_math_pow_grad2(SEXP a1, SEXP a2, SEXP grad)
 SEXP cg_math_square(SEXP a1)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   SEXP a0;
 
@@ -1230,8 +1160,8 @@ SEXP cg_math_square(SEXP a1)
       double *p0 = REAL(a0);
       double *p1 = REAL(a1);
 
-      for(int i0 = 0; i0 < n; i0++)
-        p0[i0] = p1[i0] * p1[i0];
+      for(int i = 0; i < n; i++)
+        p0[i] = p1[i] * p1[i];
 
       break;
     }
@@ -1243,8 +1173,8 @@ SEXP cg_math_square(SEXP a1)
       int *p0 = INTEGER(a0);
       int *p1 = INTEGER(a1);
 
-      for(int i0 = 0; i0 < n; i0++)
-        p0[i0] = p1[i0] * p1[i0];
+      for(int i = 0; i < n; i++)
+        p0[i] = p1[i] * p1[i];
 
       break;
     }
@@ -1260,20 +1190,17 @@ SEXP cg_math_square(SEXP a1)
 SEXP cg_math_square_grad(SEXP a1, SEXP grad)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   if(!Rf_isReal(grad))
-  {
     Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
-  }
 
   R_len_t n = XLENGTH(a1);
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+  if(XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1' and 'grad' have incompatible lengths");
 
-  int i0 = 0, i1 = 0, ig = 0;
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
 
   double *p0 = REAL(a0);
   double *pg = REAL(grad);
@@ -1284,8 +1211,8 @@ SEXP cg_math_square_grad(SEXP a1, SEXP grad)
     {
       double *p1 = REAL(a1);
 
-      MATH2(a0, a1, grad, i0, i1, ig,
-            p0[i0] = 2 * pg[ig] * p1[i1]);
+      for(int i = 0; i < n; i++)
+        p0[i] = 2 * pg[i] * p1[i];
 
       break;
     }
@@ -1294,8 +1221,8 @@ SEXP cg_math_square_grad(SEXP a1, SEXP grad)
     {
       int *p1 = INTEGER(a1);
 
-      MATH2(a0, a1, grad, i0, i1, ig,
-            p0[i0] = 2 * pg[ig] * p1[i1]);
+      for(int i = 0; i < n; i++)
+        p0[i] = 2 * pg[i] * p1[i];
 
       break;
     }
@@ -1311,9 +1238,7 @@ SEXP cg_math_square_grad(SEXP a1, SEXP grad)
 SEXP cg_math_sqrt(SEXP a1)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
   R_len_t n = XLENGTH(a1);
 
@@ -1327,8 +1252,8 @@ SEXP cg_math_sqrt(SEXP a1)
     {
       double *p1 = REAL(a1);
 
-      for(int i0 = 0; i0 < n; i0++)
-        p0[i0] = sqrt(p1[i0]);
+      for(int i = 0; i < n; i++)
+        p0[i] = sqrt(p1[i]);
 
       break;
     }
@@ -1337,8 +1262,8 @@ SEXP cg_math_sqrt(SEXP a1)
     {
       int *p1 = INTEGER(a1);
 
-      for(int i0 = 0; i0 < n; i0++)
-        p0[i0] = sqrt(p1[i0]);
+      for(int i = 0; i < n; i++)
+        p0[i] = sqrt(p1[i]);
 
       break;
     }
@@ -1351,16 +1276,46 @@ SEXP cg_math_sqrt(SEXP a1)
   return a0;
 }
 
-SEXP math_sin(SEXP a1)
+SEXP cg_math_sqrt_grad(SEXP a1, SEXP val, SEXP grad)
 {
   if(!Rf_isNumeric(a1))
-  {
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
-  }
 
-  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, XLENGTH(a1)));
+  if(!Rf_isReal(val))
+    Rf_errorcall(R_NilValue, "argument 'val' must be a real vector or array");
 
-  int i0 = 0, i1 = 0;
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  if(XLENGTH(val) != n || XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1', 'val', and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+  double *pv = REAL(val);
+  double *pg = REAL(grad);
+
+  for(int i = 0; i < n; i++)
+    p0[i] = pg[i] * 1 / (2 * pv[i]);
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_cbrt(SEXP a1)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
 
   double *p0 = REAL(a0);
 
@@ -1370,8 +1325,8 @@ SEXP math_sin(SEXP a1)
     {
       double *p1 = REAL(a1);
 
-      MATH1(a0, a1, i0, i1,
-            p0[i0] = sin(p1[i1]));
+      for(int i = 0; i < n; i++)
+        p0[i] = cbrt(p1[i]);
 
       break;
     }
@@ -1380,8 +1335,876 @@ SEXP math_sin(SEXP a1)
     {
       int *p1 = INTEGER(a1);
 
-      MATH1(a0, a1, i0, i1,
-            p0[i0] = sin(p1[i1]));
+      for(int i = 0; i < n; i++)
+        p0[i] = cbrt(p1[i]);
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_cbrt_grad(SEXP a1, SEXP val, SEXP grad)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isReal(val))
+    Rf_errorcall(R_NilValue, "argument 'val' must be a real vector or array");
+
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  if(XLENGTH(val) != n || XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1', 'val', and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+  double *pv = REAL(val);
+  double *pg = REAL(grad);
+
+  for(int i = 0; i < n; i++)
+    p0[i] = pg[i] * 1 / (3 * pv[i] * pv[i]);
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_hypot(SEXP a1, SEXP a2)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isNumeric(a2))
+    Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
+
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), n0 = MAX2(n1, n2);
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n0));
+
+  int i0 = 0, i1 = 0, i2 = 0;
+
+  double *p0 = REAL(a0);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      switch(TYPEOF(a2))
+      {
+        case REALSXP :
+        {
+          double *p2 = REAL(a2);
+
+          MATH3(n0, n1, n2, i0, i1, i2,
+                p0[i0] = hypot(p1[i1], p2[i2]));
+
+          break;
+        }
+        case LGLSXP :
+        case INTSXP :
+        {
+          int *p2 = INTEGER(a2);
+
+          MATH3(n0, n1, n2, i0, i1, i2,
+                p0[i0] = hypot(p1[i1], p2[i2]));
+
+          break;
+        }
+      }
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      switch(TYPEOF(a2))
+      {
+        case REALSXP :
+        {
+          double *p2 = REAL(a2);
+
+          MATH3(n0, n1, n2, i0, i1, i2,
+                p0[i0] = hypot(p1[i1], p2[i2]));
+
+          break;
+        }
+        case LGLSXP :
+        case INTSXP :
+        {
+          int *p2 = INTEGER(a2);
+
+          MATH3(n0, n1, n2, i0, i1, i2,
+                p0[i0] = hypot(p1[i1], p2[i2]));
+
+          break;
+        }
+      }
+      break;
+    }
+  }
+
+  if(n0 == n1)
+  {
+    SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+  }
+  else if(n0 == n2)
+  {
+    SHALLOW_DUPLICATE_ATTRIB(a0, a2);
+  }
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_hypot_grad(SEXP a1, SEXP val, SEXP grad)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isReal(val))
+    Rf_errorcall(R_NilValue, "argument 'val' must be a real vector or array");
+
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n1 = XLENGTH(a1), ng = XLENGTH(grad);
+
+  if(XLENGTH(val) != ng)
+    Rf_errorcall(R_NilValue, "argument 'val', and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n1));
+
+  int i1 = 0, ig = 0;
+
+  double *p0 = REAL(a0);
+  double *pv = REAL(val);
+  double *pg = REAL(grad);
+
+  memset(p0, 0, n1 * sizeof(double));
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      MATH2(n1, ng, i1, ig,
+            p0[i1] += pg[ig] * (p1[i1] / pv[ig]));
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      MATH2(n1, ng, i1, ig,
+            p0[i1] += pg[ig] * (p1[i1] / pv[ig]));
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_fma(SEXP a1, SEXP a2, SEXP a3)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isNumeric(a2))
+    Rf_errorcall(R_NilValue, "argument 'a2' must be a numerical vector or array");
+
+  if(!Rf_isNumeric(a3))
+    Rf_errorcall(R_NilValue, "argument 'a3' must be a numerical vector or array");
+
+  SEXP a0;
+
+  R_len_t n1 = XLENGTH(a1), n2 = XLENGTH(a2), n3 = XLENGTH(a3), n0 = MAX3(n1, n2, n3);
+
+  int i0 = 0, i1 = 0, i2 = 0, i3 = 0;
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      PROTECT(a0 = Rf_allocVector(REALSXP, n0));
+
+      double *p0 = REAL(a0);
+      double *p1 = REAL(a1);
+
+      switch(TYPEOF(a2))
+      {
+        case REALSXP :
+        {
+          double *p2 = REAL(a2);
+
+          switch(TYPEOF(a3))
+          {
+            case REALSXP :
+            {
+              double *p3 = REAL(a3);
+
+              MATH4(n0, n1, n2, n3, i0, i1, i2, i3,
+                    p0[i0] = fma(p1[i1], p2[i2], p3[i3]));
+
+              break;
+            }
+            case LGLSXP :
+            case INTSXP :
+            {
+              int *p3 = INTEGER(a3);
+
+              MATH4(n0, n1, n2, n3, i0, i1, i2, i3,
+                    p0[i0] = fma(p1[i1], p2[i2], p3[i3]));
+
+              break;
+            }
+          }
+          break;
+        }
+        case LGLSXP :
+        case INTSXP :
+        {
+          int *p2 = INTEGER(a2);
+
+          switch(TYPEOF(a3))
+          {
+            case REALSXP :
+            {
+              double *p3 = REAL(a3);
+
+              MATH4(n0, n1, n2, n3, i0, i1, i2, i3,
+                    p0[i0] = fma(p1[i1], p2[i2], p3[i3]));
+
+              break;
+            }
+            case LGLSXP :
+            case INTSXP :
+            {
+              int *p3 = INTEGER(a3);
+
+              MATH4(n0, n1, n2, n3, i0, i1, i2, i3,
+                    p0[i0] = fma(p1[i1], p2[i2], p3[i3]));
+
+              break;
+            }
+          }
+          break;
+        }
+      }
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      switch(TYPEOF(a2))
+      {
+        case REALSXP :
+        {
+          PROTECT(a0 = Rf_allocVector(REALSXP, n0));
+
+          double *p0 = REAL(a0);
+          double *p2 = REAL(a2);
+
+          switch(TYPEOF(a3))
+          {
+            case REALSXP :
+            {
+              double *p3 = REAL(a3);
+
+              MATH4(n0, n1, n2, n3, i0, i1, i2, i3,
+                    p0[i0] = fma(p1[i1], p2[i2], p3[i3]));
+
+              break;
+            }
+            case LGLSXP :
+            case INTSXP :
+            {
+              int *p3 = INTEGER(a3);
+
+              MATH4(n0, n1, n2, n3, i0, i1, i2, i3,
+                    p0[i0] = fma(p1[i1], p2[i2], p3[i3]));
+
+              break;
+            }
+          }
+          break;
+        }
+        case LGLSXP :
+        case INTSXP :
+        {
+          int *p2 = INTEGER(a2);
+
+          switch(TYPEOF(a3))
+          {
+            case REALSXP :
+            {
+              PROTECT(a0 = Rf_allocVector(REALSXP, n0));
+
+              double *p0 = REAL(a0);
+              double *p3 = REAL(a3);
+
+              MATH4(n0, n1, n2, n3, i0, i1, i2, i3,
+                    p0[i0] = fma(p1[i1], p2[i2], p3[i3]));
+
+              break;
+            }
+            case LGLSXP :
+            case INTSXP :
+            {
+              PROTECT(a0 = Rf_allocVector(INTSXP, n0));
+
+              int *p0 = INTEGER(a0);
+              int *p3 = INTEGER(a3);
+
+              MATH4(n0, n1, n2, n3, i0, i1, i2, i3,
+                    p0[i0] = fma(p1[i1], p2[i2], p3[i3]));
+
+              break;
+            }
+          }
+          break;
+        }
+      }
+      break;
+    }
+  }
+
+  if(n0 == n1)
+    SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+  else if(n0 == n2)
+    SHALLOW_DUPLICATE_ATTRIB(a0, a2);
+  else if(n0 == n3)
+    SHALLOW_DUPLICATE_ATTRIB(a0, a3);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_exp(SEXP a1)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = exp(p1[i]);
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = exp(p1[i]);
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_exp_grad(SEXP a1, SEXP val, SEXP grad)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isReal(val))
+    Rf_errorcall(R_NilValue, "argument 'val' must be a real vector or array");
+
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  if(XLENGTH(val) != n || XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1', 'val', and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+  double *pv = REAL(val);
+  double *pg = REAL(grad);
+
+  for(int i = 0; i < n; i++)
+    p0[i] = pg[i] * pv[i];
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_exp2(SEXP a1)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = exp2(p1[i]);
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = exp2(p1[i]);
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_exp2_grad(SEXP a1, SEXP val, SEXP grad)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isReal(val))
+    Rf_errorcall(R_NilValue, "argument 'val' must be a real vector or array");
+
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  if(XLENGTH(val) != n || XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1', 'val', and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+  double *pv = REAL(val);
+  double *pg = REAL(grad);
+
+  for(int i = 0; i < n; i++)
+    p0[i] = pg[i] * pv[i] * log(2);
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_ln(SEXP a1)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = log(p1[i]);
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = log(p1[i]);
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_ln_grad(SEXP a1, SEXP grad)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  if(XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1' and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+  double *pg = REAL(grad);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = pg[i] / p1[i];
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = pg[i] / p1[i];
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_log2(SEXP a1)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = log2(p1[i]);
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = log2(p1[i]);
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_log2_grad(SEXP a1, SEXP grad)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  if(XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1' and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+  double *pg = REAL(grad);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = pg[i] / (p1[i] * log(2));
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = pg[i] / (p1[i] * log(2));
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_log10(SEXP a1)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = log10(p1[i]);
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = log10(p1[i]);
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_log10_grad(SEXP a1, SEXP grad)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  if(XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1' and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+  double *pg = REAL(grad);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = pg[i] / (p1[i] * log(10));
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = pg[i] / (p1[i] * log(10));
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_abs(SEXP a1)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  SEXP a0;
+
+  R_len_t n = XLENGTH(a1);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+      double *p0 = REAL(a0);
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = fabs(p1[i]);
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      a0 = PROTECT(Rf_allocVector(INTSXP, n));
+
+      int *p0 = INTEGER(a0);
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = abs(p1[i]);
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_math_abs_grad(SEXP a1, SEXP val, SEXP grad)
+{
+  if(!Rf_isNumeric(a1))
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+
+  if(!Rf_isNumeric(val))
+    Rf_errorcall(R_NilValue, "argument 'val' must be a numerical vector or array");
+
+  if(!Rf_isReal(grad))
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+
+  R_len_t n = XLENGTH(a1);
+
+  if(XLENGTH(val) != n || XLENGTH(grad) != n)
+    Rf_errorcall(R_NilValue, "argument 'a1', 'val', and 'grad' have incompatible lengths");
+
+  SEXP a0 = PROTECT(Rf_allocVector(REALSXP, n));
+
+  double *p0 = REAL(a0);
+  double *pg = REAL(grad);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+      double *pv = REAL(val);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = pg[i] * (p1[i] / pv[i]);
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+      int *pv = INTEGER(val);
+
+      for(int i = 0; i < n; i++)
+        p0[i] = pg[i] * (p1[i] / pv[i]);
 
       break;
     }

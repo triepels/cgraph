@@ -4,12 +4,12 @@
 \alias{cg_log2}
 \title{Logarithm Base 2}
 \usage{
-cg_log2(x, name = NULL)
+cg_log2(n1, name = NULL)
 }
 \arguments{
-\item{x}{either a cg_node object or a numeric vector or array.}
-
 \item{name}{character scalar, name of the operation (optional).}
+
+\item{x}{either a cg_node object or a numeric vector or array.}
 }
 \value{
 cg_operator object, node of the operation.
