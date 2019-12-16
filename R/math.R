@@ -25,9 +25,9 @@
 #'
 #' @author Ron Triepels
 #' @export
-cg_pos <- function(n1, name = NULL)
+cg_pos <- function(x, name = NULL)
 {
-  cg_operator(pos, list(n1), name)
+  cg_operator(pos, list(x), name)
 }
 
 # Function definition
@@ -57,9 +57,9 @@ delayedAssign("pos", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_neg <- function(n1, name = NULL)
+cg_neg <- function(x, name = NULL)
 {
-  cg_operator(neg, list(n1), name)
+  cg_operator(neg, list(x), name)
 }
 
 # Function definition
@@ -90,9 +90,9 @@ delayedAssign("neg", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_add <- function(n1, n2, name = NULL)
+cg_add <- function(x, y, name = NULL)
 {
-  cg_operator(add, list(n1, n2), name)
+  cg_operator(add, list(x, y), name)
 }
 
 # Function definition
@@ -114,15 +114,15 @@ delayedAssign("add", cg_function(
 ))
 
 #' @export
-`+.cg_node` <- function(n1, n2)
+`+.cg_node` <- function(x, y)
 {
-  if(missing(n2))
+  if(missing(y))
   {
-    cg_pos(n1)
+    cg_pos(x)
   }
   else
   {
-    cg_add(n1, n2)
+    cg_add(x, y)
   }
 }
 
@@ -140,9 +140,9 @@ delayedAssign("add", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_sub <- function(n1, n2, name = NULL)
+cg_sub <- function(x, y, name = NULL)
 {
-  cg_operator(sub, list(n1, n2), name)
+  cg_operator(sub, list(x, y), name)
 }
 
 # Function definition
@@ -165,15 +165,15 @@ delayedAssign("sub", cg_function(
 
 #' @export
 #' @author Ron Triepels
-`-.cg_node` <- function(n1, n2)
+`-.cg_node` <- function(x, y)
 {
-  if(missing(n2))
+  if(missing(y))
   {
-    cg_neg(n1)
+    cg_neg(x)
   }
   else
   {
-    cg_sub(n1, n2)
+    cg_sub(x, y)
   }
 }
 
@@ -191,9 +191,9 @@ delayedAssign("sub", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_mul <- function(n1, n2, name = NULL)
+cg_mul <- function(x, y, name = NULL)
 {
-  cg_operator(mul, list(n1, n2), name)
+  cg_operator(mul, list(x, y), name)
 }
 
 # Function definition
@@ -215,9 +215,9 @@ delayedAssign("mul", cg_function(
 ))
 
 #' @export
-`*.cg_node` <- function(n1, n2)
+`*.cg_node` <- function(x, y)
 {
-  cg_mul(n1, n2)
+  cg_mul(x, y)
 }
 
 #' Divide
@@ -234,9 +234,9 @@ delayedAssign("mul", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_div <- function(n1, n2, name = NULL)
+cg_div <- function(x, y, name = NULL)
 {
-  cg_operator(div, list(n1, n2), name)
+  cg_operator(div, list(x, y), name)
 }
 
 # Function definition
@@ -258,9 +258,9 @@ delayedAssign("div", cg_function(
 ))
 
 #' @export
-`/.cg_node` <- function(n1, n2)
+`/.cg_node` <- function(x, y)
 {
-  cg_div(n1, n2)
+  cg_div(x, y)
 }
 
 #' Power
@@ -277,9 +277,9 @@ delayedAssign("div", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_pow <- function(n1, n2, name = NULL)
+cg_pow <- function(x, y, name = NULL)
 {
-  cg_operator(pow, list(n1, n2), name)
+  cg_operator(pow, list(x, y), name)
 }
 
 # Function definition
@@ -301,9 +301,9 @@ delayedAssign("pow", cg_function(
 ))
 
 #' @export
-`^.cg_node` <- function(n1, n2)
+`^.cg_node` <- function(x, y)
 {
-  cg_pow(n1, n2)
+  cg_pow(x, y)
 }
 
 #' Square
@@ -321,9 +321,9 @@ delayedAssign("pow", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_square <- function(n1, name = NULL)
+cg_square <- function(x, name = NULL)
 {
-  cg_operator(square, list(n1), name)
+  cg_operator(square, list(x), name)
 }
 
 # Function definition
@@ -353,9 +353,9 @@ delayedAssign("square", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_sqrt <- function(n1, name = NULL)
+cg_sqrt <- function(x, name = NULL)
 {
-  cg_operator(sqrt, list(n1), name)
+  cg_operator(sqrt, list(x), name)
 }
 
 # Function definition
@@ -373,9 +373,9 @@ delayedAssign("sqrt", cg_function(
 ))
 
 #' @export
-cg_cbrt <- function(n1, name = NULL)
+cg_cbrt <- function(x, name = NULL)
 {
-  cg_operator(cbrt, list(n1), name)
+  cg_operator(cbrt, list(x), name)
 }
 
 # Function definition
@@ -393,9 +393,9 @@ delayedAssign("cbrt", cg_function(
 ))
 
 #' @export
-cg_hypot <- function(n1, n2, name = NULL)
+cg_hypot <- function(x, y, name = NULL)
 {
-  cg_operator(hypot, list(n1, n2), name)
+  cg_operator(hypot, list(x, y), name)
 }
 
 # Function definition
@@ -417,9 +417,9 @@ delayedAssign("hypot", cg_function(
 ))
 
 #' @export
-cg_fma <- function(n1, n2, n3, name = NULL)
+cg_fma <- function(x, y, z, name = NULL)
 {
-  cg_operator(fma, list(n1, n2, n3), name)
+  cg_operator(fma, list(x, y, z), name)
 }
 
 # Function definition
@@ -457,9 +457,9 @@ delayedAssign("fma", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_exp <- function(n1, name = NULL)
+cg_exp <- function(x, name = NULL)
 {
-  cg_operator(exp, list(n1), name)
+  cg_operator(exp, list(x), name)
 }
 
 # Function definition
@@ -477,9 +477,9 @@ delayedAssign("exp", cg_function(
 ))
 
 #' @export
-cg_exp2 <- function(n1, name = NULL)
+cg_exp2 <- function(x, name = NULL)
 {
-  cg_operator(exp2, list(n1), name)
+  cg_operator(exp2, list(x), name)
 }
 
 # Function definition
@@ -509,9 +509,9 @@ delayedAssign("exp2", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_ln <- function(n1, name = NULL)
+cg_ln <- function(x, name = NULL)
 {
-  cg_operator(ln, list(n1), name)
+  cg_operator(ln, list(x), name)
 }
 
 # Function definition
@@ -541,9 +541,9 @@ delayedAssign("ln", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_log2 <- function(n1, name = NULL)
+cg_log2 <- function(x, name = NULL)
 {
-  cg_operator(log2, list(n1), name)
+  cg_operator(log2, list(x), name)
 }
 
 # Function definition
@@ -580,11 +580,14 @@ cg_log10 <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("log10", cg_function(
-  def = base::log10,
+  def = function(a1)
+  {
+    .Call("cg_math_log10", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      grad / (x * log(10))
+      .Call("cg_math_log10_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -602,9 +605,9 @@ delayedAssign("log10", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_abs <- function(n1, name = NULL)
+cg_abs <- function(x, name = NULL)
 {
-  cg_operator(abs, list(n1), name)
+  cg_operator(abs, list(x), name)
 }
 
 # Function definition
@@ -641,11 +644,14 @@ cg_sin <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("sin", cg_function(
-  def = base::sin,
+  def = function(a1)
+  {
+    .Call("cg_math_sin", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      grad * cos(x)
+      .Call("cg_math_sin_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -670,11 +676,14 @@ cg_cos <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("cos", cg_function(
-  def = base::cos,
+  def = function(a1)
+  {
+    .Call("cg_math_cos", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      -grad * sin(x)
+      .Call("cg_math_cos_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -699,11 +708,14 @@ cg_tan <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("tan", cg_function(
-  def = base::tan,
+  def = function(a1)
+  {
+    .Call("cg_math_tan", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      grad / cos(x) ^ 2
+      .Call("cg_math_tan_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -757,11 +769,14 @@ cg_cosh <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("cosh", cg_function(
-  def = base::cosh,
+  def = function(a1)
+  {
+    .Call("cg_math_cosh", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      grad * sinh(x)
+      .Call("cg_math_cosh_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -786,11 +801,14 @@ cg_tanh <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("tanh", cg_function(
-  def = base::tanh,
+  def = function(a1)
+  {
+    .Call("cg_math_tanh", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      grad * (1 - val ^ 2)
+      .Call("cg_math_tanh_grad", a1, val, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -815,11 +833,14 @@ cg_asin <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("asin", cg_function(
-  def = base::asin,
+  def = function(a1)
+  {
+    .Call("cg_math_asin", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      grad / sqrt(1 - x ^ 2)
+      .Call("cg_math_asin_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -844,11 +865,14 @@ cg_acos <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("acos", cg_function(
-  def = base::acos,
+  def = function(a1)
+  {
+    .Call("cg_math_acos", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      -grad / sqrt(1 - x ^ 2)
+      .Call("cg_math_acos_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -902,11 +926,14 @@ cg_asinh <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("asinh", cg_function(
-  def = base::asinh,
+  def = function(a1)
+  {
+    .Call("cg_math_asinh", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      grad / sqrt(x ^ 2 + 1)
+      .Call("cg_math_asinh_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -960,11 +987,14 @@ cg_atanh <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("atanh", cg_function(
-  def = base::atanh,
+  def = function(a1)
+  {
+    .Call("cg_math_atanh", a1, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      grad / (1 - x ^ 2)
+      .Call("cg_math_atanh_grad", a1, grad, PACKAGE = "cgraph")
     }
   )
 ))
@@ -987,14 +1017,14 @@ cg_sigmoid <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("sigmoid", cg_function(
-  def = function(x)
+  def = function(a1)
   {
-    .Call("sigmoid", x, PACKAGE = "cgraph")
+    .Call("cg_math_sigmoid", a1, PACKAGE = "cgraph")
   },
   grads = list(
-    function(x, val, grad)
+    function(a1, val, grad)
     {
-      .Call("sigmoid_grad", x, val, grad, PACKAGE = "cgraph")
+      .Call("cg_math_sigmoid_grad", a1, val, grad, PACKAGE = "cgraph")
     }
   )
 ))

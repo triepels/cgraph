@@ -4,12 +4,12 @@
 \alias{cg_neg}
 \title{Negative}
 \usage{
-cg_neg(n1, name = NULL)
+cg_neg(x, name = NULL)
 }
 \arguments{
-\item{name}{character scalar, name of the operation (optional).}
-
 \item{x}{either a cg_node object or a numeric vector or array.}
+
+\item{name}{character scalar, name of the operation (optional).}
 }
 \value{
 cg_operator object, node of the operation.

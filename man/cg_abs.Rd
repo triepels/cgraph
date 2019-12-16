@@ -4,12 +4,12 @@
 \alias{cg_abs}
 \title{Absolute Value}
 \usage{
-cg_abs(n1, name = NULL)
+cg_abs(x, name = NULL)
 }
 \arguments{
-\item{name}{character scalar, name of the operation (optional).}
-
 \item{x}{either a cg_node object or a numeric vector or array.}
+
+\item{name}{character scalar, name of the operation (optional).}
 }
 \value{
 cg_operator object, node of the operation.
