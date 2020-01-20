@@ -625,14 +625,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     {
       SEXP input = VECTOR_ELT(inputs, i);
 
-      if(cg_is(input, "cg_node"))
-      {
-        SETCAR(args, cg_node_value(input));
-      }
-      else
-      {
-        SETCAR(args, input);
-      }
+      SETCAR(args, cg_node_value(input));
 
       args = CDR(args);
     }
