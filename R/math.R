@@ -379,7 +379,7 @@ cg_square <- function(x, name = NULL)
 delayedAssign("square", cg_function(
   def = function(x)
   {
-    x * x
+    x^2
   },
   grads = list(
     function(x, val, grad)
