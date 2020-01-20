@@ -53,7 +53,7 @@ void cg_node_set_type(SEXP node, const int type);
 
 SEXP cg_node_inputs(SEXP node);
 
-void cg_node_add_input(SEXP node, SEXP input);
+void cg_node_set_inputs(SEXP node, SEXP inputs);
 
 SEXP cg_node_value(SEXP node);
 

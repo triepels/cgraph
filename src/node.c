@@ -141,37 +141,26 @@ SEXP cg_node_inputs(SEXP node)
   return inputs;
 }
 
-void cg_node_add_input(SEXP node, SEXP input)
+void cg_node_set_inputs(SEXP node, SEXP inputs)
 {
-  if(!cg_is(input, "cg_node"))
-  {
-    Rf_errorcall(R_NilValue, "argument 'input' must be a cg_node object");
-  }
-
-  int index;
-
-  SEXP inputs = R_NilValue;
-
-  PROTECT_WITH_INDEX(inputs = Rf_findVarInFrame(node, CG_INPUTS_SYMBOL), &index);
-
   if(TYPEOF(inputs) != VECSXP)
   {
-    REPROTECT(inputs = Rf_allocVector(VECSXP, 1), index);
-
-    SET_VECTOR_ELT(inputs, 0, input);
+    Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
   }
-  else
+
+  R_len_t n = XLENGTH(inputs);
+
+  for(int i = 0; i < n; i++)
   {
-    R_len_t n = XLENGTH(inputs);
+    SEXP input = VECTOR_ELT(inputs, i);
 
-    REPROTECT(inputs = Rf_lengthgets(inputs, n + 1), index);
-
-    SET_VECTOR_ELT(inputs, n, input);
+    if(!cg_is(input, "cg_node"))
+    {
+      Rf_errorcall(R_NilValue, "invalid input provided to argument 'inputs' at index %d", i + 1);
+    }
   }
 
   Rf_defineVar(CG_INPUTS_SYMBOL, inputs, node);
-
-  UNPROTECT(1);
 }
 
 SEXP cg_node_value(SEXP node)
@@ -574,7 +563,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   if(TYPEOF(inputs) != VECSXP)
   {
-    Rf_errorcall(R_NilValue, "argument 'inputs' must be a list");
+    Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
   }
 
   if(!Rf_isNull(name) && !Rf_isValidString(name))
@@ -624,10 +613,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   cg_node_set_function(node, function);
 
-  for(int i = 0; i < n; i++)
-  {
-    cg_node_add_input(node, VECTOR_ELT(inputs, i));
-  }
+  cg_node_set_inputs(node, inputs);
 
   if(can_eval)
   {
