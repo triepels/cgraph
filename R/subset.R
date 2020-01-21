@@ -2,7 +2,7 @@
 delayedAssign("[", cg_function(
   def = base::`[`,
   grads = list(
-    function(x, ..., val, grad)
+    function(x, ..., value, grad)
     {
       if(is.array(x))
       {
