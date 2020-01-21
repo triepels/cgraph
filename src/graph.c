@@ -365,11 +365,11 @@ static void forward(SEXP node)
 
   R_len_t n = XLENGTH(inputs);
 
-  SEXP function = PROTECT(cg_node_function(node));
-
   SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
 
-  SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
+  SEXP names = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
+
+  SEXP arg = args;
 
   for(int i = 0; i < n; i++)
   {
@@ -383,18 +383,27 @@ static void forward(SEXP node)
                    cg_node_name(input));
     }
 
-    SETCAR(args, input_value);
+    SETCAR(arg, input_value);
 
-    args = CDR(args);
+    if(names != R_NilValue && CHAR(STRING_ELT(names, i))[0] != '\0')
+    {
+      SET_TAG(arg, Rf_installTrChar(STRING_ELT(names, i)));
+    }
+
+    arg = CDR(arg);
 
     UNPROTECT(1);
   }
+
+  SEXP function = PROTECT(cg_node_function(node));
+
+  SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
 
   SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
 
   cg_node_set_value(node, result);
 
-  UNPROTECT(5);
+  UNPROTECT(6);
 }
 
 SEXP cg_graph_forward(SEXP graph, SEXP target)
@@ -447,17 +456,9 @@ static void backward(SEXP node)
 
   R_len_t n = XLENGTH(inputs);
 
-  SEXP function = PROTECT(cg_node_function(node));
-
-  SEXP function_grads = PROTECT(cg_function_grads(function));
-
-  if(n != XLENGTH(function_grads))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has an invalid number of inputs (%d)",
-                 cg_node_name(node), n);
-  }
-
   SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 2));
+
+  SEXP names = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
 
   SEXP arg = args;
 
@@ -475,18 +476,29 @@ static void backward(SEXP node)
 
     SETCAR(arg, input_value);
 
+    if(names != R_NilValue && CHAR(STRING_ELT(names, i))[0] != '\0')
+    {
+      SET_TAG(arg, Rf_installTrChar(STRING_ELT(names, i)));
+    }
+
     arg = CDR(arg);
 
     UNPROTECT(1);
   }
 
+  SETCAR(arg, value);
+
   SET_TAG(arg, Rf_install("val"));
 
-  SETCAR(arg, value);
+  SETCADR(arg, grad);
 
   SET_TAG(CDR(arg), Rf_install("grad"));
 
-  SETCADR(arg, grad);
+  SEXP function = PROTECT(cg_node_function(node));
+
+  SEXP function_grads = PROTECT(cg_function_grads(function));
+
+  R_len_t k = XLENGTH(function_grads);
 
   for(int i = 0; i < n; i++)
   {
@@ -495,6 +507,12 @@ static void backward(SEXP node)
     if(cg_node_type(input) == CGCST)
     {
       continue;
+    }
+
+    if(i >= k)
+    {
+      Rf_errorcall(R_NilValue, "unable to differentiate node '%s' at input %d",
+                   cg_node_name(node), i + 1);
     }
 
     SEXP call = PROTECT(Rf_lcons(VECTOR_ELT(function_grads, i), args));
@@ -562,7 +580,7 @@ static void backward(SEXP node)
     UNPROTECT(3);
   }
 
-  UNPROTECT(6);
+  UNPROTECT(7);
 }
 
 SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
