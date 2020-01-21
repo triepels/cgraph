@@ -14,7 +14,7 @@
 
 context("Graph")
 
-test_that("Duplicate nodes",
+test_that("Graph 1",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -26,7 +26,7 @@ test_that("Duplicate nodes",
   expect_error(cg_parameter(1, name = "a"))
 })
 
-test_that("Operators with equivalent inputs",
+test_that("Graph 2",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -47,7 +47,7 @@ test_that("Operators with equivalent inputs",
   expect_equivalent(a$grad, approx_gradient(graph, b, a), tolerance = 1e-4)
 })
 
-test_that("Graph with multiple outputs",
+test_that("Graph 3",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -81,7 +81,7 @@ test_that("Graph with multiple outputs",
   expect_equivalent(b$grad, approx_gradient(graph, d, b), tolerance = 1e-4)
 })
 
-test_that("Reverse DFS algorithm check",
+test_that("Graph 4",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -105,7 +105,7 @@ test_that("Reverse DFS algorithm check",
   expect_equivalent(b$grad, approx_gradient(graph, d, b), tolerance = 1e-4)
 })
 
-test_that("Large graph (10000 operators)",
+test_that("Graph 5",
 {
   # Initialize graph
   graph <- cg_graph()
