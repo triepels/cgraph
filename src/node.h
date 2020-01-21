@@ -41,8 +41,6 @@ const char* cg_node_name(SEXP node);
 
 void cg_node_set_name(SEXP node, const char *name);
 
-SEXP cg_node_symbol(SEXP node); /* NOTE: DEPRECATED */
-
 int cg_node_id(SEXP node);
 
 void cg_node_set_id(SEXP node, const int id);
@@ -66,10 +64,6 @@ void cg_node_set_grad(SEXP node, SEXP value);
 SEXP cg_node_function(SEXP node);
 
 void cg_node_set_function(SEXP node, SEXP function);
-
-void cg_node_eval(SEXP node, SEXP values); /* NOTE: DEPRECATED */
-
-void cg_node_eval_gradients(SEXP node, SEXP values, SEXP gradients); /* NOTE: DEPRECATED */
 
 /*
  * PRIVATE CONSTRUCTORS
