@@ -31,6 +31,8 @@ limitations under the License.
  */
 
 #define CG_NODES_SYMBOL Rf_install("nodes")
+#define CG_VALUE_SYMBOL Rf_install("value")
+#define CG_GRAD_SYMBOL Rf_install("grad")
 
 /*
  * PRIVATE METHODS
@@ -488,11 +490,11 @@ static void backward(SEXP node)
 
   SETCAR(arg, value);
 
-  SET_TAG(arg, Rf_install("value"));
+  SET_TAG(arg, CG_VALUE_SYMBOL);
 
   SETCADR(arg, grad);
 
-  SET_TAG(CDR(arg), Rf_install("grad"));
+  SET_TAG(CDR(arg), CG_GRAD_SYMBOL);
 
   SEXP function = PROTECT(cg_node_function(node));
 
