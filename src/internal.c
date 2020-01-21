@@ -28,6 +28,52 @@ limitations under the License.
  * PUBLIC METHODS
  */
 
+SEXP dots(SEXP env)
+{
+  if(!Rf_isEnvironment(env))
+  {
+    Rf_errorcall(R_NilValue, "argument 'env' must be an environment");
+  }
+
+  SEXP args = PROTECT(Rf_findVarInFrame(env, R_DotsSymbol));
+
+  if(TYPEOF(args) != DOTSXP)
+  {
+    UNPROTECT(1);
+
+    return R_NilValue;
+  }
+
+  R_len_t n = 0;
+
+  for(SEXP arg = args; arg != R_NilValue; arg = CDR(arg))
+  {
+    SEXP arg_value = CAR(arg);
+
+    if(TYPEOF(arg_value) == PROMSXP)
+    {
+      SETCAR(arg, Rf_eval(arg_value, env));
+    }
+
+    n++;
+  }
+
+  SEXP dots = PROTECT(Rf_allocVector(VECSXP, n));
+
+  SEXP arg = args;
+
+  for(int i = 0; i < n; i++)
+  {
+    SET_VECTOR_ELT(dots, i, CAR(arg));
+
+    arg = CDR(arg);
+  }
+
+  UNPROTECT(2);
+
+  return dots;
+}
+
 SEXP bsum(SEXP x, SEXP block_size)
 {
   if(!Rf_isNumeric(x))

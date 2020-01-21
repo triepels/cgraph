@@ -48,6 +48,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_session_graph", (DL_FUNC) &cg_session_graph, 0},
   {"cg_session_set_graph", (DL_FUNC) &cg_session_set_graph, 1},
   // Internal
+  {"dots", (DL_FUNC) &dots, 1},
   {"bsum", (DL_FUNC) &bsum, 2},
   {"approx_gradient", (DL_FUNC) &approx_gradient, 5},
   // Math

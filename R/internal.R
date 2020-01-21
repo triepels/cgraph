@@ -12,6 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Capture Ellipsis
+#'
+#' Evaluate the ellipsis (i.e. `...`) in environment \code{env} and coerce it to a list.
+#'
+#' @param env, environment, the environment in which to search for the ellipsis. Defaults to the parent frame.
+#'
+#' @note Any promise objects in the ellipsis object are evaluated in environment \code{env}.
+#'
+#' @return list containing all objects provided to the ellipsis object.
+#'
+#' @author Ron Triepels
+#' @keywords internal
+dots <- function(env = parent.frame())
+{
+  .Call("dots", env, PACKAGE = "cgraph")
+}
+
 #' Block Summation
 #'
 #' Divide a vector or array in consecutive fixed-sized blocks and sum the elements at each position in these blocks.
