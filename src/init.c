@@ -50,6 +50,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_session_graph", (DL_FUNC) &cg_session_graph, 0},
   {"cg_session_set_graph", (DL_FUNC) &cg_session_set_graph, 1},
   // Internal
+  {"dots", (DL_FUNC) &dots, 1},
   {"bsum", (DL_FUNC) &bsum, 2},
   {"approx_gradient", (DL_FUNC) &approx_gradient, 5},
   // Math
@@ -57,10 +58,16 @@ static const R_CallMethodDef CallEntries[] = {
   {NULL, NULL, 0}
 };
 
+static const R_ExternalMethodDef ExternalEntries[] = {
+  // Internal
+  {"arg_list", (DL_FUNC) &arg_list, -1},
+  {NULL, NULL, 0}
+};
+
 void R_init_cgraph(DllInfo *dll)
 {
   // Register c routines in R session
-  R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+  R_registerRoutines(dll, NULL, CallEntries, NULL, ExternalEntries);
   R_useDynamicSymbols(dll, FALSE);
 
   // Initialize a new session

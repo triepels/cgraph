@@ -12,6 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+dots <- function(env = parent.frame())
+{
+  .Call("dots", env, PACKAGE = "cgraph")
+}
+
+arg_list <- function(...)
+{
+  .External("arg_list", ..., PACKAGE = "cgraph")
+}
+
 #' Block Summation
 #'
 #' Divide a vector or array in consecutive fixed-sized blocks and sum the elements at each position in these blocks.

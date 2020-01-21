@@ -26,6 +26,10 @@ limitations under the License.
  * PUBLIC METHODS
  */
 
+SEXP dots(SEXP env);
+
+SEXP arg_list(SEXP args);
+
 SEXP bsum(SEXP x, SEXP block_size);
 
 SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilon);

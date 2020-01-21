@@ -619,22 +619,31 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
   {
     SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
 
-    SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
+    SEXP names = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
+
+    SEXP arg = args;
 
     for(int i = 0; i < n; i++)
     {
       SEXP input = VECTOR_ELT(inputs, i);
 
-      SETCAR(args, cg_node_value(input));
+      SETCAR(arg, cg_node_value(input));
 
-      args = CDR(args);
+      if(names != R_NilValue && CHAR(STRING_ELT(names, i))[0] != '\0')
+      {
+        SET_TAG(arg, Rf_installTrChar(STRING_ELT(names, i)));
+      }
+
+      arg = CDR(arg);
     }
+
+    SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
 
     SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
 
     cg_node_set_value(node, result);
 
-    UNPROTECT(3);
+    UNPROTECT(4);
   }
   else
   {
