@@ -2,7 +2,7 @@
 delayedAssign("[", cg_function(
   def = base::`[`,
   grads = list(
-    function(x, ..., drop = FALSE, val, grad)
+    function(x, ..., val, grad)
     {
       if(is.array(x))
       {
@@ -21,14 +21,7 @@ delayedAssign("[", cg_function(
 ))
 
 #' @export
-`[.cg_node` <- function(x, ..., drop = FALSE)
+`[.cg_node` <- function(x, ...)
 {
-  if(!drop)
-  {
-    cg_operator(`[`, c(x, dots()))
-  }
-  else
-  {
-    cg_operator(`[`, c(x, dots(), drop = drop))
-  }
+  cg_operator(`[`, c(x, dots()))
 }

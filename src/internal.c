@@ -67,16 +67,27 @@ SEXP dots(SEXP env)
 
   SEXP dots = PROTECT(Rf_allocVector(VECSXP, n));
 
+  SEXP names = PROTECT(Rf_allocVector(STRSXP, n));
+
   SEXP arg = args;
 
   for(int i = 0; i < n; i++)
   {
     SET_VECTOR_ELT(dots, i, CAR(arg));
 
+    SEXP arg_tag = (TAG)(arg);
+
+    if(arg_tag != R_NilValue)
+    {
+      SET_STRING_ELT(names, i, (PRINTNAME)(arg_tag));
+    }
+
     arg = CDR(arg);
   }
 
-  UNPROTECT(2);
+  Rf_setAttrib(dots, R_NamesSymbol, names);
+
+  UNPROTECT(3);
 
   return dots;
 }
