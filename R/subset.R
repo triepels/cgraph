@@ -23,5 +23,12 @@ delayedAssign("[", cg_function(
 #' @export
 `[.cg_node` <- function(x, ..., drop = FALSE)
 {
-  cg_operator(`[`, c(x, dots(), drop = drop))
+  if(!drop)
+  {
+    cg_operator(`[`, c(x, dots()))
+  }
+  else
+  {
+    cg_operator(`[`, c(x, dots(), drop = drop))
+  }
 }
