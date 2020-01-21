@@ -58,6 +58,13 @@ SEXP dots(SEXP env)
     n++;
   }
 
+  if(n == 1 && CAR(args) == R_MissingArg)
+  {
+    UNPROTECT(1);
+
+    return R_NilValue;
+  }
+
   SEXP dots = PROTECT(Rf_allocVector(VECSXP, n));
 
   SEXP arg = args;
