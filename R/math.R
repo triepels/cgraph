@@ -34,7 +34,7 @@ cg_pos <- function(x, name = NULL)
 delayedAssign("pos", cg_function(
   def = base::`+`,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad
     }
@@ -63,7 +63,7 @@ cg_neg <- function(x, name = NULL)
 delayedAssign("neg", cg_function(
   def = base::`-`,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       -grad
     }
@@ -93,7 +93,7 @@ cg_add <- function(x, y, name = NULL)
 delayedAssign("add", cg_function(
   def = base::`+`,
   grads = list(
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(x))
       {
@@ -104,7 +104,7 @@ delayedAssign("add", cg_function(
         bsum(grad, length(x))
       }
     },
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(y))
       {
@@ -154,7 +154,7 @@ cg_sub <- function(x, y, name = NULL)
 delayedAssign("sub", cg_function(
   def = base::`-`,
   grads = list(
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(x))
       {
@@ -165,7 +165,7 @@ delayedAssign("sub", cg_function(
         bsum(grad, length(x))
       }
     },
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(y))
       {
@@ -216,7 +216,7 @@ cg_mul <- function(x, y, name = NULL)
 delayedAssign("mul", cg_function(
   def = base::`*`,
   grads = list(
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(x))
       {
@@ -227,7 +227,7 @@ delayedAssign("mul", cg_function(
         bsum(grad * y, length(x))
       }
     },
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(y))
       {
@@ -270,7 +270,7 @@ cg_div <- function(x, y, name = NULL)
 delayedAssign("div", cg_function(
   def = base::`/`,
   grads = list(
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(x))
       {
@@ -281,7 +281,7 @@ delayedAssign("div", cg_function(
         bsum(grad / y, length(x))
       }
     },
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(y))
       {
@@ -324,7 +324,7 @@ cg_pow <- function(x, y, name = NULL)
 delayedAssign("pow", cg_function(
   def = base::`^`,
   grads = list(
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(x))
       {
@@ -335,7 +335,7 @@ delayedAssign("pow", cg_function(
         bsum(grad * y * x ^ (y - 1), length(x))
       }
     },
-    function(x, y, val, grad)
+    function(x, y, value, grad)
     {
       if(is.array(y))
       {
@@ -382,7 +382,7 @@ delayedAssign("square", cg_function(
     x^2
   },
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       if(is.array(x))
       {
@@ -418,9 +418,9 @@ cg_sqrt <- function(x, name = NULL)
 delayedAssign("sqrt", cg_function(
   def = base::sqrt,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
-      grad * 1 / (2 * val)
+      grad * 1 / (2 * value)
     }
   )
 ))
@@ -447,9 +447,9 @@ cg_exp <- function(x, name = NULL)
 delayedAssign("exp", cg_function(
   def = base::exp,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
-      grad * val
+      grad * value
     }
   )
 ))
@@ -476,7 +476,7 @@ cg_ln <- function(x, name = NULL)
 delayedAssign("ln", cg_function(
   def = base::log,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad / x
     }
@@ -505,7 +505,7 @@ cg_log2 <- function(x, name = NULL)
 delayedAssign("log2", cg_function(
   def = base::log2,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad / (x * log(2))
     }
@@ -534,7 +534,7 @@ cg_log10 <- function(x, name = NULL)
 delayedAssign("log10", cg_function(
   def = base::log10,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad / (x * log(10))
     }
@@ -563,9 +563,9 @@ cg_abs <- function(x, name = NULL)
 delayedAssign("abs", cg_function(
   def = base::abs,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
-      grad * (x / val)
+      grad * (x / value)
     }
   )
 ))
@@ -592,7 +592,7 @@ cg_sin <- function(x, name = NULL)
 delayedAssign("sin", cg_function(
   def = base::sin,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad * cos(x)
     }
@@ -621,7 +621,7 @@ cg_cos <- function(x, name = NULL)
 delayedAssign("cos", cg_function(
   def = base::cos,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       -grad * sin(x)
     }
@@ -650,7 +650,7 @@ cg_tan <- function(x, name = NULL)
 delayedAssign("tan", cg_function(
   def = base::tan,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad / cos(x) ^ 2
     }
@@ -679,7 +679,7 @@ cg_sinh <- function(x, name = NULL)
 delayedAssign("sinh", cg_function(
   def = base::sinh,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad * cosh(x)
     }
@@ -708,7 +708,7 @@ cg_cosh <- function(x, name = NULL)
 delayedAssign("cosh", cg_function(
   def = base::cosh,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad * sinh(x)
     }
@@ -737,9 +737,9 @@ cg_tanh <- function(x, name = NULL)
 delayedAssign("tanh", cg_function(
   def = base::tanh,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
-      grad * (1 - val ^ 2)
+      grad * (1 - value ^ 2)
     }
   )
 ))
@@ -766,7 +766,7 @@ cg_asin <- function(x, name = NULL)
 delayedAssign("asin", cg_function(
   def = base::asin,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad / sqrt(1 - x ^ 2)
     }
@@ -795,7 +795,7 @@ cg_acos <- function(x, name = NULL)
 delayedAssign("acos", cg_function(
   def = base::acos,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       -grad / sqrt(1 - x ^ 2)
     }
@@ -824,7 +824,7 @@ cg_atan <- function(x, name = NULL)
 delayedAssign("atan", cg_function(
   def = base::atan,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad / (x ^ 2 + 1)
     }
@@ -853,7 +853,7 @@ cg_asinh <- function(x, name = NULL)
 delayedAssign("asinh", cg_function(
   def = base::asinh,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad / sqrt(x ^ 2 + 1)
     }
@@ -882,7 +882,7 @@ cg_acosh <- function(x, name = NULL)
 delayedAssign("acosh", cg_function(
   def = base::acosh,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad / sqrt(x ^ 2 - 1)
     }
@@ -911,7 +911,7 @@ cg_atanh <- function(x, name = NULL)
 delayedAssign("atanh", cg_function(
   def = base::atanh,
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
       grad / (1 - x ^ 2)
     }
@@ -941,9 +941,9 @@ delayedAssign("sigmoid", cg_function(
     .Call("sigmoid", x, PACKAGE = "cgraph")
   },
   grads = list(
-    function(x, val, grad)
+    function(x, value, grad)
     {
-      grad * val * (1 - val)
+      grad * value * (1 - value)
     }
   )
 ))

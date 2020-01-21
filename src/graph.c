@@ -488,7 +488,7 @@ static void backward(SEXP node)
 
   SETCAR(arg, value);
 
-  SET_TAG(arg, Rf_install("val"));
+  SET_TAG(arg, Rf_install("value"));
 
   SETCADR(arg, grad);
 
