@@ -230,7 +230,7 @@ void cg_graph_init_target_grad(SEXP graph, SEXP target, SEXP index)
 
     if(k < 1 || k > n)
     {
-      Rf_errorcall(R_NilValue, "argument 'index' must be between 1 and %d", n);
+      Rf_errorcall(R_NilValue, "argument 'index' out of bounds");
     }
 
     x[k - 1] = 1;
