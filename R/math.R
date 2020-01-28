@@ -16,7 +16,7 @@
 #'
 #' Calculate \code{x}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -45,7 +45,7 @@ delayedAssign("pos", cg_function(
 #'
 #' Calculate \code{-x}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -74,8 +74,8 @@ delayedAssign("neg", cg_function(
 #'
 #' Calculate \code{x + y}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
-#' @param y either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -135,8 +135,8 @@ delayedAssign("add", cg_function(
 #'
 #' Calculate \code{x - y}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
-#' @param y either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -197,8 +197,8 @@ delayedAssign("sub", cg_function(
 #'
 #' Calculate \code{x * y}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
-#' @param y either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -251,8 +251,8 @@ delayedAssign("mul", cg_function(
 #'
 #' Calculate \code{x / y}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
-#' @param y either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -305,8 +305,8 @@ delayedAssign("div", cg_function(
 #'
 #' Calculate \code{x ^ y}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
-#' @param y either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -359,7 +359,7 @@ delayedAssign("pow", cg_function(
 #'
 #' Calculate \code{x ^ 2}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -400,7 +400,7 @@ delayedAssign("square", cg_function(
 #'
 #' Calculate \code{sqrt(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -429,7 +429,7 @@ delayedAssign("sqrt", cg_function(
 #'
 #' Calculate \code{exp(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -458,7 +458,7 @@ delayedAssign("exp", cg_function(
 #'
 #' Calculate \code{log(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -487,7 +487,7 @@ delayedAssign("ln", cg_function(
 #'
 #' Calculate \code{log2(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -516,7 +516,7 @@ delayedAssign("log2", cg_function(
 #'
 #' Calculate \code{log10(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -545,7 +545,7 @@ delayedAssign("log10", cg_function(
 #'
 #' Calculate \code{abs(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -574,7 +574,7 @@ delayedAssign("abs", cg_function(
 #'
 #' Calculate \code{sin(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -603,7 +603,7 @@ delayedAssign("sin", cg_function(
 #'
 #' Calculate \code{cos(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -632,7 +632,7 @@ delayedAssign("cos", cg_function(
 #'
 #' Calculate \code{tan(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -661,7 +661,7 @@ delayedAssign("tan", cg_function(
 #'
 #' Calculate \code{sinh(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -690,7 +690,7 @@ delayedAssign("sinh", cg_function(
 #'
 #' Calculate \code{cosh(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -719,7 +719,7 @@ delayedAssign("cosh", cg_function(
 #'
 #' Calculate \code{tanh(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -748,7 +748,7 @@ delayedAssign("tanh", cg_function(
 #'
 #' Calculate \code{asin(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -777,7 +777,7 @@ delayedAssign("asin", cg_function(
 #'
 #' Calculate \code{acos(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -806,7 +806,7 @@ delayedAssign("acos", cg_function(
 #'
 #' Calculate \code{atan(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -835,7 +835,7 @@ delayedAssign("atan", cg_function(
 #'
 #' Calculate \code{asinh(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -864,7 +864,7 @@ delayedAssign("asinh", cg_function(
 #'
 #' Calculate \code{acosh(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -893,7 +893,7 @@ delayedAssign("acosh", cg_function(
 #'
 #' Calculate \code{atanh(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -922,7 +922,7 @@ delayedAssign("atanh", cg_function(
 #'
 #' Calculate \code{1 / (1 + exp(-x))}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.

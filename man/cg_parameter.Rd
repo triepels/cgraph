@@ -7,7 +7,7 @@
 cg_parameter(value, name = NULL)
 }
 \arguments{
-\item{value}{numeric vector or array, value of the node.}
+\item{value}{numerical vector or array, value of the node.}
 
 \item{name}{character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.}
 }

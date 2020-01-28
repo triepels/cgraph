@@ -13,9 +13,9 @@ approx_gradient(graph, target, node, index = 1, eps = 1e-04)
 
 \item{node}{cg_node object, node with respect to which the target node is differentiated.}
 
-\item{index}{numeric scalar, index of the target node that is differentiated. Defaults to the first element.}
+\item{index}{numerical scalar, index of the target node that is differentiated. Defaults to the first element.}
 
-\item{eps}{numeric scalar, step size. Defaults to 1e-4.}
+\item{eps}{numerical scalar, step size. Defaults to 1e-4.}
 }
 \value{
 the derivative of the node supplied to argument \code{node} with respect to the node supplied to argument \code{target}.

@@ -7,9 +7,9 @@
 cg_crossprod(x, y = NULL, name = NULL)
 }
 \arguments{
-\item{x}{either a cg_node object or a numeric matrix.}
+\item{x}{either a cg_node object or a numerical matrix.}
 
-\item{y}{either a cg_node object or a numeric matrix (optional).}
+\item{y}{either a cg_node object or a numerical matrix (optional).}
 
 \item{name}{character scalar, name of the operation (optional).}
 }

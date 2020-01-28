@@ -7,11 +7,11 @@
 cg_linear(x, y, z, name = NULL)
 }
 \arguments{
-\item{x}{either a cg_node object or a numeric matrix.}
+\item{x}{either a cg_node object or a numerical matrix.}
 
-\item{y}{either a cg_node object or a numeric matrix.}
+\item{y}{either a cg_node object or a numerical matrix.}
 
-\item{z}{either a cg_node object or a numeric vector.}
+\item{z}{either a cg_node object or a numerical vector.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/array.R
 \name{cg_as_double}
 \alias{cg_as_double}
-\title{Coerce to a Numeric Vector}
+\title{Coerce to a Numerical Vector}
 \usage{
 cg_as_double(x, name = NULL)
 }
 \arguments{
-\item{x}{either a cg_node object or a numeric matrix or array.}
+\item{x}{either a cg_node object or a numerical matrix or array.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }
@@ -15,7 +15,7 @@ cg_as_double(x, name = NULL)
 cg_operator object, node of the operation.
 }
 \description{
-Coerce \code{x} to a one-dimensional numeric vector.
+Coerce \code{x} to a one-dimensional numerical vector.
 }
 \note{
 This function is identical to \code{cg_as_numeric}.

@@ -77,7 +77,7 @@ cg_graph_forward <- function(graph, target)
 #'
 #' @param graph cg_graph object, graph that is differentiated.
 #' @param target cg_node object, node in the graph that is differentiated.
-#' @param index numeric scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).
+#' @param index numerical scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).
 #'
 #' @note All nodes required to compute the target node must first have been evaluated by calling \link[cgraph:cg_graph_forward]{cg_graph_forward}. The target node is only differenated with respect to those nodes on which it directly or indirectly depends.
 #'

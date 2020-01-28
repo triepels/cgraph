@@ -11,7 +11,7 @@ cg_graph_backward(graph, target, index = NULL)
 
 \item{target}{cg_node object, node in the graph that is differentiated.}
 
-\item{index}{numeric scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).}
+\item{index}{numerical scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).}
 }
 \value{
 none.

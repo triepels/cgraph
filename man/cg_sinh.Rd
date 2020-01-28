@@ -7,7 +7,7 @@
 cg_sinh(x, name = NULL)
 }
 \arguments{
-\item{x}{either a cg_node object or a numeric vector or array.}
+\item{x}{either a cg_node object or a numerical vector or array.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }

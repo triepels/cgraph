@@ -20,9 +20,9 @@ cg_node object.
 Add an operation node to the active graph.
 }
 \note{
-Argument \code{name} is deprecated and will be removed in the next major release.
-
 Any objects that are supplied to argument \code{inputs} that are not cg_node objects are implicitly coerced to cg_constant objects.
+
+The elements of argument \code{input} can be named to control how the arguments of the function provided to argument \code{fun} are machted when the function is evaluated. In case no names are provided, arguments are matched positionally.
 }
 \examples{
 # Initialize a computational graph

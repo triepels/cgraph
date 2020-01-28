@@ -16,8 +16,8 @@
 #'
 #' Calculate \code{x \%*\% y}.
 #'
-#' @param x either a cg_node object or a numeric matrix.
-#' @param y either a cg_node object or a numeric matrix.
+#' @param x either a cg_node object or a numerical matrix.
+#' @param y either a cg_node object or a numerical matrix.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -50,8 +50,8 @@ delayedAssign("matmul", cg_function(
 #'
 #' Calculate \code{crossprod(x, y)}.
 #'
-#' @param x either a cg_node object or a numeric matrix.
-#' @param y either a cg_node object or a numeric matrix (optional).
+#' @param x either a cg_node object or a numerical matrix.
+#' @param y either a cg_node object or a numerical matrix (optional).
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -91,8 +91,8 @@ delayedAssign("crossprod", cg_function(
 #'
 #' Calculate \code{tcrossprod(x, y)}.
 #'
-#' @param x either a cg_node object or a numeric matrix.
-#' @param y either a cg_node object or a numeric matrix (optional).
+#' @param x either a cg_node object or a numerical matrix.
+#' @param y either a cg_node object or a numerical matrix (optional).
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -132,9 +132,9 @@ delayedAssign("tcrossprod", cg_function(
 #'
 #' Calculate \code{x \%*\% y + c(z)}.
 #'
-#' @param x either a cg_node object or a numeric matrix.
-#' @param y either a cg_node object or a numeric matrix.
-#' @param z either a cg_node object or a numeric vector.
+#' @param x either a cg_node object or a numerical matrix.
+#' @param y either a cg_node object or a numerical matrix.
+#' @param z either a cg_node object or a numerical vector.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -181,7 +181,7 @@ delayedAssign("linear", cg_function(
 #'
 #' Calculate \code{sum(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @note In contrast to the base \link[base:sum]{sum} function, this function only accepts a single argument.
@@ -221,7 +221,7 @@ delayedAssign("sum", cg_function(
 #'
 #' Calculate \code{prod(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @note In contrast to the base \link[base:prod]{prod} function, this function only accepts a single argument.
@@ -254,7 +254,7 @@ delayedAssign("prod", cg_function(
 #'
 #' Calculate \code{rowSums(x)}.
 #'
-#' @param x either a cg_node object or a numeric matrix or array.
+#' @param x either a cg_node object or a numerical matrix or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -281,11 +281,11 @@ delayedAssign("rowsums", cg_function(
   )
 ))
 
-#' Col Sums
+#' Column Sums
 #'
 #' Calculate \code{colSums(x)}.
 #'
-#' @param x either a cg_node object or a numeric matrix or array.
+#' @param x either a cg_node object or a numerical matrix or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -316,7 +316,7 @@ delayedAssign("colsums", cg_function(
 #'
 #' Calculate \code{mean(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -354,7 +354,7 @@ delayedAssign("mean", cg_function(
 #'
 #' Calculate \code{max(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -385,7 +385,7 @@ delayedAssign("max", cg_function(
 #'
 #' Calculate \code{min(x)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -416,8 +416,8 @@ delayedAssign("min", cg_function(
 #'
 #' Calculate \code{pmax(x, y)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
-#' @param y either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -466,8 +466,8 @@ delayedAssign("pmax", cg_function(
 #'
 #' Calculate \code{pmin(x, y)}.
 #'
-#' @param x either a cg_node object or a numeric vector or array.
-#' @param y either a cg_node object or a numeric vector or array.
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -512,11 +512,11 @@ delayedAssign("pmin", cg_function(
   )
 ))
 
-#' Coerce to a Numeric Vector
+#' Coerce to a Numerical Vector
 #'
-#' Coerce \code{x} to a one-dimensional numeric vector.
+#' Coerce \code{x} to a one-dimensional numerical vector.
 #'
-#' @param x either a cg_node object or a numeric matrix or array.
+#' @param x either a cg_node object or a numerical matrix or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -550,11 +550,11 @@ delayedAssign("as_double", cg_function(
   )
 ))
 
-#' Coerce to a Numeric Vector
+#' Coerce to a Numerical Vector
 #'
-#' Coerce \code{x} to a one-dimensional numeric vector.
+#' Coerce \code{x} to a one-dimensional numerical vector.
 #'
-#' @param x either a cg_node object or a numeric matrix or array.
+#' @param x either a cg_node object or a numerical matrix or array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -574,7 +574,7 @@ cg_as_numeric <- function(x, name = NULL)
 #'
 #' Perform \code{t(x)}.
 #'
-#' @param x either a cg_node object or a numeric matrix.
+#' @param x either a cg_node object or a numerical matrix.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.

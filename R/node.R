@@ -16,7 +16,7 @@
 #'
 #' Add a constant node to the active graph.
 #'
-#' @param value numeric vector or array, value of the node.
+#' @param value R object, value of the node.
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
 #'
 #' @note Constant nodes are ignored when differentiating a graph.
@@ -40,7 +40,7 @@ cg_constant <- function(value, name = NULL)
 #'
 #' Add a parameter node to the active graph.
 #'
-#' @param value numeric vector or array, value of the node.
+#' @param value numerical vector or array, value of the node.
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
 #'
 #' @note Parameters are assumed to be subject to some optimization process. Hence, their value might change over time. You can use data member \code{value} of a cg_node object to retrieve or change its value.
@@ -94,9 +94,9 @@ cg_input <- function(name = NULL)
 #' @param inputs list, the nodes that are consumed by the operation.
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
 #'
-#' @note Argument \code{name} is deprecated and will be removed in the next major release.
+#' @note Any objects that are supplied to argument \code{inputs} that are not cg_node objects are implicitly coerced to cg_constant objects.
 #'
-#' Any objects that are supplied to argument \code{inputs} that are not cg_node objects are implicitly coerced to cg_constant objects.
+#' The elements of argument \code{input} can be named to control how the arguments of the function provided to argument \code{fun} are machted when the function is evaluated. In case no names are provided, arguments are matched positionally.
 #'
 #' @return cg_node object.
 #'

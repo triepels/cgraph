@@ -33,12 +33,12 @@ dots <- function(env = parent.frame())
 #'
 #' Divide a vector or array in consecutive fixed-sized blocks and sum the elements at each position in these blocks.
 #'
-#' @param x, numeric vector or array, the object that is summed.
-#' @param block_size, numeric scalar, the size of each block. Defaults to 1.
+#' @param x, numerical vector or array, the object that is summed.
+#' @param block_size, numerical scalar, the size of each block. Defaults to 1.
 #'
 #' @note If \code{x} is an array and \code{block_size} is equal to the size of \code{x}'s first dimension, then \link[cgraph]{bsum} behaves as \link[base:colSums]{rowSums}.
 #'
-#' @return numeric vector. Each 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2nd element of the blocks, and so on.
+#' @return numerical vector. Each 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2nd element of the blocks, and so on.
 #'
 #' @author Ron Triepels
 #' @keywords internal
@@ -54,8 +54,8 @@ bsum <- function(x, block_size = 1)
 #' @param graph cg_graph object, graph that is differentiated.
 #' @param target cg_node object, node in the graph that is differentiated.
 #' @param node cg_node object, node with respect to which the target node is differentiated.
-#' @param index numeric scalar, index of the target node that is differentiated. Defaults to the first element.
-#' @param eps numeric scalar, step size. Defaults to 1e-4.
+#' @param index numerical scalar, index of the target node that is differentiated. Defaults to the first element.
+#' @param eps numerical scalar, step size. Defaults to 1e-4.
 #'
 #' @note All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Only those nodes needed to compute the target node (including the target itself) are evaluated.
 #'

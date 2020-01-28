@@ -2,12 +2,12 @@
 % Please edit documentation in R/array.R
 \name{cg_colsums}
 \alias{cg_colsums}
-\title{Col Sums}
+\title{Column Sums}
 \usage{
 cg_colsums(x, name = NULL)
 }
 \arguments{
-\item{x}{either a cg_node object or a numeric matrix or array.}
+\item{x}{either a cg_node object or a numerical matrix or array.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }

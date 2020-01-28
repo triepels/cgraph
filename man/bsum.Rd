@@ -7,12 +7,12 @@
 bsum(x, block_size = 1)
 }
 \arguments{
-\item{x, }{numeric vector or array, the object that is summed.}
+\item{x, }{numerical vector or array, the object that is summed.}
 
-\item{block_size, }{numeric scalar, the size of each block. Defaults to 1.}
+\item{block_size, }{numerical scalar, the size of each block. Defaults to 1.}
 }
 \value{
-numeric vector. Each 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2nd element of the blocks, and so on.
+numerical vector. Each 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2nd element of the blocks, and so on.
 }
 \description{
 Divide a vector or array in consecutive fixed-sized blocks and sum the elements at each position in these blocks.
