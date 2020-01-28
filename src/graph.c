@@ -387,9 +387,14 @@ static void forward(SEXP node)
 
     SETCAR(arg, input_value);
 
-    if(names != R_NilValue && CHAR(STRING_ELT(names, i))[0] != '\0')
+    if(!Rf_isNull(names))
     {
-      SET_TAG(arg, Rf_installTrChar(STRING_ELT(names, i)));
+      SEXP name = STRING_ELT(names, i);
+
+      if(CHAR(name)[0] != '\0')
+      {
+        SET_TAG(arg, Rf_installTrChar(name));
+      }
     }
 
     arg = CDR(arg);
@@ -478,9 +483,14 @@ static void backward(SEXP node)
 
     SETCAR(arg, input_value);
 
-    if(names != R_NilValue && CHAR(STRING_ELT(names, i))[0] != '\0')
+    if(!Rf_isNull(names))
     {
-      SET_TAG(arg, Rf_installTrChar(STRING_ELT(names, i)));
+      SEXP name = STRING_ELT(names, i);
+
+      if(CHAR(name)[0] != '\0')
+      {
+        SET_TAG(arg, Rf_installTrChar(name));
+      }
     }
 
     arg = CDR(arg);
