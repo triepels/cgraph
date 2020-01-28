@@ -18,9 +18,9 @@
 #'
 #' @param env, environment, the environment in which to search for the ellipsis. Defaults to the parent frame.
 #'
-#' @note Any promise objects in the ellipsis object are evaluated in environment \code{env}.
+#' @note Any promise objects in the ellipsis object are evaluated in environment \code{env}. `NULL` is returned in case no ellipsis object is found in environment `env`.
 #'
-#' @return list containing all objects provided to the ellipsis object.
+#' @return list containing all objects provided to the ellipsis.
 #'
 #' @author Ron Triepels
 #' @keywords internal

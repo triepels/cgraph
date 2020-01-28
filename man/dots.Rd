@@ -10,13 +10,13 @@ dots(env = parent.frame())
 \item{env, }{environment, the environment in which to search for the ellipsis. Defaults to the parent frame.}
 }
 \value{
-list containing all objects provided to the ellipsis object.
+list containing all objects provided to the ellipsis.
 }
 \description{
 Evaluate the ellipsis (i.e. `...`) in environment \code{env} and coerce it to a list.
 }
 \note{
-Any promise objects in the ellipsis object are evaluated in environment \code{env}.
+Any promise objects in the ellipsis object are evaluated in environment \code{env}. `NULL` is returned in case no ellipsis object is found in environment `env`.
 }
 \author{
 Ron Triepels
