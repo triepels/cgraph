@@ -401,7 +401,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
         if(CHAR(name)[0] != '\0')
         {
-          SET_TAG(arg, Rf_installTrChar(name));
+          SET_TAG(arg, Rf_installChar(name));
         }
       }
 

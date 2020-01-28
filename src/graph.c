@@ -415,7 +415,7 @@ static void forward(SEXP node)
 
       if(CHAR(name)[0] != '\0')
       {
-        SET_TAG(arg, Rf_installTrChar(name));
+        SET_TAG(arg, Rf_installChar(name));
       }
     }
 
@@ -511,7 +511,7 @@ static void backward(SEXP node)
 
       if(CHAR(name)[0] != '\0')
       {
-        SET_TAG(arg, Rf_installTrChar(name));
+        SET_TAG(arg, Rf_installChar(name));
       }
     }
 
