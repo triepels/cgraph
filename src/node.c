@@ -395,9 +395,14 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
       SETCAR(arg, cg_node_value(input));
 
-      if(names != R_NilValue && CHAR(STRING_ELT(names, i))[0] != '\0')
+      if(!Rf_isNull(names))
       {
-        SET_TAG(arg, Rf_installTrChar(STRING_ELT(names, i)));
+        SEXP name = STRING_ELT(names, i);
+
+        if(CHAR(name)[0] != '\0')
+        {
+          SET_TAG(arg, Rf_installTrChar(name));
+        }
       }
 
       arg = CDR(arg);
