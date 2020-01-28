@@ -31,6 +31,7 @@ limitations under the License.
  */
 
 #define CG_NODES_SYMBOL Rf_install("nodes")
+#define CG_EAGER_SYMBOL Rf_install("eager")
 #define CG_VALUE_SYMBOL Rf_install("value")
 #define CG_GRAD_SYMBOL Rf_install("grad")
 
@@ -50,6 +51,27 @@ SEXP cg_graph_nodes(SEXP graph)
   UNPROTECT(1);
 
   return nodes;
+}
+
+int cg_graph_eager(SEXP graph)
+{
+  SEXP eager = Rf_findVarInFrame(graph, CG_EAGER_SYMBOL);
+
+  if(!IS_SCALAR(eager, LGLSXP))
+  {
+    return 1;
+  }
+
+  return INTEGER(eager)[0];
+}
+
+void cg_graph_set_eager(SEXP graph, const int eager)
+{
+  SEXP graph_eager = PROTECT(Rf_ScalarLogical(eager));
+
+  Rf_defineVar(CG_EAGER_SYMBOL, graph_eager, graph);
+
+  UNPROTECT(1);
 }
 
 char* cg_graph_gen_name(SEXP graph)
@@ -630,9 +652,16 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
  * PUBLIC CONSTRUCTORS
  */
 
-SEXP cg_graph()
+SEXP cg_graph(SEXP eager)
 {
+  if(!IS_SCALAR(eager, LGLSXP))
+  {
+    Rf_errorcall(R_NilValue, "argument 'eager' must be a logical scalar");
+  }
+
   SEXP graph = PROTECT(cg_class1("cg_graph"));
+
+  cg_graph_set_eager(graph, INTEGER(eager)[0]);
 
   cg_session_set_graph(graph);
 

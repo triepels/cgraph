@@ -28,6 +28,10 @@ limitations under the License.
 
 SEXP cg_graph_nodes(SEXP graph);
 
+int cg_graph_eager(SEXP graph);
+
+void cg_graph_set_eager(SEXP graph, const int eager);
+
 char* cg_graph_gen_name(SEXP graph);
 
 int cg_graph_node_exists(SEXP graph, const char *name);

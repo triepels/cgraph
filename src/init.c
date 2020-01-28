@@ -39,7 +39,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_input", (DL_FUNC) &cg_input, 1},
   {"cg_operator", (DL_FUNC) &cg_operator, 3},
   // Graph
-  {"cg_graph", (DL_FUNC) &cg_graph, 0},
+  {"cg_graph", (DL_FUNC) &cg_graph, 1},
   {"cg_graph_forward", (DL_FUNC) &cg_graph_forward, 2},
   {"cg_graph_backward", (DL_FUNC) &cg_graph_backward, 3},
   // Function

@@ -4,7 +4,10 @@
 \alias{cg_graph}
 \title{Computational Graph}
 \usage{
-cg_graph()
+cg_graph(eager = TRUE)
+}
+\arguments{
+\item{eager}{logical scalar, should new nodes added to the graph be evaluated eagerly? Defaults to TRUE.}
 }
 \value{
 cg_graph object.

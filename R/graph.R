@@ -16,6 +16,8 @@
 #'
 #' Initialize a computational graph
 #'
+#' @param eager logical scalar, should new nodes added to the graph be evaluated eagerly? Defaults to TRUE.
+#'
 #' @note The graph is automatically set to be the active graph.
 #'
 #' @return cg_graph object.
@@ -26,9 +28,9 @@
 #' @author Ron Triepels
 #' @useDynLib cgraph
 #' @export
-cg_graph <- function()
+cg_graph <- function(eager = TRUE)
 {
-  .Call("cg_graph", PACKAGE = "cgraph")
+  .Call("cg_graph", eager, PACKAGE = "cgraph")
 }
 
 #' Forward Pass

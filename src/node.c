@@ -381,7 +381,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   cg_node_set_inputs(node, inputs);
 
-  if(can_eval)
+  if(cg_graph_eager(graph) && can_eval)
   {
     SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
 
