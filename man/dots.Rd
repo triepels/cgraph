@@ -16,7 +16,7 @@ list containing all objects provided to the ellipsis.
 Evaluate the ellipsis (i.e. `...`) in environment \code{env} and coerce it to a list.
 }
 \note{
-Any promise objects in the ellipsis object are evaluated in environment \code{env}. `NULL` is returned in case no ellipsis object is found in environment `env`.
+Any promise objects in the ellipsis object are evaluated in environment \code{env}.
 }
 \author{
 Ron Triepels

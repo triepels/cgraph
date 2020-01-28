@@ -41,7 +41,7 @@ SEXP dots(SEXP env)
   {
     UNPROTECT(1);
 
-    return R_NilValue;
+    return Rf_allocVector(VECSXP, 0);
   }
 
   R_len_t n = 0;
@@ -62,7 +62,7 @@ SEXP dots(SEXP env)
   {
     UNPROTECT(1);
 
-    return R_NilValue;
+    return Rf_allocVector(VECSXP, 0);
   }
 
   SEXP dots = PROTECT(Rf_allocVector(VECSXP, n));
