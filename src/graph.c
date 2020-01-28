@@ -521,7 +521,7 @@ static void backward(SEXP node)
 
     SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
 
-    if(!(Rf_isLogical(result) || Rf_isNumeric(result)))
+    if(!Rf_isNumeric(result))
     {
       Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
                    Rf_type2char(TYPEOF(result)), cg_node_name(node));
