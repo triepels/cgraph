@@ -19,7 +19,7 @@ test_that("Array 1",
   # Initialize graph
   graph <- cg_graph()
 
-  # Create parameter
+  # Create parameters
   a <- cg_parameter(matrix(1:4, 2, 2), name = "a")
   b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
 
@@ -42,7 +42,7 @@ test_that("Array 2",
   # Initialize graph
   graph <- cg_graph()
 
-  # Create parameter
+  # Create parameters
   a <- cg_parameter(matrix(1:4, 2, 2), name = "a")
   b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
 
@@ -65,7 +65,7 @@ test_that("Array 3",
   # Initialize graph
   graph <- cg_graph()
 
-  # Create parameter
+  # Create parameters
   a <- cg_parameter(matrix(1:4, 2, 2), name = "a")
   b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
 
@@ -88,7 +88,7 @@ test_that("Array 4",
   # Initialize graph
   graph <- cg_graph()
 
-  # Create parameter
+  # Create parameters
   a <- cg_parameter(matrix(1:4, 2, 2), name = "a")
   b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
 
@@ -111,7 +111,7 @@ test_that("Array 5",
   # Initialize graph
   graph <- cg_graph()
 
-  # Create parameter
+  # Create parameters
   a <- cg_parameter(matrix(1:4, 2, 2), name = "a")
   b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
 
@@ -134,7 +134,7 @@ test_that("Array 6",
   # Initialize graph
   graph <- cg_graph()
 
-  # Create parameter
+  # Create parameters
   a <- cg_parameter(matrix(1:4, 2, 2), name = "a")
   b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
 

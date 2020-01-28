@@ -19,7 +19,7 @@ test_that("Graph 1",
   # Initialize graph
   graph <- cg_graph()
 
-  # Create parameter
+  # Create parameters
   a <- cg_parameter(1, name = "a")
 
   # Create duplicate parameter
@@ -31,7 +31,7 @@ test_that("Graph 2",
   # Initialize graph
   graph <- cg_graph()
 
-  # Create parameter
+  # Create parameters
   a <- cg_parameter(2, name = "a")
 
   # Create test expression
