@@ -16,7 +16,7 @@
 delayedAssign("[", cg_function(
   def = base::`[`,
   grads = list(
-    function(x, ..., drop = FALSE, value, grad)
+    function(x, ..., drop = TRUE, value, grad)
     {
       if(is.array(x))
       {
@@ -24,11 +24,15 @@ delayedAssign("[", cg_function(
         out[...] <- grad
         out
       }
-      else
+      else if(is.numeric(x))
       {
         out <- rep(0, length(x))
         out[...] <- grad
         out
+      }
+      else
+      {
+        stop(sprintf("unable to differentiate object of type '%s'", typeof(x)))
       }
     }
   )
