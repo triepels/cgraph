@@ -39,3 +39,35 @@ delayedAssign("[", cg_function(
 {
   cg_operator(`[`, c(x, dots()))
 }
+
+# Function definition
+delayedAssign("[[", cg_function(
+  def = base::`[[`,
+  grads = list(
+    function(x, ..., exact = TRUE, value, grad)
+    {
+      if(is.array(x))
+      {
+        out <- array(0, dim(x))
+        out[[...]] <- grad
+        out
+      }
+      else if(is.numeric(x))
+      {
+        out <- rep(0, length(x))
+        out[[...]] <- grad
+        out
+      }
+      else
+      {
+        stop(sprintf("unable to differentiate object of type '%s'", typeof(x)))
+      }
+    }
+  )
+))
+
+#' @export
+`[[.cg_node` <- function(x, ...)
+{
+  cg_operator(`[[`, c(x, dots()))
+}
