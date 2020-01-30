@@ -55,12 +55,14 @@ SEXP cg_graph_nodes(SEXP graph)
 
 int cg_graph_eager(SEXP graph)
 {
-  SEXP eager = Rf_findVarInFrame(graph, CG_EAGER_SYMBOL);
+  SEXP eager = PROTECT(Rf_findVarInFrame(graph, CG_EAGER_SYMBOL));
 
   if(!IS_SCALAR(eager, LGLSXP))
   {
     return 1;
   }
+
+  UNPROTECT(1);
 
   return INTEGER(eager)[0];
 }

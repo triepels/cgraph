@@ -43,12 +43,14 @@ limitations under the License.
 
 const char* cg_node_name(SEXP node)
 {
-  SEXP name = Rf_findVarInFrame(node, CG_NAME_SYMBOL);
+  SEXP name = PROTECT(Rf_findVarInFrame(node, CG_NAME_SYMBOL));
 
   if(!IS_SCALAR(name, STRSXP))
   {
     Rf_errorcall(R_NilValue, "node has no name");
   }
+
+  UNPROTECT(1);
 
   return CHAR(STRING_ELT(name, 0));
 }
@@ -69,12 +71,14 @@ void cg_node_set_name(SEXP node, const char *name)
 
 int cg_node_id(SEXP node)
 {
-  SEXP id = Rf_findVarInFrame(node, CG_ID_SYMBOL);
+  SEXP id = PROTECT(Rf_findVarInFrame(node, CG_ID_SYMBOL));
 
   if(!IS_SCALAR(id, INTSXP))
   {
     Rf_errorcall(R_NilValue, "node '%s' has no id", cg_node_name(node));
   }
+
+  UNPROTECT(1);
 
   return INTEGER(id)[0];
 }
@@ -95,12 +99,14 @@ void cg_node_set_id(SEXP node, const int id)
 
 int cg_node_type(SEXP node)
 {
-  SEXP type = Rf_findVarInFrame(node, CG_TYPE_SYMBOL);
+  SEXP type = PROTECT(Rf_findVarInFrame(node, CG_TYPE_SYMBOL));
 
   if(!IS_SCALAR(type, INTSXP))
   {
     Rf_errorcall(R_NilValue, "node '%s' has no type", cg_node_name(node));
   }
+
+  UNPROTECT(1);
 
   return INTEGER(type)[0];
 }
@@ -195,12 +201,14 @@ void cg_node_set_grad(SEXP node, SEXP grad)
 
 SEXP cg_node_function(SEXP node)
 {
-  SEXP function = Rf_findVarInFrame(node, CG_FUN_SYMBOL);
+  SEXP function = PROTECT(Rf_findVarInFrame(node, CG_FUN_SYMBOL));
 
   if(!cg_is(function, "cg_function"))
   {
     Rf_errorcall(R_NilValue, "node '%s' has no function", cg_node_name(node));
   }
+
+  UNPROTECT(1);
 
   return function;
 }
