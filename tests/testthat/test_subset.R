@@ -112,8 +112,8 @@ test_that("Subset 5",
   graph <- cg_graph()
 
   # Create parameters
-  a <- cg_parameter(array(1:24, c(2, 3, 4)), name = "a")
-  b <- cg_parameter(array(1:24, c(4, 3, 2)), name = "b")
+  a <- cg_parameter(array(1:24, c(2,3,4)), name = "a")
+  b <- cg_parameter(array(1:24, c(4,3,2)), name = "b")
 
   # Create test expression
   c <- a[[2,1,3]] + b[[3,1,1]]
