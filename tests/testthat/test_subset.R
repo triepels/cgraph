@@ -82,3 +82,49 @@ test_that("Subset 3",
   expect_equivalent(a$grad, approx_gradient(graph, c, a), tolerance = 1e-4)
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
+
+test_that("Subset 4",
+{
+  # Initialize graph
+  graph <- cg_graph()
+
+  # Create parameters
+  a <- cg_parameter(1:24, name = "a")
+  b <- cg_parameter(1:24, name = "b")
+
+  # Create test expression
+  c <- a[[2]] + b[[4]]
+
+  # Perform forward pass
+  cg_graph_forward(graph, c)
+
+  # Perform backward pass
+  cg_graph_backward(graph, c)
+
+  # Check gradients
+  expect_equivalent(a$grad, approx_gradient(graph, c, a), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
+})
+
+test_that("Subset 5",
+{
+  # Initialize graph
+  graph <- cg_graph()
+
+  # Create parameters
+  a <- cg_parameter(array(1:24, c(2, 3, 4)), name = "a")
+  b <- cg_parameter(array(1:24, c(4, 3, 2)), name = "b")
+
+  # Create test expression
+  c <- a[[2,1,3]] + b[[3,1,1]]
+
+  # Perform forward pass
+  cg_graph_forward(graph, c)
+
+  # Perform backward pass
+  cg_graph_backward(graph, c)
+
+  # Check gradients
+  expect_equivalent(a$grad, approx_gradient(graph, c, a), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
+})
