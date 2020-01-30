@@ -236,7 +236,7 @@ void cg_graph_init_target_grad(SEXP graph, SEXP target, SEXP index)
 
   if(!Rf_isNumeric(value))
   {
-    Rf_errorcall(R_NilValue, "cannot differentiate type '%s' for node '%s'",
+    Rf_errorcall(R_NilValue, "unable to differentiate object of type '%s' for node '%s'",
                  Rf_type2char(TYPEOF(value)), cg_node_name(target));
   }
 
@@ -506,7 +506,7 @@ static void backward(SEXP node)
 
     if(!Rf_isNumeric(grad))
     {
-      Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
+      Rf_errorcall(R_NilValue, "unable to accumulate gradient of type '%s' for node '%s'",
                    Rf_type2char(TYPEOF(grad)), cg_node_name(node));
     }
 
@@ -522,7 +522,7 @@ static void backward(SEXP node)
 
       if(XLENGTH(grad) != m)
       {
-        Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
+        Rf_errorcall(R_NilValue, "unable to accumulate gradients of length %d and %d for node '%s'",
                      XLENGTH(grad), m, cg_node_name(node));
       }
 
