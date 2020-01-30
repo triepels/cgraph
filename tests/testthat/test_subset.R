@@ -43,8 +43,8 @@ test_that("Subset 2",
   graph <- cg_graph()
 
   # Create parameters
-  a <- cg_parameter(array(1:24, c(2, 3, 4)), name = "a")
-  b <- cg_parameter(array(1:24, c(4, 3, 2)), name = "b")
+  a <- cg_parameter(array(1:24, c(2,3,4)), name = "a")
+  b <- cg_parameter(array(1:24, c(4,3,2)), name = "b")
 
   # Create test expression
   c <- cg_sum(cg_matmul(a[1,,], b[,,1]))
@@ -66,8 +66,8 @@ test_that("Subset 3",
   graph <- cg_graph()
 
   # Create parameters
-  a <- cg_parameter(array(1:24, c(2, 3, 4)), name = "a")
-  b <- cg_parameter(array(1:24, c(4, 3, 2)), name = "b")
+  a <- cg_parameter(array(1:24, c(2,3,4)), name = "a")
+  b <- cg_parameter(array(1:24, c(4,3,2)), name = "b")
 
   # Create test expression
   c <- a[2,1,3, drop = TRUE] + b[3,1,1, drop = TRUE]
