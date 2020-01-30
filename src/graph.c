@@ -91,8 +91,8 @@ char* cg_graph_gen_name(SEXP graph)
     do
     {
       sprintf(name, "v%d", ++n);
-
-    } while (cg_graph_node_exists(graph, name));
+    }
+    while (cg_graph_node_exists(graph, name));
   }
 
   UNPROTECT(1);
