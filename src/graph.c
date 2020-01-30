@@ -516,12 +516,6 @@ static void backward(SEXP node)
     }
     else
     {
-      if(TYPEOF(grad) != TYPEOF(input_grad))
-      {
-        Rf_errorcall(R_NilValue, "cannot accumulate gradients of type '%s' and '%s' for node '%s'",
-                     Rf_type2char(TYPEOF(input_grad)), Rf_type2char(TYPEOF(grad)), cg_node_name(input));
-      }
-
       R_len_t m = XLENGTH(input_grad);
 
       if(XLENGTH(grad) != m)
@@ -530,16 +524,37 @@ static void backward(SEXP node)
                      XLENGTH(grad), m, cg_node_name(node));
       }
 
-      switch(TYPEOF(grad))
+      switch(TYPEOF(input_grad))
       {
         case REALSXP :
         {
-          double *x = REAL(grad);
           double *y = REAL(input_grad);
 
-          for(int j = 0; j < m; j++)
+          switch(TYPEOF(grad))
           {
-            y[j] += x[j];
+            case REALSXP :
+            {
+              double *x = REAL(grad);
+
+              for(int j = 0; j < m; j++)
+              {
+                y[j] += x[j];
+              }
+
+              break;
+            }
+            case LGLSXP :
+            case INTSXP :
+            {
+              int *x = INTEGER(grad);
+
+              for(int j = 0; j < m; j++)
+              {
+                y[j] += x[j];
+              }
+
+              break;
+            }
           }
 
           break;
@@ -547,12 +562,33 @@ static void backward(SEXP node)
         case LGLSXP :
         case INTSXP :
         {
-          int *x = INTEGER(grad);
           int *y = INTEGER(input_grad);
 
-          for(int j = 0; j < m; j++)
+          switch(TYPEOF(grad))
           {
-            y[j] += x[j];
+            case REALSXP :
+            {
+              double *x = REAL(grad);
+
+              for(int j = 0; j < m; j++)
+              {
+                y[j] += x[j];
+              }
+
+              break;
+            }
+            case LGLSXP :
+            case INTSXP :
+            {
+              int *x = INTEGER(grad);
+
+              for(int j = 0; j < m; j++)
+              {
+                y[j] += x[j];
+              }
+
+              break;
+            }
           }
 
           break;
