@@ -385,8 +385,6 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
   }
 
-  cg_node_set_function(node, function);
-
   cg_node_set_inputs(node, inputs);
 
   if(cg_graph_eager(graph) && can_eval)
@@ -430,6 +428,8 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
   }
 
   cg_node_set_grad(node, R_NilValue);
+
+  cg_node_set_function(node, function);
 
   cg_graph_add_node(graph, node);
 
