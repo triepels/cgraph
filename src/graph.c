@@ -307,31 +307,28 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int reverse, int (*filte
 
     SEXP inputs = PROTECT(cg_node_inputs(node));
 
-    if(!Rf_isNull(inputs))
+    R_len_t m = XLENGTH(inputs);
+
+    for(int i = 0; i < m; i++)
     {
-      R_len_t m = XLENGTH(inputs);
+      SEXP input = VECTOR_ELT(inputs, i);
 
-      for(int i = 0; i < m; i++)
+      int input_id = cg_node_id(input);
+
+      if(input_id < 1 || input_id > n)
       {
-        SEXP input = VECTOR_ELT(inputs, i);
+        Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
+      }
 
-        int input_id = cg_node_id(input);
+      if(!visited[input_id - 1] && filter(input))
+      {
+        cg_stack_push(stack, input);
 
-        if(input_id < 1 || input_id > n)
-        {
-          Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
-        }
+        visited[input_id - 1] = 1;
 
-        if(!visited[input_id - 1] && filter(input))
-        {
-          cg_stack_push(stack, input);
+        can_traverse = 1;
 
-          visited[input_id - 1] = 1;
-
-          can_traverse = 1;
-
-          break;
-        }
+        break;
       }
     }
 
@@ -381,12 +378,6 @@ static void forward(SEXP node)
 {
   SEXP inputs = PROTECT(cg_node_inputs(node));
 
-  if(Rf_isNull(inputs))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no inputs",
-                 cg_node_name(node));
-  }
-
   R_len_t n = XLENGTH(inputs);
 
   SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
@@ -399,15 +390,7 @@ static void forward(SEXP node)
   {
     SEXP input = VECTOR_ELT(inputs, i);
 
-    SEXP input_value = PROTECT(cg_node_value(input));
-
-    if(Rf_isNull(input_value))
-    {
-      Rf_errorcall(R_NilValue, "node '%s' has no value",
-                   cg_node_name(input));
-    }
-
-    SETCAR(arg, input_value);
+    SETCAR(arg, cg_node_value(input));
 
     if(!Rf_isNull(names))
     {
@@ -420,17 +403,15 @@ static void forward(SEXP node)
     }
 
     arg = CDR(arg);
-
-    UNPROTECT(1);
   }
 
   SEXP function = PROTECT(cg_node_function(node));
 
   SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
 
-  SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
+  SEXP value = PROTECT(Rf_eval(call, R_EmptyEnv));
 
-  cg_node_set_value(node, result);
+  cg_node_set_value(node, value);
 
   UNPROTECT(6);
 }
@@ -459,29 +440,7 @@ SEXP cg_graph_forward(SEXP graph, SEXP target)
 
 static void backward(SEXP node)
 {
-  SEXP value = PROTECT(cg_node_value(node));
-
-  if(Rf_isNull(value))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no value",
-                 Rf_type2char(TYPEOF(value)));
-  }
-
-  SEXP grad = PROTECT(cg_node_grad(node));
-
-  if(Rf_isNull(grad))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no gradient",
-                 cg_node_name(node));
-  }
-
   SEXP inputs = PROTECT(cg_node_inputs(node));
-
-  if(Rf_isNull(inputs))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no inputs",
-                 cg_node_name(node));
-  }
 
   R_len_t n = XLENGTH(inputs);
 
@@ -495,15 +454,7 @@ static void backward(SEXP node)
   {
     SEXP input = VECTOR_ELT(inputs, i);
 
-    SEXP input_value = PROTECT(cg_node_value(input));
-
-    if(Rf_isNull(input_value))
-    {
-      Rf_errorcall(R_NilValue, "node '%s' has no value",
-                   cg_node_name(input));
-    }
-
-    SETCAR(arg, input_value);
+    SETCAR(arg, cg_node_value(input));
 
     if(!Rf_isNull(names))
     {
@@ -516,15 +467,13 @@ static void backward(SEXP node)
     }
 
     arg = CDR(arg);
-
-    UNPROTECT(1);
   }
 
-  SETCAR(arg, value);
+  SETCAR(arg, cg_node_value(node));
 
   SET_TAG(arg, CG_VALUE_SYMBOL);
 
-  SETCADR(arg, grad);
+  SETCADR(arg, cg_node_grad(node));
 
   SET_TAG(CDR(arg), CG_GRAD_SYMBOL);
 
@@ -551,41 +500,41 @@ static void backward(SEXP node)
 
     SEXP call = PROTECT(Rf_lcons(VECTOR_ELT(function_grads, i), args));
 
-    SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
+    SEXP grad = PROTECT(Rf_eval(call, R_EmptyEnv));
 
-    if(!Rf_isNumeric(result))
+    if(!Rf_isNumeric(grad))
     {
       Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(result)), cg_node_name(node));
+                   Rf_type2char(TYPEOF(grad)), cg_node_name(node));
     }
 
     SEXP input_grad = PROTECT(cg_node_grad(input));
 
     if(Rf_isNull(input_grad))
     {
-      cg_node_set_grad(input, result);
+      cg_node_set_grad(input, grad);
     }
     else
     {
-      if(TYPEOF(result) != TYPEOF(input_grad))
+      if(TYPEOF(grad) != TYPEOF(input_grad))
       {
         Rf_errorcall(R_NilValue, "cannot accumulate gradients of type '%s' and '%s' for node '%s'",
-                     Rf_type2char(TYPEOF(input_grad)), Rf_type2char(TYPEOF(result)), cg_node_name(input));
+                     Rf_type2char(TYPEOF(input_grad)), Rf_type2char(TYPEOF(grad)), cg_node_name(input));
       }
 
       R_len_t m = XLENGTH(input_grad);
 
-      if(XLENGTH(result) != m)
+      if(XLENGTH(grad) != m)
       {
         Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
-                     XLENGTH(result), m, cg_node_name(node));
+                     XLENGTH(grad), m, cg_node_name(node));
       }
 
-      switch(TYPEOF(result))
+      switch(TYPEOF(grad))
       {
         case REALSXP :
         {
-          double *x = REAL(result);
+          double *x = REAL(grad);
           double *y = REAL(input_grad);
 
           for(int j = 0; j < m; j++)
@@ -598,7 +547,7 @@ static void backward(SEXP node)
         case LGLSXP :
         case INTSXP :
         {
-          int *x = INTEGER(result);
+          int *x = INTEGER(grad);
           int *y = INTEGER(input_grad);
 
           for(int j = 0; j < m; j++)
@@ -614,7 +563,7 @@ static void backward(SEXP node)
     UNPROTECT(3);
   }
 
-  UNPROTECT(7);
+  UNPROTECT(5);
 }
 
 SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)

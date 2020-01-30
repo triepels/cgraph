@@ -125,9 +125,7 @@ SEXP cg_node_inputs(SEXP node)
 
   if(TYPEOF(inputs) != VECSXP)
   {
-    UNPROTECT(1);
-
-    return R_NilValue;
+    Rf_errorcall(R_NilValue, "node '%s' has no inputs", cg_node_name(node));
   }
 
   UNPROTECT(1);
@@ -163,9 +161,7 @@ SEXP cg_node_value(SEXP node)
 
   if(value == R_UnboundValue)
   {
-    UNPROTECT(1);
-
-    return R_NilValue;
+    Rf_errorcall(R_NilValue, "node '%s' has no value", cg_node_name(node));
   }
 
   UNPROTECT(1);
@@ -184,9 +180,7 @@ SEXP cg_node_grad(SEXP node)
 
   if(grad == R_UnboundValue)
   {
-    UNPROTECT(1);
-
-    return R_NilValue;
+    Rf_errorcall(R_NilValue, "node '%s' has no gradient", cg_node_name(node));
   }
 
   UNPROTECT(1);
@@ -249,6 +243,8 @@ SEXP cg_constant(SEXP value, SEXP name)
 
   cg_node_set_value(node, value);
 
+  cg_node_set_grad(node, R_NilValue);
+
   cg_graph_add_node(graph, node);
 
   UNPROTECT(2);
@@ -280,6 +276,8 @@ SEXP cg_parameter(SEXP value, SEXP name)
 
   cg_node_set_value(node, value);
 
+  cg_node_set_grad(node, R_NilValue);
+
   cg_graph_add_node(graph, node);
 
   UNPROTECT(2);
@@ -310,6 +308,8 @@ SEXP cg_input(SEXP name)
   }
 
   cg_node_set_value(node, R_NilValue);
+
+  cg_node_set_grad(node, R_NilValue);
 
   cg_graph_add_node(graph, node);
 
@@ -410,9 +410,9 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
     SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
 
-    SEXP result = PROTECT(Rf_eval(call, R_EmptyEnv));
+    SEXP value = PROTECT(Rf_eval(call, R_EmptyEnv));
 
-    cg_node_set_value(node, result);
+    cg_node_set_value(node, value);
 
     UNPROTECT(4);
   }
@@ -420,6 +420,8 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
   {
     cg_node_set_value(node, R_NilValue);
   }
+
+  cg_node_set_grad(node, R_NilValue);
 
   cg_graph_add_node(graph, node);
 
