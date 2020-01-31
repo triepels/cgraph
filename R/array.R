@@ -544,7 +544,7 @@ delayedAssign("as_double", cg_function(
       }
       else
       {
-        as.double(grad)
+        grad
       }
     }
   )
