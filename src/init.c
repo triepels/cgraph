@@ -20,10 +20,10 @@ limitations under the License.
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 
-#include "math.h"
 #include "node.h"
 #include "class.h"
 #include "graph.h"
+#include "vector.h"
 #include "session.h"
 #include "function.h"
 #include "internal.h"
@@ -51,7 +51,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"dots", (DL_FUNC) &dots, 1},
   {"bsum", (DL_FUNC) &bsum, 2},
   {"approx_gradient", (DL_FUNC) &approx_gradient, 5},
-  // Math
+  // Vector
   {"sigmoid", (DL_FUNC) &sigmoid, 1},
   {NULL, NULL, 0}
 };

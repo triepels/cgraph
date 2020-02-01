@@ -19,7 +19,7 @@ limitations under the License.
 #include <R.h>
 #include <Rinternals.h>
 
-#include "math.h"
+#include "vector.h"
 
 /*
  * PUBLIC METHODS

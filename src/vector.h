@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef MATH_H
-#define MATH_H
+#ifndef VECTOR_H
+#define VECTOR_H
 
 #define R_NO_REMAP
 
