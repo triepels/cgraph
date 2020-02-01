@@ -236,9 +236,9 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
     double t2 = REAL(target_value)[k - 1];
 
-    x[i] += eps;
-
     y[i] = (t1 - t2) / (2 * eps);
+
+    x[i] += eps;
   }
 
   SHALLOW_DUPLICATE_ATTRIB(grad, node_value);
