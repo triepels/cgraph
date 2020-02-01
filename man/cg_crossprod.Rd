@@ -4,7 +4,7 @@
 \alias{cg_crossprod}
 \title{Matrix Crossproduct}
 \usage{
-cg_crossprod(x, y = NULL, name = NULL)
+cg_crossprod(x, y = x, name = NULL)
 }
 \arguments{
 \item{x}{either a cg_node object or a numerical matrix.}
