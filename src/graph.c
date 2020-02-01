@@ -59,6 +59,8 @@ int cg_graph_eager(SEXP graph)
 
   if(!IS_SCALAR(eager, LGLSXP))
   {
+    UNPROTECT(1);
+
     return 1;
   }
 
