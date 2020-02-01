@@ -83,16 +83,9 @@ delayedAssign("matmul", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_crossprod <- function(x, y = NULL, name = NULL)
+cg_crossprod <- function(x, y = x, name = NULL)
 {
-  if(is.null(y))
-  {
-    cg_operator(crossprod, list(x, x), name)
-  }
-  else
-  {
-    cg_operator(crossprod, list(x, y), name)
-  }
+  cg_operator(crossprod, list(x, y), name)
 }
 
 # Function definition
@@ -124,16 +117,9 @@ delayedAssign("crossprod", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_tcrossprod <- function(x, y = NULL, name = NULL)
+cg_tcrossprod <- function(x, y = x, name = NULL)
 {
-  if(is.null(y))
-  {
-    cg_operator(tcrossprod, list(x, x), name)
-  }
-  else
-  {
-    cg_operator(tcrossprod, list(x, y), name)
-  }
+  cg_operator(tcrossprod, list(x, y), name)
 }
 
 # Function definition
