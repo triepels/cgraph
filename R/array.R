@@ -12,6 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Dimensions of an Object
+#'
+#' Calculate \code{dim(x)}.
+#'
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object, node of the operation.
+#'
+#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#'
+#' @seealso \link[base]{dim}
+#'
+#' @author Ron Triepels
+#' @export
+cg_dim <- function(x, name = NULL)
+{
+  cg_operator(dim, list(x), name)
+}
+
+# Function definition
+delayedAssign("dim", cg_function(def = base::dim))
+
 #' Matrix Multiplication
 #'
 #' Calculate \code{x \%*\% y}.
