@@ -212,6 +212,212 @@ void cg_node_set_function(SEXP node, SEXP function)
   Rf_defineVar(CG_FUN_SYMBOL, function, node);
 }
 
+void cg_node_forward(SEXP node)
+{
+  SEXP inputs = PROTECT(cg_node_inputs(node));
+
+  R_len_t n = XLENGTH(inputs);
+
+  SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
+
+  SEXP names = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
+
+  SEXP arg = args;
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP input = VECTOR_ELT(inputs, i);
+
+    SETCAR(arg, cg_node_value(input));
+
+    if(!Rf_isNull(names))
+    {
+      SEXP name = STRING_ELT(names, i);
+
+      if(CHAR(name)[0] != '\0')
+      {
+        SET_TAG(arg, Rf_installChar(name));
+      }
+    }
+
+    arg = CDR(arg);
+  }
+
+  SEXP function = PROTECT(cg_node_function(node));
+
+  SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
+
+  SEXP value = PROTECT(Rf_eval(call, R_EmptyEnv));
+
+  cg_node_set_value(node, value);
+
+  UNPROTECT(6);
+}
+
+void cg_node_backward(SEXP node)
+{
+  SEXP inputs = PROTECT(cg_node_inputs(node));
+
+  R_len_t n = XLENGTH(inputs);
+
+  SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 2));
+
+  SEXP names = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
+
+  SEXP arg = args;
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP input = VECTOR_ELT(inputs, i);
+
+    SETCAR(arg, cg_node_value(input));
+
+    if(!Rf_isNull(names))
+    {
+      SEXP name = STRING_ELT(names, i);
+
+      if(CHAR(name)[0] != '\0')
+      {
+        SET_TAG(arg, Rf_installChar(name));
+      }
+    }
+
+    arg = CDR(arg);
+  }
+
+  SETCAR(arg, cg_node_value(node));
+
+  SET_TAG(arg, CG_VALUE_SYMBOL);
+
+  SETCADR(arg, cg_node_grad(node));
+
+  SET_TAG(CDR(arg), CG_GRAD_SYMBOL);
+
+  SEXP function = PROTECT(cg_node_function(node));
+
+  SEXP function_grads = PROTECT(cg_function_grads(function));
+
+  R_len_t k = XLENGTH(function_grads);
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP input = VECTOR_ELT(inputs, i);
+
+    if(cg_node_type(input) == CGCST)
+    {
+      continue;
+    }
+
+    if(i >= k)
+    {
+      Rf_errorcall(R_NilValue, "unable to differentiate node '%s' at input %d",
+                   cg_node_name(node), i + 1);
+    }
+
+    SEXP call = PROTECT(Rf_lcons(VECTOR_ELT(function_grads, i), args));
+
+    SEXP grad = PROTECT(Rf_eval(call, R_EmptyEnv));
+
+    if(!Rf_isNumeric(grad))
+    {
+      Rf_errorcall(R_NilValue, "unable to accumulate gradient of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(grad)), cg_node_name(node));
+    }
+
+    SEXP input_grad = PROTECT(cg_node_grad(input));
+
+    if(Rf_isNull(input_grad))
+    {
+      cg_node_set_grad(input, grad);
+    }
+    else
+    {
+      R_len_t m = XLENGTH(input_grad);
+
+      if(XLENGTH(grad) != m)
+      {
+        Rf_errorcall(R_NilValue, "unable to accumulate gradients of length %d and %d for node '%s'",
+                     XLENGTH(grad), m, cg_node_name(node));
+      }
+
+      switch(TYPEOF(input_grad))
+      {
+        case REALSXP :
+        {
+          double *y = REAL(input_grad);
+
+          switch(TYPEOF(grad))
+          {
+            case REALSXP :
+            {
+              double *x = REAL(grad);
+
+              for(int j = 0; j < m; j++)
+              {
+                y[j] += x[j];
+              }
+
+              break;
+            }
+            case LGLSXP :
+            case INTSXP :
+            {
+              int *x = INTEGER(grad);
+
+              for(int j = 0; j < m; j++)
+              {
+                y[j] += x[j];
+              }
+
+              break;
+            }
+          }
+
+          break;
+        }
+        case LGLSXP :
+        case INTSXP :
+        {
+          int *y = INTEGER(input_grad);
+
+          switch(TYPEOF(grad))
+          {
+            case REALSXP :
+            {
+              double *x = REAL(grad);
+
+              for(int j = 0; j < m; j++)
+              {
+                y[j] += x[j];
+              }
+
+              break;
+            }
+            case LGLSXP :
+            case INTSXP :
+            {
+              int *x = INTEGER(grad);
+
+              for(int j = 0; j < m; j++)
+              {
+                y[j] += x[j];
+              }
+
+              break;
+            }
+          }
+
+          break;
+        }
+      }
+    }
+
+    UNPROTECT(3);
+  }
+
+  UNPROTECT(5);
+}
+
 /*
  * CONSTRUCTORS
  */
@@ -350,15 +556,13 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
       {
         can_eval = 0;
       }
+
+      UNPROTECT(1);
     }
     else
     {
-      SEXP node = PROTECT(cg_constant(input, R_NilValue));
-
-      SET_VECTOR_ELT(inputs, i, node);
+      SET_VECTOR_ELT(inputs, i, cg_constant(input, R_NilValue));
     }
-
-    UNPROTECT(1);
   }
 
   SEXP node = PROTECT(cg_class1("cg_node"));
@@ -376,40 +580,11 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   cg_node_set_inputs(node, inputs);
 
+  cg_node_set_function(node, function);
+
   if(cg_graph_eager(graph) && can_eval)
   {
-    SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
-
-    SEXP names = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
-
-    SEXP arg = args;
-
-    for(int i = 0; i < n; i++)
-    {
-      SEXP input = VECTOR_ELT(inputs, i);
-
-      SETCAR(arg, cg_node_value(input));
-
-      if(!Rf_isNull(names))
-      {
-        SEXP name = STRING_ELT(names, i);
-
-        if(CHAR(name)[0] != '\0')
-        {
-          SET_TAG(arg, Rf_installChar(name));
-        }
-      }
-
-      arg = CDR(arg);
-    }
-
-    SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
-
-    SEXP value = PROTECT(Rf_eval(call, R_EmptyEnv));
-
-    cg_node_set_value(node, value);
-
-    UNPROTECT(4);
+    cg_node_forward(node);
   }
   else
   {
@@ -417,8 +592,6 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
   }
 
   cg_node_set_grad(node, R_NilValue);
-
-  cg_node_set_function(node, function);
 
   cg_graph_add_node(graph, node);
 

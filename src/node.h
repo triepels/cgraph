@@ -65,6 +65,10 @@ SEXP cg_node_function(SEXP node);
 
 void cg_node_set_function(SEXP node, SEXP function);
 
+void cg_node_forward(SEXP node);
+
+void cg_node_backward(SEXP node);
+
 /*
  * PRIVATE CONSTRUCTORS
  */
