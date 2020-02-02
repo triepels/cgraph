@@ -20,13 +20,7 @@ limitations under the License.
 #include <Rinternals.h>
 
 #include "class.h"
-
-/*
- * SYMBOLS
- */
-
-#define CG_SESSION_SYMBOL Rf_install("session")
-#define CG_GRAPH_SYMBOL Rf_install("graph")
+#include "symbols.h"
 
 /*
  * PRIVATE METHODS

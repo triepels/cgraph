@@ -24,16 +24,8 @@ limitations under the License.
 #include "graph.h"
 #include "stack.h"
 #include "session.h"
+#include "symbols.h"
 #include "function.h"
-
-/*
- * SYMBOLS
- */
-
-#define CG_NODES_SYMBOL Rf_install("nodes")
-#define CG_EAGER_SYMBOL Rf_install("eager")
-#define CG_VALUE_SYMBOL Rf_install("value")
-#define CG_GRAD_SYMBOL Rf_install("grad")
 
 /*
  * PRIVATE METHODS

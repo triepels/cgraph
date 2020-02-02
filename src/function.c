@@ -20,14 +20,8 @@ limitations under the License.
 #include <Rinternals.h>
 
 #include "class.h"
+#include "symbols.h"
 #include "function.h"
-
-/*
- * SYMBOLS
- */
-
-#define CG_DEF_SYMBOL Rf_install("def")
-#define CG_GRADS_SYMBOL Rf_install("grads")
 
 /*
  * PRIVATE METHODS

@@ -23,19 +23,8 @@ limitations under the License.
 #include "graph.h"
 #include "class.h"
 #include "session.h"
+#include "symbols.h"
 #include "function.h"
-
-/*
- * SYMBOLS
- */
-
-#define CG_ID_SYMBOL Rf_install("id")
-#define CG_TYPE_SYMBOL Rf_install("type")
-#define CG_NAME_SYMBOL Rf_install("name")
-#define CG_INPUTS_SYMBOL Rf_install("inputs")
-#define CG_VALUE_SYMBOL Rf_install("value")
-#define CG_GRAD_SYMBOL Rf_install("grad")
-#define CG_FUN_SYMBOL Rf_install("fun")
 
 /*
  * METHODS
