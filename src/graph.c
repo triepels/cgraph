@@ -94,8 +94,6 @@ char* cg_graph_gen_name(SEXP graph)
 
 void cg_graph_add_node(SEXP graph, SEXP node)
 {
-  const char *name = cg_node_name(node);
-
   int index_nodes;
 
   SEXP nodes = R_NilValue;
@@ -108,38 +106,17 @@ void cg_graph_add_node(SEXP graph, SEXP node)
 
     SET_VECTOR_ELT(nodes, 0, node);
 
-    Rf_setAttrib(nodes, R_NamesSymbol, Rf_mkString(name));
-
     cg_node_set_id(node, 1);
   }
   else
   {
-    int index_names;
-
-    SEXP names = R_NilValue;
-
-    PROTECT_WITH_INDEX(names = Rf_getAttrib(nodes, R_NamesSymbol), &index_names);
-
-    if(Rf_isNull(names))
-    {
-      Rf_errorcall(R_NilValue, "graph has invalid node names");
-    }
-
     R_len_t n = XLENGTH(nodes);
 
     REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), index_nodes);
 
-    REPROTECT(names = Rf_lengthgets(names, n + 1), index_names);
-
     SET_VECTOR_ELT(nodes, n, node);
 
-    SET_STRING_ELT(names, n, Rf_mkChar(name));
-
-    Rf_setAttrib(nodes, R_NamesSymbol, names);
-
     cg_node_set_id(node, n + 1);
-
-    UNPROTECT(1);
   }
 
   Rf_defineVar(CG_NODES_SYMBOL, nodes, graph);
