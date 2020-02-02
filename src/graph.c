@@ -104,7 +104,7 @@ int cg_graph_node_exists(SEXP graph, const char *name)
   {
     SEXP names = Rf_getAttrib(nodes, R_NamesSymbol);
 
-    if(!Rf_isString(names))
+    if(Rf_isNull(names))
     {
       Rf_errorcall(R_NilValue, "graph has invalid node names");
     }
@@ -162,7 +162,7 @@ void cg_graph_add_node(SEXP graph, SEXP node)
 
     PROTECT_WITH_INDEX(names = Rf_getAttrib(nodes, R_NamesSymbol), &index_names);
 
-    if(!Rf_isString(names))
+    if(Rf_isNull(names))
     {
       Rf_errorcall(R_NilValue, "graph has invalid node names");
     }
