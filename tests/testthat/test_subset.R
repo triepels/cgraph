@@ -26,9 +26,6 @@ test_that("Subset 1",
   # Create test expression
   c <- a[2] + b[4]
 
-  # Perform forward pass
-  cg_graph_forward(graph, c)
-
   # Perform backward pass
   cg_graph_backward(graph, c)
 
@@ -48,9 +45,6 @@ test_that("Subset 2",
 
   # Create test expression
   c <- cg_sum(cg_matmul(a[1,,], b[,,1]))
-
-  # Perform forward pass
-  cg_graph_forward(graph, c)
 
   # Perform backward pass
   cg_graph_backward(graph, c)
@@ -72,9 +66,6 @@ test_that("Subset 3",
   # Create test expression
   c <- a[2,1,3, drop = TRUE] + b[3,1,1, drop = TRUE]
 
-  # Perform forward pass
-  cg_graph_forward(graph, c)
-
   # Perform backward pass
   cg_graph_backward(graph, c)
 
@@ -95,9 +86,6 @@ test_that("Subset 4",
   # Create test expression
   c <- a[[2]] + b[[4]]
 
-  # Perform forward pass
-  cg_graph_forward(graph, c)
-
   # Perform backward pass
   cg_graph_backward(graph, c)
 
@@ -117,9 +105,6 @@ test_that("Subset 5",
 
   # Create test expression
   c <- a[[2,1,3]] + b[[3,1,1]]
-
-  # Perform forward pass
-  cg_graph_forward(graph, c)
 
   # Perform backward pass
   cg_graph_backward(graph, c)

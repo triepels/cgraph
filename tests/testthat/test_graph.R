@@ -25,9 +25,6 @@ test_that("Graph 1",
   # Create test expression
   b <- (a + a) + (a - a) + (a * a) + (a / a)
 
-  # Perform forward pass
-  cg_graph_forward(graph, b)
-
   # Perform backward pass
   cg_graph_backward(graph, b)
 
@@ -48,18 +45,12 @@ test_that("Graph 2",
   c <- a * b
   d <- a / b
 
-  # Perform forward pass
-  cg_graph_forward(graph, c)
-
   # Perform backward pass
   cg_graph_backward(graph, c)
 
   # Check gradients
   expect_equivalent(a$grad, approx_gradient(graph, c, a), tolerance = 1e-4)
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
-
-  # Perform forward pass
-  cg_graph_forward(graph, d)
 
   # Perform backward pass
   cg_graph_backward(graph, d)
@@ -81,9 +72,6 @@ test_that("Graph 3",
   # Create test expressions
   c <- cg_sin(b)
   d <- cg_add(cg_sin(a) + c, cg_sin(c))
-
-  # Perform forward pass
-  cg_graph_forward(graph, d)
 
   # Perform backward pass
   cg_graph_backward(graph, d)
@@ -109,9 +97,6 @@ test_that("Graph 4",
   {
     b <- cg_abs(b)
   }
-
-  # Perform forward pass
-  cg_graph_forward(graph, b)
 
   # Perform backward pass
   cg_graph_backward(graph, b)

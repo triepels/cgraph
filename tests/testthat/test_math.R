@@ -26,9 +26,6 @@ test_that("Math 1",
   # Create test expression
   c <- (a + b) * (a - b) * (a / b)
 
-  # Perform forward pass
-  cg_graph_forward(graph, c)
-
   # Perform backward pass
   cg_graph_backward(graph, c)
 
@@ -48,9 +45,6 @@ test_that("Math 2",
 
   # Create test expression
   c <- a^b + cg_square(a - b) + cg_sqrt(a)
-
-  # Perform forward pass
-  cg_graph_forward(graph, c)
 
   # Perform backward pass
   cg_graph_backward(graph, c)
@@ -72,9 +66,6 @@ test_that("Math 3",
   # Create test expression
   c <- cg_exp(a) + cg_ln(b) + cg_log2(a) + cg_log10(b)
 
-  # Perform forward pass
-  cg_graph_forward(graph, c)
-
   # Perform backward pass
   cg_graph_backward(graph, c)
 
@@ -94,9 +85,6 @@ test_that("Math 4",
 
   # Create test expression
   c <- cg_abs(-a / b)
-
-  # Perform forward pass
-  cg_graph_forward(graph, c)
 
   # Perform backward pass
   cg_graph_backward(graph, c)
@@ -118,9 +106,6 @@ test_that("Math 5",
   # Create test expression
   c <- cg_sin(a) + cg_cos(b) - cg_tan(a)
 
-  # Perform forward pass
-  cg_graph_forward(graph, c)
-
   # Perform backward pass
   cg_graph_backward(graph, c)
 
@@ -140,9 +125,6 @@ test_that("Math 6",
 
   # Create test expression
   c <- cg_sinh(a) + cg_cosh(b) - cg_tanh(a)
-
-  # Perform forward pass
-  cg_graph_forward(graph, c)
 
   # Perform backward pass
   cg_graph_backward(graph, c)
@@ -164,9 +146,6 @@ test_that("Math 7",
   # Create test expression
   c <- cg_asin(a) + cg_acos(b) - cg_atan(a)
 
-  # Perform forward pass
-  cg_graph_forward(graph, c)
-
   # Perform backward pass
   cg_graph_backward(graph, c)
 
@@ -187,9 +166,6 @@ test_that("Math 8",
   # Create test expression
   c <- cg_asinh(a) + cg_acosh(b) - cg_atanh(a)
 
-  # Perform forward pass
-  cg_graph_forward(graph, c)
-
   # Perform backward pass
   cg_graph_backward(graph, c)
 
@@ -209,9 +185,6 @@ test_that("Math 9",
 
   # Create test expression
   c <- cg_sigmoid(a) * cg_sigmoid(b)
-
-  # Perform forward pass
-  cg_graph_forward(graph, c)
 
   # Perform backward pass
   cg_graph_backward(graph, c)
