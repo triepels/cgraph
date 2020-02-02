@@ -20,18 +20,6 @@ test_that("Graph 1",
   graph <- cg_graph()
 
   # Create parameters
-  a <- cg_parameter(1, name = "a")
-
-  # Create duplicate parameter
-  expect_error(cg_parameter(1, name = "a"))
-})
-
-test_that("Graph 2",
-{
-  # Initialize graph
-  graph <- cg_graph()
-
-  # Create parameters
   a <- cg_parameter(2, name = "a")
 
   # Create test expression
@@ -47,7 +35,7 @@ test_that("Graph 2",
   expect_equivalent(a$grad, approx_gradient(graph, b, a), tolerance = 1e-4)
 })
 
-test_that("Graph 3",
+test_that("Graph 2",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -81,7 +69,7 @@ test_that("Graph 3",
   expect_equivalent(b$grad, approx_gradient(graph, d, b), tolerance = 1e-4)
 })
 
-test_that("Graph 4",
+test_that("Graph 3",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -105,7 +93,7 @@ test_that("Graph 4",
   expect_equivalent(b$grad, approx_gradient(graph, d, b), tolerance = 1e-4)
 })
 
-test_that("Graph 5",
+test_that("Graph 4",
 {
   # Initialize graph
   graph <- cg_graph()

@@ -84,11 +84,7 @@ char* cg_graph_gen_name(SEXP graph)
   {
     R_len_t n = XLENGTH(nodes);
 
-    do
-    {
-      sprintf(name, "v%d", ++n);
-    }
-    while (cg_graph_node_exists(graph, name));
+    sprintf(name, "v%d", n + 1);
   }
 
   UNPROTECT(1);
@@ -96,47 +92,9 @@ char* cg_graph_gen_name(SEXP graph)
   return name;
 }
 
-int cg_graph_node_exists(SEXP graph, const char *name)
-{
-  SEXP nodes = PROTECT(Rf_findVarInFrame(graph, CG_NODES_SYMBOL));
-
-  if(TYPEOF(nodes) == VECSXP)
-  {
-    SEXP names = Rf_getAttrib(nodes, R_NamesSymbol);
-
-    if(Rf_isNull(names))
-    {
-      Rf_errorcall(R_NilValue, "graph has invalid node names");
-    }
-
-    R_len_t n = XLENGTH(names);
-
-    for(int i = 0; i < n; i++)
-    {
-      SEXP node_name = STRING_ELT(names, i);
-
-      if(strcmp(CHAR(node_name), name) == 0)
-      {
-        UNPROTECT(1);
-
-        return TRUE;
-      }
-    }
-  }
-
-  UNPROTECT(1);
-
-  return FALSE;
-}
-
 void cg_graph_add_node(SEXP graph, SEXP node)
 {
   const char *name = cg_node_name(node);
-
-  if(cg_graph_node_exists(graph, name))
-  {
-    Rf_errorcall(R_NilValue, "'%s' is already defined in the graph", name);
-  }
 
   int index_nodes;
 
