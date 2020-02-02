@@ -59,10 +59,6 @@ static const R_CallMethodDef CallEntries[] = {
 
 void R_init_cgraph(DllInfo *dll)
 {
-  // Register c routines in R session
-  R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
-  R_useDynamicSymbols(dll, FALSE);
-
   // Initialize symbols
   CG_ID_SYMBOL      = Rf_install("id");
   CG_DEF_SYMBOL     = Rf_install("def");
@@ -77,6 +73,10 @@ void R_init_cgraph(DllInfo *dll)
   CG_VALUE_SYMBOL   = Rf_install("value");
   CG_INPUTS_SYMBOL  = Rf_install("inputs");
   CG_SESSION_SYMBOL = Rf_install("session");
+
+  // Register c routines in R session
+  R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+  R_useDynamicSymbols(dll, FALSE);
 
   // Initialize a new session
   cg_session();
