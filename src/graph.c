@@ -189,27 +189,6 @@ void cg_graph_add_node(SEXP graph, SEXP node)
   UNPROTECT(1);
 }
 
-SEXP cg_graph_get_node(SEXP graph, const int id)
-{
-  SEXP nodes = PROTECT(cg_graph_nodes(graph));
-
-  if(id < 1 || id > XLENGTH(nodes))
-  {
-    Rf_errorcall(R_NilValue, "cannot find node with id %d", id);
-  }
-
-  SEXP node = VECTOR_ELT(nodes, id - 1);
-
-  if(!cg_is(node, "cg_node"))
-  {
-    Rf_errorcall(R_NilValue, "invalid node at index %d", id);
-  }
-
-  UNPROTECT(1);
-
-  return node;
-}
-
 void cg_graph_clear_grads(SEXP graph)
 {
   SEXP nodes = PROTECT(cg_graph_nodes(graph));
