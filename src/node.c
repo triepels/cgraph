@@ -76,7 +76,7 @@ void cg_node_set_id(SEXP node, const int id)
 {
   if(id < 1)
   {
-    Rf_errorcall(R_NilValue, "argument 'id' must be higher than or equal to 1");
+    Rf_errorcall(R_NilValue, "argument 'id' must be a positive integer");
   }
 
   SEXP node_id = PROTECT(Rf_ScalarInteger(id));
