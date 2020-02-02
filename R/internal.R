@@ -69,5 +69,15 @@ bsum <- function(x, block_size = 1)
 #' @keywords internal
 approx_gradient <- function(graph, target, node, index = 1, eps = 1e-4)
 {
+  if(is.character(target))
+  {
+    target <- cg_graph_get(graph, target)
+  }
+
+  if(is.character(node))
+  {
+    node <- cg_graph_get(graph, node)
+  }
+
   .Call("approx_gradient", graph, target, node, index, eps, PACKAGE = "cgraph")
 }

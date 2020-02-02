@@ -44,6 +44,8 @@ SEXP cg_graph_get_node(SEXP graph, const int id);
  * PUBLIC METHODS
  */
 
+SEXP cg_graph_get(SEXP graph, SEXP name);
+
 SEXP cg_graph_forward(SEXP graph, SEXP target);
 
 SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index);

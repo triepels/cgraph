@@ -274,6 +274,42 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int reverse, int (*filte
  * PUBLIC METHODS
  */
 
+SEXP cg_graph_get(SEXP graph, SEXP name)
+{
+  if(!cg_is(graph, "cg_graph"))
+  {
+    Rf_errorcall(R_NilValue, "argument 'graph' must be a cg_graph object");
+  }
+
+  if(!IS_SCALAR(name, STRSXP))
+  {
+    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
+  }
+
+  SEXP nodes = PROTECT(Rf_findVarInFrame(graph, CG_NODES_SYMBOL));
+
+  const char *pn = CHAR(STRING_ELT(name, 0));
+
+  if(TYPEOF(nodes) == VECSXP)
+  {
+    R_len_t n = XLENGTH(nodes);
+
+    for(int i = n - 1; i >= 0; i--)
+    {
+      SEXP node = VECTOR_ELT(nodes, i);
+
+      if(strcmp(cg_node_name(node), pn) == 0)
+      {
+        UNPROTECT(1);
+
+        return node;
+      }
+    }
+  }
+
+  Rf_errorcall(R_NilValue, "cannot find node '%s'", pn);
+}
+
 static int filter(SEXP node)
 {
   if(cg_node_type(node) == CGOPR)

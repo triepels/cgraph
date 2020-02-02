@@ -33,6 +33,12 @@ cg_graph <- function(eager = TRUE)
   .Call("cg_graph", eager, PACKAGE = "cgraph")
 }
 
+#' @export
+cg_graph_get <- function(graph, name)
+{
+  .Call("cg_graph_get", graph, name, PACKAGE = "cgraph")
+}
+
 #' Forward Pass
 #'
 #' Perform a forward pass to evaluate a given target node in a graph.
@@ -68,6 +74,11 @@ cg_graph <- function(eager = TRUE)
 #' @export
 cg_graph_forward <- function(graph, target)
 {
+  if(is.character(target))
+  {
+    target <- cg_graph_get(graph, target)
+  }
+
   invisible(.Call("cg_graph_forward", graph, target, PACKAGE = "cgraph"))
 }
 
@@ -115,6 +126,11 @@ cg_graph_forward <- function(graph, target)
 #' @export
 cg_graph_backward <- function(graph, target, index = NULL)
 {
+  if(is.character(target))
+  {
+    target <- cg_graph_get(graph, target)
+  }
+
   invisible(.Call("cg_graph_backward", graph, target, index, PACKAGE = "cgraph"))
 }
 
