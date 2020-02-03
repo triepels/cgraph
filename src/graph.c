@@ -369,7 +369,7 @@ SEXP cg_graph(SEXP eager)
 
   SEXP graph = PROTECT(cg_class1("cg_graph"));
 
-  cg_graph_set_eager(graph, INTEGER(eager)[0]);
+  CG_SET(graph, CG_EAGER_SYMBOL, eager);
 
   cg_session_set_graph(graph);
 
