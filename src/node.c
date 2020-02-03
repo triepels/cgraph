@@ -219,7 +219,7 @@ void cg_node_forward(SEXP node)
 
   SEXP value = PROTECT(Rf_eval(call, R_EmptyEnv));
 
-  cg_node_set_value(node, value);
+  CG_SET(node, CG_VALUE_SYMBOL, value);
 
   UNPROTECT(6);
 }
@@ -298,7 +298,7 @@ void cg_node_backward(SEXP node)
 
     if(Rf_isNull(input_grad))
     {
-      cg_node_set_grad(input, grad);
+      CG_SET(input, CG_GRAD_SYMBOL, grad);
     }
     else
     {
