@@ -14,7 +14,7 @@
 
 #' Computational Graph
 #'
-#' Initialize a computational graph
+#' Initialize a computational graph.
 #'
 #' @param eager logical scalar, should new nodes added to the graph be evaluated eagerly? Defaults to TRUE.
 #'
@@ -33,6 +33,27 @@ cg_graph <- function(eager = TRUE)
   .Call("cg_graph", eager, PACKAGE = "cgraph")
 }
 
+#' Retrieve Node
+#'
+#' Retrieve a node from a graph by name.
+#'
+#' @param graph cg_graph object, graph containing the node to be retrieved.
+#' @param name character scalar, name of the node to be retrieved.
+#'
+#' @note In case multiple nodes share the same name, the last node added to the graph is retrieved.
+#'
+#' @return cg_node object.
+#'
+#' @examples # Initialize a computational graph
+#' graph <- cg_graph()
+#'
+#' # Add an input
+#' cg_input(name = "a")
+#'
+#' # Retrieve input a
+#' a <- cg_graph_get(graph, "a")
+#'
+#' @author Ron Triepels
 #' @export
 cg_graph_get <- function(graph, name)
 {

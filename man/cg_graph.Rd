@@ -13,7 +13,7 @@ cg_graph(eager = TRUE)
 cg_graph object.
 }
 \description{
-Initialize a computational graph
+Initialize a computational graph.
 }
 \note{
 The graph is automatically set to be the active graph.
