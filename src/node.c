@@ -78,7 +78,7 @@ void cg_node_set_id(SEXP node, const int id)
   Rf_defineVar(CG_ID_SYMBOL, Rf_ScalarInteger(id), node);
 }
 
-int cg_node_type(SEXP node)
+cg_node_type_t cg_node_type(SEXP node)
 {
   SEXP type = PROTECT(Rf_findVarInFrame(node, CG_TYPE_SYMBOL));
 
@@ -89,10 +89,10 @@ int cg_node_type(SEXP node)
 
   UNPROTECT(1);
 
-  return INTEGER(type)[0];
+  return (cg_node_type_t)INTEGER(type)[0];
 }
 
-void cg_node_set_type(SEXP node, const int type)
+void cg_node_set_type(SEXP node, const cg_node_type_t type)
 {
   if(type < 0 || type > 3)
   {

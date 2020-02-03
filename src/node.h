@@ -25,13 +25,15 @@ limitations under the License.
 #include "class.h"
 
 /*
- * TYPES
+ * ENUMERATIONS & TYPES
  */
 
-#define CGCST 0
-#define CGPRM 1
-#define CGIPT 2
-#define CGOPR 3
+typedef enum {
+    CGCST,
+    CGPRM,
+    CGIPT,
+    CGOPR
+} cg_node_type_t;
 
 /*
  * PRIVATE METHODS
@@ -45,9 +47,9 @@ int cg_node_id(SEXP node);
 
 void cg_node_set_id(SEXP node, const int id);
 
-int cg_node_type(SEXP node);
+cg_node_type_t cg_node_type(SEXP node);
 
-void cg_node_set_type(SEXP node, const int type);
+void cg_node_set_type(SEXP node, const cg_node_type_t type);
 
 SEXP cg_node_inputs(SEXP node);
 
