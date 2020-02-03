@@ -18,21 +18,22 @@ delayedAssign("subset1", cg_function(
   grads = list(
     function(x, ..., drop = TRUE, value, grad)
     {
+      if(!is.numeric(x))
+      {
+        stop(sprintf("unable to differentiate object of type '%s'", typeof(x)))
+      }
+
       if(is.array(x))
       {
         out <- array(0, dim(x))
         out[...] <- grad
         out
       }
-      else if(is.numeric(x))
+      else
       {
         out <- rep(0, length(x))
         out[...] <- grad
         out
-      }
-      else
-      {
-        stop(sprintf("unable to differentiate object of type '%s'", typeof(x)))
       }
     }
   )
@@ -50,6 +51,11 @@ delayedAssign("subset2", cg_function(
   grads = list(
     function(x, ..., exact = TRUE, value, grad)
     {
+      if(!is.numeric(x))
+      {
+        stop(sprintf("unable to differentiate object of type '%s'", typeof(x)))
+      }
+
       if(is.array(x))
       {
         out <- array(0, dim(x))
@@ -61,10 +67,6 @@ delayedAssign("subset2", cg_function(
         out <- rep(0, length(x))
         out[[...]] <- grad
         out
-      }
-      else
-      {
-        stop(sprintf("unable to differentiate object of type '%s'", typeof(x)))
       }
     }
   )
