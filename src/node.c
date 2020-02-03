@@ -51,11 +51,7 @@ void cg_node_set_name(SEXP node, const char *name)
     Rf_errorcall(R_NilValue, "argument 'name' must be a non-blank character scalar");
   }
 
-  SEXP node_name = PROTECT(Rf_mkString(name));
-
-  Rf_defineVar(CG_NAME_SYMBOL, node_name, node);
-
-  UNPROTECT(1);
+  Rf_defineVar(CG_NAME_SYMBOL, Rf_mkString(name), node);
 }
 
 int cg_node_id(SEXP node)
@@ -79,11 +75,7 @@ void cg_node_set_id(SEXP node, const int id)
     Rf_errorcall(R_NilValue, "argument 'id' must be a positive integer");
   }
 
-  SEXP node_id = PROTECT(Rf_ScalarInteger(id));
-
-  Rf_defineVar(CG_ID_SYMBOL, node_id, node);
-
-  UNPROTECT(1);
+  Rf_defineVar(CG_ID_SYMBOL, Rf_ScalarInteger(id), node);
 }
 
 int cg_node_type(SEXP node)
@@ -107,11 +99,7 @@ void cg_node_set_type(SEXP node, const int type)
     Rf_errorcall(R_NilValue, "argument 'type' must be a valid type");
   }
 
-  SEXP node_type = PROTECT(Rf_ScalarInteger(type));
-
-  Rf_defineVar(CG_TYPE_SYMBOL, node_type, node);
-
-  UNPROTECT(1);
+  Rf_defineVar(CG_TYPE_SYMBOL, Rf_ScalarInteger(type), node);
 }
 
 SEXP cg_node_inputs(SEXP node)

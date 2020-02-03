@@ -63,11 +63,7 @@ int cg_graph_eager(SEXP graph)
 
 void cg_graph_set_eager(SEXP graph, const int eager)
 {
-  SEXP graph_eager = PROTECT(Rf_ScalarLogical(eager));
-
-  Rf_defineVar(CG_EAGER_SYMBOL, graph_eager, graph);
-
-  UNPROTECT(1);
+  Rf_defineVar(CG_EAGER_SYMBOL, Rf_ScalarLogical(eager), graph);
 }
 
 char* cg_graph_gen_name(SEXP graph)
