@@ -62,7 +62,7 @@ delayedAssign("subset2", cg_function(
         out[[...]] <- grad
         out
       }
-      else if(is.numeric(x))
+      else
       {
         out <- rep(0, length(x))
         out[[...]] <- grad
