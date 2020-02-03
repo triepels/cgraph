@@ -9,7 +9,7 @@ cg_graph_forward(graph, target)
 \arguments{
 \item{graph}{cg_graph object, graph that is evaluated.}
 
-\item{target}{cg_node object, node in the graph that is evaluated.}
+\item{target}{cg_node object or character scalar, node in the graph that is evaluated.}
 }
 \value{
 none.

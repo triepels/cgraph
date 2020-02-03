@@ -9,9 +9,9 @@ approx_gradient(graph, target, node, index = 1, eps = 1e-04)
 \arguments{
 \item{graph}{cg_graph object, graph that is differentiated.}
 
-\item{target}{cg_node object, node in the graph that is differentiated.}
+\item{target}{cg_node object or character scalar, node in the graph that is differentiated.}
 
-\item{node}{cg_node object, node with respect to which the target node is differentiated.}
+\item{node}{cg_node object or character scalar, node with respect to which the target node is differentiated.}
 
 \item{index}{numerical scalar, index of the target node that is differentiated. Defaults to the first element.}
 

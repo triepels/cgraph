@@ -9,7 +9,7 @@ cg_graph_backward(graph, target, index = NULL)
 \arguments{
 \item{graph}{cg_graph object, graph that is differentiated.}
 
-\item{target}{cg_node object, node in the graph that is differentiated.}
+\item{target}{cg_node object or character scalar, node in the graph that is differentiated.}
 
 \item{index}{numerical scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).}
 }

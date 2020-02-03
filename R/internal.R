@@ -52,8 +52,8 @@ bsum <- function(x, block_size = 1)
 #' Differentiate a target node with respect to a given node by numerical differentiation.
 #'
 #' @param graph cg_graph object, graph that is differentiated.
-#' @param target cg_node object, node in the graph that is differentiated.
-#' @param node cg_node object, node with respect to which the target node is differentiated.
+#' @param target cg_node object or character scalar, node in the graph that is differentiated.
+#' @param node cg_node object or character scalar, node with respect to which the target node is differentiated.
 #' @param index numerical scalar, index of the target node that is differentiated. Defaults to the first element.
 #' @param eps numerical scalar, step size. Defaults to 1e-4.
 #'

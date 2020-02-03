@@ -48,10 +48,13 @@ cg_graph <- function(eager = TRUE)
 #' graph <- cg_graph()
 #'
 #' # Add an input
-#' cg_input(name = "a")
+#' a <- cg_input(name = "a")
 #'
 #' # Retrieve input a
-#' a <- cg_graph_get(graph, "a")
+#' b <- cg_graph_get(graph, "a")
+#'
+#' # Check equality
+#' identical(a, b)
 #'
 #' @author Ron Triepels
 #' @export
@@ -65,7 +68,7 @@ cg_graph_get <- function(graph, name)
 #' Perform a forward pass to evaluate a given target node in a graph.
 #'
 #' @param graph cg_graph object, graph that is evaluated.
-#' @param target cg_node object, node in the graph that is evaluated.
+#' @param target cg_node object or character scalar, node in the graph that is evaluated.
 #'
 #' @note All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Only those nodes needed to compute the target node (including the target itself) are evaluated.
 #'
@@ -108,7 +111,7 @@ cg_graph_forward <- function(graph, target)
 #' Perform a backward pass to evaluate the partial derivatives of a given target node with respect to the nodes in a graph.
 #'
 #' @param graph cg_graph object, graph that is differentiated.
-#' @param target cg_node object, node in the graph that is differentiated.
+#' @param target cg_node object or character scalar, node in the graph that is differentiated.
 #' @param index numerical scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).
 #'
 #' @note All nodes required to compute the target node must first have been evaluated by calling \link[cgraph:cg_graph_forward]{cg_graph_forward}. The target node is only differenated with respect to those nodes on which it directly or indirectly depends.

@@ -25,10 +25,13 @@ In case multiple nodes share the same name, the last node added to the graph is 
 graph <- cg_graph()
 
 # Add an input
-cg_input(name = "a")
+a <- cg_input(name = "a")
 
 # Retrieve input a
-a <- cg_graph_get(graph, "a")
+b <- cg_graph_get(graph, "a")
+
+# Check equality
+identical(a, b)
 
 }
 \author{
