@@ -428,9 +428,9 @@ SEXP cg_parameter(SEXP value, SEXP name)
 {
   SEXP graph = PROTECT(cg_session_graph());
 
-  if(!Rf_isNull(name) && !Rf_isValidString(name))
+  if(!Rf_isNull(name) && TYPEOF(name) != STRSXP)
   {
-    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
+    Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
 
   SEXP node = PROTECT(cg_class1("cg_node"));
@@ -446,8 +446,8 @@ SEXP cg_parameter(SEXP value, SEXP name)
     cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
   }
 
-  cg_node_set_value(node, value);
-  cg_node_set_grad(node, R_NilValue);
+  CG_SET(node, CG_VALUE_SYMBOL, value);
+  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
   cg_graph_add_node(graph, node);
 
