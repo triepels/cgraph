@@ -142,6 +142,7 @@ delayedAssign("add", cg_function(
 ))
 
 #' @export
+#' @author Ron Triepels
 `+.cg_node` <- function(x, y)
 {
   if(missing(y))
@@ -265,6 +266,7 @@ delayedAssign("mul", cg_function(
 ))
 
 #' @export
+#' @author Ron Triepels
 `*.cg_node` <- function(x, y)
 {
   cg_mul(x, y)
@@ -319,6 +321,7 @@ delayedAssign("div", cg_function(
 ))
 
 #' @export
+#' @author Ron Triepels
 `/.cg_node` <- function(x, y)
 {
   cg_div(x, y)
@@ -373,6 +376,7 @@ delayedAssign("pow", cg_function(
 ))
 
 #' @export
+#' @author Ron Triepels
 `^.cg_node` <- function(x, y)
 {
   cg_pow(x, y)
