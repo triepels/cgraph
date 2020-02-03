@@ -18,7 +18,7 @@ approx_gradient(graph, target, node, index = 1, eps = 1e-04)
 \item{eps}{numerical scalar, step size. Defaults to 1e-4.}
 }
 \value{
-the derivative of the node supplied to argument \code{node} with respect to the node supplied to argument \code{target}.
+numerical vector or array, the derivative of the node supplied to argument \code{node} with respect to the node supplied to argument \code{target}.
 }
 \description{
 Differentiate a target node with respect to a given node by numerical differentiation.

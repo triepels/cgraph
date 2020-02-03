@@ -20,7 +20,7 @@
 #'
 #' @note Any promise objects in the ellipsis object are evaluated in environment \code{env}.
 #'
-#' @return list containing all objects provided to the ellipsis.
+#' @return named list, containing all objects provided to the ellipsis.
 #'
 #' @author Ron Triepels
 #' @keywords internal
@@ -65,7 +65,7 @@ bsum <- function(x, block_size = 1)
 #'
 #' If the name of the node is supplied to argument \code{target} or argument \code{node}, a linear search is performed to retrieve the nodes from the graph. In case multiple nodes share the same name, the last node added to the graph is retrieved. Please note that this linear search can become relatively expensive for large graphs.
 #'
-#' @return the derivative of the node supplied to argument \code{node} with respect to the node supplied to argument \code{target}.
+#' @return numerical vector or array, the derivative of the node supplied to argument \code{node} with respect to the node supplied to argument \code{target}.
 #'
 #' @author Ron Triepels
 #' @keywords internal
