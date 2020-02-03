@@ -396,7 +396,7 @@ SEXP cg_constant(SEXP value, SEXP name)
 {
   SEXP graph = PROTECT(cg_session_graph());
 
-  if(!Rf_isNull(name) && TYPEOF(name) != STRSXP)
+  if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
   {
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
@@ -428,7 +428,7 @@ SEXP cg_parameter(SEXP value, SEXP name)
 {
   SEXP graph = PROTECT(cg_session_graph());
 
-  if(!Rf_isNull(name) && TYPEOF(name) != STRSXP)
+  if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
   {
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
@@ -460,7 +460,7 @@ SEXP cg_input(SEXP name)
 {
   SEXP graph = PROTECT(cg_session_graph());
 
-  if(!Rf_isNull(name) && TYPEOF(name) != STRSXP)
+  if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
   {
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
@@ -502,7 +502,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
   }
 
-  if(!Rf_isNull(name) && TYPEOF(name) != STRSXP)
+  if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
   {
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
