@@ -120,64 +120,6 @@ void cg_graph_add_node(SEXP graph, SEXP node)
   UNPROTECT(1);
 }
 
-void cg_graph_clear_grads(SEXP graph)
-{
-  SEXP nodes = PROTECT(cg_graph_nodes(graph));
-
-  R_len_t n = XLENGTH(nodes);
-
-  for(int i = 0; i < n; i++)
-  {
-    cg_node_set_grad(VECTOR_ELT(nodes, i), R_NilValue);
-  }
-
-  UNPROTECT(1);
-}
-
-void cg_graph_init_target_grad(SEXP graph, SEXP target, SEXP index)
-{
-  SEXP value = PROTECT(cg_node_value(target));
-
-  if(!Rf_isNumeric(value))
-  {
-    Rf_errorcall(R_NilValue, "unable to differentiate object of type '%s' for node '%s'",
-                 Rf_type2char(TYPEOF(value)), cg_node_name(target));
-  }
-
-  R_len_t n = XLENGTH(value);
-
-  SEXP grad = PROTECT(Rf_allocVector(REALSXP, n));
-
-  double *x = REAL(grad);
-
-  memset(x, 0, n * sizeof(double));
-
-  if(!Rf_isNull(index))
-  {
-    int k = Rf_asInteger(index);
-
-    if(k < 1 || k > n)
-    {
-      Rf_errorcall(R_NilValue, "argument 'index' out of bounds");
-    }
-
-    x[k - 1] = 1;
-  }
-  else
-  {
-    for(int i = 0; i < n; i++)
-    {
-      x[i] = 1;
-    }
-  }
-
-  SHALLOW_DUPLICATE_ATTRIB(grad, value);
-
-  cg_node_set_grad(target, grad);
-
-  UNPROTECT(2);
-}
-
 void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int reverse, int (*filter)(SEXP node), void (*exec)(SEXP node))
 {
   SEXP nodes = PROTECT(cg_graph_nodes(graph));
@@ -360,11 +302,57 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
     Rf_errorcall(R_NilValue, "argument 'index' must be NULL or a numeric scalar");
   }
 
-  cg_graph_clear_grads(graph);
+  SEXP nodes = PROTECT(cg_graph_nodes(graph));
 
-  cg_graph_init_target_grad(graph, target, index);
+  R_len_t n = XLENGTH(nodes);
+
+  for(int i = 0; i < n; i++)
+  {
+    cg_node_set_grad(VECTOR_ELT(nodes, i), R_NilValue);
+  }
+
+  SEXP value = PROTECT(cg_node_value(target));
+
+  R_len_t m = XLENGTH(value);
+
+  if(!Rf_isNumeric(value))
+  {
+    Rf_errorcall(R_NilValue, "unable to differentiate object of type '%s' for node '%s'",
+                 Rf_type2char(TYPEOF(value)), cg_node_name(target));
+  }
+
+  SEXP grad = PROTECT(Rf_allocVector(REALSXP, m));
+
+  double *x = REAL(grad);
+
+  memset(x, 0, m * sizeof(double));
+
+  if(!Rf_isNull(index))
+  {
+    int k = Rf_asInteger(index);
+
+    if(k < 1 || k > m)
+    {
+      Rf_errorcall(R_NilValue, "argument 'index' out of bounds");
+    }
+
+    x[k - 1] = 1;
+  }
+  else
+  {
+    for(int i = 0; i < m; i++)
+    {
+      x[i] = 1;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(grad, value);
+
+  cg_node_set_grad(target, grad);
 
   cg_graph_reverse_dfs_from(graph, target, 1, filter, cg_node_backward);
+
+  UNPROTECT(3);
 
   return R_NilValue;
 }
