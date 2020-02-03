@@ -347,7 +347,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   SHALLOW_DUPLICATE_ATTRIB(grad, value);
 
-  cg_node_set_grad(target, grad);
+  CG_SET(target, CG_GRAD_SYMBOL, grad);
 
   cg_graph_reverse_dfs_from(graph, target, 1, filter, cg_node_backward);
 
