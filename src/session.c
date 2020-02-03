@@ -20,7 +20,6 @@ limitations under the License.
 #include <Rinternals.h>
 
 #include "class.h"
-#include "symbols.h"
 
 /*
  * PRIVATE METHODS
@@ -50,7 +49,7 @@ SEXP cg_session_graph()
 {
   SEXP session = PROTECT(cg_session_get());
 
-  SEXP graph = PROTECT(Rf_findVarInFrame(session, CG_GRAPH_SYMBOL));
+  SEXP graph = PROTECT(CG_GET(session, CG_GRAPH_SYMBOL));
 
   if(graph == R_UnboundValue)
   {
@@ -71,7 +70,7 @@ SEXP cg_session_set_graph(SEXP graph)
 
   SEXP session = PROTECT(cg_session_get());
 
-  Rf_defineVar(CG_GRAPH_SYMBOL, graph, session);
+  CG_SET(session, CG_GRAPH_SYMBOL, graph);
 
   UNPROTECT(1);
 
@@ -88,7 +87,7 @@ SEXP cg_session()
 
   SEXP env = PROTECT(R_FindNamespace(Rf_mkString("cgraph")));
 
-  Rf_defineVar(CG_SESSION_SYMBOL, session, env);
+  CG_SET(env, CG_SESSION_SYMBOL, session);
 
   UNPROTECT(2);
 

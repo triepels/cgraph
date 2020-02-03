@@ -23,7 +23,6 @@ limitations under the License.
 #include "graph.h"
 #include "class.h"
 #include "session.h"
-#include "symbols.h"
 #include "function.h"
 
 /*
@@ -32,7 +31,7 @@ limitations under the License.
 
 const char* cg_node_name(SEXP node)
 {
-  SEXP name = PROTECT(Rf_findVarInFrame(node, CG_NAME_SYMBOL));
+  SEXP name = PROTECT(CG_GET(node, CG_NAME_SYMBOL));
 
   if(!IS_SCALAR(name, STRSXP))
   {
@@ -51,12 +50,12 @@ void cg_node_set_name(SEXP node, const char *name)
     Rf_errorcall(R_NilValue, "argument 'name' must be a non-blank character scalar");
   }
 
-  Rf_defineVar(CG_NAME_SYMBOL, Rf_mkString(name), node);
+  CG_SET(node, CG_NAME_SYMBOL, Rf_mkString(name));
 }
 
 int cg_node_id(SEXP node)
 {
-  SEXP id = PROTECT(Rf_findVarInFrame(node, CG_ID_SYMBOL));
+  SEXP id = PROTECT(CG_GET(node, CG_ID_SYMBOL));
 
   if(!IS_SCALAR(id, INTSXP))
   {
@@ -75,12 +74,12 @@ void cg_node_set_id(SEXP node, const int id)
     Rf_errorcall(R_NilValue, "argument 'id' must be a positive integer");
   }
 
-  Rf_defineVar(CG_ID_SYMBOL, Rf_ScalarInteger(id), node);
+  CG_SET(node, CG_ID_SYMBOL, Rf_ScalarInteger(id));
 }
 
 cg_node_type_t cg_node_type(SEXP node)
 {
-  SEXP type = PROTECT(Rf_findVarInFrame(node, CG_TYPE_SYMBOL));
+  SEXP type = PROTECT(CG_GET(node, CG_TYPE_SYMBOL));
 
   if(!IS_SCALAR(type, INTSXP))
   {
@@ -94,17 +93,12 @@ cg_node_type_t cg_node_type(SEXP node)
 
 void cg_node_set_type(SEXP node, const cg_node_type_t type)
 {
-  if(type < 0 || type > 3)
-  {
-    Rf_errorcall(R_NilValue, "argument 'type' must be a valid type");
-  }
-
-  Rf_defineVar(CG_TYPE_SYMBOL, Rf_ScalarInteger(type), node);
+  CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(type));
 }
 
 SEXP cg_node_inputs(SEXP node)
 {
-  SEXP inputs = PROTECT(Rf_findVarInFrame(node, CG_INPUTS_SYMBOL));
+  SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
 
   if(TYPEOF(inputs) != VECSXP)
   {
@@ -123,24 +117,12 @@ void cg_node_set_inputs(SEXP node, SEXP inputs)
     Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
   }
 
-  R_len_t n = XLENGTH(inputs);
-
-  for(int i = 0; i < n; i++)
-  {
-    SEXP input = VECTOR_ELT(inputs, i);
-
-    if(!cg_is(input, "cg_node"))
-    {
-      Rf_errorcall(R_NilValue, "invalid input provided to argument 'inputs' at index %d", i + 1);
-    }
-  }
-
-  Rf_defineVar(CG_INPUTS_SYMBOL, inputs, node);
+  CG_SET(node, CG_INPUTS_SYMBOL, inputs);
 }
 
 SEXP cg_node_value(SEXP node)
 {
-  SEXP value = PROTECT(Rf_findVarInFrame(node, CG_VALUE_SYMBOL));
+  SEXP value = PROTECT(CG_GET(node, CG_VALUE_SYMBOL));
 
   if(value == R_UnboundValue)
   {
@@ -154,12 +136,12 @@ SEXP cg_node_value(SEXP node)
 
 void cg_node_set_value(SEXP node, SEXP value)
 {
-  Rf_defineVar(CG_VALUE_SYMBOL, value, node);
+  CG_SET(node, CG_VALUE_SYMBOL, value);
 }
 
 SEXP cg_node_grad(SEXP node)
 {
-  SEXP grad = PROTECT(Rf_findVarInFrame(node, CG_GRAD_SYMBOL));
+  SEXP grad = PROTECT(CG_GET(node, CG_GRAD_SYMBOL));
 
   if(grad == R_UnboundValue)
   {
@@ -173,12 +155,12 @@ SEXP cg_node_grad(SEXP node)
 
 void cg_node_set_grad(SEXP node, SEXP grad)
 {
-  Rf_defineVar(CG_GRAD_SYMBOL, grad, node);
+  CG_SET(node, CG_GRAD_SYMBOL, grad);
 }
 
 SEXP cg_node_function(SEXP node)
 {
-  SEXP function = PROTECT(Rf_findVarInFrame(node, CG_FUN_SYMBOL));
+  SEXP function = PROTECT(CG_GET(node, CG_FUN_SYMBOL));
 
   if(!cg_is(function, "cg_function"))
   {
@@ -197,7 +179,7 @@ void cg_node_set_function(SEXP node, SEXP function)
     Rf_errorcall(R_NilValue, "argument 'function' must be a cg_function object");
   }
 
-  Rf_defineVar(CG_FUN_SYMBOL, function, node);
+  CG_SET(node, CG_FUN_SYMBOL, function);
 }
 
 void cg_node_forward(SEXP node)

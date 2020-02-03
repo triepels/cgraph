@@ -24,7 +24,6 @@ limitations under the License.
 #include "graph.h"
 #include "stack.h"
 #include "session.h"
-#include "symbols.h"
 #include "function.h"
 
 /*
@@ -33,7 +32,7 @@ limitations under the License.
 
 SEXP cg_graph_nodes(SEXP graph)
 {
-  SEXP nodes = PROTECT(Rf_findVarInFrame(graph, CG_NODES_SYMBOL));
+  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
 
   if(TYPEOF(nodes) != VECSXP)
   {
@@ -47,7 +46,7 @@ SEXP cg_graph_nodes(SEXP graph)
 
 int cg_graph_eager(SEXP graph)
 {
-  SEXP eager = PROTECT(Rf_findVarInFrame(graph, CG_EAGER_SYMBOL));
+  SEXP eager = PROTECT(CG_GET(graph, CG_EAGER_SYMBOL));
 
   if(!IS_SCALAR(eager, LGLSXP))
   {
@@ -63,14 +62,14 @@ int cg_graph_eager(SEXP graph)
 
 void cg_graph_set_eager(SEXP graph, const int eager)
 {
-  Rf_defineVar(CG_EAGER_SYMBOL, Rf_ScalarLogical(eager), graph);
+  CG_SET(graph, CG_EAGER_SYMBOL, Rf_ScalarLogical(eager));
 }
 
 char* cg_graph_gen_name(SEXP graph)
 {
   char *name = R_alloc(1, 32 * sizeof(char));
 
-  SEXP nodes = PROTECT(Rf_findVarInFrame(graph, CG_NODES_SYMBOL));
+  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
 
   if(TYPEOF(nodes) != VECSXP)
   {
@@ -94,7 +93,7 @@ void cg_graph_add_node(SEXP graph, SEXP node)
 
   SEXP nodes = R_NilValue;
 
-  PROTECT_WITH_INDEX(nodes = Rf_findVarInFrame(graph, CG_NODES_SYMBOL), &index_nodes);
+  PROTECT_WITH_INDEX(nodes = CG_GET(graph, CG_NODES_SYMBOL), &index_nodes);
 
   if(TYPEOF(nodes) != VECSXP)
   {
@@ -115,7 +114,7 @@ void cg_graph_add_node(SEXP graph, SEXP node)
     cg_node_set_id(node, n + 1);
   }
 
-  Rf_defineVar(CG_NODES_SYMBOL, nodes, graph);
+  CG_SET(graph, CG_NODES_SYMBOL, nodes);
 
   UNPROTECT(1);
 }
@@ -224,7 +223,7 @@ SEXP cg_graph_get(SEXP graph, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
   }
 
-  SEXP nodes = PROTECT(Rf_findVarInFrame(graph, CG_NODES_SYMBOL));
+  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
 
   const char *pn = CHAR(STRING_ELT(name, 0));
 

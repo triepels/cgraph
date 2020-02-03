@@ -20,7 +20,6 @@ limitations under the License.
 #include <Rinternals.h>
 
 #include "class.h"
-#include "symbols.h"
 #include "function.h"
 
 /*
@@ -29,7 +28,7 @@ limitations under the License.
 
 SEXP cg_function_def(SEXP function)
 {
-  SEXP def = PROTECT(Rf_findVarInFrame(function, CG_DEF_SYMBOL));
+  SEXP def = PROTECT(CG_GET(function, CG_DEF_SYMBOL));
 
   if(!Rf_isFunction(def))
   {
@@ -48,12 +47,12 @@ void cg_function_set_def(SEXP function, SEXP def)
     Rf_errorcall(R_NilValue, "argument 'def' must be a function");
   }
 
-  Rf_defineVar(CG_DEF_SYMBOL, def, function);
+  CG_SET(function, CG_DEF_SYMBOL, def);
 }
 
 SEXP cg_function_grads(SEXP function)
 {
-  SEXP grads = PROTECT(Rf_findVarInFrame(function, CG_GRADS_SYMBOL));
+  SEXP grads = PROTECT(CG_GET(function, CG_GRADS_SYMBOL));
 
   if(TYPEOF(grads) != VECSXP)
   {
@@ -72,6 +71,25 @@ void cg_function_set_grads(SEXP function, SEXP grads)
     Rf_errorcall(R_NilValue, "argument 'grads' must be a list of gradient functions");
   }
 
+  CG_SET(function, CG_GRADS_SYMBOL, grads);
+}
+
+/*
+ * PUBLIC CONSTRUCTORS
+ */
+
+SEXP cg_function(SEXP def, SEXP grads)
+{
+  if(!Rf_isFunction(def))
+  {
+    Rf_errorcall(R_NilValue, "argument 'def' must be a function");
+  }
+
+  if(TYPEOF(grads) != VECSXP)
+  {
+    Rf_errorcall(R_NilValue, "argument 'grads' must be a list of gradient functions");
+  }
+
   R_len_t n = XLENGTH(grads);
 
   for(int i = 0; i < n; i++)
@@ -84,19 +102,10 @@ void cg_function_set_grads(SEXP function, SEXP grads)
     }
   }
 
-  Rf_defineVar(CG_GRADS_SYMBOL, grads, function);
-}
-
-/*
- * PUBLIC CONSTRUCTORS
- */
-
-SEXP cg_function(SEXP def, SEXP grads)
-{
   SEXP function = PROTECT(cg_class1("cg_function"));
 
-  cg_function_set_def(function, def);
-  cg_function_set_grads(function, grads);
+  CG_SET(function, CG_DEF_SYMBOL, def);
+  CG_SET(function, CG_GRADS_SYMBOL, grads);
 
   UNPROTECT(1);
 
