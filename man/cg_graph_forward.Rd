@@ -9,7 +9,7 @@ cg_graph_forward(graph, target)
 \arguments{
 \item{graph}{cg_graph object, graph that is evaluated.}
 
-\item{target}{cg_node object or character scalar, node in the graph that is evaluated.}
+\item{target}{cg_node object, node in the graph that is evaluated. Alternatively, argument \code{target} can be a character scalar denoting the name of the node in the graph that is evaluated.}
 }
 \value{
 none.
@@ -21,6 +21,8 @@ Perform a forward pass to evaluate a given target node in a graph.
 All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Only those nodes needed to compute the target node (including the target itself) are evaluated.
 
 The value of a node can be retrieved via the \code{values} data member of a \code{cg_node} object.
+
+If the name of the target node is supplied to argument \code{target}, a linear search is performed to retrieve the node from the graph. In case multiple nodes share the same name, the last node added to the graph is retrieved. Please note that this linear search can become relatively expensive for large graphs.
 }
 \examples{
 # Initialize a computational graph

@@ -52,8 +52,8 @@ bsum <- function(x, block_size = 1)
 #' Differentiate a target node with respect to a given node by numerical differentiation.
 #'
 #' @param graph cg_graph object, graph that is differentiated.
-#' @param target cg_node object or character scalar, node in the graph that is differentiated.
-#' @param node cg_node object or character scalar, node with respect to which the target node is differentiated.
+#' @param target cg_node object, node in the graph that is differentiated. Alternatively, argument \code{target} can be a character scalar denoting the name of the node in the graph that is differentiated.
+#' @param node cg_node object, node with respect to which the target node is differentiated. Alternatively, argument \code{node} can be a character scalar denoting the name of the node in the graph to which the target node is differentiated.
 #' @param index numerical scalar, index of the target node that is differentiated. Defaults to the first element.
 #' @param eps numerical scalar, step size. Defaults to 1e-4.
 #'
@@ -62,6 +62,8 @@ bsum <- function(x, block_size = 1)
 #' The graph is differentiation by the symmetric difference quotient. This method can only be used to differentiate scalars. In case the target node evaluates to a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated. The derivative has the same shape as the value of node supplied to argument \code{node}.
 #'
 #' Numerical differentiation is subject to estimation error and can be very slow. Therefore, this function should only be used for testing purposes.
+#'
+#' If the name of the node is supplied to argument \code{target} or argument \code{node}, a linear search is performed to retrieve the nodes from the graph. In case multiple nodes share the same name, the last node added to the graph is retrieved. Please note that this linear search can become relatively expensive for large graphs.
 #'
 #' @return the derivative of the node supplied to argument \code{node} with respect to the node supplied to argument \code{target}.
 #'

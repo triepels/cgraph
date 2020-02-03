@@ -9,7 +9,7 @@ cg_graph_backward(graph, target, index = NULL)
 \arguments{
 \item{graph}{cg_graph object, graph that is differentiated.}
 
-\item{target}{cg_node object or character scalar, node in the graph that is differentiated.}
+\item{target}{cg_node object, node in the graph that is differentiated. Alternatively, argument \code{target} can be a character scalar denoting the name of the node in the graph that is differentiated.}
 
 \item{index}{numerical scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).}
 }
@@ -25,6 +25,8 @@ All nodes required to compute the target node must first have been evaluated by 
 In case the value of the target node is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated.
 
 The derivatives have the same shape as the values of the nodes. They can be retrieved via the \code{grad} data member of a \code{cg_node} object.
+
+If the name of the target node is supplied to argument \code{target}, a linear search is performed to retrieve the node from the graph. In case multiple nodes share the same name, the last node added to the graph is retrieved. Please note that this linear search can become relatively expensive for large graphs.
 }
 \examples{
 # Initialize a computational graph

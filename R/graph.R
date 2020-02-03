@@ -68,11 +68,13 @@ cg_graph_get <- function(graph, name)
 #' Perform a forward pass to evaluate a given target node in a graph.
 #'
 #' @param graph cg_graph object, graph that is evaluated.
-#' @param target cg_node object or character scalar, node in the graph that is evaluated.
+#' @param target cg_node object, node in the graph that is evaluated. Alternatively, argument \code{target} can be a character scalar denoting the name of the node in the graph that is evaluated.
 #'
 #' @note All nodes required to compute the target node must have a value or their value must be able to be computed at run-time. Only those nodes needed to compute the target node (including the target itself) are evaluated.
 #'
 #' The value of a node can be retrieved via the \code{values} data member of a \code{cg_node} object.
+#'
+#' If the name of the target node is supplied to argument \code{target}, a linear search is performed to retrieve the node from the graph. In case multiple nodes share the same name, the last node added to the graph is retrieved. Please note that this linear search can become relatively expensive for large graphs.
 #'
 #' @return none.
 #'
@@ -111,7 +113,7 @@ cg_graph_forward <- function(graph, target)
 #' Perform a backward pass to evaluate the partial derivatives of a given target node with respect to the nodes in a graph.
 #'
 #' @param graph cg_graph object, graph that is differentiated.
-#' @param target cg_node object or character scalar, node in the graph that is differentiated.
+#' @param target cg_node object, node in the graph that is differentiated. Alternatively, argument \code{target} can be a character scalar denoting the name of the node in the graph that is differentiated.
 #' @param index numerical scalar, index of the target node that is differentiated. Defaults to NULL (i.e. all elements are differentiated element-wise).
 #'
 #' @note All nodes required to compute the target node must first have been evaluated by calling \link[cgraph:cg_graph_forward]{cg_graph_forward}. The target node is only differenated with respect to those nodes on which it directly or indirectly depends.
@@ -119,6 +121,8 @@ cg_graph_forward <- function(graph, target)
 #' In case the value of the target node is a vector or an array, argument \code{index} can be used to specify which element of the vector or array is differentiated.
 #'
 #' The derivatives have the same shape as the values of the nodes. They can be retrieved via the \code{grad} data member of a \code{cg_node} object.
+#'
+#' If the name of the target node is supplied to argument \code{target}, a linear search is performed to retrieve the node from the graph. In case multiple nodes share the same name, the last node added to the graph is retrieved. Please note that this linear search can become relatively expensive for large graphs.
 #'
 #' @return none.
 #'
