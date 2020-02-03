@@ -433,7 +433,6 @@ SEXP cg_constant(SEXP value, SEXP name)
   }
 
   cg_node_set_value(node, value);
-
   cg_node_set_grad(node, R_NilValue);
 
   cg_graph_add_node(graph, node);
@@ -466,7 +465,6 @@ SEXP cg_parameter(SEXP value, SEXP name)
   }
 
   cg_node_set_value(node, value);
-
   cg_node_set_grad(node, R_NilValue);
 
   cg_graph_add_node(graph, node);
@@ -499,7 +497,6 @@ SEXP cg_input(SEXP name)
   }
 
   cg_node_set_value(node, R_NilValue);
-
   cg_node_set_grad(node, R_NilValue);
 
   cg_graph_add_node(graph, node);
@@ -567,7 +564,6 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
   }
 
   cg_node_set_inputs(node, inputs);
-
   cg_node_set_function(node, function);
 
   if(cg_graph_eager(graph) && can_eval)
