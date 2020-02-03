@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Function definition
-delayedAssign("[", cg_function(
+delayedAssign("subset1", cg_function(
   def = base::`[`,
   grads = list(
     function(x, ..., drop = TRUE, value, grad)
@@ -41,11 +41,11 @@ delayedAssign("[", cg_function(
 #' @export
 `[.cg_node` <- function(x, ...)
 {
-  cg_operator(`[`, c(x, dots()))
+  cg_operator(subset1, c(x, dots()))
 }
 
 # Function definition
-delayedAssign("[[", cg_function(
+delayedAssign("subset2", cg_function(
   def = base::`[[`,
   grads = list(
     function(x, ..., exact = TRUE, value, grad)
@@ -73,5 +73,5 @@ delayedAssign("[[", cg_function(
 #' @export
 `[[.cg_node` <- function(x, ...)
 {
-  cg_operator(`[[`, c(x, dots()))
+  cg_operator(subset2, c(x, dots()))
 }
