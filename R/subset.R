@@ -12,6 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Subset
+#'
+#' Calculate \code{x[...]}.
+#'
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param ... either cg_node objects or a numerical scalars that are passed on to the \code{`[`} function.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object, node of the operation.
+#'
+#' @note This operator is not differentiable with respect to the arguments provided to \code{...}. Any attempt to differentiate this operator with respect to these arguments results in an error.
+#'
+#' @seealso \link[base:Extract]{subset}
+#'
+#' @author Ron Triepels
+#' @export
+cg_subset1 <- function(x, ..., name = NULL)
+{
+  cg_operator(subset1, c(x, dots()))
+}
+
 # Function definition
 delayedAssign("subset1", cg_function(
   def = base::`[`,
@@ -42,7 +63,28 @@ delayedAssign("subset1", cg_function(
 #' @export
 `[.cg_node` <- function(x, ...)
 {
-  cg_operator(subset1, c(x, dots()))
+  cg_subset1(x, ...)
+}
+
+#' Subset
+#'
+#' Calculate \code{x[[...]]}.
+#'
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param ... either cg_node objects or a numerical scalars that are passed on to the \code{`[[`} function.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object, node of the operation.
+#'
+#' @note This operator is not differentiable with respect to the arguments provided to \code{...}. Any attempt to differentiate this operator with respect to these arguments results in an error.
+#'
+#' @seealso \link[base:Extract]{subset}
+#'
+#' @author Ron Triepels
+#' @export
+cg_subset2 <- function(x, ..., name = NULL)
+{
+  cg_operator(subset2, c(x, dots()))
 }
 
 # Function definition
@@ -75,5 +117,5 @@ delayedAssign("subset2", cg_function(
 #' @export
 `[[.cg_node` <- function(x, ...)
 {
-  cg_operator(subset2, c(x, dots()))
+  cg_subset2(x, ...)
 }
