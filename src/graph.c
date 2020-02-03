@@ -307,7 +307,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   for(int i = 0; i < n; i++)
   {
-    cg_node_set_grad(VECTOR_ELT(nodes, i), R_NilValue);
+    CG_SET(VECTOR_ELT(nodes, i), CG_GRAD_SYMBOL, R_NilValue);
   }
 
   SEXP value = PROTECT(cg_node_value(target));
