@@ -502,9 +502,9 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
   }
 
-  if(!Rf_isNull(name) && !Rf_isValidString(name))
+  if(!Rf_isNull(name) && TYPEOF(name) != STRSXP)
   {
-    Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
+    Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
 
   int can_eval = 1;
@@ -545,8 +545,8 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
   }
 
-  cg_node_set_inputs(node, inputs);
-  cg_node_set_function(node, function);
+  CG_SET(node, CG_INPUTS_SYMBOL, inputs);
+  CG_SET(node, CG_FUN_SYMBOL, function);
 
   if(cg_graph_eager(graph) && can_eval)
   {
@@ -554,10 +554,10 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
   }
   else
   {
-    cg_node_set_value(node, R_NilValue);
+    CG_SET(node, CG_VALUE_SYMBOL, R_NilValue);
   }
 
-  cg_node_set_grad(node, R_NilValue);
+  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
   cg_graph_add_node(graph, node);
 
