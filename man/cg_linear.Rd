@@ -16,7 +16,7 @@ cg_linear(x, y, z, name = NULL)
 \item{name}{character scalar, name of the operation (optional).}
 }
 \value{
-cg_operator object, node of the operation.
+cg_operator object.
 }
 \description{
 Calculate \code{x \%*\% y + c(z)}.

@@ -16,7 +16,7 @@
 #'
 #' Get the graph that is currently active.
 #'
-#' @return cg_graph object, the graph that is currently active.
+#' @return cg_graph object.
 #'
 #' @examples # Initialize a computational graph
 #' graph <- cg_graph()

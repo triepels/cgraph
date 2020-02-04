@@ -12,7 +12,7 @@ cg_graph_forward(graph, target)
 \item{target}{cg_node object, node in the graph that is evaluated. Alternatively, argument \code{target} can be a character scalar denoting the name of the node in the graph that is evaluated.}
 }
 \value{
-none.
+None.
 }
 \description{
 Perform a forward pass to evaluate a given target node in a graph.

@@ -7,7 +7,7 @@
 cg_session_graph()
 }
 \value{
-cg_graph object, the graph that is currently active.
+cg_graph object.
 }
 \description{
 Get the graph that is currently active.

@@ -12,7 +12,7 @@ cg_atanh(x, name = NULL)
 \item{name}{character scalar, name of the operation (optional).}
 }
 \value{
-cg_operator object, node of the operation.
+cg_operator object.
 }
 \description{
 Calculate \code{atanh(x)}.

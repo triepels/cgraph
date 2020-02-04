@@ -19,7 +19,7 @@
 #' @param x either a cg_node object or a numerical array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 #'
@@ -42,7 +42,7 @@ delayedAssign("dim", cg_function(def = base::dim))
 #' @param x either a cg_node object or a numerical array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 #'
@@ -65,7 +65,7 @@ delayedAssign("nrow", cg_function(def = base::nrow))
 #' @param x either a cg_node object or a numerical array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 #'
@@ -89,7 +89,7 @@ delayedAssign("ncol", cg_function(def = base::ncol))
 #' @param y either a cg_node object or a numerical matrix.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:matmult]{matmult}
 #'
@@ -123,7 +123,7 @@ delayedAssign("matmul", cg_function(
 #' @param y either a cg_node object or a numerical matrix (optional).
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:crossprod]{crossprod}
 #'
@@ -157,7 +157,7 @@ delayedAssign("crossprod", cg_function(
 #' @param y either a cg_node object or a numerical matrix (optional).
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:crossprod]{tcrossprod}
 #'
@@ -192,7 +192,7 @@ delayedAssign("tcrossprod", cg_function(
 #' @param z either a cg_node object or a numerical vector.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This function is equivalent to \code{cg_matmul(x, y) + cg_as_numeric(z)}.
 #'
@@ -241,7 +241,7 @@ delayedAssign("linear", cg_function(
 #'
 #' @note In contrast to the base \link[base:sum]{sum} function, this function only accepts a single argument.
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note Function \link[base:sum]{sum} is called without changing the default value of argument \code{na.rm}.
 #'
@@ -281,7 +281,7 @@ delayedAssign("sum", cg_function(
 #'
 #' @note In contrast to the base \link[base:prod]{prod} function, this function only accepts a single argument.
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note Function \link[base:prod]{prod} is called without changing the default value of argument \code{na.rm}.
 #'
@@ -312,7 +312,7 @@ delayedAssign("prod", cg_function(
 #' @param x either a cg_node object or a numerical matrix or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note Function \link[base:colSums]{rowSums} is called without changing the default value of argument \code{na.rm} and \code{dims}.
 #'
@@ -343,7 +343,7 @@ delayedAssign("rowsums", cg_function(
 #' @param x either a cg_node object or a numerical matrix or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note Function \link[base:colSums]{colSums} is called without changing the default value of argument \code{na.rm} and \code{dims}.
 #'
@@ -374,7 +374,7 @@ delayedAssign("colsums", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note Function \link[base:mean]{mean} is called without changing the default value of argument \code{trim} and \code{na.rm}.
 #'
@@ -412,7 +412,7 @@ delayedAssign("mean", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note Function \link[base:Extremes]{max} is called without changing the default value of argument \code{na.rm}.
 #'
@@ -443,7 +443,7 @@ delayedAssign("max", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note Function \link[base:Extremes]{min} is called without changing the default value of argument \code{na.rm}.
 #'
@@ -475,7 +475,7 @@ delayedAssign("min", cg_function(
 #' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note Function \link[base:Extremes]{pmax} is called without changing the default value of argument \code{na.rm}.
 #'
@@ -525,7 +525,7 @@ delayedAssign("pmax", cg_function(
 #' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note Function \link[base:Extremes]{pmin} is called without changing the default value of argument \code{na.rm}.
 #'
@@ -574,7 +574,7 @@ delayedAssign("pmin", cg_function(
 #' @param x either a cg_node object or a numerical matrix.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:t]{t}
 #'

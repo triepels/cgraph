@@ -20,7 +20,7 @@
 #' @param ... either cg_node objects or a numerical scalars that are passed on to the \code{`[`} function.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This operator is not differentiable with respect to the arguments provided to \code{...}. Any attempt to differentiate this operator with respect to these arguments results in an error.
 #'
@@ -75,7 +75,7 @@ delayedAssign("subset1", cg_function(
 #' @param ... either cg_node objects or a numerical scalars that are passed on to the \code{`[[`} function.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This operator is not differentiable with respect to the arguments provided to \code{...}. Any attempt to differentiate this operator with respect to these arguments results in an error.
 #'

@@ -76,7 +76,7 @@ cg_graph_get <- function(graph, name)
 #'
 #' If the name of the target node is supplied to argument \code{target}, a linear search is performed to retrieve the node from the graph. In case multiple nodes share the same name, the last node added to the graph is retrieved. Please note that this linear search can become relatively expensive for large graphs.
 #'
-#' @return none.
+#' @return None.
 #'
 #' @examples # Initialize a computational graph
 #' graph <- cg_graph()
@@ -124,7 +124,7 @@ cg_graph_forward <- function(graph, target)
 #'
 #' If the name of the target node is supplied to argument \code{target}, a linear search is performed to retrieve the node from the graph. In case multiple nodes share the same name, the last node added to the graph is retrieved. Please note that this linear search can become relatively expensive for large graphs.
 #'
-#' @return none.
+#' @return None.
 #'
 #' @examples # Initialize a computational graph
 #' graph <- cg_graph()

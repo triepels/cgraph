@@ -20,7 +20,7 @@
 #'
 #' @note Any promise objects in the ellipsis object are evaluated in environment \code{env}.
 #'
-#' @return named list, containing all objects provided to the ellipsis.
+#' @return named list.
 #'
 #' @author Ron Triepels
 #' @keywords internal
@@ -38,7 +38,7 @@ dots <- function(env = parent.frame())
 #'
 #' @note If \code{x} is an array and \code{block_size} is equal to the size of \code{x}'s first dimension, then \link[cgraph]{bsum} behaves as \link[base:colSums]{rowSums}.
 #'
-#' @return numerical vector. Each 1th element of the vector is the sum of each 1th element of the blocks, the 2nd element of the vector is the sum of each 2nd element of the blocks, and so on.
+#' @return numerical vector.
 #'
 #' @author Ron Triepels
 #' @keywords internal
@@ -65,7 +65,7 @@ bsum <- function(x, block_size = 1)
 #'
 #' If the name of the node is supplied to argument \code{target} or argument \code{node}, a linear search is performed to retrieve the nodes from the graph. In case multiple nodes share the same name, the last node added to the graph is retrieved. Please note that this linear search can become relatively expensive for large graphs.
 #'
-#' @return numerical vector or array, the derivative of the node supplied to argument \code{node} with respect to the node supplied to argument \code{target}.
+#' @return numerical vector or array.
 #'
 #' @author Ron Triepels
 #' @keywords internal

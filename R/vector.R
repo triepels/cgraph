@@ -19,7 +19,7 @@
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 #'
@@ -42,7 +42,7 @@ delayedAssign("length", cg_function(def = base::length))
 #' @param x either a cg_node object or a numerical matrix or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This function is identical to \code{cg_as_numeric}.
 #'
@@ -80,7 +80,7 @@ delayedAssign("as_double", cg_function(
 #' @param x either a cg_node object or a numerical matrix or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This function is identical to \code{cg_as_double}.
 #'
@@ -100,7 +100,7 @@ cg_as_numeric <- function(x, name = NULL)
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Arithmetic]{positive}
 #'
@@ -129,7 +129,7 @@ delayedAssign("pos", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Arithmetic]{negative}
 #'
@@ -159,7 +159,7 @@ delayedAssign("neg", cg_function(
 #' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Arithmetic]{add}
 #'
@@ -221,7 +221,7 @@ delayedAssign("add", cg_function(
 #' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Arithmetic]{subtract}
 #'
@@ -283,7 +283,7 @@ delayedAssign("sub", cg_function(
 #' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Arithmetic]{multiply}
 #'
@@ -338,7 +338,7 @@ delayedAssign("mul", cg_function(
 #' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Arithmetic]{divide}
 #'
@@ -393,7 +393,7 @@ delayedAssign("div", cg_function(
 #' @param y either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Arithmetic]{power}
 #'
@@ -447,7 +447,7 @@ delayedAssign("pow", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @note This function is equivalent to \code{cg_pow(x, 2)}.
 #'
@@ -488,7 +488,7 @@ delayedAssign("square", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:MathFun]{sqrt}
 #'
@@ -517,7 +517,7 @@ delayedAssign("sqrt", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:log]{exp}
 #'
@@ -546,7 +546,7 @@ delayedAssign("exp", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:log]{log}
 #'
@@ -575,7 +575,7 @@ delayedAssign("ln", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:log]{log2}
 #'
@@ -604,7 +604,7 @@ delayedAssign("log2", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:log]{log10}
 #'
@@ -633,7 +633,7 @@ delayedAssign("log10", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:MathFun]{abs}
 #'
@@ -662,7 +662,7 @@ delayedAssign("abs", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Trig]{sin}
 #'
@@ -691,7 +691,7 @@ delayedAssign("sin", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Trig]{cos}
 #'
@@ -720,7 +720,7 @@ delayedAssign("cos", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Trig]{tan}
 #'
@@ -749,7 +749,7 @@ delayedAssign("tan", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Hyperbolic]{sinh}
 #'
@@ -778,7 +778,7 @@ delayedAssign("sinh", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Hyperbolic]{cosh}
 #'
@@ -807,7 +807,7 @@ delayedAssign("cosh", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Hyperbolic]{tanh}
 #'
@@ -836,7 +836,7 @@ delayedAssign("tanh", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Trig]{asin}
 #'
@@ -865,7 +865,7 @@ delayedAssign("asin", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Trig]{acos}
 #'
@@ -894,7 +894,7 @@ delayedAssign("acos", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Trig]{atan}
 #'
@@ -923,7 +923,7 @@ delayedAssign("atan", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Hyperbolic]{asinh}
 #'
@@ -952,7 +952,7 @@ delayedAssign("asinh", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Hyperbolic]{acosh}
 #'
@@ -981,7 +981,7 @@ delayedAssign("acosh", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @seealso \link[base:Hyperbolic]{atanh}
 #'
@@ -1010,7 +1010,7 @@ delayedAssign("atanh", cg_function(
 #' @param x either a cg_node object or a numerical vector or array.
 #' @param name character scalar, name of the operation (optional).
 #'
-#' @return cg_operator object, node of the operation.
+#' @return cg_operator object.
 #'
 #' @author Ron Triepels
 #' @export

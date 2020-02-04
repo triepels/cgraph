@@ -10,7 +10,7 @@ dots(env = parent.frame())
 \item{env, }{environment, the environment in which to search for the ellipsis. Defaults to the parent frame.}
 }
 \value{
-named list, containing all objects provided to the ellipsis.
+named list.
 }
 \description{
 Evaluate the ellipsis (i.e. `...`) in environment \code{env} and coerce it to a list.
