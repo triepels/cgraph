@@ -181,11 +181,10 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
   PROTECT_WITH_INDEX(target_value = cg_node_value(target), &target_index);
 
-  if(!Rf_isReal(target_value))
+  if(!Rf_isNumeric(target_value))
   {
-    REPROTECT(target_value = Rf_coerceVector(target_value, REALSXP), target_index);
-
-    cg_node_set_value(target, target_value);
+    Rf_errorcall(R_NilValue, "unable to differentiate object of type '%s' for node '%s'",
+                 Rf_type2char(TYPEOF(target_value)), cg_node_name(target));
   }
 
   int k = Rf_asInteger(index);
@@ -202,6 +201,12 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
   PROTECT_WITH_INDEX(node_value = cg_node_value(node), &node_index);
 
+  if(!Rf_isNumeric(node_value))
+  {
+    Rf_errorcall(R_NilValue, "unable to differentiate with respect to an object of type '%s' for node '%s'",
+                 Rf_type2char(TYPEOF(node_value)), cg_node_name(target));
+  }
+
   if(!Rf_isReal(node_value))
   {
     REPROTECT(node_value = Rf_coerceVector(node_value, REALSXP), node_index);
@@ -213,14 +218,14 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
   SEXP grad = PROTECT(Rf_allocVector(REALSXP, n));
 
-  double *x = REAL(node_value);
-  double *y = REAL(grad);
+  double *pn = REAL(node_value);
+  double *pg = REAL(grad);
 
   double eps = Rf_asReal(epsilon);
 
   for(int i = 0; i < n; i++)
   {
-    x[i] += eps;
+    pn[i] += eps;
 
     cg_graph_forward(graph, target);
 
@@ -228,7 +233,7 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
     double t1 = REAL(target_value)[k - 1];
 
-    x[i] -= 2 * eps;
+    pn[i] -= 2 * eps;
 
     cg_graph_forward(graph, target);
 
@@ -236,9 +241,9 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
     double t2 = REAL(target_value)[k - 1];
 
-    y[i] = (t1 - t2) / (2 * eps);
+    pg[i] = (t1 - t2) / (2 * eps);
 
-    x[i] += eps;
+    pn[i] += eps;
   }
 
   SHALLOW_DUPLICATE_ATTRIB(grad, node_value);
