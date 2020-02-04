@@ -314,17 +314,17 @@ void cg_node_backward(SEXP node)
       {
         case REALSXP :
         {
-          double *y = REAL(input_grad);
+          double *pi = REAL(input_grad);
 
           switch(TYPEOF(grad))
           {
             case REALSXP :
             {
-              double *x = REAL(grad);
+              double *pg = REAL(grad);
 
               for(int j = 0; j < m; j++)
               {
-                y[j] += x[j];
+                pi[j] += pg[j];
               }
 
               break;
@@ -332,11 +332,11 @@ void cg_node_backward(SEXP node)
             case LGLSXP :
             case INTSXP :
             {
-              int *x = INTEGER(grad);
+              int *pg = INTEGER(grad);
 
               for(int j = 0; j < m; j++)
               {
-                y[j] += x[j];
+                pi[j] += pg[j];
               }
 
               break;
@@ -348,17 +348,17 @@ void cg_node_backward(SEXP node)
         case LGLSXP :
         case INTSXP :
         {
-          int *y = INTEGER(input_grad);
+          int *pi = INTEGER(input_grad);
 
           switch(TYPEOF(grad))
           {
             case REALSXP :
             {
-              double *x = REAL(grad);
+              double *pg = REAL(grad);
 
               for(int j = 0; j < m; j++)
               {
-                y[j] += x[j];
+                pi[j] += pg[j];
               }
 
               break;
@@ -366,11 +366,11 @@ void cg_node_backward(SEXP node)
             case LGLSXP :
             case INTSXP :
             {
-              int *x = INTEGER(grad);
+              int *pg = INTEGER(grad);
 
               for(int j = 0; j < m; j++)
               {
-                y[j] += x[j];
+                pi[j] += pg[j];
               }
 
               break;
