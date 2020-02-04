@@ -7,7 +7,7 @@ New Features:
 * Added function `cg_graph_get` to retrieve a node by name from a graph.
 * Nodes can now be subsetted at run-time. Subsetting can be performed by calling the new operators `cg_subset1` or `cg_subset2`, or the corresponding overloaded S3 methods `[` and `[[` respectively, on a `cg_node` object.
 * Function `cg_graph` has a new argument `eager` which can be used to enable or disable eager evaluation. Eager evaluation can also be enabled or disabled on an existing graph by changing data member `eager` of a `cg_graph` object.
-* Function `cg_graph_forward` and `cg_graph_backward` now allow argument `target` to be the name of the target node, in which case a linear search is performed to retrieve the target node by name from the graph prior to a forward or backward pass. Please note that this search can be expensive for large graphs.
+* Function `cg_graph_forward` and `cg_graph_backward` now allow argument `target` to be the name of the target node, in which case a linear search is performed to retrieve the node by name from the graph prior to a forward or backward pass. Please note that this search can be expensive for large graphs.
 
 Comments:
 
