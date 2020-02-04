@@ -280,7 +280,7 @@ void cg_node_backward(SEXP node)
 
     if(i >= k)
     {
-      Rf_errorcall(R_NilValue, "unable to differentiate node '%s' at input %d",
+      Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at input %d",
                    cg_node_name(node), i + 1);
     }
 
@@ -290,7 +290,7 @@ void cg_node_backward(SEXP node)
 
     if(!Rf_isNumeric(grad))
     {
-      Rf_errorcall(R_NilValue, "unable to accumulate gradient of type '%s' for node '%s'",
+      Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
                    Rf_type2char(TYPEOF(grad)), cg_node_name(node));
     }
 
@@ -306,7 +306,7 @@ void cg_node_backward(SEXP node)
 
       if(XLENGTH(grad) != m)
       {
-        Rf_errorcall(R_NilValue, "unable to accumulate gradients of length %d and %d for node '%s'",
+        Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
                      XLENGTH(grad), m, cg_node_name(node));
       }
 

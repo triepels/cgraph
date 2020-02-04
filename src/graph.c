@@ -129,7 +129,7 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
 
   if(id < 1 || id > n)
   {
-    Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", id);
+    Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", id);
   }
 
   int *visited = (int*)R_alloc(n, sizeof(int));
@@ -160,7 +160,7 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
 
       if(input_id < 1 || input_id > n)
       {
-        Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
+        Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", input_id);
       }
 
       if(!visited[input_id - 1] && filter(input))
@@ -198,7 +198,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
   if(id < 1 || id > n)
   {
-    Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", id);
+    Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", id);
   }
 
   int *visited = (int*)R_alloc(n, sizeof(int));
@@ -233,7 +233,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
       if(input_id < 1 || input_id > n)
       {
-        Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
+        Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", input_id);
       }
 
       if(!visited[input_id - 1] && filter(input))
@@ -375,7 +375,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   if(!Rf_isNumeric(value))
   {
-    Rf_errorcall(R_NilValue, "unable to differentiate object of type '%s' for node '%s'",
+    Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s' for node '%s'",
                  Rf_type2char(TYPEOF(value)), cg_node_name(target));
   }
 
