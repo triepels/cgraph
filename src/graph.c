@@ -89,15 +89,15 @@ char* cg_graph_gen_name(SEXP graph)
 
 void cg_graph_add_node(SEXP graph, SEXP node)
 {
-  int index_nodes;
+  int index;
 
   SEXP nodes = R_NilValue;
 
-  PROTECT_WITH_INDEX(nodes = CG_GET(graph, CG_NODES_SYMBOL), &index_nodes);
+  PROTECT_WITH_INDEX(nodes = CG_GET(graph, CG_NODES_SYMBOL), &index);
 
   if(TYPEOF(nodes) != VECSXP)
   {
-    REPROTECT(nodes = Rf_allocVector(VECSXP, 1), index_nodes);
+    REPROTECT(nodes = Rf_allocVector(VECSXP, 1), index);
 
     SET_VECTOR_ELT(nodes, 0, node);
 
@@ -107,7 +107,7 @@ void cg_graph_add_node(SEXP graph, SEXP node)
   {
     R_len_t n = XLENGTH(nodes);
 
-    REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), index_nodes);
+    REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), index);
 
     SET_VECTOR_ELT(nodes, n, node);
 
@@ -322,9 +322,9 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   SEXP grad = PROTECT(Rf_allocVector(REALSXP, m));
 
-  double *x = REAL(grad);
+  double *pg = REAL(grad);
 
-  memset(x, 0, m * sizeof(double));
+  memset(pg, 0, m * sizeof(double));
 
   if(!Rf_isNull(index))
   {
@@ -335,13 +335,13 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
       Rf_errorcall(R_NilValue, "argument 'index' out of bounds");
     }
 
-    x[k - 1] = 1;
+    pg[k - 1] = 1;
   }
   else
   {
     for(int i = 0; i < m; i++)
     {
-      x[i] = 1;
+      pg[i] = 1;
     }
   }
 
