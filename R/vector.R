@@ -35,6 +35,64 @@ cg_length <- function(x, name = NULL)
 # Function definition
 delayedAssign("length", cg_function(def = base::length))
 
+#' Coerce to a Numerical Vector
+#'
+#' Coerce \code{x} to a one-dimensional numerical vector.
+#'
+#' @param x either a cg_node object or a numerical matrix or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object, node of the operation.
+#'
+#' @note This function is identical to \code{cg_as_numeric}.
+#'
+#' @seealso \link[base:double]{as.double}
+#'
+#' @author Ron Triepels
+#' @export
+cg_as_double <- function(x, name = NULL)
+{
+  cg_operator(as_double, list(x), name)
+}
+
+# Function definition
+delayedAssign("as_double", cg_function(
+  def = base::as.double,
+  grads = list(
+    function(x, value, grad)
+    {
+      if(is.array(x))
+      {
+        array(grad, dim(x))
+      }
+      else
+      {
+        grad
+      }
+    }
+  )
+))
+
+#' Coerce to a Numerical Vector
+#'
+#' Coerce \code{x} to a one-dimensional numerical vector.
+#'
+#' @param x either a cg_node object or a numerical matrix or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object, node of the operation.
+#'
+#' @note This function is identical to \code{cg_as_double}.
+#'
+#' @seealso \link[base:double]{as.numeric}
+#'
+#' @author Ron Triepels
+#' @export
+cg_as_numeric <- function(x, name = NULL)
+{
+  cg_operator(as_double, list(x), name)
+}
+
 #' Positive
 #'
 #' Calculate \code{x}.
