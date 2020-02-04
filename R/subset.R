@@ -61,6 +61,7 @@ delayedAssign("subset1", cg_function(
 ))
 
 #' @export
+#' @author Ron Triepels
 `[.cg_node` <- function(x, ...)
 {
   cg_subset1(x, ...)
@@ -115,6 +116,7 @@ delayedAssign("subset2", cg_function(
 ))
 
 #' @export
+#' @author Ron Triepels
 `[[.cg_node` <- function(x, ...)
 {
   cg_subset2(x, ...)
