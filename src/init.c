@@ -29,6 +29,24 @@ limitations under the License.
 #include "internal.h"
 
 /*
+ * SYMBOL DEFINITIONS
+ */
+
+SEXP CG_ID_SYMBOL      = NULL;
+SEXP CG_DEF_SYMBOL     = NULL;
+SEXP CG_FUN_SYMBOL     = NULL;
+SEXP CG_GRAD_SYMBOL    = NULL;
+SEXP CG_NAME_SYMBOL    = NULL;
+SEXP CG_TYPE_SYMBOL    = NULL;
+SEXP CG_EAGER_SYMBOL   = NULL;
+SEXP CG_GRADS_SYMBOL   = NULL;
+SEXP CG_GRAPH_SYMBOL   = NULL;
+SEXP CG_NODES_SYMBOL   = NULL;
+SEXP CG_VALUE_SYMBOL   = NULL;
+SEXP CG_INPUTS_SYMBOL  = NULL;
+SEXP CG_SESSION_SYMBOL = NULL;
+
+/*
  * LIBRARY INITIALIZATION
  */
 
@@ -63,7 +81,7 @@ void R_init_cgraph(DllInfo *dll)
   R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
   R_useDynamicSymbols(dll, FALSE);
 
-  // Initialize symbols
+  // Install symbols
   CG_ID_SYMBOL      = Rf_install("id");
   CG_DEF_SYMBOL     = Rf_install("def");
   CG_FUN_SYMBOL     = Rf_install("fun");
