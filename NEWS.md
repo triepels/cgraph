@@ -58,12 +58,12 @@ cgraph 4.0.2
 Comments:
 
 * The default name of a node is now `v` followed by the node id.
-* The classes for the node types (i.e. constant, parameter, input, and operator) are removed. Instead, the node type is stored as an integer attribute in a `cg_node` object for efficiency reasons.
-* Argument `index` of function `cg_graph_gradients` can now also be `NULL` to differentiate nodes element-wise. This is now also the default behavior.
+* The S3 classes of the node types (i.e. constant, parameter, input, and operator) are removed for performance reasons. The type of a node can now be retrieved by data member `type` of a `cg_node` object.
+* Argument `index` of function `cg_graph_gradients` can now also be `NULL`, in which case the nodes in a graph are differented element-wise. This is now also the default behavior.
 
 Bug fixes:
 
-* Fixed memory leak when performing a forward pass and backward pass using function `cg_graph_run` and `cg_graph_gradients` respectively.
+* Fixed memory leak in function `cg_graph_run` and `cg_graph_gradients`.
 * Function `bsum` now prints a correct error message when argument `block_size` is not a numerical scalar.
 
 cgraph 4.0.1
@@ -81,10 +81,9 @@ cgraph 4.0.0
 Comments:
 
 * The C-API has been completely reworked.
-* The R6 class `cgraph` is removed. To create a computational graph, use function `cg_graph` instead.
-* Method `get_parms` and `add_parms` are removed.
+* The R6 class `cgraph` is removed. Use function `cg_graph` to create a new graph.
+* Method `get_parms`, `add_parms` and `adj_mat` are removed.
 * Method `active` is removed. The active graph can now be retrieved and changed by function `cg_session_graph` and `cg_session_set_graph` respectively.
-* Method `adj_mat` is removed.
 * Overloaded S3 method `print` is removed.
 * Function `const`, `input`, `parm`, and `opr` have been renamed to `cg_constant`, `cg_input`, `cg_parameter`, and `cg_operator` respectively.
 * Function `val` and `set` are removed. The value of a constant or parameter node can now be retrieved or changed directly by data member `value` of a `cg_node` object.
