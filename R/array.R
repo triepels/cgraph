@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Dimensions of an Object
+#' Dimensions of an Array
 #'
 #' Calculate \code{dim(x)}.
 #'
-#' @param x either a cg_node object or a numerical vector or array.
+#' @param x either a cg_node object or a numerical array.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object, node of the operation.
@@ -34,6 +34,52 @@ cg_dim <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("dim", cg_function(def = base::dim))
+
+#' Number of Rows of an Array
+#'
+#' Calculate \code{nrow(x)}.
+#'
+#' @param x either a cg_node object or a numerical array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object, node of the operation.
+#'
+#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#'
+#' @seealso \link[base]{nrow}
+#'
+#' @author Ron Triepels
+#' @export
+cg_nrow <- function(x, name = NULL)
+{
+  cg_operator(nrow, list(x), name)
+}
+
+# Function definition
+delayedAssign("nrow", cg_function(def = base::nrow))
+
+#' Number of Columns of an Array
+#'
+#' Calculate \code{ncol(x)}.
+#'
+#' @param x either a cg_node object or a numerical array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object, node of the operation.
+#'
+#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#'
+#' @seealso \link[base]{ncol}
+#'
+#' @author Ron Triepels
+#' @export
+cg_ncol <- function(x, name = NULL)
+{
+  cg_operator(ncol, list(x), name)
+}
+
+# Function definition
+delayedAssign("ncol", cg_function(def = base::ncol))
 
 #' Matrix Multiplication
 #'
@@ -581,7 +627,7 @@ cg_as_numeric <- function(x, name = NULL)
 
 #' Matrix Transpose
 #'
-#' Perform \code{t(x)}.
+#' Calculate \code{t(x)}.
 #'
 #' @param x either a cg_node object or a numerical matrix.
 #' @param name character scalar, name of the operation (optional).

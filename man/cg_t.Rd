@@ -15,7 +15,7 @@ cg_t(x, name = NULL)
 cg_operator object, node of the operation.
 }
 \description{
-Perform \code{t(x)}.
+Calculate \code{t(x)}.
 }
 \seealso{
 \link[base:t]{t}
