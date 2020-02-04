@@ -19,7 +19,7 @@ Comments:
 cgraph 5.0.1
 ----------------------------------------------------------------
 
-Bug fixes:
+Bug Fixes:
 
 * Fixed a bug in function `cg_graph_backward` which sometimes caused a computational graph to be traversed in an incorrect order and compute incorrect gradients.
 
@@ -36,14 +36,14 @@ Comments:
 
 * Function `cg_graph_run` and `cg_graph_gradients` are deprecated and will be removed in the next major release. Use function `cg_graph_forward` and `cg_graph_backward` to perform a forward pass and backward pass instead.
 
-Bug fixes:
+Bug Fixes:
 
 * Fixed several memory leaks and protection bugs.
 
 cgraph 4.0.3
 ----------------------------------------------------------------
 
-Bug fixes:
+Bug Fixes:
 
 * Fixed several protection bugs in the C-API thanks to `rchk`.
 
@@ -59,7 +59,7 @@ Comments:
 * The default name of a node is now `v` followed by the node id.
 * The S3 classes of the node types (i.e. constant, parameter, input, and operator) are removed for performance reasons. The type of a node can now be retrieved by data member `type` of a `cg_node` object.
 
-Bug fixes:
+Bug Fixes:
 
 * Fixed memory leak in function `cg_graph_run` and `cg_graph_gradients`.
 * Function `bsum` now prints a correct error message when argument `block_size` is not a numerical scalar.
@@ -67,7 +67,7 @@ Bug fixes:
 cgraph 4.0.1
 ----------------------------------------------------------------
 
-Bug fixes:
+Bug Fixes:
 
 * Fixed an bug that caused an error when installing `cgraph` on R versions before 3.5.
 * Function `cg_session_set_graph` no longer prints `NULL` to the console when the active graph is changed. 
@@ -89,7 +89,7 @@ New Features:
 
 * The function that is called by an operator is no longer stored as a symbol in the environment of the operator. Instead, each function now has its own global `cg_function` object which can be linked to an operator. This significantly reduces the size of a `cg_graph` object.
 
-Bug fixes:
+Bug Fixes:
 
 * Fixed a bug that caused a node to be evaluated to its corresponding `cg_node` environment rather than its value when calling `cg_graph_run` and `cg_graph_gradients`.
 * Fixed a bug that caused a segfault when calling function `cg_graph_run` and `cg_graph_gradients` on a `cg_graph` object which contains nodes with an invalid id.
@@ -97,7 +97,7 @@ Bug fixes:
 cgraph 3.0.1
 ----------------------------------------------------------------
 
-Bug fixes:
+Bug Fixes:
 
 * Fixed a bug that caused overloaded S3 methods called by operators to dispatch incorrectly on R versions before 3.5.
 
@@ -122,7 +122,7 @@ New Features:
 * Operator `cg_crossprod` and `cg_tcrossprod` now allow argument `y` to be missing (similarly as the corresponding base functions).
 * Argument `dim` of operator `cg_reshape` now expects an `cg_node` object instead of an integer scalar or vector that holds the new array dimensions.
 
-Bug fixes:
+Bug Fixes:
 
 * Fixed a bug that caused a segfault when using cgraph in RStudio on Red Hat Enterprise Linux.
 
@@ -133,7 +133,7 @@ Comments:
 
 * The S3 overloaded methods of prefix operators have been marked as deprecated and will be removed in the next major release. Only infix operators like `+` or `-` will have S3 overloaded methods.
 
-Bug fixes:
+Bug Fixes:
 
 * Operator `sigmoid` now correctly handles numerical underflow.
 * Operator `cg.pmax` and `cg.pmin` are now correctly differentiated when argument `x` and `y` are arrays.
@@ -145,7 +145,7 @@ New Features:
 cgraph 2.0.2
 ----------------------------------------------------------------
 
-Bug fixes:
+Bug Fixes:
 
 * Nodes that are given a value upon creation are now properly printed to the R console.
 * Function `run`, `gradients`, and `approx.grad` no longer cause an infinite loop when member `values` of a `cgraph` object is supplied to the `values` argument of the functions.
@@ -156,7 +156,7 @@ Bug fixes:
 cgraph 2.0.1
 ----------------------------------------------------------------
 
-Bug fixes:
+Bug Fixes:
 
 * Function `run` and `gradients` no longer change the parent environment of argument `values` when the argument is an environment.
 * Function `name` no longer generates a name that indicates the node type for performance reasons. Instead, it simply generates the name 'node' followed by the number of nodes that have been added to the graph.
@@ -176,7 +176,7 @@ New Features:
 * Data member `nodes` of a `cgraph` object is now named to allow more convenient access to the symbols of the nodes in a graph.
 * You can now instruct the active graph to no longer automatically evaluate a node when it is printed to the console by setting `options(cg.autorun = FALSE)`.
 
-Bug fixes:
+Bug Fixes:
 
 * An error is now raised when an invalid object is provided to the methods of a `cgraph` object instead of coercing the object to a valid object.
 * Function `opr` now ignores argument `grads` when its elements are not properly named.
