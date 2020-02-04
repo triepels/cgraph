@@ -1,9 +1,27 @@
+cgraph 6.0.0
+----------------------------------------------------------------
+
+Features:
+
+* Added operator `cg_length`, `cg_dim`, `cg_nrow`, and `cg_ncol`.
+* Added function `cg_graph_get` to retrieve a node by name from a graph.
+* Nodes can now be subsetted at run-time. Subsetting can be performed by calling the new operators `cg_subset1` or `cg_subset2`, or the corresponding overloaded S3 methods `[` and `[[` respectively, on a `cg_node` object.
+* Function `cg_graph` has a new argument `eager` which can be used to enable or disable eager evaluation. Eager evaluation can also be enabled or disabled on an existing graph by changing data member `eager` of a `cg_graph` object.
+* Function `cg_graph_forward` and `cg_graph_backward` now allow argument `target` to be the name of the target node, in which case a linear search is performed to retrieve the target node by name from the graph prior to a forward or backward pass. Please note that this search can be expensive for large graphs.
+
+Comments:
+
+* The name of a node no longer has to be unique.
+* Function `cg_graph_run` and `cg_graph_gradients` have been removed.
+* Data member `nodes` of a `cgraph` object is no longer named for performance reasons. Use function `cg_graph_get` to retrieve a node.
+* The performance of function `cg_operator` has significantly improved. Computational graphs are now build considerbly faster.
+
 cgraph 5.0.1
 ----------------------------------------------------------------
 
 Bug fixes:
 
-* Fixed a bug in function `cg_graph_backward` which sometimes caused a computational graph to be traversed in an incorrect order.
+* Fixed a bug in function `cg_graph_backward` which sometimes caused a computational graph to be traversed in an incorrect order and compute incorrect gradients.
 
 cgraph 5.0.0
 ----------------------------------------------------------------
@@ -12,7 +30,7 @@ Features:
 
 * Added operator `cg_square`.
 * Operators are now evaluated eagerly. This means that, when an operator is added to a computational graph, it is immediately evaluated (if possible). Eager evaluation makes it easier to debug a computational graph and enables the user to change its control flow at run-time.
-* Added function `cg_graph_forward` and `cg_graph_backward` to perform a forward pass and backward pass respectively. These functions are similar to function `cg_graph_run` and `cg_graph_gradients` but do not use environments to store the values and derivatives of nodes. Instead, the value and derivative of a node are stored 'locally' at each node and can be retrieved by data member `value` and `grad`.
+* Added function `cg_graph_forward` and `cg_graph_backward` to perform a forward pass and backward pass respectively. These functions are similar to function `cg_graph_run` and `cg_graph_gradients` but do not use environments to store the values and derivatives of nodes. Instead, the value and derivative of a node are stored 'locally' at each node and can be retrieved by data member `value` and `grad` respectively.
 
 Comments:
 
@@ -24,7 +42,7 @@ Bug fixes:
 
 Documenation:
 
-* Fixed typos in the documentation of several functions.
+* Fixed typos in the documentation.
 * The examples of function `cg_graph_run` and `cg_graph_gradients` have been removed to avoid deprecation warnings in the CRAN check.
 
 cgraph 4.0.3
@@ -64,12 +82,12 @@ Comments:
 
 * The C-API has been completely reworked.
 * The R6 class `cgraph` is removed. To create a computational graph, use function `cg_graph` instead.
-* Method `get_parms` and `add_parms` are no longer available.
+* Method `get_parms` and `add_parms` are removed.
 * Method `active` is removed. The active graph can now be retrieved and changed by function `cg_session_graph` and `cg_session_set_graph` respectively.
 * Method `adj_mat` is removed.
-* S3 overloaded method `print` is removed.
+* Overloaded S3 method `print` is removed.
 * Function `const`, `input`, `parm`, and `opr` have been renamed to `cg_constant`, `cg_input`, `cg_parameter`, and `cg_operator` respectively.
-* Function `val` and `set` are removed. The value of a constant or parameter node can be retrieved or changed directly by calling `x$value` where `x` is the environment of a `cg_node` object.
+* Function `val` and `set` are removed. The value of a constant or parameter node can now be retrieved or changed directly by data member `value` of a `cg_node` object.
 * Function `run` and `gradients` have been renamed to `cg_graph_run` and `cg_graph_gradients` respectively.
 * Removed logical operators `!`, `==`, `!=`, `<`, `>`, `<=`, and `>=`.
 
@@ -92,7 +110,7 @@ cgraph 3.0.1
 
 Bug fixes:
 
-* Fixed a bug that caused S3 methods called by operators to dispatch incorrectly on R versions before 3.5.
+* Fixed a bug that caused overloaded S3 methods called by operators to dispatch incorrectly on R versions before 3.5.
 
 cgraph 3.0.0
 ----------------------------------------------------------------
@@ -102,13 +120,13 @@ Comments:
 * Large parts of the C-API have been reworked.
 * Some naming conventions have changed. Individual names in the name of a function are now separated with an underscore (_) instead of a dot (.). For example, operator `cg.matmul` is now named `cg_matmul`. The same rule applies to class names. For example, class `cg.node` is now named `cg_node`.
 * Function `name` is removed. Names for nodes are now generated internally in the C-API.
-* Function `approx.gradients` is removed. A similar function is still available as `cgraph:::approx_grad` in the package namespace. However, it should be noted that this function is not well-optimized and should only be used for testing purposes.
+* Function `approx.gradients` is no longer exported but still avaiable in the package namespace. Please note that this function is not well-optimized and should only be used for testing purposes.
 * Calling `print` on a `cg_node` object no longer prints the value of the node. Use function `val` to evaluate a node.
 
 Features:
 
-* The initialization method of a cgraph object has a new argument `library` which can be used to specify which function library the graph uses.
-* The calls of functions and their corresponding gradient functions are now build at run-time. This potentially allows operators to accept a variable number of arguments.
+* The initialization method of a cgraph object has a new argument `library` which can be used to specify the function library that is used by the graph.
+* The calls of functions and their corresponding gradient functions are now build at run-time.
 * Added function `val` and `set` to retrieve or set the value of a node respectively.
 * A node can now also be named 'grad'. 'grad' is no longer a reserved word.
 * Operator `cg_mean` now calls the base `mean` function.
@@ -170,7 +188,7 @@ Features:
 
 * Added hyperbolic trigonometry operations `sinh` and `cosh`.
 * Added inverse hyperbolic trigonometry operations `asinh` and `acosh`.
-* The elements of member `nodes` of a `cgraph` object are now named to allow more convenient access to the symbols of the nodes in a graph.
+* Data member `nodes` of a `cgraph` object is now named to allow more convenient access to the symbols of the nodes in a graph.
 * You can now instruct the active graph to no longer automatically evaluate a node when it is printed to the console by setting `options(cg.autorun = FALSE)`.
 
 Documentation:
