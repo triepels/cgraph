@@ -41,7 +41,7 @@ delayedAssign("subset1", cg_function(
     {
       if(!is.numeric(x))
       {
-        stop(sprintf("unable to differentiate object of type '%s'", typeof(x)))
+        stop(sprintf("cannot differentiate object of type '%s'", typeof(x)))
       }
 
       if(is.array(x))
@@ -95,7 +95,7 @@ delayedAssign("subset2", cg_function(
     {
       if(!is.numeric(x))
       {
-        stop(sprintf("unable to differentiate object of type '%s'", typeof(x)))
+        stop(sprintf("cannot differentiate object of type '%s'", typeof(x)))
       }
 
       if(is.array(x))
