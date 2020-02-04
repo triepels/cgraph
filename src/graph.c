@@ -119,7 +119,76 @@ void cg_graph_add_node(SEXP graph, SEXP node)
   UNPROTECT(1);
 }
 
-void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int reverse, int (*filter)(SEXP node), void (*exec)(SEXP node))
+void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*exec)(SEXP node))
+{
+  SEXP nodes = PROTECT(cg_graph_nodes(graph));
+
+  int id = cg_node_id(target);
+
+  R_len_t n = XLENGTH(nodes);
+
+  if(id < 1 || id > n)
+  {
+    Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", id);
+  }
+
+  int *visited = (int*)R_alloc(n, sizeof(int));
+
+  memset(visited, 0, n * sizeof(int));
+
+  cg_stack_t *stack = cg_stack_allocate(n);
+
+  cg_stack_push(stack, target);
+
+  visited[id - 1] = 1;
+
+  while(!cg_stack_is_empty(stack))
+  {
+    int can_traverse = 0;
+
+    SEXP node = cg_stack_top(stack);
+
+    SEXP inputs = PROTECT(cg_node_inputs(node));
+
+    R_len_t m = XLENGTH(inputs);
+
+    for(int i = 0; i < m; i++)
+    {
+      SEXP input = VECTOR_ELT(inputs, i);
+
+      int input_id = cg_node_id(input);
+
+      if(input_id < 1 || input_id > n)
+      {
+        Rf_errorcall(R_NilValue, "unable to retrieve node with id %d", input_id);
+      }
+
+      if(!visited[input_id - 1] && filter(input))
+      {
+        cg_stack_push(stack, input);
+
+        visited[input_id - 1] = 1;
+
+        can_traverse = 1;
+
+        break;
+      }
+    }
+
+    if(!can_traverse)
+    {
+      cg_stack_pop(stack);
+
+      exec(node);
+    }
+
+    UNPROTECT(1);
+  }
+
+  UNPROTECT(1);
+}
+
+void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*exec)(SEXP node))
 {
   SEXP nodes = PROTECT(cg_graph_nodes(graph));
 
@@ -189,19 +258,9 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int reverse, int (*filte
     UNPROTECT(1);
   }
 
-  if(reverse)
+  for(int i = k - 1; i >= 0; i--)
   {
-    for(int i = k - 1; i >= 0; i--)
-    {
-      exec(queue[i]);
-    }
-  }
-  else
-  {
-    for(int i = 0; i < k; i++)
-    {
-      exec(queue[i]);
-    }
+    exec(queue[i]);
   }
 
   UNPROTECT(1);
@@ -274,7 +333,7 @@ SEXP cg_graph_forward(SEXP graph, SEXP target)
     Rf_errorcall(R_NilValue, "argument 'target' must be an operator node");
   }
 
-  cg_graph_reverse_dfs_from(graph, target, 0, filter, cg_node_forward);
+  cg_graph_dfs_from(graph, target, filter, cg_node_forward);
 
   return R_NilValue;
 }
@@ -349,7 +408,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   CG_SET(target, CG_GRAD_SYMBOL, grad);
 
-  cg_graph_reverse_dfs_from(graph, target, 1, filter, cg_node_backward);
+  cg_graph_reverse_dfs_from(graph, target, filter, cg_node_backward);
 
   UNPROTECT(3);
 
