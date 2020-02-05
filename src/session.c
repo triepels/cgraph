@@ -20,26 +20,7 @@ limitations under the License.
 #include <Rinternals.h>
 
 #include "class.h"
-
-/*
- * PRIVATE METHODS
- */
-
-SEXP cg_session_get()
-{
-  SEXP env = PROTECT(R_FindNamespace(Rf_mkString("cgraph")));
-
-  SEXP session = PROTECT(Rf_eval(CG_SESSION_SYMBOL, env));
-
-  if(!cg_is(session, "cg_session"))
-  {
-    Rf_errorcall(R_NilValue, "invalid session");
-  }
-
-  UNPROTECT(2);
-
-  return session;
-}
+#include "session.h"
 
 /*
  * PUBLIC METHODS
@@ -47,18 +28,12 @@ SEXP cg_session_get()
 
 SEXP cg_session_graph()
 {
-  SEXP session = PROTECT(cg_session_get());
-
-  SEXP graph = PROTECT(CG_GET(session, CG_GRAPH_SYMBOL));
-
-  if(graph == R_UnboundValue)
+  if(session.graph == NULL)
   {
     Rf_errorcall(R_NilValue, "no active graph has been set");
   }
 
-  UNPROTECT(2);
-
-  return graph;
+  return session.graph;
 }
 
 SEXP cg_session_set_graph(SEXP graph)
@@ -68,28 +43,7 @@ SEXP cg_session_set_graph(SEXP graph)
     Rf_errorcall(R_NilValue, "argument 'graph' must be a cg_graph object");
   }
 
-  SEXP session = PROTECT(cg_session_get());
-
-  CG_SET(session, CG_GRAPH_SYMBOL, graph);
-
-  UNPROTECT(1);
+  session.graph = graph;
 
   return R_NilValue;
-}
-
-/*
- * PUBLIC CONSTRUCTORS
- */
-
-SEXP cg_session()
-{
-  SEXP session = PROTECT(cg_class1("cg_session"));
-
-  SEXP env = PROTECT(R_FindNamespace(Rf_mkString("cgraph")));
-
-  CG_SET(env, CG_SESSION_SYMBOL, session);
-
-  UNPROTECT(2);
-
-  return session;
 }

@@ -23,10 +23,19 @@ limitations under the License.
 #include <Rinternals.h>
 
 /*
- * PRIVATE METHODS
+ * SESSION STRUCT
  */
 
-SEXP cg_session_get();
+typedef struct
+{
+    SEXP graph;
+} cg_session_t;
+
+/*
+ * SESSION DECLARATION
+ */
+
+extern cg_session_t session;
 
 /*
  * PUBLIC METHODS
@@ -35,11 +44,5 @@ SEXP cg_session_get();
 SEXP cg_session_graph();
 
 SEXP cg_session_set_graph(SEXP graph);
-
-/*
- * PUBLIC CONSTRUCTORS
- */
-
-SEXP cg_session();
 
 #endif

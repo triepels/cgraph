@@ -29,6 +29,12 @@ limitations under the License.
 #include "internal.h"
 
 /*
+ * SESSION DEFINITION
+ */
+
+cg_session_t session;
+
+/*
  * SYMBOL DEFINITIONS
  */
 
@@ -95,7 +101,4 @@ void R_init_cgraph(DllInfo *dll)
   CG_VALUE_SYMBOL   = Rf_install("value");
   CG_INPUTS_SYMBOL  = Rf_install("inputs");
   CG_SESSION_SYMBOL = Rf_install("session");
-
-  // Initialize a new session
-  cg_session();
 }
