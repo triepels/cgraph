@@ -26,7 +26,8 @@ limitations under the License.
  * PUBLIC STRUCTS
  */
 
-typedef struct {
+typedef struct
+{
   int top;
   int size;
   SEXP *data;
