@@ -23,7 +23,7 @@ limitations under the License.
 #include <Rinternals.h>
 
 /*
- * PUBLIC STRUCTS
+ * STACK STRUCT
  */
 
 typedef struct
