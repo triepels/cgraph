@@ -96,9 +96,7 @@ void R_init_cgraph(DllInfo *dll)
   CG_TYPE_SYMBOL    = Rf_install("type");
   CG_EAGER_SYMBOL   = Rf_install("eager");
   CG_GRADS_SYMBOL   = Rf_install("grads");
-  CG_GRAPH_SYMBOL   = Rf_install("graph");
   CG_NODES_SYMBOL   = Rf_install("nodes");
   CG_VALUE_SYMBOL   = Rf_install("value");
   CG_INPUTS_SYMBOL  = Rf_install("inputs");
-  CG_SESSION_SYMBOL = Rf_install("session");
 }
