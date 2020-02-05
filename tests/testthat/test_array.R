@@ -84,6 +84,26 @@ test_that("Array 4",
   b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
 
   # Create test expression
+  c <- cg_rowmeans(cg_linear(a, b, cg_colmeans(b)))
+
+  # Perform backward pass
+  cg_graph_backward(graph, c, index = 1)
+
+  # Check gradients
+  expect_equivalent(a$grad, approx_gradient(graph, c, a), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
+})
+
+test_that("Array 5",
+{
+  # Initialize graph
+  graph <- cg_graph()
+
+  # Create parameters
+  a <- cg_parameter(matrix(1:4, 2, 2), name = "a")
+  b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
+
+  # Create test expression
   c <- cg_max(a) * cg_min(b)
 
   # Perform backward pass
@@ -94,7 +114,7 @@ test_that("Array 4",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Array 5",
+test_that("Array 6",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -114,7 +134,7 @@ test_that("Array 5",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Array 6",
+test_that("Array 7",
 {
   # Initialize graph
   graph <- cg_graph()

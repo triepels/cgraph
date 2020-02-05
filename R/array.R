@@ -405,6 +405,68 @@ delayedAssign("mean", cg_function(
   )
 ))
 
+#' Row Means
+#'
+#' Calculate \code{rowMeans(x)}.
+#'
+#' @param x either a cg_node object or a numerical matrix or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @note Function \link[base:colSums]{rowMeans} is called without changing the default value of argument \code{na.rm} and \code{dims}.
+#'
+#' @seealso \link[base:colSums]{rowMeans}
+#'
+#' @author Ron Triepels
+#' @export
+cg_rowmeans <- function(x, name = NULL)
+{
+  cg_operator(rowmeans, list(x), name)
+}
+
+# Function definition
+delayedAssign("rowmeans", cg_function(
+  def = base::rowMeans,
+  grads = list(
+    function(x, value, grad)
+    {
+      1 / prod(dim(x)[-1L]) * array(grad, dim(x))
+    }
+  )
+))
+
+#' Column Means
+#'
+#' Calculate \code{colMeans(x)}.
+#'
+#' @param x either a cg_node object or a numerical matrix or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @note Function \link[base:colSums]{colMeans} is called without changing the default value of argument \code{na.rm} and \code{dims}.
+#'
+#' @seealso \link[base:colSums]{colMeans}
+#'
+#' @author Ron Triepels
+#' @export
+cg_colmeans <- function(x, name = NULL)
+{
+  cg_operator(colmeans, list(x), name)
+}
+
+# Function definition
+delayedAssign("colmeans", cg_function(
+  def = base::colMeans,
+  grads = list(
+    function(x, value, grad)
+    {
+      1 / nrow(x) * aperm(array(grad, rev(dim(x))))
+    }
+  )
+))
+
 #' Maxima
 #'
 #' Calculate \code{max(x)}.
