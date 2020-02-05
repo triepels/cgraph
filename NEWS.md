@@ -1,3 +1,14 @@
+cgraph 6.0.1
+----------------------------------------------------------------
+
+New Features:
+
+* Added operator `cg_rowmeans` and `cg_colmeans`.
+
+Bug Fixes:
+
+* Global symbols in the C-API are now correctly defined.
+
 cgraph 6.0.0
 ----------------------------------------------------------------
 
