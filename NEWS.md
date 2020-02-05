@@ -207,4 +207,4 @@ cgraph 1.0.0
 
 Comments:
 
-* CRAN Submission.
+* Initial CRAN Submission.
