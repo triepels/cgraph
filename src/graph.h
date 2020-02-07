@@ -26,17 +26,7 @@ limitations under the License.
  * PRIVATE METHODS
  */
 
-SEXP cg_graph_nodes(SEXP graph);
-
-int cg_graph_eager(SEXP graph);
-
-void cg_graph_set_eager(SEXP graph, const int eager);
-
-char* cg_graph_gen_name(SEXP graph);
-
 void cg_graph_add_node(SEXP graph, SEXP node);
-
-SEXP cg_graph_get_node(SEXP graph, const int id);
 
 /*
  * PUBLIC METHODS

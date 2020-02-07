@@ -179,12 +179,12 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
   SEXP target_value = R_NilValue;
 
-  PROTECT_WITH_INDEX(target_value = cg_node_value(target), &target_index);
+  PROTECT_WITH_INDEX(target_value = CG_GET(target, CG_VALUE_SYMBOL), &target_index);
 
   if(!Rf_isNumeric(target_value))
   {
     Rf_errorcall(R_NilValue, "unable to differentiate object of type '%s' for node '%s'",
-                 Rf_type2char(TYPEOF(target_value)), cg_node_name(target));
+                 Rf_type2char(TYPEOF(target_value)), CG_GET_STR(target, CG_NAME_SYMBOL));
   }
 
   int k = Rf_asInteger(index);
@@ -192,26 +192,26 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
   if(k < 1 || k > XLENGTH(target_value))
   {
     Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at index %d",
-                 cg_node_name(target), k);
+                 CG_GET_STR(target, CG_NAME_SYMBOL), k);
   }
 
   int node_index;
 
   SEXP node_value = R_NilValue;
 
-  PROTECT_WITH_INDEX(node_value = cg_node_value(node), &node_index);
+  PROTECT_WITH_INDEX(node_value = CG_GET(node, CG_VALUE_SYMBOL), &node_index);
 
   if(!Rf_isNumeric(node_value))
   {
     Rf_errorcall(R_NilValue, "unable to differentiate with respect to an object of type '%s' for node '%s'",
-                 Rf_type2char(TYPEOF(node_value)), cg_node_name(target));
+                 Rf_type2char(TYPEOF(node_value)), CG_GET_STR(target, CG_NAME_SYMBOL));
   }
 
   if(!Rf_isReal(node_value))
   {
     REPROTECT(node_value = Rf_coerceVector(node_value, REALSXP), node_index);
 
-    cg_node_set_value(node, node_value);
+    CG_SET(node, CG_VALUE_SYMBOL, node_value);
   }
 
   int n = XLENGTH(node_value);
@@ -229,7 +229,7 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
     cg_graph_forward(graph, target);
 
-    REPROTECT(target_value = cg_node_value(target), target_index);
+    REPROTECT(target_value = CG_GET(target, CG_VALUE_SYMBOL), target_index);
 
     double t1 = REAL(target_value)[k - 1];
 
@@ -237,7 +237,7 @@ SEXP approx_gradient(SEXP graph, SEXP target, SEXP node, SEXP index, SEXP epsilo
 
     cg_graph_forward(graph, target);
 
-    REPROTECT(target_value = cg_node_value(target), target_index);
+    REPROTECT(target_value = CG_GET(target, CG_VALUE_SYMBOL), target_index);
 
     double t2 = REAL(target_value)[k - 1];
 

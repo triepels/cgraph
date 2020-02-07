@@ -29,6 +29,28 @@ limitations under the License.
 #define CG_GET(x, SYMBOL) Rf_findVarInFrame(x, SYMBOL)
 #define CG_SET(x, SYMBOL, v) Rf_defineVar(SYMBOL, v, x)
 
+#define CG_GET_LGL(x, SYMBOL) INTEGER(Rf_findVarInFrame(x, SYMBOL))[0]
+#define CG_GET_INT(x, SYMBOL) INTEGER(Rf_findVarInFrame(x, SYMBOL))[0]
+#define CG_GET_REAL(x, SYMBOL) REAL(Rf_findVarInFrame(x, SYMBOL))[0]
+#define CG_GET_STR(x, SYMBOL) CHAR(STRING_ELT(Rf_findVarInFrame(x, SYMBOL), 0))
+
+#define CG_SET_LGL(x, SYMBOL, v) Rf_defineVar(SYMBOL, Rf_ScalarLogical(v), x)
+#define CG_SET_INT(x, SYMBOL, v) Rf_defineVar(SYMBOL, Rf_ScalarInteger(v), x)
+#define CG_SET_REAL(x, SYMBOL, v) Rf_defineVar(SYMBOL, Rf_ScalarReal(v), x)
+#define CG_SET_STR(x, SYMBOL, v) Rf_defineVar(SYMBOL, Rf_mkString(v), x)
+
+/*
+ * CLASS DEF STRUCTURE
+ */
+
+typedef void (*cg_constructor_t)(SEXP);
+
+typedef struct
+{
+    const char *name;
+    int locked;
+} cg_class_def_t;
+
 /*
  * SYMBOL DECLARATIONS
  */
@@ -51,12 +73,14 @@ extern SEXP CG_INPUTS_SYMBOL;
 
 int cg_is(SEXP env, const char *class_name);
 
+void cg_class_lock(SEXP env, const cg_class_def_t *def);
+
+void cg_class_unlock(SEXP env, const cg_class_def_t *def);
+
 /*
  * PRIVATE CONSTRUCTORS
  */
 
-SEXP cg_class1(const char *class_name1);
-
-SEXP cg_class2(const char *class_name1, const char *class_name2);
+SEXP cg_class(const char *name, const cg_class_def_t *def);
 
 #endif

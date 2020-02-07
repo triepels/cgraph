@@ -27,65 +27,18 @@ limitations under the License.
 #include "function.h"
 
 /*
- * PRIVATE METHODS
+ * CLASS DEFINITIONS
  */
 
-SEXP cg_graph_nodes(SEXP graph)
-{
-  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
+static const cg_class_def_t GRAPH_DEF[] = {
+  { "eager",  1 },
+  { "nodes",  1 },
+  { NULL,     0 }
+};
 
-  if(TYPEOF(nodes) != VECSXP)
-  {
-    Rf_errorcall(R_NilValue, "graph does not have any nodes");
-  }
-
-  UNPROTECT(1);
-
-  return nodes;
-}
-
-int cg_graph_eager(SEXP graph)
-{
-  SEXP eager = PROTECT(CG_GET(graph, CG_EAGER_SYMBOL));
-
-  if(!IS_SCALAR(eager, LGLSXP))
-  {
-    UNPROTECT(1);
-
-    return 1;
-  }
-
-  UNPROTECT(1);
-
-  return INTEGER(eager)[0];
-}
-
-void cg_graph_set_eager(SEXP graph, const int eager)
-{
-  CG_SET(graph, CG_EAGER_SYMBOL, Rf_ScalarLogical(eager));
-}
-
-char* cg_graph_gen_name(SEXP graph)
-{
-  char *name = R_alloc(1, 32 * sizeof(char));
-
-  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
-
-  if(TYPEOF(nodes) != VECSXP)
-  {
-    strcpy(name, "v1");
-  }
-  else
-  {
-    R_len_t n = XLENGTH(nodes);
-
-    sprintf(name, "v%d", n + 1);
-  }
-
-  UNPROTECT(1);
-
-  return name;
-}
+/*
+ * PRIVATE METHODS
+ */
 
 void cg_graph_add_node(SEXP graph, SEXP node)
 {
@@ -95,13 +48,15 @@ void cg_graph_add_node(SEXP graph, SEXP node)
 
   PROTECT_WITH_INDEX(nodes = CG_GET(graph, CG_NODES_SYMBOL), &index);
 
+  cg_class_unlock(graph, GRAPH_DEF);
+
   if(TYPEOF(nodes) != VECSXP)
   {
     REPROTECT(nodes = Rf_allocVector(VECSXP, 1), index);
 
     SET_VECTOR_ELT(nodes, 0, node);
 
-    cg_node_set_id(node, 1);
+    CG_SET_INT(node, CG_ID_SYMBOL, 1);
   }
   else
   {
@@ -111,26 +66,23 @@ void cg_graph_add_node(SEXP graph, SEXP node)
 
     SET_VECTOR_ELT(nodes, n, node);
 
-    cg_node_set_id(node, n + 1);
+    CG_SET_INT(node, CG_ID_SYMBOL, n + 1);
   }
 
   CG_SET(graph, CG_NODES_SYMBOL, nodes);
+
+  cg_class_lock(graph, GRAPH_DEF);
 
   UNPROTECT(1);
 }
 
 void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*exec)(SEXP node))
 {
-  SEXP nodes = PROTECT(cg_graph_nodes(graph));
+  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
 
-  int id = cg_node_id(target);
+  int id = CG_GET_INT(target, CG_ID_SYMBOL);
 
   R_len_t n = XLENGTH(nodes);
-
-  if(id < 1 || id > n)
-  {
-    Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", id);
-  }
 
   int *visited = (int*)R_alloc(n, sizeof(int));
 
@@ -148,7 +100,7 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
 
     SEXP node = cg_stack_top(stack);
 
-    SEXP inputs = PROTECT(cg_node_inputs(node));
+    SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
 
     R_len_t m = XLENGTH(inputs);
 
@@ -156,12 +108,7 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
     {
       SEXP input = VECTOR_ELT(inputs, i);
 
-      int input_id = cg_node_id(input);
-
-      if(input_id < 1 || input_id > n)
-      {
-        Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", input_id);
-      }
+      int input_id = CG_GET_INT(input, CG_ID_SYMBOL);
 
       if(!visited[input_id - 1] && filter(input))
       {
@@ -190,16 +137,11 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
 
 void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*exec)(SEXP node))
 {
-  SEXP nodes = PROTECT(cg_graph_nodes(graph));
+  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
 
-  int id = cg_node_id(target);
+  int id = CG_GET_INT(target, CG_ID_SYMBOL);
 
   R_len_t n = XLENGTH(nodes);
-
-  if(id < 1 || id > n)
-  {
-    Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", id);
-  }
 
   int *visited = (int*)R_alloc(n, sizeof(int));
 
@@ -221,7 +163,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
     SEXP node = cg_stack_top(stack);
 
-    SEXP inputs = PROTECT(cg_node_inputs(node));
+    SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
 
     R_len_t m = XLENGTH(inputs);
 
@@ -229,12 +171,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
     {
       SEXP input = VECTOR_ELT(inputs, i);
 
-      int input_id = cg_node_id(input);
-
-      if(input_id < 1 || input_id > n)
-      {
-        Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", input_id);
-      }
+      int input_id = CG_GET_INT(input, CG_ID_SYMBOL);
 
       if(!visited[input_id - 1] && filter(input))
       {
@@ -294,7 +231,7 @@ SEXP cg_graph_get(SEXP graph, SEXP name)
     {
       SEXP node = VECTOR_ELT(nodes, i);
 
-      if(strcmp(cg_node_name(node), pn) == 0)
+      if(strcmp(CG_GET_STR(node, CG_NAME_SYMBOL), pn) == 0)
       {
         UNPROTECT(1);
 
@@ -308,7 +245,7 @@ SEXP cg_graph_get(SEXP graph, SEXP name)
 
 static int filter(SEXP node)
 {
-  if(cg_node_type(node) == CGOPR)
+  if(CG_GET_INT(node, CG_TYPE_SYMBOL) == CGOPR)
   {
     return 1;
   }
@@ -328,7 +265,7 @@ SEXP cg_graph_forward(SEXP graph, SEXP target)
     Rf_errorcall(R_NilValue, "argument 'target' must be a cg_node object");
   }
 
-  if(cg_node_type(target) != CGOPR)
+  if(CG_GET_INT(target, CG_TYPE_SYMBOL) != CGOPR)
   {
     Rf_errorcall(R_NilValue, "argument 'target' must be an operator node");
   }
@@ -350,7 +287,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
     Rf_errorcall(R_NilValue, "argument 'target' must be a cg_node object");
   }
 
-  if(cg_node_type(target) != CGOPR)
+  if(CG_GET_INT(target, CG_TYPE_SYMBOL) != CGOPR)
   {
     Rf_errorcall(R_NilValue, "argument 'target' must be an operator node");
   }
@@ -360,7 +297,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
     Rf_errorcall(R_NilValue, "argument 'index' must be NULL or a numeric scalar");
   }
 
-  SEXP nodes = PROTECT(cg_graph_nodes(graph));
+  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
 
   R_len_t n = XLENGTH(nodes);
 
@@ -369,14 +306,14 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
     CG_SET(VECTOR_ELT(nodes, i), CG_GRAD_SYMBOL, R_NilValue);
   }
 
-  SEXP value = PROTECT(cg_node_value(target));
+  SEXP value = PROTECT(CG_GET(target, CG_VALUE_SYMBOL));
 
   R_len_t m = XLENGTH(value);
 
   if(!Rf_isNumeric(value))
   {
     Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s' for node '%s'",
-                 Rf_type2char(TYPEOF(value)), cg_node_name(target));
+                 Rf_type2char(TYPEOF(value)), CG_GET_STR(target, CG_NAME_SYMBOL));
   }
 
   SEXP grad = PROTECT(Rf_allocVector(REALSXP, m));
@@ -426,10 +363,11 @@ SEXP cg_graph(SEXP eager)
     Rf_errorcall(R_NilValue, "argument 'eager' must be a logical scalar");
   }
 
-  SEXP graph = PROTECT(cg_class1("cg_graph"));
+  SEXP graph = PROTECT(cg_class("cg_graph", GRAPH_DEF));
 
   CG_SET(graph, CG_EAGER_SYMBOL, eager);
-  CG_SET(graph, CG_NODES_SYMBOL, R_NilValue);
+
+  cg_class_lock(graph, GRAPH_DEF);
 
   cg_session_set_graph(graph);
 

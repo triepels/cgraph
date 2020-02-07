@@ -39,33 +39,7 @@ typedef enum {
  * PRIVATE METHODS
  */
 
-const char* cg_node_name(SEXP node);
-
-void cg_node_set_name(SEXP node, const char *name);
-
-int cg_node_id(SEXP node);
-
-void cg_node_set_id(SEXP node, const int id);
-
-cg_node_type_t cg_node_type(SEXP node);
-
-void cg_node_set_type(SEXP node, const cg_node_type_t type);
-
-SEXP cg_node_inputs(SEXP node);
-
-void cg_node_set_inputs(SEXP node, SEXP inputs);
-
-SEXP cg_node_value(SEXP node);
-
-void cg_node_set_value(SEXP node, SEXP value);
-
-SEXP cg_node_grad(SEXP node);
-
-void cg_node_set_grad(SEXP node, SEXP value);
-
-SEXP cg_node_function(SEXP node);
-
-void cg_node_set_function(SEXP node, SEXP function);
+void cg_node_gen_name(SEXP node, SEXP graph);
 
 void cg_node_forward(SEXP node);
 

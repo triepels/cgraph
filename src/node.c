@@ -26,165 +26,77 @@ limitations under the License.
 #include "function.h"
 
 /*
+ * CLASS DEFINITIONS
+ */
+
+static const cg_class_def_t CST_DEF[] = {
+  { "id",     1 },
+  { "type",   1 },
+  { "name",   1 },
+  { "value",  1 },
+  { "grad",   0 },
+  { NULL,     0 }
+};
+
+static const cg_class_def_t PRM_DEF[] = {
+  { "id",     1 },
+  { "type",   1 },
+  { "name",   1 },
+  { "value",  0 },
+  { "grad",   0 },
+  { NULL,     0 }
+};
+
+
+static const cg_class_def_t IPT_DEF[] = {
+  { "id",     1 },
+  { "type",   1 },
+  { "name",   1 },
+  { "value",  0 },
+  { "grad",   0 },
+  { NULL,     0 }
+};
+
+static const cg_class_def_t OPR_DEF[] = {
+  { "id",     1 },
+  { "type",   1 },
+  { "name",   1 },
+  { "inputs", 1 },
+  { "fun",    1 },
+  { "value",  0 },
+  { "grad",   0 },
+  { NULL,     0 }
+};
+
+/*
  * METHODS
  */
 
-const char* cg_node_name(SEXP node)
+void cg_node_gen_name(SEXP node, SEXP graph)
 {
-  SEXP name = PROTECT(CG_GET(node, CG_NAME_SYMBOL));
+  char *name = R_alloc(1, 32 * sizeof(char));
 
-  if(!IS_SCALAR(name, STRSXP))
+  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
+
+  if(TYPEOF(nodes) != VECSXP)
   {
-    Rf_errorcall(R_NilValue, "node has no name");
+    strcpy(name, "v1");
   }
+  else
+  {
+    R_len_t n = XLENGTH(nodes);
+
+    sprintf(name, "v%d", n + 1);
+  }
+
+  CG_SET_STR(node, CG_NAME_SYMBOL, name);
 
   UNPROTECT(1);
-
-  return CHAR(STRING_ELT(name, 0));
-}
-
-void cg_node_set_name(SEXP node, const char *name)
-{
-  if(strcmp(name, "") == 0)
-  {
-    Rf_errorcall(R_NilValue, "argument 'name' must be a non-blank character scalar");
-  }
-
-  CG_SET(node, CG_NAME_SYMBOL, Rf_mkString(name));
-}
-
-int cg_node_id(SEXP node)
-{
-  SEXP id = PROTECT(CG_GET(node, CG_ID_SYMBOL));
-
-  if(!IS_SCALAR(id, INTSXP))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no id", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return INTEGER(id)[0];
-}
-
-void cg_node_set_id(SEXP node, const int id)
-{
-  if(id < 1)
-  {
-    Rf_errorcall(R_NilValue, "argument 'id' must be a positive integer");
-  }
-
-  CG_SET(node, CG_ID_SYMBOL, Rf_ScalarInteger(id));
-}
-
-cg_node_type_t cg_node_type(SEXP node)
-{
-  SEXP type = PROTECT(CG_GET(node, CG_TYPE_SYMBOL));
-
-  if(!IS_SCALAR(type, INTSXP))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no type", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return (cg_node_type_t)INTEGER(type)[0];
-}
-
-void cg_node_set_type(SEXP node, const cg_node_type_t type)
-{
-  CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(type));
-}
-
-SEXP cg_node_inputs(SEXP node)
-{
-  SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
-
-  if(TYPEOF(inputs) != VECSXP)
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no inputs", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return inputs;
-}
-
-void cg_node_set_inputs(SEXP node, SEXP inputs)
-{
-  if(TYPEOF(inputs) != VECSXP)
-  {
-    Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
-  }
-
-  CG_SET(node, CG_INPUTS_SYMBOL, inputs);
-}
-
-SEXP cg_node_value(SEXP node)
-{
-  SEXP value = PROTECT(CG_GET(node, CG_VALUE_SYMBOL));
-
-  if(value == R_UnboundValue)
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no value", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return value;
-}
-
-void cg_node_set_value(SEXP node, SEXP value)
-{
-  CG_SET(node, CG_VALUE_SYMBOL, value);
-}
-
-SEXP cg_node_grad(SEXP node)
-{
-  SEXP grad = PROTECT(CG_GET(node, CG_GRAD_SYMBOL));
-
-  if(grad == R_UnboundValue)
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no gradient", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return grad;
-}
-
-void cg_node_set_grad(SEXP node, SEXP grad)
-{
-  CG_SET(node, CG_GRAD_SYMBOL, grad);
-}
-
-SEXP cg_node_function(SEXP node)
-{
-  SEXP function = PROTECT(CG_GET(node, CG_FUN_SYMBOL));
-
-  if(!cg_is(function, "cg_function"))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no function", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return function;
-}
-
-void cg_node_set_function(SEXP node, SEXP function)
-{
-  if(!cg_is(function, "cg_function"))
-  {
-    Rf_errorcall(R_NilValue, "argument 'function' must be a cg_function object");
-  }
-
-  CG_SET(node, CG_FUN_SYMBOL, function);
 }
 
 void cg_node_forward(SEXP node)
 {
-  SEXP inputs = PROTECT(cg_node_inputs(node));
+  SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
 
   R_len_t n = XLENGTH(inputs);
 
@@ -198,7 +110,7 @@ void cg_node_forward(SEXP node)
   {
     SEXP input = VECTOR_ELT(inputs, i);
 
-    SETCAR(arg, cg_node_value(input));
+    SETCAR(arg, CG_GET(input, CG_VALUE_SYMBOL));
 
     if(!Rf_isNull(names))
     {
@@ -213,9 +125,9 @@ void cg_node_forward(SEXP node)
     arg = CDR(arg);
   }
 
-  SEXP function = PROTECT(cg_node_function(node));
+  SEXP function = PROTECT(CG_GET(node, CG_FUN_SYMBOL));
 
-  SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
+  SEXP call = PROTECT(Rf_lcons(CG_GET(function, CG_DEF_SYMBOL), args));
 
   SEXP value = PROTECT(Rf_eval(call, R_EmptyEnv));
 
@@ -226,7 +138,7 @@ void cg_node_forward(SEXP node)
 
 void cg_node_backward(SEXP node)
 {
-  SEXP inputs = PROTECT(cg_node_inputs(node));
+  SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
 
   R_len_t n = XLENGTH(inputs);
 
@@ -240,7 +152,7 @@ void cg_node_backward(SEXP node)
   {
     SEXP input = VECTOR_ELT(inputs, i);
 
-    SETCAR(arg, cg_node_value(input));
+    SETCAR(arg, CG_GET(input, CG_VALUE_SYMBOL));
 
     if(!Rf_isNull(names))
     {
@@ -255,17 +167,17 @@ void cg_node_backward(SEXP node)
     arg = CDR(arg);
   }
 
-  SETCAR(arg, cg_node_value(node));
+  SETCAR(arg, CG_GET(node, CG_VALUE_SYMBOL));
 
   SET_TAG(arg, CG_VALUE_SYMBOL);
 
-  SETCADR(arg, cg_node_grad(node));
+  SETCADR(arg, CG_GET(node, CG_GRAD_SYMBOL));
 
   SET_TAG(CDR(arg), CG_GRAD_SYMBOL);
 
-  SEXP function = PROTECT(cg_node_function(node));
+  SEXP function = PROTECT(CG_GET(node, CG_FUN_SYMBOL));
 
-  SEXP function_grads = PROTECT(cg_function_grads(function));
+  SEXP function_grads = PROTECT(CG_GET(function, CG_GRADS_SYMBOL));
 
   R_len_t k = XLENGTH(function_grads);
 
@@ -273,7 +185,7 @@ void cg_node_backward(SEXP node)
   {
     SEXP input = VECTOR_ELT(inputs, i);
 
-    if(cg_node_type(input) == CGCST)
+    if(CG_GET_INT(input, CG_TYPE_SYMBOL) == CGCST)
     {
       continue;
     }
@@ -281,7 +193,7 @@ void cg_node_backward(SEXP node)
     if(i >= k)
     {
       Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at input %d",
-                   cg_node_name(node), i + 1);
+                   CG_GET_STR(node, CG_NAME_SYMBOL), i + 1);
     }
 
     SEXP call = PROTECT(Rf_lcons(VECTOR_ELT(function_grads, i), args));
@@ -291,10 +203,10 @@ void cg_node_backward(SEXP node)
     if(!Rf_isNumeric(grad))
     {
       Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(grad)), cg_node_name(node));
+                   Rf_type2char(TYPEOF(grad)), CG_GET_STR(node, CG_NAME_SYMBOL));
     }
 
-    SEXP input_grad = PROTECT(cg_node_grad(input));
+    SEXP input_grad = PROTECT(CG_GET(input, CG_GRAD_SYMBOL));
 
     if(Rf_isNull(input_grad))
     {
@@ -307,7 +219,7 @@ void cg_node_backward(SEXP node)
       if(XLENGTH(grad) != m)
       {
         Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
-                     XLENGTH(grad), m, cg_node_name(node));
+                     XLENGTH(grad), m, CG_GET_STR(node, CG_NAME_SYMBOL));
       }
 
       switch(TYPEOF(input_grad))
@@ -394,30 +306,31 @@ void cg_node_backward(SEXP node)
 
 SEXP cg_constant(SEXP value, SEXP name)
 {
-  SEXP graph = PROTECT(cg_session_graph());
-
   if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
   {
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
 
-  SEXP node = PROTECT(cg_class1("cg_node"));
+  SEXP graph = PROTECT(cg_session_graph());
 
-  cg_node_set_type(node, CGCST);
+  SEXP node = PROTECT(cg_class("cg_node", CST_DEF));
+
+  CG_SET_INT(node, CG_TYPE_SYMBOL, CGCST);
 
   if(Rf_isNull(name))
   {
-    cg_node_set_name(node, cg_graph_gen_name(graph));
+    cg_node_gen_name(node, graph);
   }
   else
   {
-    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
+    CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
   CG_SET(node, CG_VALUE_SYMBOL, value);
-  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
   cg_graph_add_node(graph, node);
+
+  cg_class_lock(node, CST_DEF);
 
   UNPROTECT(2);
 
@@ -426,30 +339,31 @@ SEXP cg_constant(SEXP value, SEXP name)
 
 SEXP cg_parameter(SEXP value, SEXP name)
 {
-  SEXP graph = PROTECT(cg_session_graph());
-
   if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
   {
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
 
-  SEXP node = PROTECT(cg_class1("cg_node"));
+  SEXP graph = PROTECT(cg_session_graph());
 
-  cg_node_set_type(node, CGPRM);
+  SEXP node = PROTECT(cg_class("cg_node", PRM_DEF));
+
+  CG_SET_INT(node, CG_TYPE_SYMBOL, CGPRM);
 
   if(Rf_isNull(name))
   {
-    cg_node_set_name(node, cg_graph_gen_name(graph));
+    cg_node_gen_name(node, graph);
   }
   else
   {
-    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
+    CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
   CG_SET(node, CG_VALUE_SYMBOL, value);
-  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
   cg_graph_add_node(graph, node);
+
+  cg_class_lock(node, PRM_DEF);
 
   UNPROTECT(2);
 
@@ -458,30 +372,29 @@ SEXP cg_parameter(SEXP value, SEXP name)
 
 SEXP cg_input(SEXP name)
 {
-  SEXP graph = PROTECT(cg_session_graph());
-
   if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
   {
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
 
-  SEXP node = PROTECT(cg_class1("cg_node"));
+  SEXP graph = PROTECT(cg_session_graph());
 
-  cg_node_set_type(node, CGIPT);
+  SEXP node = PROTECT(cg_class("cg_node", IPT_DEF));
+
+  CG_SET_INT(node, CG_TYPE_SYMBOL, CGIPT);
 
   if(Rf_isNull(name))
   {
-    cg_node_set_name(node, cg_graph_gen_name(graph));
+    cg_node_gen_name(node, graph);
   }
   else
   {
-    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
+    CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
-  CG_SET(node, CG_VALUE_SYMBOL, R_NilValue);
-  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
-
   cg_graph_add_node(graph, node);
+
+  cg_class_lock(node, IPT_DEF);
 
   UNPROTECT(2);
 
@@ -490,8 +403,6 @@ SEXP cg_input(SEXP name)
 
 SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 {
-  SEXP graph = PROTECT(cg_session_graph());
-
   if(!cg_is(function, "cg_function"))
   {
     Rf_errorcall(R_NilValue, "argument 'function' must be a cg_function object");
@@ -517,7 +428,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
     if(cg_is(input, "cg_node"))
     {
-      SEXP value = PROTECT(cg_node_value(input));
+      SEXP value = PROTECT(CG_GET(input, CG_VALUE_SYMBOL));
 
       if(Rf_isNull(value))
       {
@@ -532,34 +443,32 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     }
   }
 
-  SEXP node = PROTECT(cg_class1("cg_node"));
+  SEXP graph = PROTECT(cg_session_graph());
 
-  cg_node_set_type(node, CGOPR);
+  SEXP node = PROTECT(cg_class("cg_node", OPR_DEF));
+
+  CG_SET_INT(node, CG_TYPE_SYMBOL, CGOPR);
 
   if(Rf_isNull(name))
   {
-    cg_node_set_name(node, cg_graph_gen_name(graph));
+    cg_node_gen_name(node, graph);
   }
   else
   {
-    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
+    CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
   CG_SET(node, CG_INPUTS_SYMBOL, inputs);
   CG_SET(node, CG_FUN_SYMBOL, function);
 
-  if(cg_graph_eager(graph) && can_eval)
+  if(CG_GET_LGL(graph, CG_EAGER_SYMBOL) && can_eval)
   {
     cg_node_forward(node);
   }
-  else
-  {
-    CG_SET(node, CG_VALUE_SYMBOL, R_NilValue);
-  }
-
-  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
   cg_graph_add_node(graph, node);
+
+  cg_class_lock(node, OPR_DEF);
 
   UNPROTECT(2);
 

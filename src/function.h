@@ -23,18 +23,6 @@ limitations under the License.
 #include <Rinternals.h>
 
 /*
- * PRIVATE METHODS
- */
-
-SEXP cg_function_def(SEXP function);
-
-void cg_function_set_def(SEXP function, SEXP def);
-
-SEXP cg_function_grads(SEXP function);
-
-void cg_function_set_grads(SEXP function, SEXP grads);
-
-/*
  * PUBLIC CONSTRUCTORS
  */
 

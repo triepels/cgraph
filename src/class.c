@@ -40,11 +40,46 @@ int cg_is(SEXP env, const char *class_name)
   return TRUE;
 }
 
+void cg_class_lock(SEXP env, const cg_class_def_t *def)
+{
+  int i = 0;
+
+  while(def[i].name != NULL)
+  {
+    if(def[i].locked)
+    {
+      R_LockBinding(Rf_install(def[i].name), env);
+    }
+
+    i++;
+  }
+
+  if(!R_EnvironmentIsLocked(env))
+  {
+    R_LockEnvironment(env, FALSE);
+  }
+}
+
+void cg_class_unlock(SEXP env, const cg_class_def_t *def)
+{
+  int i = 0;
+
+  while(def[i].name != NULL)
+  {
+    if(def[i].locked)
+    {
+      R_unLockBinding(Rf_install(def[i].name), env);
+    }
+
+    i++;
+  }
+}
+
 /*
  * PUBLIC CONSTRUCTORS
  */
 
-SEXP cg_class1(const char *class_name1)
+SEXP cg_class(const char *name, const cg_class_def_t *def)
 {
   SEXP env = PROTECT(Rf_allocSExp(ENVSXP));
 
@@ -52,29 +87,18 @@ SEXP cg_class1(const char *class_name1)
   SET_HASHTAB(env, R_NilValue);
   SET_ENCLOS(env, R_EmptyEnv);
 
-  Rf_setAttrib(env, R_ClassSymbol, Rf_mkString(class_name1));
+  int i = 0;
+
+  while(def[i].name != NULL)
+  {
+    CG_SET(env, Rf_install(def[i].name), R_NilValue);
+
+    i++;
+  }
+
+  Rf_setAttrib(env, R_ClassSymbol, Rf_mkString(name));
 
   UNPROTECT(1);
-
-  return env;
-}
-
-SEXP cg_class2(const char *class_name1, const char *class_name2)
-{
-  SEXP env = PROTECT(Rf_allocSExp(ENVSXP));
-
-  SET_FRAME(env, R_NilValue);
-  SET_HASHTAB(env, R_NilValue);
-  SET_ENCLOS(env, R_EmptyEnv);
-
-  SEXP class_attrib = PROTECT(Rf_allocVector(STRSXP, 2));
-
-  SET_STRING_ELT(class_attrib, 0, Rf_mkChar(class_name1));
-  SET_STRING_ELT(class_attrib, 1, Rf_mkChar(class_name2));
-
-  Rf_setAttrib(env, R_ClassSymbol, class_attrib);
-
-  UNPROTECT(2);
 
   return env;
 }
