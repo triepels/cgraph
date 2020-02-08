@@ -32,7 +32,7 @@ int cg_graph_eager(SEXP graph);
 
 void cg_graph_set_eager(SEXP graph, const int eager);
 
-char* cg_graph_gen_name(SEXP graph);
+SEXP cg_graph_gen_name(SEXP graph);
 
 void cg_graph_add_node(SEXP graph, SEXP node);
 

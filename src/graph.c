@@ -65,7 +65,7 @@ void cg_graph_set_eager(SEXP graph, const int eager)
   CG_SET(graph, CG_EAGER_SYMBOL, Rf_ScalarLogical(eager));
 }
 
-char* cg_graph_gen_name(SEXP graph)
+SEXP cg_graph_gen_name(SEXP graph)
 {
   char *name = R_alloc(1, 32 * sizeof(char));
 
@@ -84,7 +84,7 @@ char* cg_graph_gen_name(SEXP graph)
 
   UNPROTECT(1);
 
-  return name;
+  return Rf_mkString(name);
 }
 
 void cg_graph_add_node(SEXP graph, SEXP node)
