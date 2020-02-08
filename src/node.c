@@ -411,7 +411,7 @@ SEXP cg_constant(SEXP value, SEXP name)
   }
   else
   {
-    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
+    CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
   CG_SET(node, CG_VALUE_SYMBOL, value);
@@ -443,7 +443,7 @@ SEXP cg_parameter(SEXP value, SEXP name)
   }
   else
   {
-    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
+    CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
   CG_SET(node, CG_VALUE_SYMBOL, value);
@@ -475,7 +475,7 @@ SEXP cg_input(SEXP name)
   }
   else
   {
-    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
+    CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
   CG_SET(node, CG_VALUE_SYMBOL, R_NilValue);
@@ -542,7 +542,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
   }
   else
   {
-    cg_node_set_name(node, CHAR(STRING_ELT(name, 0)));
+    CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
   CG_SET(node, CG_INPUTS_SYMBOL, inputs);
