@@ -199,7 +199,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
   UNPROTECT(1);
 }
 
-static int filter(SEXP node)
+static inline int filter(SEXP node)
 {
   if(cg_node_type(node) == CGOPR)
   {
