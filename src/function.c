@@ -59,16 +59,6 @@ SEXP cg_function_grads(SEXP function)
     Rf_errorcall(R_NilValue, "function has no gradients");
   }
 
-  R_len_t n = XLENGTH(grads);
-
-  for(int i = 0; i < n; i++)
-  {
-    if(!Rf_isFunction(VECTOR_ELT(grads, i)))
-    {
-      Rf_errorcall(R_NilValue, "function has an invalid gradient at index %d", i + 1);
-    }
-  }
-
   UNPROTECT(1);
 
   return grads;
@@ -79,16 +69,6 @@ void cg_function_set_grads(SEXP function, SEXP grads)
   if(TYPEOF(grads) != VECSXP)
   {
     Rf_errorcall(R_NilValue, "argument 'grads' must be a list of gradient functions");
-  }
-
-  R_len_t n = XLENGTH(grads);
-
-  for(int i = 0; i < n; i++)
-  {
-    if(!Rf_isFunction(VECTOR_ELT(grads, i)))
-    {
-      Rf_errorcall(R_NilValue, "function 'grads' has an invalid gradient at index %d", i + 1);
-    }
   }
 
   CG_SET(function, CG_GRADS_SYMBOL, grads);

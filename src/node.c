@@ -105,17 +105,6 @@ SEXP cg_node_inputs(SEXP node)
     Rf_errorcall(R_NilValue, "node '%s' has no inputs", cg_node_name(node));
   }
 
-  R_len_t n = XLENGTH(inputs);
-
-  for(int i = 0; i < n; i++)
-  {
-    if(TYPEOF(VECTOR_ELT(inputs, i)) != ENVSXP)
-    {
-      Rf_errorcall(R_NilValue, "node '%s' has an invalid input at index %d",
-                   cg_node_name(node), i + 1);
-    }
-  }
-
   UNPROTECT(1);
 
   return inputs;
@@ -126,16 +115,6 @@ void cg_node_set_inputs(SEXP node, SEXP inputs)
   if(TYPEOF(inputs) != VECSXP)
   {
     Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
-  }
-
-  R_len_t n = XLENGTH(inputs);
-
-  for(int i = 0; i < n; i++)
-  {
-    if(TYPEOF(VECTOR_ELT(inputs, i)) != ENVSXP)
-    {
-      Rf_errorcall(R_NilValue, "argument 'inputs' has an invalid input at index %d", i + 1);
-    }
   }
 
   CG_SET(node, CG_INPUTS_SYMBOL, inputs);
@@ -305,7 +284,14 @@ void cg_node_backward(SEXP node)
                    cg_node_name(node), i + 1);
     }
 
-    SEXP call = PROTECT(Rf_lcons(VECTOR_ELT(function_grads, i), args));
+    SEXP function_grad = VECTOR_ELT(function_grads, i);
+
+    if(!Rf_isFunction(function_grad))
+    {
+      Rf_errorcall(R_NilValue, "function has an invalid gradient at index %d", i + 1);
+    }
+
+    SEXP call = PROTECT(Rf_lcons(function_grad, args));
 
     SEXP grad = PROTECT(Rf_eval(call, R_EmptyEnv));
 

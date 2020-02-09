@@ -156,6 +156,12 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
     {
       SEXP input = VECTOR_ELT(inputs, i);
 
+      if(TYPEOF(input) != ENVSXP)
+      {
+        Rf_errorcall(R_NilValue, "node '%s' has an invalid input at index %d",
+                     cg_node_name(node), i + 1);
+      }
+
       int input_id = cg_node_id(input);
 
       if(input_id < 1 || input_id > n)
@@ -228,6 +234,12 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
     for(int i = 0; i < m; i++)
     {
       SEXP input = VECTOR_ELT(inputs, i);
+
+      if(TYPEOF(input) != ENVSXP)
+      {
+        Rf_errorcall(R_NilValue, "node '%s' has an invalid input at index %d",
+                     cg_node_name(node), i + 1);
+      }
 
       int input_id = cg_node_id(input);
 
