@@ -287,7 +287,7 @@ SEXP cg_constant(SEXP value, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
 
-  SEXP node = PROTECT(cg_class1("cg_node"));
+  SEXP node = PROTECT(cg_class("cg_node"));
 
   cg_node_set_type(node, CGCST);
 
@@ -319,7 +319,7 @@ SEXP cg_parameter(SEXP value, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
 
-  SEXP node = PROTECT(cg_class1("cg_node"));
+  SEXP node = PROTECT(cg_class("cg_node"));
 
   cg_node_set_type(node, CGPRM);
 
@@ -351,7 +351,7 @@ SEXP cg_input(SEXP name)
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
 
-  SEXP node = PROTECT(cg_class1("cg_node"));
+  SEXP node = PROTECT(cg_class("cg_node"));
 
   cg_node_set_type(node, CGIPT);
 
@@ -418,7 +418,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     }
   }
 
-  SEXP node = PROTECT(cg_class1("cg_node"));
+  SEXP node = PROTECT(cg_class("cg_node"));
 
   cg_node_set_type(node, CGOPR);
 

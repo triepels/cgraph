@@ -33,9 +33,7 @@ limitations under the License.
  * PUBLIC FUNCTIONS
  */
 
-SEXP cg_class1(const char *class_name1);
-
-SEXP cg_class2(const char *class_name1, const char *class_name2);
+SEXP cg_class(const char *name);
 
 int cg_is(SEXP env, const char *class_name);
 

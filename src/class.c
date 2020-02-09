@@ -25,7 +25,7 @@ limitations under the License.
  * PUBLIC FUNCTIONS
  */
 
-SEXP cg_class1(const char *class_name1)
+SEXP cg_class(const char *name)
 {
   SEXP env = PROTECT(Rf_allocSExp(ENVSXP));
 
@@ -33,29 +33,9 @@ SEXP cg_class1(const char *class_name1)
   SET_HASHTAB(env, R_NilValue);
   SET_ENCLOS(env, R_EmptyEnv);
 
-  Rf_setAttrib(env, R_ClassSymbol, Rf_mkString(class_name1));
+  Rf_setAttrib(env, R_ClassSymbol, Rf_mkString(name));
 
   UNPROTECT(1);
-
-  return env;
-}
-
-SEXP cg_class2(const char *class_name1, const char *class_name2)
-{
-  SEXP env = PROTECT(Rf_allocSExp(ENVSXP));
-
-  SET_FRAME(env, R_NilValue);
-  SET_HASHTAB(env, R_NilValue);
-  SET_ENCLOS(env, R_EmptyEnv);
-
-  SEXP class_attrib = PROTECT(Rf_allocVector(STRSXP, 2));
-
-  SET_STRING_ELT(class_attrib, 0, Rf_mkChar(class_name1));
-  SET_STRING_ELT(class_attrib, 1, Rf_mkChar(class_name2));
-
-  Rf_setAttrib(env, R_ClassSymbol, class_attrib);
-
-  UNPROTECT(2);
 
   return env;
 }

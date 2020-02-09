@@ -413,7 +413,7 @@ SEXP cg_graph(SEXP eager)
     Rf_errorcall(R_NilValue, "argument 'eager' must be a logical scalar");
   }
 
-  SEXP graph = PROTECT(cg_class1("cg_graph"));
+  SEXP graph = PROTECT(cg_class("cg_graph"));
 
   CG_SET(graph, CG_EAGER_SYMBOL, eager);
   CG_SET(graph, CG_NODES_SYMBOL, R_NilValue);
