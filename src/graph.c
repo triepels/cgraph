@@ -209,7 +209,7 @@ static inline int filter(SEXP node)
 }
 
 /*
- * PUBLIC METHODS
+ * PUBLIC FUNCTIONS
  */
 
 SEXP cg_graph_gen_name(SEXP graph)

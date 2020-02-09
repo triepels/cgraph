@@ -36,9 +36,9 @@ typedef enum {
     CGOPR
 } cg_node_type_t;
 
-    /*
-     * INLINED GET/SET FUNCTIONS
-     */
+/*
+ * INLINED GET/SET FUNCTIONS
+ */
 
 inline const char* cg_node_name(SEXP node)
 {
