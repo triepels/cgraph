@@ -22,7 +22,7 @@ limitations under the License.
 #include "stack.h"
 
 /*
- * PUBLIC METHODS
+ * PUBLIC FUNCTIONS
  */
 
 cg_stack_t* cg_stack_allocate(const int size)

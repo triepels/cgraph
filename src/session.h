@@ -23,7 +23,7 @@ limitations under the License.
 #include <Rinternals.h>
 
 /*
- * SESSION STRUCT
+ * SESSION STRUCTURE DECLARATION
  */
 
 typedef struct
@@ -31,14 +31,10 @@ typedef struct
     SEXP graph;
 } cg_session_t;
 
-/*
- * SESSION DECLARATION
- */
-
 extern cg_session_t session;
 
 /*
- * PUBLIC METHODS
+ * PUBLIC FUNCTIONS
  */
 
 SEXP cg_session_graph();

@@ -30,33 +30,13 @@ limitations under the License.
 #define CG_SET(x, SYMBOL, v) Rf_defineVar(SYMBOL, v, x)
 
 /*
- * SYMBOL DECLARATIONS
- */
-
-extern SEXP CG_ID_SYMBOL;
-extern SEXP CG_DEF_SYMBOL;
-extern SEXP CG_FUN_SYMBOL;
-extern SEXP CG_GRAD_SYMBOL;
-extern SEXP CG_NAME_SYMBOL;
-extern SEXP CG_TYPE_SYMBOL;
-extern SEXP CG_EAGER_SYMBOL;
-extern SEXP CG_GRADS_SYMBOL;
-extern SEXP CG_NODES_SYMBOL;
-extern SEXP CG_VALUE_SYMBOL;
-extern SEXP CG_INPUTS_SYMBOL;
-
-/*
- * PRIVATE METHODS
- */
-
-int cg_is(SEXP env, const char *class_name);
-
-/*
- * PRIVATE CONSTRUCTORS
+ * PUBLIC FUNCTIONS
  */
 
 SEXP cg_class1(const char *class_name1);
 
 SEXP cg_class2(const char *class_name1, const char *class_name2);
+
+int cg_is(SEXP env, const char *class_name);
 
 #endif

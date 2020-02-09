@@ -26,161 +26,40 @@ limitations under the License.
 #include "function.h"
 
 /*
- * METHODS
+ * INLINED GET/SET FUNCTIONS
  */
 
-const char* cg_node_name(SEXP node)
-{
-  SEXP name = PROTECT(CG_GET(node, CG_NAME_SYMBOL));
+extern inline const char* cg_node_name(SEXP node);
 
-  if(!IS_SCALAR(name, STRSXP))
-  {
-    Rf_errorcall(R_NilValue, "node has no name");
-  }
+extern inline void cg_node_set_name(SEXP node, const char *name);
 
-  UNPROTECT(1);
+extern inline int cg_node_id(SEXP node);
 
-  return CHAR(STRING_ELT(name, 0));
-}
+extern inline void cg_node_set_id(SEXP node, const int id);
 
-void cg_node_set_name(SEXP node, const char *name)
-{
-  if(strcmp(name, "") == 0)
-  {
-    Rf_errorcall(R_NilValue, "argument 'name' must be a non-blank character scalar");
-  }
+extern inline cg_node_type_t cg_node_type(SEXP node);
 
-  CG_SET(node, CG_NAME_SYMBOL, Rf_mkString(name));
-}
+extern inline void cg_node_set_type(SEXP node, const cg_node_type_t type);
 
-int cg_node_id(SEXP node)
-{
-  SEXP id = PROTECT(CG_GET(node, CG_ID_SYMBOL));
+extern inline SEXP cg_node_inputs(SEXP node);
 
-  if(!IS_SCALAR(id, INTSXP))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no id", cg_node_name(node));
-  }
+extern inline void cg_node_set_inputs(SEXP node, SEXP inputs);
 
-  UNPROTECT(1);
+extern inline SEXP cg_node_value(SEXP node);
 
-  return INTEGER(id)[0];
-}
+extern inline void cg_node_set_value(SEXP node, SEXP value);
 
-void cg_node_set_id(SEXP node, const int id)
-{
-  if(id < 1)
-  {
-    Rf_errorcall(R_NilValue, "argument 'id' must be a positive integer");
-  }
+extern inline SEXP cg_node_grad(SEXP node);
 
-  CG_SET(node, CG_ID_SYMBOL, Rf_ScalarInteger(id));
-}
+extern inline void cg_node_set_grad(SEXP node, SEXP grad);
 
-cg_node_type_t cg_node_type(SEXP node)
-{
-  SEXP type = PROTECT(CG_GET(node, CG_TYPE_SYMBOL));
+extern inline SEXP cg_node_function(SEXP node);
 
-  if(!IS_SCALAR(type, INTSXP))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no type", cg_node_name(node));
-  }
+extern inline void cg_node_set_function(SEXP node, SEXP function);
 
-  UNPROTECT(1);
-
-  return (cg_node_type_t)INTEGER(type)[0];
-}
-
-void cg_node_set_type(SEXP node, const cg_node_type_t type)
-{
-  CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(type));
-}
-
-SEXP cg_node_inputs(SEXP node)
-{
-  SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
-
-  if(TYPEOF(inputs) != VECSXP)
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no inputs", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return inputs;
-}
-
-void cg_node_set_inputs(SEXP node, SEXP inputs)
-{
-  if(TYPEOF(inputs) != VECSXP)
-  {
-    Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
-  }
-
-  CG_SET(node, CG_INPUTS_SYMBOL, inputs);
-}
-
-SEXP cg_node_value(SEXP node)
-{
-  SEXP value = PROTECT(CG_GET(node, CG_VALUE_SYMBOL));
-
-  if(value == R_UnboundValue)
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no value", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return value;
-}
-
-void cg_node_set_value(SEXP node, SEXP value)
-{
-  CG_SET(node, CG_VALUE_SYMBOL, value);
-}
-
-SEXP cg_node_grad(SEXP node)
-{
-  SEXP grad = PROTECT(CG_GET(node, CG_GRAD_SYMBOL));
-
-  if(grad == R_UnboundValue)
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no gradient", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return grad;
-}
-
-void cg_node_set_grad(SEXP node, SEXP grad)
-{
-  CG_SET(node, CG_GRAD_SYMBOL, grad);
-}
-
-SEXP cg_node_function(SEXP node)
-{
-  SEXP function = PROTECT(CG_GET(node, CG_FUN_SYMBOL));
-
-  if(!cg_is(function, "cg_function"))
-  {
-    Rf_errorcall(R_NilValue, "node '%s' has no function", cg_node_name(node));
-  }
-
-  UNPROTECT(1);
-
-  return function;
-}
-
-void cg_node_set_function(SEXP node, SEXP function)
-{
-  if(!cg_is(function, "cg_function"))
-  {
-    Rf_errorcall(R_NilValue, "argument 'function' must be a cg_function object");
-  }
-
-  CG_SET(node, CG_FUN_SYMBOL, function);
-}
+/*
+ * PUBLIC FUNCTIONS
+ */
 
 void cg_node_forward(SEXP node)
 {
@@ -396,7 +275,7 @@ void cg_node_backward(SEXP node)
 }
 
 /*
- * CONSTRUCTORS
+ * PUBLIC CONSTRUCTORS
  */
 
 SEXP cg_constant(SEXP value, SEXP name)

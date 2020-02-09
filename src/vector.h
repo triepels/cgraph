@@ -23,7 +23,7 @@ limitations under the License.
 #include <Rinternals.h>
 
 /*
- * PUBLIC METHODS
+ * PUBLIC FUNCTIONS
  */
 
 SEXP sigmoid(SEXP x);

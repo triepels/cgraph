@@ -23,7 +23,7 @@ limitations under the License.
 #include "session.h"
 
 /*
- * PUBLIC METHODS
+ * PUBLIC FUNCTIONS
  */
 
 SEXP cg_session_graph()

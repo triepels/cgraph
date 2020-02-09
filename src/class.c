@@ -22,26 +22,7 @@ limitations under the License.
 #include "class.h"
 
 /*
- * PRIVATE METHODS
- */
-
-int cg_is(SEXP env, const char *class_name)
-{
-  if(!Rf_isEnvironment(env))
-  {
-    return FALSE;
-  }
-
-  if(!Rf_inherits(env, class_name))
-  {
-    return FALSE;
-  }
-
-  return TRUE;
-}
-
-/*
- * PUBLIC CONSTRUCTORS
+ * PUBLIC FUNCTIONS
  */
 
 SEXP cg_class1(const char *class_name1)
@@ -77,4 +58,19 @@ SEXP cg_class2(const char *class_name1, const char *class_name2)
   UNPROTECT(2);
 
   return env;
+}
+
+int cg_is(SEXP env, const char *class_name)
+{
+  if(!Rf_isEnvironment(env))
+  {
+    return FALSE;
+  }
+
+  if(!Rf_inherits(env, class_name))
+  {
+    return FALSE;
+  }
+
+  return TRUE;
 }

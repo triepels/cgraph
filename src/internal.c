@@ -25,7 +25,7 @@ limitations under the License.
 #include "internal.h"
 
 /*
- * PUBLIC METHODS
+ * PUBLIC FUNCTIONS
  */
 
 SEXP dots(SEXP env)

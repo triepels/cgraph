@@ -22,27 +22,56 @@ limitations under the License.
 #include <R.h>
 #include <Rinternals.h>
 
+#include "class.h"
+
 /*
- * PRIVATE METHODS
+ * INLINED GET/SET FUNCTIONS
  */
 
-SEXP cg_graph_nodes(SEXP graph);
+inline SEXP cg_graph_nodes(SEXP graph)
+{
+    SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
 
-int cg_graph_eager(SEXP graph);
+    if(TYPEOF(nodes) != VECSXP)
+    {
+        Rf_errorcall(R_NilValue, "graph does not have any nodes");
+    }
 
-void cg_graph_set_eager(SEXP graph, const int eager);
+    UNPROTECT(1);
+
+    return nodes;
+}
+
+inline int cg_graph_eager(SEXP graph)
+{
+    SEXP eager = PROTECT(CG_GET(graph, CG_EAGER_SYMBOL));
+
+    if(!IS_SCALAR(eager, LGLSXP))
+    {
+        UNPROTECT(1);
+
+        return 1;
+    }
+
+    UNPROTECT(1);
+
+    return INTEGER(eager)[0];
+}
+
+inline void cg_graph_set_eager(SEXP graph, const int eager)
+{
+    CG_SET(graph, CG_EAGER_SYMBOL, Rf_ScalarLogical(eager));
+}
+
+/*
+ * PUBLIC FUNCTIONS
+ */
 
 SEXP cg_graph_gen_name(SEXP graph);
 
-void cg_graph_add_node(SEXP graph, SEXP node);
-
-SEXP cg_graph_get_node(SEXP graph, const int id);
-
-/*
- * PUBLIC METHODS
- */
-
 SEXP cg_graph_get(SEXP graph, SEXP name);
+
+void cg_graph_add_node(SEXP graph, SEXP node);
 
 SEXP cg_graph_forward(SEXP graph, SEXP target);
 

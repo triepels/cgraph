@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef STACK_H
-#define STACK_H
+#ifndef SYMBOLS_H
+#define SYMBOLS_H
 
 #define R_NO_REMAP
 
@@ -23,30 +23,19 @@ limitations under the License.
 #include <Rinternals.h>
 
 /*
- * STACK STRUCTURE
+ * GLOBAL SYMBOLS
  */
 
-typedef struct
-{
-  int top;
-  int size;
-  SEXP *data;
-} cg_stack_t;
-
-/*
- * PUBLIC FUNCTIONS
- */
-
-cg_stack_t* cg_stack_allocate(const int size);
-
-int cg_stack_is_empty(const cg_stack_t *stack);
-
-int cg_stack_is_full(const cg_stack_t *stack);
-
-void cg_stack_push(cg_stack_t *stack, const SEXP x);
-
-SEXP cg_stack_top(const cg_stack_t *stack);
-
-void cg_stack_pop(cg_stack_t *stack);
+extern SEXP CG_ID_SYMBOL;
+extern SEXP CG_DEF_SYMBOL;
+extern SEXP CG_FUN_SYMBOL;
+extern SEXP CG_GRAD_SYMBOL;
+extern SEXP CG_NAME_SYMBOL;
+extern SEXP CG_TYPE_SYMBOL;
+extern SEXP CG_EAGER_SYMBOL;
+extern SEXP CG_GRADS_SYMBOL;
+extern SEXP CG_NODES_SYMBOL;
+extern SEXP CG_VALUE_SYMBOL;
+extern SEXP CG_INPUTS_SYMBOL;
 
 #endif

@@ -22,7 +22,7 @@ limitations under the License.
 #include "vector.h"
 
 /*
- * PUBLIC METHODS
+ * PUBLIC FUNCTIONS
  */
 
 SEXP sigmoid(SEXP x)

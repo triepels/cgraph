@@ -25,6 +25,7 @@ limitations under the License.
 #include "graph.h"
 #include "vector.h"
 #include "session.h"
+#include "symbols.h"
 #include "function.h"
 #include "internal.h"
 

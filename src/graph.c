@@ -27,97 +27,18 @@ limitations under the License.
 #include "function.h"
 
 /*
- * PRIVATE METHODS
+ * INLINED GET/SET FUNCTIONS
  */
 
-SEXP cg_graph_nodes(SEXP graph)
-{
-  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
+extern inline SEXP cg_graph_nodes(SEXP graph);
 
-  if(TYPEOF(nodes) != VECSXP)
-  {
-    Rf_errorcall(R_NilValue, "graph does not have any nodes");
-  }
+extern inline int cg_graph_eager(SEXP graph);
 
-  UNPROTECT(1);
+extern inline void cg_graph_set_eager(SEXP graph, const int eager);
 
-  return nodes;
-}
-
-int cg_graph_eager(SEXP graph)
-{
-  SEXP eager = PROTECT(CG_GET(graph, CG_EAGER_SYMBOL));
-
-  if(!IS_SCALAR(eager, LGLSXP))
-  {
-    UNPROTECT(1);
-
-    return 1;
-  }
-
-  UNPROTECT(1);
-
-  return INTEGER(eager)[0];
-}
-
-void cg_graph_set_eager(SEXP graph, const int eager)
-{
-  CG_SET(graph, CG_EAGER_SYMBOL, Rf_ScalarLogical(eager));
-}
-
-SEXP cg_graph_gen_name(SEXP graph)
-{
-  char *name = R_alloc(1, 32 * sizeof(char));
-
-  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
-
-  if(TYPEOF(nodes) != VECSXP)
-  {
-    strcpy(name, "v1");
-  }
-  else
-  {
-    R_len_t n = XLENGTH(nodes);
-
-    sprintf(name, "v%d", n + 1);
-  }
-
-  UNPROTECT(1);
-
-  return Rf_mkString(name);
-}
-
-void cg_graph_add_node(SEXP graph, SEXP node)
-{
-  int index;
-
-  SEXP nodes = R_NilValue;
-
-  PROTECT_WITH_INDEX(nodes = CG_GET(graph, CG_NODES_SYMBOL), &index);
-
-  if(TYPEOF(nodes) != VECSXP)
-  {
-    REPROTECT(nodes = Rf_allocVector(VECSXP, 1), index);
-
-    SET_VECTOR_ELT(nodes, 0, node);
-
-    cg_node_set_id(node, 1);
-  }
-  else
-  {
-    R_len_t n = XLENGTH(nodes);
-
-    REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), index);
-
-    SET_VECTOR_ELT(nodes, n, node);
-
-    cg_node_set_id(node, n + 1);
-  }
-
-  CG_SET(graph, CG_NODES_SYMBOL, nodes);
-
-  UNPROTECT(1);
-}
+/*
+ * PRIVATE FUNCTIONS
+ */
 
 void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*exec)(SEXP node))
 {
@@ -278,9 +199,41 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
   UNPROTECT(1);
 }
 
+static int filter(SEXP node)
+{
+  if(cg_node_type(node) == CGOPR)
+  {
+    return 1;
+  }
+
+  return 0;
+}
+
 /*
  * PUBLIC METHODS
  */
+
+SEXP cg_graph_gen_name(SEXP graph)
+{
+  char *name = R_alloc(1, 32 * sizeof(char));
+
+  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
+
+  if(TYPEOF(nodes) != VECSXP)
+  {
+    strcpy(name, "v1");
+  }
+  else
+  {
+    R_len_t n = XLENGTH(nodes);
+
+    sprintf(name, "v%d", n + 1);
+  }
+
+  UNPROTECT(1);
+
+  return Rf_mkString(name);
+}
 
 SEXP cg_graph_get(SEXP graph, SEXP name)
 {
@@ -318,14 +271,36 @@ SEXP cg_graph_get(SEXP graph, SEXP name)
   Rf_errorcall(R_NilValue, "cannot find node '%s'", pn);
 }
 
-static int filter(SEXP node)
+void cg_graph_add_node(SEXP graph, SEXP node)
 {
-  if(cg_node_type(node) == CGOPR)
+  int index;
+
+  SEXP nodes = R_NilValue;
+
+  PROTECT_WITH_INDEX(nodes = CG_GET(graph, CG_NODES_SYMBOL), &index);
+
+  if(TYPEOF(nodes) != VECSXP)
   {
-    return 1;
+    REPROTECT(nodes = Rf_allocVector(VECSXP, 1), index);
+
+    SET_VECTOR_ELT(nodes, 0, node);
+
+    cg_node_set_id(node, 1);
+  }
+  else
+  {
+    R_len_t n = XLENGTH(nodes);
+
+    REPROTECT(nodes = Rf_lengthgets(nodes, n + 1), index);
+
+    SET_VECTOR_ELT(nodes, n, node);
+
+    cg_node_set_id(node, n + 1);
   }
 
-  return 0;
+  CG_SET(graph, CG_NODES_SYMBOL, nodes);
+
+  UNPROTECT(1);
 }
 
 SEXP cg_graph_forward(SEXP graph, SEXP target)
