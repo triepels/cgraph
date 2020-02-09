@@ -21,7 +21,6 @@ limitations under the License.
 
 #include "node.h"
 #include "graph.h"
-#include "class.h"
 #include "session.h"
 #include "function.h"
 

@@ -19,8 +19,6 @@ limitations under the License.
 #include <R.h>
 #include <Rinternals.h>
 
-#include "class.h"
-#include "symbols.h"
 #include "function.h"
 
 /*

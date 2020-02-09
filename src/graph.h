@@ -23,6 +23,7 @@ limitations under the License.
 #include <Rinternals.h>
 
 #include "class.h"
+#include "symbols.h"
 
 /*
  * INLINED GET/SET FUNCTIONS

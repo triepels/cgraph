@@ -20,7 +20,6 @@ limitations under the License.
 #include <Rinternals.h>
 
 #include "node.h"
-#include "class.h"
 #include "graph.h"
 #include "stack.h"
 #include "session.h"
