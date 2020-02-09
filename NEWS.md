@@ -8,8 +8,7 @@ New Features:
 Bug Fixes:
 
 * Global symbols in the C-API are now correctly defined (fixes CRAN gcc10 error).
-* Performing a forward or backward pass on a graph with operators having invalid inputs no longer causes a segfault.
-* Performing a forward or backward pass on a graph with operators having invalid gradient functions no longer causes a segfault.
+* Evaluating or differentiating a graph with operators having invalid inputs or invalid gradient functions no longer causes a segfault.
 
 cgraph 6.0.0
 ----------------------------------------------------------------
