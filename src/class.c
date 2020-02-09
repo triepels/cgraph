@@ -40,14 +40,14 @@ SEXP cg_class(const char *name)
   return env;
 }
 
-int cg_is(SEXP env, const char *class_name)
+int cg_is(SEXP env, const char *name)
 {
   if(!Rf_isEnvironment(env))
   {
     return FALSE;
   }
 
-  if(!Rf_inherits(env, class_name))
+  if(!Rf_inherits(env, name))
   {
     return FALSE;
   }

@@ -35,6 +35,6 @@ limitations under the License.
 
 SEXP cg_class(const char *name);
 
-int cg_is(SEXP env, const char *class_name);
+int cg_is(SEXP env, const char *name);
 
 #endif
