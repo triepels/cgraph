@@ -9,7 +9,7 @@ cg_subset2(x, ..., name = NULL)
 \arguments{
 \item{x}{either a cg_node object or a numerical vector or array.}
 
-\item{...}{either cg_node objects or a numerical scalars that are passed on to the \code{`[[`} function.}
+\item{...}{either cg_node objects or numerical scalars that are passed on to the \code{`[[`} function.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }
