@@ -288,8 +288,6 @@ SEXP cg_constant(SEXP value, SEXP name)
 
   SEXP node = PROTECT(cg_class("cg_node"));
 
-  cg_node_set_type(node, CGCST);
-
   if(Rf_isNull(name))
   {
     CG_SET(node, CG_NAME_SYMBOL, cg_graph_gen_name(graph));
@@ -299,8 +297,13 @@ SEXP cg_constant(SEXP value, SEXP name)
     CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
+  CG_SET(node, CG_GRAD_SYMBOL,  R_NilValue);
+
   CG_SET(node, CG_VALUE_SYMBOL, value);
-  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
+
+  CG_SET(node, CG_TYPE_SYMBOL,  Rf_ScalarInteger(CGCST));
+
+  CG_SET(node, CG_ID_SYMBOL,    R_NilValue);
 
   cg_graph_add_node(graph, node);
 
@@ -320,8 +323,6 @@ SEXP cg_parameter(SEXP value, SEXP name)
 
   SEXP node = PROTECT(cg_class("cg_node"));
 
-  cg_node_set_type(node, CGPRM);
-
   if(Rf_isNull(name))
   {
     CG_SET(node, CG_NAME_SYMBOL, cg_graph_gen_name(graph));
@@ -331,8 +332,13 @@ SEXP cg_parameter(SEXP value, SEXP name)
     CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
+  CG_SET(node, CG_GRAD_SYMBOL,  R_NilValue);
+
   CG_SET(node, CG_VALUE_SYMBOL, value);
-  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
+
+  CG_SET(node, CG_TYPE_SYMBOL,  Rf_ScalarInteger(CGPRM));
+
+  CG_SET(node, CG_ID_SYMBOL,    R_NilValue);
 
   cg_graph_add_node(graph, node);
 
@@ -352,8 +358,6 @@ SEXP cg_input(SEXP name)
 
   SEXP node = PROTECT(cg_class("cg_node"));
 
-  cg_node_set_type(node, CGIPT);
-
   if(Rf_isNull(name))
   {
     CG_SET(node, CG_NAME_SYMBOL, cg_graph_gen_name(graph));
@@ -363,8 +367,13 @@ SEXP cg_input(SEXP name)
     CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
+  CG_SET(node, CG_GRAD_SYMBOL,  R_NilValue);
+
   CG_SET(node, CG_VALUE_SYMBOL, R_NilValue);
-  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
+
+  CG_SET(node, CG_TYPE_SYMBOL,  Rf_ScalarInteger(CGIPT));
+
+  CG_SET(node, CG_ID_SYMBOL,    R_NilValue);
 
   cg_graph_add_node(graph, node);
 
@@ -419,8 +428,6 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   SEXP node = PROTECT(cg_class("cg_node"));
 
-  cg_node_set_type(node, CGOPR);
-
   if(Rf_isNull(name))
   {
     CG_SET(node, CG_NAME_SYMBOL, cg_graph_gen_name(graph));
@@ -430,19 +437,22 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     CG_SET(node, CG_NAME_SYMBOL, name);
   }
 
+  CG_SET(node, CG_GRAD_SYMBOL,   R_NilValue);
+
+  CG_SET(node, CG_VALUE_SYMBOL,  R_NilValue);
+
+  CG_SET(node, CG_FUN_SYMBOL,    function);
+
   CG_SET(node, CG_INPUTS_SYMBOL, inputs);
-  CG_SET(node, CG_FUN_SYMBOL, function);
+
+  CG_SET(node, CG_TYPE_SYMBOL,   Rf_ScalarInteger(CGOPR));
+
+  CG_SET(node, CG_ID_SYMBOL,     R_NilValue);
 
   if(cg_graph_eager(graph) && can_eval)
   {
     cg_node_forward(node);
   }
-  else
-  {
-    CG_SET(node, CG_VALUE_SYMBOL, R_NilValue);
-  }
-
-  CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
   cg_graph_add_node(graph, node);
 

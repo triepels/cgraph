@@ -63,8 +63,9 @@ SEXP cg_function(SEXP def, SEXP grads)
 
   SEXP function = PROTECT(cg_class("cg_function"));
 
-  CG_SET(function, CG_DEF_SYMBOL, def);
   CG_SET(function, CG_GRADS_SYMBOL, grads);
+
+  CG_SET(function, CG_DEF_SYMBOL, def);
 
   UNPROTECT(1);
 
