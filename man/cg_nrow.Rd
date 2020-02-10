@@ -21,7 +21,7 @@ Calculate \code{nrow(x)}.
 This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 }
 \seealso{
-\link[base]{nrow}
+\link[base:nrow]{nrow}
 }
 \author{
 Ron Triepels

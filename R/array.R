@@ -23,7 +23,7 @@
 #'
 #' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 #'
-#' @seealso \link[base]{dim}
+#' @seealso \link[base:dim]{dim}
 #'
 #' @author Ron Triepels
 #' @export
@@ -46,7 +46,7 @@ delayedAssign("dim", cg_function(def = base::dim))
 #'
 #' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 #'
-#' @seealso \link[base]{nrow}
+#' @seealso \link[base:nrow]{nrow}
 #'
 #' @author Ron Triepels
 #' @export
@@ -69,7 +69,7 @@ delayedAssign("nrow", cg_function(def = base::nrow))
 #'
 #' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 #'
-#' @seealso \link[base]{ncol}
+#' @seealso \link[base:nrow]{ncol}
 #'
 #' @author Ron Triepels
 #' @export

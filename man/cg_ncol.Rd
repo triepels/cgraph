@@ -21,7 +21,7 @@ Calculate \code{ncol(x)}.
 This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 }
 \seealso{
-\link[base]{ncol}
+\link[base:nrow]{ncol}
 }
 \author{
 Ron Triepels

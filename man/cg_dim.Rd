@@ -21,7 +21,7 @@ Calculate \code{dim(x)}.
 This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 }
 \seealso{
-\link[base]{dim}
+\link[base:dim]{dim}
 }
 \author{
 Ron Triepels
