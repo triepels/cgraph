@@ -64,11 +64,31 @@ void cg_node_forward(SEXP node)
 {
   SEXP inputs = PROTECT(cg_node_inputs(node));
 
-  SEXP args = PROTECT(Rf_duplicate(inputs));
+  R_len_t n = XLENGTH(inputs);
 
-  for(SEXP arg = args; arg != R_NilValue; arg = CDR(arg))
+  SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
+
+  SEXP names = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
+
+  SEXP arg = args;
+
+  for(int i = 0; i < n; i++)
   {
-    SETCAR(arg, cg_node_value(CAR(arg)));
+    SEXP input = VECTOR_ELT(inputs, i);
+
+    SETCAR(arg, cg_node_value(input));
+
+    if(!Rf_isNull(names))
+    {
+      SEXP name = STRING_ELT(names, i);
+
+      if(CHAR(name)[0] != '\0')
+      {
+        SET_TAG(arg, Rf_installChar(name));
+      }
+    }
+
+    arg = CDR(arg);
   }
 
   SEXP function = PROTECT(cg_node_function(node));
@@ -79,22 +99,12 @@ void cg_node_forward(SEXP node)
 
   CG_SET(node, CG_VALUE_SYMBOL, value);
 
-  UNPROTECT(5);
+  UNPROTECT(6);
 }
 
 void cg_node_backward(SEXP node)
 {
   SEXP inputs = PROTECT(cg_node_inputs(node));
-
-  SEXP args = PROTECT(Rf_duplicate(inputs));
-
-  for(SEXP arg = args; arg != R_NilValue; arg = CDR(arg))
-  {
-    SETCAR(arg, cg_node_value(CAR(arg)));
-  }
-
-///CHANGE ME!
-
 
   R_len_t n = XLENGTH(inputs);
 
@@ -381,9 +391,9 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'function' must be a cg_function object");
   }
 
-  if(TYPEOF(inputs) != LISTSXP)
+  if(TYPEOF(inputs) != VECSXP)
   {
-    Rf_errorcall(R_NilValue, "argument 'inputs' must be a pairlist of inputs");
+    Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
   }
 
   if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
@@ -393,13 +403,15 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   int can_eval = 1;
 
-  for(SEXP input = inputs; input != R_NilValue; input = CDR(input))
-  {
-    SEXP input_car = CAR(input);
+  R_xlen_t n = XLENGTH(inputs);
 
-    if(cg_is(input_car, "cg_node"))
+  for(int i = 0; i < n; i++)
+  {
+    SEXP input = VECTOR_ELT(inputs, i);
+
+    if(cg_is(input, "cg_node"))
     {
-      SEXP value = PROTECT(cg_node_value(input_car));
+      SEXP value = PROTECT(cg_node_value(input));
 
       if(Rf_isNull(value))
       {
@@ -410,7 +422,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     }
     else
     {
-      SETCAR(input, cg_constant(input_car, R_NilValue));
+      SET_VECTOR_ELT(inputs, i, cg_constant(input, R_NilValue));
     }
   }
 

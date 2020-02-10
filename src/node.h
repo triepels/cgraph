@@ -111,7 +111,7 @@ inline SEXP cg_node_inputs(SEXP node)
 {
     SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
 
-    if(TYPEOF(inputs) != LISTSXP)
+    if(TYPEOF(inputs) != VECSXP)
     {
         Rf_errorcall(R_NilValue, "node '%s' has no inputs", cg_node_name(node));
     }
@@ -123,9 +123,9 @@ inline SEXP cg_node_inputs(SEXP node)
 
 inline void cg_node_set_inputs(SEXP node, SEXP inputs)
 {
-    if(TYPEOF(inputs) != LISTSXP)
+    if(TYPEOF(inputs) != VECSXP)
     {
-        Rf_errorcall(R_NilValue, "argument 'inputs' must be a pairlist of inputs");
+        Rf_errorcall(R_NilValue, "argument 'inputs' must be a list of inputs");
     }
 
     CG_SET(node, CG_INPUTS_SYMBOL, inputs);
