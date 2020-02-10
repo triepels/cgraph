@@ -70,28 +70,25 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
 
     SEXP inputs = PROTECT(cg_node_inputs(node));
 
-    R_len_t m = XLENGTH(inputs);
-
-    for(int i = 0; i < m; i++)
+    for(SEXP input = inputs; input != R_NilValue; input = CDR(input))
     {
-      SEXP input = VECTOR_ELT(inputs, i);
+      SEXP input_car = CAR(input);
 
-      if(TYPEOF(input) != ENVSXP)
+      if(TYPEOF(input_car) != ENVSXP)
       {
-        Rf_errorcall(R_NilValue, "node '%s' has an invalid input at index %d",
-                     cg_node_name(node), i + 1);
+        Rf_errorcall(R_NilValue, "cannot process inputs of node node '%s'", cg_node_name(node));
       }
 
-      int input_id = cg_node_id(input);
+      int input_id = cg_node_id(input_car);
 
       if(input_id < 1 || input_id > n)
       {
         Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", input_id);
       }
 
-      if(!visited[input_id - 1] && filter(input))
+      if(!visited[input_id - 1] && filter(input_car))
       {
-        cg_stack_push(stack, input);
+        cg_stack_push(stack, input_car);
 
         visited[input_id - 1] = 1;
 
@@ -149,28 +146,25 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
     SEXP inputs = PROTECT(cg_node_inputs(node));
 
-    R_len_t m = XLENGTH(inputs);
-
-    for(int i = 0; i < m; i++)
+    for(SEXP input = inputs; input != R_NilValue; input = CDR(input))
     {
-      SEXP input = VECTOR_ELT(inputs, i);
+      SEXP input_car = CAR(input);
 
-      if(TYPEOF(input) != ENVSXP)
+      if(TYPEOF(input_car) != ENVSXP)
       {
-        Rf_errorcall(R_NilValue, "node '%s' has an invalid input at index %d",
-                     cg_node_name(node), i + 1);
+        Rf_errorcall(R_NilValue, "cannot process inputs of node node '%s'", cg_node_name(node));
       }
 
-      int input_id = cg_node_id(input);
+      int input_id = cg_node_id(input_car);
 
       if(input_id < 1 || input_id > n)
       {
         Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", input_id);
       }
 
-      if(!visited[input_id - 1] && filter(input))
+      if(!visited[input_id - 1] && filter(input_car))
       {
-        cg_stack_push(stack, input);
+        cg_stack_push(stack, input_car);
 
         visited[input_id - 1] = 1;
 

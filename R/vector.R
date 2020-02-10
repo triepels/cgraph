@@ -641,7 +641,7 @@ delayedAssign("log10", cg_function(
 #' @export
 cg_abs <- function(x, name = NULL)
 {
-  cg_operator(abs, list(x), name)
+  cg_operator(abs, pairlist(x), name)
 }
 
 # Function definition
@@ -1016,7 +1016,7 @@ delayedAssign("atanh", cg_function(
 #' @export
 cg_sigmoid <- function(x, name = NULL)
 {
-  cg_operator(sigmoid, list(x), name)
+  cg_operator(sigmoid, pairlist(x), name)
 }
 
 # Function definition
