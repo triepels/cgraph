@@ -22,7 +22,13 @@ limitations under the License.
 #include "class.h"
 
 /*
- * PUBLIC FUNCTIONS
+ * INLINED FUNCTIONS
+ */
+
+extern inline int cg_is(SEXP env, const char *name);
+
+/*
+ * PUBLIC CONSTRUCTORS
  */
 
 SEXP cg_class(const char *name)
@@ -38,19 +44,4 @@ SEXP cg_class(const char *name)
   UNPROTECT(1);
 
   return env;
-}
-
-int cg_is(SEXP env, const char *name)
-{
-  if(!Rf_isEnvironment(env))
-  {
-    return FALSE;
-  }
-
-  if(!Rf_inherits(env, name))
-  {
-    return FALSE;
-  }
-
-  return TRUE;
 }

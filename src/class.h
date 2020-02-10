@@ -30,11 +30,28 @@ limitations under the License.
 #define CG_SET(x, SYMBOL, v) Rf_defineVar(SYMBOL, v, x)
 
 /*
- * PUBLIC FUNCTIONS
+ * INLINED FUNCTIONS
+ */
+
+inline int cg_is(SEXP env, const char *name)
+{
+    if(!Rf_isEnvironment(env))
+    {
+        return FALSE;
+    }
+
+    if(!Rf_inherits(env, name))
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+/*
+ * PUBLIC CONSTRUCTORS
  */
 
 SEXP cg_class(const char *name);
-
-int cg_is(SEXP env, const char *name);
 
 #endif
