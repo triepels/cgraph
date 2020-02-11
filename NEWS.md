@@ -3,7 +3,7 @@ cgraph 6.0.2
 
 New Features:
 
-* The gradients supplied to argument `grads` of function `cg_function` can now also be matched by name (instead of positionally). The names must match all non-constant arguments of the function provided to argument `def`.
+* The gradients supplied to argument `grads` of function `cg_function` can now also be matched by name (instead of positionally). The names associated with the gradients must match the non-constant arguments of the function provided to argument `def`.
 
 cgraph 6.0.1
 ----------------------------------------------------------------
