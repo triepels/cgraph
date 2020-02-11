@@ -104,11 +104,11 @@ cg_matmul <- function(x, y, name = NULL)
 delayedAssign("matmul", cg_function(
   def = base::`%*%`,
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       tcrossprod(grad, y)
     },
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       crossprod(x, grad)
     }
@@ -138,11 +138,11 @@ cg_crossprod <- function(x, y = x, name = NULL)
 delayedAssign("crossprod", cg_function(
   def = base::crossprod,
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       y %*% grad
     },
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       x %*% grad
     }
@@ -172,11 +172,11 @@ cg_tcrossprod <- function(x, y = x, name = NULL)
 delayedAssign("tcrossprod", cg_function(
   def = base::tcrossprod,
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       grad %*% y
     },
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       grad %*% x
     }
@@ -210,15 +210,15 @@ delayedAssign("linear", cg_function(
     x %*% y + c(z)
   },
   grads = list(
-    function(x, y, z, value, grad)
+    function(x, y, z, output, grad)
     {
       tcrossprod(grad, y)
     },
-    function(x, y, z, value, grad)
+    function(x, y, z, output, grad)
     {
       crossprod(x, grad)
     },
-    function(x, y, z, value, grad)
+    function(x, y, z, output, grad)
     {
       if(is.array(z))
       {
@@ -258,7 +258,7 @@ cg_sum <- function(x, name = NULL)
 delayedAssign("sum", cg_function(
   def = base::sum,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
       if(is.array(x))
       {
@@ -298,9 +298,9 @@ cg_prod <- function(x, name = NULL)
 delayedAssign("prod", cg_function(
   def = base::prod,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
-      grad * value / x
+      grad * output / x
     }
   )
 ))
@@ -329,7 +329,7 @@ cg_rowsums <- function(x, name = NULL)
 delayedAssign("rowsums", cg_function(
   def = base::rowSums,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
       array(grad, dim(x))
     }
@@ -360,7 +360,7 @@ cg_colsums <- function(x, name = NULL)
 delayedAssign("colsums", cg_function(
   def = base::colSums,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
       aperm(array(grad, rev(dim(x))))
     }
@@ -391,7 +391,7 @@ cg_mean <- function(x, name = NULL)
 delayedAssign("mean", cg_function(
   def = base::mean.default,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
       if(is.array(x))
       {
@@ -429,7 +429,7 @@ cg_rowmeans <- function(x, name = NULL)
 delayedAssign("rowmeans", cg_function(
   def = base::rowMeans,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
       1 / prod(dim(x)[-1L]) * array(grad, dim(x))
     }
@@ -460,7 +460,7 @@ cg_colmeans <- function(x, name = NULL)
 delayedAssign("colmeans", cg_function(
   def = base::colMeans,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
       1 / nrow(x) * aperm(array(grad, rev(dim(x))))
     }
@@ -491,9 +491,9 @@ cg_max <- function(x, name = NULL)
 delayedAssign("max", cg_function(
   def = base::max,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
-      c(grad) * (x == c(value))
+      c(grad) * (x == c(output))
     }
   )
 ))
@@ -522,9 +522,9 @@ cg_min <- function(x, name = NULL)
 delayedAssign("min", cg_function(
   def = base::min,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
-      c(grad) * (x == c(value))
+      c(grad) * (x == c(output))
     }
   )
 ))
@@ -554,7 +554,7 @@ cg_pmax <- function(x, y, name = NULL)
 delayedAssign("pmax", cg_function(
   def = base::pmax,
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       if(is.array(x))
       {
@@ -565,7 +565,7 @@ delayedAssign("pmax", cg_function(
         bsum(grad * (x >= c(y)), length(x))
       }
     },
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       if(is.array(y))
       {
@@ -604,7 +604,7 @@ cg_pmin <- function(x, y, name = NULL)
 delayedAssign("pmin", cg_function(
   def = base::pmin,
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       if(is.array(x))
       {
@@ -615,7 +615,7 @@ delayedAssign("pmin", cg_function(
         bsum(grad * (x <= c(y)), length(x))
       }
     },
-    function(x, y, value, grad)
+    function(x, y, output, grad)
     {
       if(is.array(y))
       {
@@ -651,7 +651,7 @@ cg_t <- function(x, name = NULL)
 delayedAssign("t", cg_function(
   def = base::t.default,
   grads = list(
-    function(x, value, grad)
+    function(x, output, grad)
     {
       t.default(grad)
     }

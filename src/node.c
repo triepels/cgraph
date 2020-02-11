@@ -135,7 +135,7 @@ void cg_node_backward(SEXP node)
 
   SETCAR(arg, cg_node_value(node));
 
-  SET_TAG(arg, CG_VALUE_SYMBOL);
+  SET_TAG(arg, CG_OUTPUT_SYMBOL);
 
   SETCADR(arg, cg_node_grad(node));
 

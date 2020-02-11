@@ -51,6 +51,7 @@ SEXP CG_GRAPH_SYMBOL   = NULL;
 SEXP CG_NODES_SYMBOL   = NULL;
 SEXP CG_VALUE_SYMBOL   = NULL;
 SEXP CG_INPUTS_SYMBOL  = NULL;
+SEXP CG_OUTPUT_SYMBOL  = NULL;
 
 /*
  * LIBRARY INITIALIZATION
@@ -99,4 +100,5 @@ void R_init_cgraph(DllInfo *dll)
   CG_NODES_SYMBOL   = Rf_install("nodes");
   CG_VALUE_SYMBOL   = Rf_install("value");
   CG_INPUTS_SYMBOL  = Rf_install("inputs");
+  CG_OUTPUT_SYMBOL  = Rf_install("output");
 }
