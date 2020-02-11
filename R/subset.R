@@ -37,7 +37,7 @@ cg_subset1 <- function(x, ..., name = NULL)
 delayedAssign("subset1", cg_function(
   def = base::`[`,
   grads = list(
-    x = function(x, ..., drop = TRUE, output, grad)
+    x = function(x, ..., drop = TRUE, value, grad)
     {
       if(!is.numeric(x))
       {
@@ -92,7 +92,7 @@ cg_subset2 <- function(x, ..., name = NULL)
 delayedAssign("subset2", cg_function(
   def = base::`[[`,
   grads = list(
-    x = function(x, ..., exact = TRUE, output, grad)
+    x = function(x, ..., exact = TRUE, value, grad)
     {
       if(!is.numeric(x))
       {
