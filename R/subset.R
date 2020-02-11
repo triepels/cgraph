@@ -30,14 +30,14 @@
 #' @export
 cg_subset1 <- function(x, ..., name = NULL)
 {
-  cg_operator(subset1, c(x, dots()))
+  cg_operator(subset1, c(x = x, dots()))
 }
 
 # Function definition
 delayedAssign("subset1", cg_function(
   def = base::`[`,
   grads = list(
-    function(x, ..., drop = TRUE, value, grad)
+    x = function(x, ..., drop = TRUE, output, grad)
     {
       if(!is.numeric(x))
       {
@@ -67,6 +67,31 @@ delayedAssign("subset1", cg_function(
   cg_subset1(x, ...)
 }
 
+#' @author Ron Triepels
+#' @export
+cg_subassign1 <- function(x, ..., name = NULL)
+{
+  cg_operator(subassign1, c(x, dots()))
+}
+
+# Function definition
+delayedAssign("subassign1", cg_function(
+  def = base::`[<-`,
+  grads = list(
+    value = function(x, ..., value, output, grad)
+    {
+      grad[...]
+    }
+  )
+))
+
+#' @export
+#' @author Ron Triepels
+`[<-.cg_node` <- function(x, ...)
+{
+  cg_subassign1(x, ...)
+}
+
 #' Subset
 #'
 #' Calculate \code{x[[...]]}.
@@ -85,14 +110,14 @@ delayedAssign("subset1", cg_function(
 #' @export
 cg_subset2 <- function(x, ..., name = NULL)
 {
-  cg_operator(subset2, c(x, dots()))
+  cg_operator(subset2, c(x = x, dots()))
 }
 
 # Function definition
 delayedAssign("subset2", cg_function(
   def = base::`[[`,
   grads = list(
-    function(x, ..., exact = TRUE, value, grad)
+    x = function(x, ..., exact = TRUE, output, grad)
     {
       if(!is.numeric(x))
       {
