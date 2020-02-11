@@ -58,7 +58,7 @@ SEXP dots(SEXP env)
     n++;
   }
 
-  if(n == 1 && CAR(args) == R_MissingArg)
+  if(n == 0 || (n == 1 && CAR(args) == R_MissingArg))
   {
     UNPROTECT(1);
 
