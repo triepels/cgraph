@@ -30,14 +30,14 @@
 #' @export
 cg_subset1 <- function(x, ..., name = NULL)
 {
-  cg_operator(subset1, c(x, dots()))
+  cg_operator(subset1, c(x = x, dots()))
 }
 
 # Function definition
 delayedAssign("subset1", cg_function(
   def = base::`[`,
   grads = list(
-    function(x, ..., drop = TRUE, output, grad)
+    x = function(x, ..., drop = TRUE, output, grad)
     {
       if(!is.numeric(x))
       {
@@ -85,14 +85,14 @@ delayedAssign("subset1", cg_function(
 #' @export
 cg_subset2 <- function(x, ..., name = NULL)
 {
-  cg_operator(subset2, c(x, dots()))
+  cg_operator(subset2, c(x = x, dots()))
 }
 
 # Function definition
 delayedAssign("subset2", cg_function(
   def = base::`[[`,
   grads = list(
-    function(x, ..., exact = TRUE, output, grad)
+    x = function(x, ..., exact = TRUE, output, grad)
     {
       if(!is.numeric(x))
       {

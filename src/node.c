@@ -64,11 +64,11 @@ void cg_node_forward(SEXP node)
 {
   SEXP inputs = PROTECT(cg_node_inputs(node));
 
+  SEXP input_tags = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
+
   R_len_t n = XLENGTH(inputs);
 
   SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
-
-  SEXP names = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
 
   SEXP arg = args;
 
@@ -78,13 +78,13 @@ void cg_node_forward(SEXP node)
 
     SETCAR(arg, cg_node_value(input));
 
-    if(!Rf_isNull(names))
+    if(!Rf_isNull(input_tags))
     {
-      SEXP name = STRING_ELT(names, i);
+      SEXP input_tag = STRING_ELT(input_tags, i);
 
-      if(CHAR(name)[0] != '\0')
+      if(CHAR(input_tag)[0] != '\0')
       {
-        SET_TAG(arg, Rf_installChar(name));
+        SET_TAG(arg, Rf_installChar(input_tag));
       }
     }
 
@@ -106,11 +106,11 @@ void cg_node_backward(SEXP node)
 {
   SEXP inputs = PROTECT(cg_node_inputs(node));
 
+  SEXP input_tags = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
+
   R_len_t n = XLENGTH(inputs);
 
   SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 2));
-
-  SEXP names = PROTECT(Rf_getAttrib(inputs, R_NamesSymbol));
 
   SEXP arg = args;
 
@@ -120,13 +120,13 @@ void cg_node_backward(SEXP node)
 
     SETCAR(arg, cg_node_value(input));
 
-    if(!Rf_isNull(names))
+    if(!Rf_isNull(input_tags))
     {
-      SEXP name = STRING_ELT(names, i);
+      SEXP input_tag = STRING_ELT(input_tags, i);
 
-      if(CHAR(name)[0] != '\0')
+      if(CHAR(input_tag)[0] != '\0')
       {
-        SET_TAG(arg, Rf_installChar(name));
+        SET_TAG(arg, Rf_installChar(input_tag));
       }
     }
 
@@ -145,7 +145,9 @@ void cg_node_backward(SEXP node)
 
   SEXP function_grads = PROTECT(cg_function_grads(function));
 
-  R_len_t k = XLENGTH(function_grads);
+  SEXP function_grad_tags = PROTECT(Rf_getAttrib(function_grads, R_NamesSymbol));
+
+  R_len_t m = XLENGTH(function_grads);
 
   for(int i = 0; i < n; i++)
   {
@@ -156,17 +158,56 @@ void cg_node_backward(SEXP node)
       continue;
     }
 
-    if(i >= k)
-    {
-      Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at input %d",
-                   cg_node_name(node), i + 1);
-    }
+    SEXP function_grad;
 
-    SEXP function_grad = VECTOR_ELT(function_grads, i);
+    if(Rf_isNull(input_tags))
+    {
+      if(i >= m)
+      {
+        Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at input %d",
+                     cg_node_name(node), i + 1);
+      }
+
+      function_grad = VECTOR_ELT(function_grads, i);
+    }
+    else
+    {
+      SEXP input_tag = STRING_ELT(input_tags, i);
+
+      if(CHAR(input_tag)[0] == '\0')
+      {
+        Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at input %d",
+                     cg_node_name(node), i + 1);
+      }
+
+      int match = 0;
+
+      if(!Rf_isNull(function_grad_tags))
+      {
+        for(int j = 0; j < m; j++)
+        {
+          if(input_tag == STRING_ELT(function_grad_tags, j))
+          {
+            function_grad = VECTOR_ELT(function_grads, j);
+
+            match = 1;
+
+            break;
+          }
+        }
+      }
+
+      if(!match)
+      {
+        Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at input '%s'",
+                     cg_node_name(node), CHAR(input_tag));
+      }
+    }
 
     if(!Rf_isFunction(function_grad))
     {
-      Rf_errorcall(R_NilValue, "function has an invalid gradient at index %d", i + 1);
+      Rf_errorcall(R_NilValue, "cannot process gradient function of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(function_grad)), cg_node_name(node));
     }
 
     SEXP call = PROTECT(Rf_lcons(function_grad, args));
@@ -187,12 +228,12 @@ void cg_node_backward(SEXP node)
     }
     else
     {
-      R_len_t m = XLENGTH(input_grad);
+      R_len_t l = XLENGTH(input_grad);
 
-      if(XLENGTH(grad) != m)
+      if(XLENGTH(grad) != l)
       {
         Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
-                     XLENGTH(grad), m, cg_node_name(node));
+                     XLENGTH(grad), l, cg_node_name(node));
       }
 
       switch(TYPEOF(input_grad))
@@ -207,9 +248,9 @@ void cg_node_backward(SEXP node)
             {
               double *pg = REAL(grad);
 
-              for(int j = 0; j < m; j++)
+              for(int k = 0; k < l; k++)
               {
-                pi[j] += pg[j];
+                pi[k] += pg[k];
               }
 
               break;
@@ -219,9 +260,9 @@ void cg_node_backward(SEXP node)
             {
               int *pg = INTEGER(grad);
 
-              for(int j = 0; j < m; j++)
+              for(int k = 0; k < l; k++)
               {
-                pi[j] += pg[j];
+                pi[k] += pg[k];
               }
 
               break;
@@ -241,9 +282,9 @@ void cg_node_backward(SEXP node)
             {
               double *pg = REAL(grad);
 
-              for(int j = 0; j < m; j++)
+              for(int k = 0; k < l; k++)
               {
-                pi[j] += pg[j];
+                pi[k] += pg[k];
               }
 
               break;
@@ -253,9 +294,9 @@ void cg_node_backward(SEXP node)
             {
               int *pg = INTEGER(grad);
 
-              for(int j = 0; j < m; j++)
+              for(int k = 0; k < l; k++)
               {
-                pi[j] += pg[j];
+                pi[k] += pg[k];
               }
 
               break;
@@ -270,7 +311,7 @@ void cg_node_backward(SEXP node)
     UNPROTECT(3);
   }
 
-  UNPROTECT(5);
+  UNPROTECT(6);
 }
 
 /*
