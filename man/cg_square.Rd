@@ -18,7 +18,7 @@ cg_operator object.
 Calculate \code{x ^ 2}.
 }
 \note{
-This function is equivalent to \code{cg_pow(x, 2)}.
+This function is equivalent to \code{cg_pow(x, 2)} but more efficient.
 }
 \seealso{
 \link[base:Arithmetic]{square}

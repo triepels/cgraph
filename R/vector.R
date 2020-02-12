@@ -449,7 +449,7 @@ delayedAssign("pow", cg_function(
 #'
 #' @return cg_operator object.
 #'
-#' @note This function is equivalent to \code{cg_pow(x, 2)}.
+#' @note This function is equivalent to \code{cg_pow(x, 2)} but more efficient.
 #'
 #' @seealso \link[base:Arithmetic]{square}
 #'
