@@ -32,7 +32,7 @@ Comments:
 
 * The name of a node no longer has to be unique.
 * Function `cg_graph_run` and `cg_graph_gradients` have been removed.
-* Data member `nodes` of a `cgraph` object is no longer named for performance reasons. Use function `cg_graph_get` to retrieve a node.
+* Data member `nodes` of a `cgraph` object is no longer named for performance reasons. Use function `cg_graph_get` to retrieve a node by name.
 * The performance of function `cg_operator` has significantly improved. Graphs can now be build considerbly faster.
 
 cgraph 5.0.1
