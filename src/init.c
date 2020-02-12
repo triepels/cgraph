@@ -28,6 +28,7 @@ limitations under the License.
 #include "symbols.h"
 #include "function.h"
 #include "internal.h"
+#include "optimizer.h"
 
 /*
  * SESSION DEFINITION
@@ -40,6 +41,7 @@ cg_session_t session;
  */
 
 SEXP CG_ID_SYMBOL      = NULL;
+SEXP CG_LR_SYMBOL      = NULL;
 SEXP CG_DEF_SYMBOL     = NULL;
 SEXP CG_FUN_SYMBOL     = NULL;
 SEXP CG_GRAD_SYMBOL    = NULL;
@@ -49,6 +51,7 @@ SEXP CG_EAGER_SYMBOL   = NULL;
 SEXP CG_GRADS_SYMBOL   = NULL;
 SEXP CG_GRAPH_SYMBOL   = NULL;
 SEXP CG_NODES_SYMBOL   = NULL;
+SEXP CG_PARMS_SYMBOL   = NULL;
 SEXP CG_VALUE_SYMBOL   = NULL;
 SEXP CG_INPUTS_SYMBOL  = NULL;
 
@@ -69,6 +72,9 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_graph_backward",     (DL_FUNC) &cg_graph_backward,     3},
   // Function
   {"cg_function",           (DL_FUNC) &cg_function,           2},
+  // Optimizer
+  {"cg_gd",                 (DL_FUNC) &cg_gd,                 2},
+  {"cg_optimizer_step",     (DL_FUNC) &cg_optimizer_step,     1},
   // Session
   {"cg_session_graph",      (DL_FUNC) &cg_session_graph,      0},
   {"cg_session_set_graph",  (DL_FUNC) &cg_session_set_graph,  1},
@@ -89,6 +95,7 @@ void R_init_cgraph(DllInfo *dll)
 
   // Install symbols
   CG_ID_SYMBOL      = Rf_install("id");
+  CG_LR_SYMBOL      = Rf_install("lr");
   CG_DEF_SYMBOL     = Rf_install("def");
   CG_FUN_SYMBOL     = Rf_install("fun");
   CG_GRAD_SYMBOL    = Rf_install("grad");
@@ -97,6 +104,7 @@ void R_init_cgraph(DllInfo *dll)
   CG_EAGER_SYMBOL   = Rf_install("eager");
   CG_GRADS_SYMBOL   = Rf_install("grads");
   CG_NODES_SYMBOL   = Rf_install("nodes");
+  CG_PARMS_SYMBOL   = Rf_install("parms");
   CG_VALUE_SYMBOL   = Rf_install("value");
   CG_INPUTS_SYMBOL  = Rf_install("inputs");
 }

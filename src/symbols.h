@@ -27,6 +27,7 @@ limitations under the License.
  */
 
 extern SEXP CG_ID_SYMBOL;
+extern SEXP CG_LR_SYMBOL;
 extern SEXP CG_DEF_SYMBOL;
 extern SEXP CG_FUN_SYMBOL;
 extern SEXP CG_GRAD_SYMBOL;
@@ -35,6 +36,7 @@ extern SEXP CG_TYPE_SYMBOL;
 extern SEXP CG_EAGER_SYMBOL;
 extern SEXP CG_GRADS_SYMBOL;
 extern SEXP CG_NODES_SYMBOL;
+extern SEXP CG_PARMS_SYMBOL;
 extern SEXP CG_VALUE_SYMBOL;
 extern SEXP CG_INPUTS_SYMBOL;
 
