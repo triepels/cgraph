@@ -163,10 +163,10 @@ static inline void cg_gd_momentum_step(SEXP optimizer)
                    XLENGTH(grad), cg_node_name(parm));
     }
 
-    if(m != XLENGTH(buffer))
+    if(m != XLENGTH(state))
     {
       Rf_errorcall(R_NilValue, "cannot process momentum buffer of length %d for node '%s'",
-                   XLENGTH(buffer), cg_node_name(parm));
+                   XLENGTH(state), cg_node_name(parm));
     }
 
     double *ps = REAL(state);
