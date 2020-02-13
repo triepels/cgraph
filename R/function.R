@@ -36,6 +36,7 @@ cg_function <- function(def, grads = list())
   .Call("cg_function", def, grads, PACKAGE = "cgraph")
 }
 
+#' @author Ron Triepels
 #' @export
 print.cg_function <- function(x, ...)
 {

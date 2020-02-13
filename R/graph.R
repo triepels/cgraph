@@ -162,6 +162,7 @@ cg_graph_backward <- function(graph, target, index = NULL)
   invisible(.Call("cg_graph_backward", graph, target, index, PACKAGE = "cgraph"))
 }
 
+#' @author Ron Triepels
 #' @export
 print.cg_graph <- function(x, ...)
 {

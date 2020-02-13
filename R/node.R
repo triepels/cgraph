@@ -119,6 +119,7 @@ cg_operator <- function(fun, inputs, name = NULL)
   .Call("cg_operator", fun, inputs, name, PACKAGE = "cgraph")
 }
 
+#' @author Ron Triepels
 #' @export
 print.cg_node <- function(x, ...)
 {

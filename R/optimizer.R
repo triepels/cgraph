@@ -25,3 +25,10 @@ cg_optimizer_step <- function(optimizer)
 {
   invisible(.Call("cg_optimizer_step", optimizer, PACKAGE = "cgraph"))
 }
+
+#' @author Ron Triepels
+#' @export
+print.cg_optimizer <- function(x, ...)
+{
+  cat("<cg_optimizer>")
+}
