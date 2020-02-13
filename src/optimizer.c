@@ -32,7 +32,7 @@ extern inline void cg_optimizer_set_parms(SEXP optimizer, SEXP parms);
 
 extern inline double cg_optimizer_lr(SEXP optimizer);
 
-extern inline void cg_optimizer_set_lr(SEXP optimizer, const double eta);
+extern inline void cg_optimizer_set_lr(SEXP optimizer, const double lr);
 
 extern inline cg_optimizer_type_t cg_optimizer_type(SEXP optimizer);
 
