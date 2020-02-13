@@ -214,7 +214,7 @@ void cg_node_backward(SEXP node)
 
     SEXP grad = PROTECT(Rf_eval(call, R_EmptyEnv));
 
-    if(!Rf_isNumeric(grad))
+    if(!Rf_isReal(grad))
     {
       Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
                    Rf_type2char(TYPEOF(grad)), cg_node_name(node));
@@ -230,81 +230,18 @@ void cg_node_backward(SEXP node)
     {
       R_len_t l = XLENGTH(input_grad);
 
-      if(XLENGTH(grad) != l)
+      if(l != XLENGTH(grad))
       {
         Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
-                     XLENGTH(grad), l, cg_node_name(node));
+                     l, XLENGTH(grad), cg_node_name(node));
       }
 
-      switch(TYPEOF(input_grad))
+      double *pg = REAL(grad);
+      double *pi = REAL(input_grad);
+
+      for(int k = 0; k < l; k++)
       {
-        case REALSXP :
-        {
-          double *pi = REAL(input_grad);
-
-          switch(TYPEOF(grad))
-          {
-            case REALSXP :
-            {
-              double *pg = REAL(grad);
-
-              for(int k = 0; k < l; k++)
-              {
-                pi[k] += pg[k];
-              }
-
-              break;
-            }
-            case LGLSXP :
-            case INTSXP :
-            {
-              int *pg = INTEGER(grad);
-
-              for(int k = 0; k < l; k++)
-              {
-                pi[k] += pg[k];
-              }
-
-              break;
-            }
-          }
-
-          break;
-        }
-        case LGLSXP :
-        case INTSXP :
-        {
-          int *pi = INTEGER(input_grad);
-
-          switch(TYPEOF(grad))
-          {
-            case REALSXP :
-            {
-              double *pg = REAL(grad);
-
-              for(int k = 0; k < l; k++)
-              {
-                pi[k] += pg[k];
-              }
-
-              break;
-            }
-            case LGLSXP :
-            case INTSXP :
-            {
-              int *pg = INTEGER(grad);
-
-              for(int k = 0; k < l; k++)
-              {
-                pi[k] += pg[k];
-              }
-
-              break;
-            }
-          }
-
-          break;
-        }
+        pi[k] += pg[k];
       }
     }
 

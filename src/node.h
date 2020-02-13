@@ -154,7 +154,7 @@ inline SEXP cg_node_grad(SEXP node)
 {
     SEXP grad = PROTECT(CG_GET(node, CG_GRAD_SYMBOL));
 
-    if(grad == R_UnboundValue)
+    if(!Rf_isNull(grad) && TYPEOF(grad) != REALSXP)
     {
         Rf_errorcall(R_NilValue, "node '%s' has no gradient", cg_node_name(node));
     }
@@ -167,6 +167,11 @@ inline SEXP cg_node_grad(SEXP node)
 
 inline void cg_node_set_grad(SEXP node, SEXP grad)
 {
+    if(TYPEOF(grad) != REALSXP)
+    {
+        Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+    }
+
     CG_SET(node, CG_GRAD_SYMBOL, grad);
 }
 
