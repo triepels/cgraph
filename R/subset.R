@@ -16,7 +16,7 @@
 #'
 #' Calculate \code{x[...]}.
 #'
-#' @param x either a cg_node object or a numerical vector or array.
+#' @param x a cg_node object.
 #' @param ... either cg_node objects or numerical scalars that are passed on to the \code{`[`} function.
 #' @param name character scalar, name of the operation (optional).
 #'
@@ -57,7 +57,7 @@ delayedAssign("subset1", cg_function(
 #'
 #' Calculate \code{x[[...]]}.
 #'
-#' @param x either a cg_node object or a numerical vector or array.
+#' @param x a cg_node object.
 #' @param ... either cg_node objects or numerical scalars that are passed on to the \code{`[[`} function.
 #' @param name character scalar, name of the operation (optional).
 #'

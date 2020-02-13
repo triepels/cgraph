@@ -7,7 +7,7 @@
 cg_subset2(x, ..., name = NULL)
 }
 \arguments{
-\item{x}{either a cg_node object or a numerical vector or array.}
+\item{x}{a cg_node object.}
 
 \item{...}{either cg_node objects or numerical scalars that are passed on to the \code{`[[`} function.}
 
