@@ -30,12 +30,37 @@ limitations under the License.
  */
 
 typedef enum {
-  CGGD
+  CGGD,
+  CGGDM
 } cg_optimizer_type_t;
 
 /*
  * INLINED GET/SET FUNCTIONS
  */
+
+inline SEXP cg_optimizer_buffer1(SEXP optimizer)
+{
+  SEXP buffer = PROTECT(CG_GET(optimizer, CG_BUFFER1_SYMBOL));
+
+  if(TYPEOF(buffer) != VECSXP)
+  {
+    Rf_errorcall(R_NilValue, "optimizer has no internal buffer");
+  }
+
+  UNPROTECT(1);
+
+  return buffer;
+}
+
+inline void cg_optimizer_set_buffer1(SEXP optimizer, SEXP buffer)
+{
+  if(TYPEOF(buffer) != VECSXP)
+  {
+    Rf_errorcall(R_NilValue, "argument 'buffer' must be a list of buffered states");
+  }
+
+  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer);
+}
 
 inline SEXP cg_optimizer_parms(SEXP optimizer)
 {
@@ -61,23 +86,42 @@ inline void cg_optimizer_set_parms(SEXP optimizer, SEXP parms)
   CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
 }
 
-inline double cg_optimizer_lr(SEXP optimizer)
+inline double cg_optimizer_gamma(SEXP optimizer)
 {
-  SEXP lr = PROTECT(CG_GET(optimizer, CG_LR_SYMBOL));
+  SEXP gamma = PROTECT(CG_GET(optimizer, CG_GAMMA_SYMBOL));
 
-  if(!IS_SCALAR(lr, REALSXP))
+  if(!IS_SCALAR(gamma, REALSXP))
+  {
+    Rf_errorcall(R_NilValue, "optimizer has no momentum rate");
+  }
+
+  UNPROTECT(1);
+
+  return REAL(gamma)[0];
+}
+
+inline void cg_optimizer_set_gamma(SEXP optimizer, const double gamma)
+{
+  CG_SET(optimizer, CG_GAMMA_SYMBOL, Rf_ScalarReal(gamma));
+}
+
+inline double cg_optimizer_eta(SEXP optimizer)
+{
+  SEXP eta = PROTECT(CG_GET(optimizer, CG_ETA_SYMBOL));
+
+  if(!IS_SCALAR(eta, REALSXP))
   {
     Rf_errorcall(R_NilValue, "optimizer has no learning rate");
   }
 
   UNPROTECT(1);
 
-  return REAL(lr)[0];
+  return REAL(eta)[0];
 }
 
-inline void cg_optimizer_set_lr(SEXP optimizer, const double lr)
+inline void cg_optimizer_set_eta(SEXP optimizer, const double eta)
 {
-  CG_SET(optimizer, CG_LR_SYMBOL, Rf_ScalarReal(lr));
+  CG_SET(optimizer, CG_ETA_SYMBOL, Rf_ScalarReal(eta));
 }
 
 inline cg_optimizer_type_t cg_optimizer_type(SEXP optimizer)
@@ -109,6 +153,8 @@ SEXP cg_optimizer_step(SEXP optimizer);
  * PUBLIC CONSTRUCTORS
  */
 
-SEXP cg_gd(SEXP parms, SEXP lr);
+SEXP cg_gd(SEXP parms, SEXP eta);
+
+SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma);
 
 #endif

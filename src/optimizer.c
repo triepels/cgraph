@@ -26,13 +26,21 @@ limitations under the License.
  * INLINED GET/SET FUNCTIONS
  */
 
+extern inline SEXP cg_optimizer_buffer1(SEXP optimizer);
+
+extern inline void cg_optimizer_set_buffer1(SEXP optimizer, SEXP buffer);
+
 extern inline SEXP cg_optimizer_parms(SEXP optimizer);
 
 extern inline void cg_optimizer_set_parms(SEXP optimizer, SEXP parms);
 
-extern inline double cg_optimizer_lr(SEXP optimizer);
+extern inline double cg_optimizer_gamma(SEXP optimizer);
 
-extern inline void cg_optimizer_set_lr(SEXP optimizer, const double lr);
+extern inline void cg_optimizer_set_gamma(SEXP optimizer, const double gamma);
+
+extern inline double cg_optimizer_eta(SEXP optimizer);
+
+extern inline void cg_optimizer_set_eta(SEXP optimizer, const double eta);
 
 extern inline cg_optimizer_type_t cg_optimizer_type(SEXP optimizer);
 
@@ -46,7 +54,7 @@ static inline void cg_gd_step(SEXP optimizer)
 {
   SEXP parms = PROTECT(cg_optimizer_parms(optimizer));
 
-  const double lr = cg_optimizer_lr(optimizer);
+  const double eta = cg_optimizer_eta(optimizer);
 
   R_len_t n = XLENGTH(parms);
 
@@ -79,8 +87,8 @@ static inline void cg_gd_step(SEXP optimizer)
 
     if(m != XLENGTH(grad))
     {
-      Rf_errorcall(R_NilValue, "cannot process value and gradient of length %d and %d respectively for node '%s'",
-                   m, XLENGTH(grad), cg_node_name(parm));
+      Rf_errorcall(R_NilValue, "cannot process gradient of length %d for node '%s'",
+                   XLENGTH(grad), cg_node_name(parm));
     }
 
     double *pv = REAL(value);
@@ -88,13 +96,93 @@ static inline void cg_gd_step(SEXP optimizer)
 
     for(int i = 0; i < m; i++)
     {
-      pv[i] -= lr * pg[i];
+      pv[i] -= eta * pg[i];
     }
 
     UNPROTECT(2);
   }
 
   UNPROTECT(1);
+}
+
+static inline void cg_gd_momentum_step(SEXP optimizer)
+{
+  SEXP parms = PROTECT(cg_optimizer_parms(optimizer));
+
+  SEXP buffer = PROTECT(cg_optimizer_buffer1(optimizer));
+
+  R_len_t n = XLENGTH(buffer);
+
+  if(n != XLENGTH(parms))
+  {
+    Rf_errorcall(R_NilValue, "optimizer has an invalid number of momentum buffers");
+  }
+
+  const double eta = cg_optimizer_eta(optimizer);
+
+  const double gamma = cg_optimizer_gamma(optimizer);
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP parm = VECTOR_ELT(parms, i);
+
+    if(TYPEOF(parm) != ENVSXP)
+    {
+      Rf_errorcall(R_NilValue, "argument 'parms' has an invalid parameter at index %d", i + 1);
+    }
+
+    SEXP state = VECTOR_ELT(buffer, i);
+
+    if(!Rf_isReal(state))
+    {
+      Rf_errorcall(R_NilValue, "cannot process momentum buffer of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(state)), cg_node_name(parm));
+    }
+
+    SEXP value = PROTECT(cg_node_value(parm));
+
+    if(!Rf_isReal(value))
+    {
+      Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(value)), cg_node_name(parm));
+    }
+
+    SEXP grad = PROTECT(cg_node_grad(parm));
+
+    if(!Rf_isReal(grad))
+    {
+      Rf_errorcall(R_NilValue, "cannot process gradient of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(grad)), cg_node_name(parm));
+    }
+
+    R_len_t m = XLENGTH(value);
+
+    if(m != XLENGTH(grad))
+    {
+      Rf_errorcall(R_NilValue, "cannot process value of length %d for node '%s'",
+                   XLENGTH(grad), cg_node_name(parm));
+    }
+
+    if(m != XLENGTH(buffer))
+    {
+      Rf_errorcall(R_NilValue, "cannot process momentum buffer of length %d for node '%s'",
+                   XLENGTH(buffer), cg_node_name(parm));
+    }
+
+    double *ps = REAL(state);
+    double *pv = REAL(value);
+    double *pg = REAL(grad);
+
+    for(int i = 0; i < m; i++)
+    {
+      ps[i] = gamma * ps[i] + eta * pg[i];
+      pv[i] -= ps[i];
+    }
+
+    UNPROTECT(2);
+  }
+
+  UNPROTECT(2);
 }
 
 /*
@@ -113,6 +201,9 @@ SEXP cg_optimizer_step(SEXP optimizer)
     case CGGD :
       cg_gd_step(optimizer);
       break;
+    case CGGDM :
+      cg_gd_momentum_step(optimizer);
+      break;
   }
 
   return R_NilValue;
@@ -122,16 +213,16 @@ SEXP cg_optimizer_step(SEXP optimizer)
  * PUBLIC CONSTRUCTORS
  */
 
-SEXP cg_gd(SEXP parms, SEXP lr)
+SEXP cg_gd(SEXP parms, SEXP eta)
 {
   if(TYPEOF(parms) != VECSXP)
   {
     Rf_errorcall(R_NilValue, "argument 'parms' must be a list of parameters");
   }
 
-  if(!IS_SCALAR(lr, REALSXP))
+  if(!IS_SCALAR(eta, REALSXP))
   {
-    Rf_errorcall(R_NilValue, "argument 'lr' must be a real scalar");
+    Rf_errorcall(R_NilValue, "argument 'eta' must be a real scalar");
   }
 
   R_xlen_t n = XLENGTH(parms);
@@ -148,13 +239,77 @@ SEXP cg_gd(SEXP parms, SEXP lr)
 
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
 
-  CG_SET(optimizer, CG_LR_SYMBOL, lr);
+  CG_SET(optimizer, CG_ETA_SYMBOL, eta);
 
   CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
 
   CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGGD));
 
   UNPROTECT(1);
+
+  return optimizer;
+}
+
+SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma)
+{
+  if(TYPEOF(parms) != VECSXP)
+  {
+    Rf_errorcall(R_NilValue, "argument 'parms' must be a list of parameters");
+  }
+
+  if(!IS_SCALAR(eta, REALSXP))
+  {
+    Rf_errorcall(R_NilValue, "argument 'eta' must be a real scalar");
+  }
+
+  if(!IS_SCALAR(gamma, REALSXP))
+  {
+    Rf_errorcall(R_NilValue, "argument 'gamma' must be a real scalar");
+  }
+
+  R_xlen_t n = XLENGTH(parms);
+
+  SEXP buffer = PROTECT(Rf_allocVector(VECSXP, n));
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP parm = VECTOR_ELT(parms, i);
+
+    if(!cg_is(parm, "cg_node"))
+    {
+      Rf_errorcall(R_NilValue, "argument 'parms' has an invalid parameter at index %d", i + 1);
+    }
+
+    SEXP value = PROTECT(cg_node_value(parm));
+
+    if(!Rf_isReal(value))
+    {
+      Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(value)), cg_node_name(parm));
+    }
+
+    SEXP state = PROTECT(Rf_duplicate(value));
+
+    memset(REAL(state), 0, XLENGTH(value) * sizeof(double));
+
+    SET_VECTOR_ELT(buffer, i, state);
+
+    UNPROTECT(2);
+  }
+
+  SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
+
+  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer);
+
+  CG_SET(optimizer, CG_GAMMA_SYMBOL, gamma);
+
+  CG_SET(optimizer, CG_ETA_SYMBOL, eta);
+
+  CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
+
+  CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGGDM));
+
+  UNPROTECT(2);
 
   return optimizer;
 }

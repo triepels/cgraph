@@ -40,20 +40,22 @@ cg_session_t session;
  * SYMBOL DEFINITIONS
  */
 
-SEXP CG_ID_SYMBOL      = NULL;
-SEXP CG_LR_SYMBOL      = NULL;
-SEXP CG_DEF_SYMBOL     = NULL;
-SEXP CG_FUN_SYMBOL     = NULL;
-SEXP CG_GRAD_SYMBOL    = NULL;
-SEXP CG_NAME_SYMBOL    = NULL;
-SEXP CG_TYPE_SYMBOL    = NULL;
-SEXP CG_EAGER_SYMBOL   = NULL;
-SEXP CG_GRADS_SYMBOL   = NULL;
-SEXP CG_GRAPH_SYMBOL   = NULL;
-SEXP CG_NODES_SYMBOL   = NULL;
-SEXP CG_PARMS_SYMBOL   = NULL;
-SEXP CG_VALUE_SYMBOL   = NULL;
-SEXP CG_INPUTS_SYMBOL  = NULL;
+SEXP CG_ID_SYMBOL       = NULL;
+SEXP CG_DEF_SYMBOL      = NULL;
+SEXP CG_ETA_SYMBOL      = NULL;
+SEXP CG_FUN_SYMBOL      = NULL;
+SEXP CG_GRAD_SYMBOL     = NULL;
+SEXP CG_NAME_SYMBOL     = NULL;
+SEXP CG_TYPE_SYMBOL     = NULL;
+SEXP CG_EAGER_SYMBOL    = NULL;
+SEXP CG_GAMMA_SYMBOL    = NULL;
+SEXP CG_GRADS_SYMBOL    = NULL;
+SEXP CG_GRAPH_SYMBOL    = NULL;
+SEXP CG_NODES_SYMBOL    = NULL;
+SEXP CG_PARMS_SYMBOL    = NULL;
+SEXP CG_VALUE_SYMBOL    = NULL;
+SEXP CG_INPUTS_SYMBOL   = NULL;
+SEXP CG_BUFFER1_SYMBOL  = NULL;
 
 /*
  * LIBRARY INITIALIZATION
@@ -74,6 +76,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_function",           (DL_FUNC) &cg_function,           2},
   // Optimizer
   {"cg_gd",                 (DL_FUNC) &cg_gd,                 2},
+  {"cg_gd_momentum",        (DL_FUNC) &cg_gd_momentum,        3},
   {"cg_optimizer_step",     (DL_FUNC) &cg_optimizer_step,     1},
   // Session
   {"cg_session_graph",      (DL_FUNC) &cg_session_graph,      0},
@@ -94,17 +97,19 @@ void R_init_cgraph(DllInfo *dll)
   R_useDynamicSymbols(dll, FALSE);
 
   // Install symbols
-  CG_ID_SYMBOL      = Rf_install("id");
-  CG_LR_SYMBOL      = Rf_install("lr");
-  CG_DEF_SYMBOL     = Rf_install("def");
-  CG_FUN_SYMBOL     = Rf_install("fun");
-  CG_GRAD_SYMBOL    = Rf_install("grad");
-  CG_NAME_SYMBOL    = Rf_install("name");
-  CG_TYPE_SYMBOL    = Rf_install("type");
-  CG_EAGER_SYMBOL   = Rf_install("eager");
-  CG_GRADS_SYMBOL   = Rf_install("grads");
-  CG_NODES_SYMBOL   = Rf_install("nodes");
-  CG_PARMS_SYMBOL   = Rf_install("parms");
-  CG_VALUE_SYMBOL   = Rf_install("value");
-  CG_INPUTS_SYMBOL  = Rf_install("inputs");
+  CG_ID_SYMBOL        = Rf_install("id");
+  CG_DEF_SYMBOL       = Rf_install("def");
+  CG_ETA_SYMBOL       = Rf_install("eta");
+  CG_FUN_SYMBOL       = Rf_install("fun");
+  CG_GRAD_SYMBOL      = Rf_install("grad");
+  CG_NAME_SYMBOL      = Rf_install("name");
+  CG_TYPE_SYMBOL      = Rf_install("type");
+  CG_EAGER_SYMBOL     = Rf_install("eager");
+  CG_GAMMA_SYMBOL     = Rf_install("gamma");
+  CG_GRADS_SYMBOL     = Rf_install("grads");
+  CG_NODES_SYMBOL     = Rf_install("nodes");
+  CG_PARMS_SYMBOL     = Rf_install("parms");
+  CG_VALUE_SYMBOL     = Rf_install("value");
+  CG_INPUTS_SYMBOL    = Rf_install("inputs");
+  CG_BUFFER1_SYMBOL   = Rf_install("buffer1");
 }

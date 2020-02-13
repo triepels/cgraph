@@ -14,10 +14,18 @@
 
 #' @author Ron Triepels
 #' @export
-cg_gd <- function(parms = list(), lr = 0.05)
+cg_gd <- function(parms = list(), eta = 0.05)
 {
-  .Call("cg_gd", parms, lr, PACKAGE = "cgraph")
+  .Call("cg_gd", parms, eta, PACKAGE = "cgraph")
 }
+
+#' @author Ron Triepels
+#' @export
+cg_gd_momentum <- function(parms = list(), eta = 0.05, gamma = 0.9)
+{
+  .Call("cg_gd_momentum", parms, eta, gamma, PACKAGE = "cgraph")
+}
+
 
 #' @author Ron Triepels
 #' @export
