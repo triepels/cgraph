@@ -61,7 +61,7 @@ static inline void cg_gd_step(SEXP optimizer)
 
     SEXP value = PROTECT(cg_node_value(parm));
 
-    if(!Rf_isNumeric(value))
+    if(!Rf_isReal(value))
     {
       Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
                    Rf_type2char(TYPEOF(value)), cg_node_name(parm));
@@ -83,33 +83,12 @@ static inline void cg_gd_step(SEXP optimizer)
                    m, XLENGTH(grad), cg_node_name(parm));
     }
 
-    switch(TYPEOF(value))
+    double *pv = REAL(value);
+    double *pg = REAL(grad);
+
+    for(int i = 0; i < m; i++)
     {
-      case REALSXP :
-      {
-        double *pv = REAL(value);
-        double *pg = REAL(grad);
-
-        for(int i = 0; i < m; i++)
-        {
-          pv[i] -= lr * pg[i];
-        }
-
-        break;
-      }
-      case LGLSXP :
-      case INTSXP :
-      {
-        int *pv = INTEGER(value);
-        double *pg = REAL(grad);
-
-        for(int i = 0; i < m; i++)
-        {
-          pv[i] -= lr * pg[i];
-        }
-
-        break;
-      }
+      pv[i] -= lr * pg[i];
     }
 
     UNPROTECT(2);
