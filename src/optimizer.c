@@ -297,6 +297,8 @@ SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma)
     UNPROTECT(2);
   }
 
+  SHALLOW_DUPLICATE_ATTRIB(buffer, parms);
+
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
 
   CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer);
