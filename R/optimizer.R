@@ -26,6 +26,13 @@ cg_gd_momentum <- function(parms = list(), eta = 0.05, gamma = 0.9)
   .Call("cg_gd_momentum", parms, eta, gamma, PACKAGE = "cgraph")
 }
 
+#' @author Ron Triepels
+#' @export
+cg_rmsprop <- function(parms = list(), eta = 1e-3, gamma = 0.9, eps = 1e-4)
+{
+  .Call("cg_rmsprop", parms, eta, gamma, eps, PACKAGE = "cgraph")
+}
+
 
 #' @author Ron Triepels
 #' @export

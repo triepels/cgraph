@@ -34,6 +34,10 @@ extern inline SEXP cg_optimizer_parms(SEXP optimizer);
 
 extern inline void cg_optimizer_set_parms(SEXP optimizer, SEXP parms);
 
+extern inline double cg_optimizer_eps(SEXP optimizer);
+
+extern inline void cg_optimizer_set_eps(SEXP optimizer, const double eps);
+
 extern inline double cg_optimizer_gamma(SEXP optimizer);
 
 extern inline void cg_optimizer_set_gamma(SEXP optimizer, const double gamma);
@@ -185,6 +189,88 @@ static inline void cg_gd_momentum_step(SEXP optimizer)
   UNPROTECT(2);
 }
 
+static inline void cg_rmsprop_step(SEXP optimizer)
+{
+  SEXP parms = PROTECT(cg_optimizer_parms(optimizer));
+
+  SEXP buffer = PROTECT(cg_optimizer_buffer1(optimizer));
+
+  R_len_t n = XLENGTH(buffer);
+
+  if(n != XLENGTH(parms))
+  {
+    Rf_errorcall(R_NilValue, "optimizer has an invalid number of momentum buffers");
+  }
+
+  const double eta = cg_optimizer_eta(optimizer);
+
+  const double gamma = cg_optimizer_gamma(optimizer);
+
+  const double eps = cg_optimizer_eps(optimizer);
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP parm = VECTOR_ELT(parms, i);
+
+    if(TYPEOF(parm) != ENVSXP)
+    {
+      Rf_errorcall(R_NilValue, "argument 'parms' has an invalid parameter at index %d", i + 1);
+    }
+
+    SEXP state = VECTOR_ELT(buffer, i);
+
+    if(!Rf_isReal(state))
+    {
+      Rf_errorcall(R_NilValue, "cannot process momentum buffer of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(state)), cg_node_name(parm));
+    }
+
+    SEXP value = PROTECT(cg_node_value(parm));
+
+    if(!Rf_isReal(value))
+    {
+      Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(value)), cg_node_name(parm));
+    }
+
+    SEXP grad = PROTECT(cg_node_grad(parm));
+
+    if(!Rf_isReal(grad))
+    {
+      Rf_errorcall(R_NilValue, "cannot process gradient of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(grad)), cg_node_name(parm));
+    }
+
+    R_len_t m = XLENGTH(value);
+
+    if(m != XLENGTH(grad))
+    {
+      Rf_errorcall(R_NilValue, "cannot process value of length %d for node '%s'",
+                   XLENGTH(grad), cg_node_name(parm));
+    }
+
+    if(m != XLENGTH(state))
+    {
+      Rf_errorcall(R_NilValue, "cannot process momentum buffer of length %d for node '%s'",
+                   XLENGTH(state), cg_node_name(parm));
+    }
+
+    double *ps = REAL(state);
+    double *pv = REAL(value);
+    double *pg = REAL(grad);
+
+    for(int i = 0; i < m; i++)
+    {
+      ps[i] = gamma * ps[i] + (1 - gamma) * pg[i] * pg[i];
+      pv[i] -= eta / sqrt(ps[i] + eps) * pg[i];
+    }
+
+    UNPROTECT(2);
+  }
+
+  UNPROTECT(2);
+}
+
 /*
  * PUBLIC FUNCTIONS
  */
@@ -204,6 +290,11 @@ SEXP cg_optimizer_step(SEXP optimizer)
     case CGGDM :
       cg_gd_momentum_step(optimizer);
       break;
+    case CGRMS :
+      cg_rmsprop_step(optimizer);
+      break;
+    default :
+      Rf_errorcall(R_NilValue, "optimizer is not yet implemented");
   }
 
   return R_NilValue;
@@ -310,6 +401,79 @@ SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma)
   CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
 
   CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGGDM));
+
+  UNPROTECT(2);
+
+  return optimizer;
+}
+
+SEXP cg_rmsprop(SEXP parms, SEXP eta, SEXP gamma, SEXP eps)
+{
+  if(TYPEOF(parms) != VECSXP)
+  {
+    Rf_errorcall(R_NilValue, "argument 'parms' must be a list of parameters");
+  }
+
+  if(!IS_SCALAR(eta, REALSXP))
+  {
+    Rf_errorcall(R_NilValue, "argument 'eta' must be a real scalar");
+  }
+
+  if(!IS_SCALAR(gamma, REALSXP))
+  {
+    Rf_errorcall(R_NilValue, "argument 'gamma' must be a real scalar");
+  }
+
+  if(!IS_SCALAR(eps, REALSXP))
+  {
+    Rf_errorcall(R_NilValue, "argument 'eps' must be a real scalar");
+  }
+
+  R_xlen_t n = XLENGTH(parms);
+
+  SEXP buffer = PROTECT(Rf_allocVector(VECSXP, n));
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP parm = VECTOR_ELT(parms, i);
+
+    if(!cg_is(parm, "cg_node"))
+    {
+      Rf_errorcall(R_NilValue, "argument 'parms' has an invalid parameter at index %d", i + 1);
+    }
+
+    SEXP value = PROTECT(cg_node_value(parm));
+
+    if(!Rf_isReal(value))
+    {
+      Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(value)), cg_node_name(parm));
+    }
+
+    SEXP state = PROTECT(Rf_duplicate(value));
+
+    memset(REAL(state), 0, XLENGTH(value) * sizeof(double));
+
+    SET_VECTOR_ELT(buffer, i, state);
+
+    UNPROTECT(2);
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(buffer, parms);
+
+  SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
+
+  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer);
+
+  CG_SET(optimizer, CG_EPS_SYMBOL, eps);
+
+  CG_SET(optimizer, CG_GAMMA_SYMBOL, gamma);
+
+  CG_SET(optimizer, CG_ETA_SYMBOL, eta);
+
+  CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
+
+  CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGRMS));
 
   UNPROTECT(2);
 

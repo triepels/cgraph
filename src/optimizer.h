@@ -30,8 +30,12 @@ limitations under the License.
  */
 
 typedef enum {
-  CGGD,
-  CGGDM
+  CGGD,   /* Gradient Desecnt */
+  CGGDM,  /* Gradient Descent with Momentum */
+  CGNAG,  /* Nestrov Accelerated Gradient */
+  CGADG,  /* Adagrad */
+  CGADD,  /* Adadelta */
+  CGRMS   /* Root Mean Square Propagation */
 } cg_optimizer_type_t;
 
 /*
@@ -84,6 +88,25 @@ inline void cg_optimizer_set_parms(SEXP optimizer, SEXP parms)
   }
 
   CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
+}
+
+inline double cg_optimizer_eps(SEXP optimizer)
+{
+  SEXP eps = PROTECT(CG_GET(optimizer, CG_EPS_SYMBOL));
+
+  if(!IS_SCALAR(eps, REALSXP))
+  {
+    Rf_errorcall(R_NilValue, "optimizer has no error term");
+  }
+
+  UNPROTECT(1);
+
+  return REAL(eps)[0];
+}
+
+inline void cg_optimizer_set_eps(SEXP optimizer, const double eps)
+{
+  CG_SET(optimizer, CG_EPS_SYMBOL, Rf_ScalarReal(eps));
 }
 
 inline double cg_optimizer_gamma(SEXP optimizer)
@@ -156,5 +179,7 @@ SEXP cg_optimizer_step(SEXP optimizer);
 SEXP cg_gd(SEXP parms, SEXP eta);
 
 SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma);
+
+SEXP cg_rmsprop(SEXP parms, SEXP eta, SEXP gamma, SEXP eps);
 
 #endif

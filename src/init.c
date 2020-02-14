@@ -42,6 +42,7 @@ cg_session_t session;
 
 SEXP CG_ID_SYMBOL       = NULL;
 SEXP CG_DEF_SYMBOL      = NULL;
+SEXP CG_EPS_SYMBOL      = NULL;
 SEXP CG_ETA_SYMBOL      = NULL;
 SEXP CG_FUN_SYMBOL      = NULL;
 SEXP CG_GRAD_SYMBOL     = NULL;
@@ -77,6 +78,7 @@ static const R_CallMethodDef CallEntries[] = {
   // Optimizer
   {"cg_gd",                 (DL_FUNC) &cg_gd,                 2},
   {"cg_gd_momentum",        (DL_FUNC) &cg_gd_momentum,        3},
+  {"cg_rmsprop",            (DL_FUNC) &cg_rmsprop,            4},
   {"cg_optimizer_step",     (DL_FUNC) &cg_optimizer_step,     1},
   // Session
   {"cg_session_graph",      (DL_FUNC) &cg_session_graph,      0},
@@ -99,6 +101,7 @@ void R_init_cgraph(DllInfo *dll)
   // Install symbols
   CG_ID_SYMBOL        = Rf_install("id");
   CG_DEF_SYMBOL       = Rf_install("def");
+  CG_EPS_SYMBOL       = Rf_install("eps");
   CG_ETA_SYMBOL       = Rf_install("eta");
   CG_FUN_SYMBOL       = Rf_install("fun");
   CG_GRAD_SYMBOL      = Rf_install("grad");
