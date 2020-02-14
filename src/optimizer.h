@@ -30,7 +30,7 @@ limitations under the License.
  */
 
 typedef enum {
-  CGGD,   /* Gradient Desecnt */
+  CGSGD,  /* (Stochastic) Gradient Desecnt */
   CGGDM,  /* Gradient Descent with Momentum */
   CGNAG,  /* Nestrov Accelerated Gradient */
   CGADG,  /* Adagrad */

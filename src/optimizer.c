@@ -284,7 +284,7 @@ SEXP cg_optimizer_step(SEXP optimizer)
 
   switch(cg_optimizer_type(optimizer))
   {
-    case CGGD :
+    case CGSGD :
       cg_gd_step(optimizer);
       break;
     case CGGDM :
@@ -334,7 +334,7 @@ SEXP cg_gd(SEXP parms, SEXP eta)
 
   CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
 
-  CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGGD));
+  CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGSGD));
 
   UNPROTECT(1);
 
