@@ -312,7 +312,7 @@ SEXP cg_parameter(SEXP value, SEXP name)
 
   CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
-  CG_SET(node, CG_VALUE_SYMBOL, value);
+  CG_SET(node, CG_VALUE_SYMBOL, Rf_duplicate(value));
 
   CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGPRM));
 
