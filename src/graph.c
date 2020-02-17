@@ -52,9 +52,7 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
     Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", id);
   }
 
-  int *visited = (int*)R_alloc(n, sizeof(int));
-
-  memset(visited, 0, n * sizeof(int));
+  int *visited = Calloc(n, int);
 
   cg_stack_t *stack = cg_stack_allocate(n);
 
@@ -111,6 +109,8 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
     UNPROTECT(1);
   }
 
+  Free(visited);
+
   UNPROTECT(1);
 }
 
@@ -127,9 +127,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
     Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", id);
   }
 
-  int *visited = (int*)R_alloc(n, sizeof(int));
-
-  memset(visited, 0, n * sizeof(int));
+  int *visited = Calloc(n, int);
 
   SEXP *queue = (SEXP*)R_alloc(n, sizeof(SEXP));
 
@@ -194,6 +192,8 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
   {
     exec(queue[i]);
   }
+
+  Free(visited);
 
   UNPROTECT(1);
 }
