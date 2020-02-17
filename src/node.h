@@ -164,7 +164,6 @@ inline SEXP cg_node_grad(SEXP node)
     return grad;
 }
 
-
 inline void cg_node_set_grad(SEXP node, SEXP grad)
 {
     if(TYPEOF(grad) != REALSXP)
