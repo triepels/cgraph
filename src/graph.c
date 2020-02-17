@@ -369,8 +369,6 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   double *pg = REAL(grad);
 
-  memset(pg, 0, m * sizeof(double));
-
   if(!Rf_isNull(index))
   {
     int k = Rf_asInteger(index);
@@ -379,6 +377,8 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
     {
       Rf_errorcall(R_NilValue, "argument 'index' out of bounds");
     }
+
+    memset(pg, 0, m * sizeof(double));
 
     pg[k - 1] = 1;
   }
