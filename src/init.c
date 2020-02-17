@@ -48,6 +48,7 @@ SEXP CG_FUN_SYMBOL      = NULL;
 SEXP CG_GRAD_SYMBOL     = NULL;
 SEXP CG_NAME_SYMBOL     = NULL;
 SEXP CG_TYPE_SYMBOL     = NULL;
+SEXP CG_BETAS_SYMBOL    = NULL;
 SEXP CG_EAGER_SYMBOL    = NULL;
 SEXP CG_GAMMA_SYMBOL    = NULL;
 SEXP CG_GRADS_SYMBOL    = NULL;
@@ -55,7 +56,9 @@ SEXP CG_GRAPH_SYMBOL    = NULL;
 SEXP CG_NODES_SYMBOL    = NULL;
 SEXP CG_PARMS_SYMBOL    = NULL;
 SEXP CG_VALUE_SYMBOL    = NULL;
+SEXP CG_GAMMAS_SYMBOL   = NULL;
 SEXP CG_INPUTS_SYMBOL   = NULL;
+SEXP CG_BUFFER0_SYMBOL  = NULL;
 SEXP CG_BUFFER1_SYMBOL  = NULL;
 
 /*
@@ -78,7 +81,9 @@ static const R_CallMethodDef CallEntries[] = {
   // Optimizer
   {"cg_gd",                 (DL_FUNC) &cg_gd,                 2},
   {"cg_gd_momentum",        (DL_FUNC) &cg_gd_momentum,        3},
+  {"cg_adagrad",            (DL_FUNC) &cg_adagrad,            3},
   {"cg_rmsprop",            (DL_FUNC) &cg_rmsprop,            4},
+  {"cg_adam",               (DL_FUNC) &cg_adam,               4},
   {"cg_optimizer_step",     (DL_FUNC) &cg_optimizer_step,     1},
   // Session
   {"cg_session_graph",      (DL_FUNC) &cg_session_graph,      0},
@@ -107,12 +112,15 @@ void R_init_cgraph(DllInfo *dll)
   CG_GRAD_SYMBOL      = Rf_install("grad");
   CG_NAME_SYMBOL      = Rf_install("name");
   CG_TYPE_SYMBOL      = Rf_install("type");
+  CG_BETAS_SYMBOL     = Rf_install("betas");
   CG_EAGER_SYMBOL     = Rf_install("eager");
   CG_GAMMA_SYMBOL     = Rf_install("gamma");
   CG_GRADS_SYMBOL     = Rf_install("grads");
   CG_NODES_SYMBOL     = Rf_install("nodes");
   CG_PARMS_SYMBOL     = Rf_install("parms");
   CG_VALUE_SYMBOL     = Rf_install("value");
+  CG_GAMMAS_SYMBOL    = Rf_install("gammas");
   CG_INPUTS_SYMBOL    = Rf_install("inputs");
+  CG_BUFFER0_SYMBOL   = Rf_install("buffer0");
   CG_BUFFER1_SYMBOL   = Rf_install("buffer1");
 }

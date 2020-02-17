@@ -35,12 +35,37 @@ typedef enum {
   CGNAG,  /* Nestrov Accelerated Gradient */
   CGADG,  /* Adagrad */
   CGADD,  /* Adadelta */
-  CGRMS   /* Root Mean Square Propagation */
+  CGRMS,  /* Root Mean Square Propagation */
+  CGADM   /* ADAM */
 } cg_optimizer_type_t;
 
 /*
  * INLINED GET/SET FUNCTIONS
  */
+
+inline SEXP cg_optimizer_buffer0(SEXP optimizer)
+{
+  SEXP buffer = PROTECT(CG_GET(optimizer, CG_BUFFER0_SYMBOL));
+
+  if(TYPEOF(buffer) != VECSXP)
+  {
+    Rf_errorcall(R_NilValue, "optimizer has no first moments buffer");
+  }
+
+  UNPROTECT(1);
+
+  return buffer;
+}
+
+inline void cg_optimizer_set_buffer0(SEXP optimizer, SEXP buffer)
+{
+  if(TYPEOF(buffer) != VECSXP)
+  {
+    Rf_errorcall(R_NilValue, "argument 'buffer' must be a list of buffered states");
+  }
+
+  CG_SET(optimizer, CG_BUFFER0_SYMBOL, buffer);
+}
 
 inline SEXP cg_optimizer_buffer1(SEXP optimizer)
 {
@@ -48,7 +73,7 @@ inline SEXP cg_optimizer_buffer1(SEXP optimizer)
 
   if(TYPEOF(buffer) != VECSXP)
   {
-    Rf_errorcall(R_NilValue, "optimizer has no internal buffer");
+    Rf_errorcall(R_NilValue, "optimizer has no second moments buffer");
   }
 
   UNPROTECT(1);
@@ -107,6 +132,58 @@ inline double cg_optimizer_eps(SEXP optimizer)
 inline void cg_optimizer_set_eps(SEXP optimizer, const double eps)
 {
   CG_SET(optimizer, CG_EPS_SYMBOL, Rf_ScalarReal(eps));
+}
+
+inline double* cg_optimizer_betas(SEXP optimizer)
+{
+  SEXP betas = PROTECT(CG_GET(optimizer, CG_BETAS_SYMBOL));
+
+  if(TYPEOF(betas) != REALSXP || XLENGTH(betas) != 2)
+  {
+    Rf_errorcall(R_NilValue, "optimizer has no beta coefficients");
+  }
+
+  UNPROTECT(1);
+
+  return REAL(betas);
+}
+
+inline void cg_optimizer_set_betas(SEXP optimizer, const double beta1, const double beta2)
+{
+  SEXP betas = PROTECT(Rf_allocVector(REALSXP, 2));
+
+  REAL(betas)[0] = beta1;
+  REAL(betas)[1] = beta2;
+
+  CG_SET(optimizer, CG_BETAS_SYMBOL, betas);
+
+  UNPROTECT(1);
+}
+
+inline double* cg_optimizer_gammas(SEXP optimizer)
+{
+  SEXP gammas = PROTECT(CG_GET(optimizer, CG_GAMMAS_SYMBOL));
+
+  if(TYPEOF(gammas) != REALSXP || XLENGTH(gammas) != 2)
+  {
+    Rf_errorcall(R_NilValue, "optimizer has no gamma coefficients");
+  }
+
+  UNPROTECT(1);
+
+  return REAL(gammas);
+}
+
+inline void cg_optimizer_set_gammas(SEXP optimizer, const double gamma1, const double gamma2)
+{
+  SEXP gammas = PROTECT(Rf_allocVector(REALSXP, 2));
+
+  REAL(gammas)[0] = gamma1;
+  REAL(gammas)[1] = gamma2;
+
+  CG_SET(optimizer, CG_GAMMAS_SYMBOL, gammas);
+
+  UNPROTECT(1);
 }
 
 inline double cg_optimizer_gamma(SEXP optimizer)
@@ -180,6 +257,10 @@ SEXP cg_gd(SEXP parms, SEXP eta);
 
 SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma);
 
+SEXP cg_adagrad(SEXP parms, SEXP eta, SEXP eps);
+
 SEXP cg_rmsprop(SEXP parms, SEXP eta, SEXP gamma, SEXP eps);
+
+SEXP cg_adam(SEXP parms, SEXP eta, SEXP betas, SEXP eps);
 
 #endif

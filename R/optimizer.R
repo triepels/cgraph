@@ -28,9 +28,23 @@ cg_gd_momentum <- function(parms = list(), eta = 0.05, gamma = 0.9)
 
 #' @author Ron Triepels
 #' @export
-cg_rmsprop <- function(parms = list(), eta = 1e-3, gamma = 0.9, eps = 1e-4)
+cg_adagrad <- function(parms = list(), eta = 1e-2, eps = 1e-8)
+{
+  .Call("cg_adagrad", parms, eta, eps, PACKAGE = "cgraph")
+}
+
+#' @author Ron Triepels
+#' @export
+cg_rmsprop <- function(parms = list(), eta = 1e-3, gamma = 0.9, eps = 1e-8)
 {
   .Call("cg_rmsprop", parms, eta, gamma, eps, PACKAGE = "cgraph")
+}
+
+#' @author Ron Triepels
+#' @export
+cg_adam <- function(parms = list(), eta = 1e-3, betas = c(0.9, 0.999), eps = 1e-8)
+{
+  .Call("cg_adam", parms, eta, betas, eps, PACKAGE = "cgraph")
 }
 
 #' @author Ron Triepels
