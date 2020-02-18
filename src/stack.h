@@ -66,7 +66,7 @@ inline SEXP cg_stack_top(const cg_stack_t *stack)
 {
   if(cg_stack_is_empty(stack))
   {
-    Rf_errorcall(R_NilValue, "unable to retrieve top element because the stack is empty");
+    Rf_errorcall(R_NilValue, "unable to retrieve the top element because the stack is empty");
   }
 
   return stack->data[stack->top];
