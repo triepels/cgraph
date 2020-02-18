@@ -202,6 +202,10 @@ inline void cg_node_set_function(SEXP node, SEXP function)
  * PUBLIC FUNCTIONS
  */
 
+void cg_node_zero_grad(SEXP node);
+
+void cg_node_fill_grad(SEXP node, SEXP index, const double x);
+
 void cg_node_forward(SEXP node);
 
 void cg_node_backward(SEXP node);

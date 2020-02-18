@@ -60,6 +60,91 @@ extern inline void cg_node_set_function(SEXP node, SEXP function);
  * PUBLIC FUNCTIONS
  */
 
+void cg_node_zero_grad(SEXP node)
+{
+  SEXP value = PROTECT(cg_node_value(node));
+
+  if(!Rf_isNumeric(value))
+  {
+    Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s' for node '%s'",
+                 Rf_type2char(TYPEOF(value)), cg_node_name(node));
+  }
+
+  SEXP grad;
+
+  int index_grad;
+
+  PROTECT_WITH_INDEX(grad = cg_node_grad(node), &index_grad);
+
+  R_len_t n = XLENGTH(value);
+
+  if(!Rf_isReal(grad) || XLENGTH(grad) != n)
+  {
+    REPROTECT(grad = Rf_allocVector(REALSXP, n), index_grad);
+  }
+
+  memset(REAL(grad), 0, n * sizeof(double));
+
+  SHALLOW_DUPLICATE_ATTRIB(grad, value);
+
+  CG_SET(node, CG_GRAD_SYMBOL, grad);
+
+  UNPROTECT(2);
+}
+
+void cg_node_fill_grad(SEXP node, SEXP index, const double x)
+{
+  SEXP value = PROTECT(cg_node_value(node));
+
+  if(!Rf_isNumeric(value))
+  {
+    Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s' for node '%s'",
+                 Rf_type2char(TYPEOF(value)), cg_node_name(node));
+  }
+
+  SEXP grad;
+
+  int index_grad;
+
+  PROTECT_WITH_INDEX(grad = cg_node_grad(node), &index_grad);
+
+  R_len_t n = XLENGTH(value);
+
+  if(!Rf_isReal(grad) || XLENGTH(grad) != n)
+  {
+    REPROTECT(grad = Rf_allocVector(REALSXP, n), index_grad);
+  }
+
+  double *pg = REAL(grad);
+
+  if(!Rf_isNull(index))
+  {
+    int k = Rf_asInteger(index);
+
+    if(k < 1 || k > n)
+    {
+      Rf_errorcall(R_NilValue, "argument 'index' out of bounds");
+    }
+
+    memset(pg, 0, n * sizeof(double));
+
+    pg[k - 1] = x;
+  }
+  else
+  {
+    for(int i = 0; i < n; i++)
+    {
+      pg[i] = x;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(grad, value);
+
+  CG_SET(node, CG_GRAD_SYMBOL, grad);
+
+  UNPROTECT(2);
+}
+
 void cg_node_forward(SEXP node)
 {
   SEXP inputs = PROTECT(cg_node_inputs(node));
@@ -222,27 +307,20 @@ void cg_node_backward(SEXP node)
 
     SEXP input_grad = PROTECT(cg_node_grad(input));
 
-    if(Rf_isNull(input_grad))
+    R_len_t l = XLENGTH(input_grad);
+
+    if(l != XLENGTH(grad))
     {
-      CG_SET(input, CG_GRAD_SYMBOL, grad);
+      Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
+                   l, XLENGTH(grad), cg_node_name(node));
     }
-    else
+
+    double *pg = REAL(grad);
+    double *pi = REAL(input_grad);
+
+    for(int k = 0; k < l; k++)
     {
-      R_len_t l = XLENGTH(input_grad);
-
-      if(l != XLENGTH(grad))
-      {
-        Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
-                     l, XLENGTH(grad), cg_node_name(node));
-      }
-
-      double *pg = REAL(grad);
-      double *pi = REAL(input_grad);
-
-      for(int k = 0; k < l; k++)
-      {
-        pi[k] += pg[k];
-      }
+      pi[k] += pg[k];
     }
 
     UNPROTECT(3);

@@ -114,7 +114,7 @@ void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (
   UNPROTECT(1);
 }
 
-void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*exec)(SEXP node))
+SEXP* cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), int *k)
 {
   SEXP nodes = PROTECT(cg_graph_nodes(graph));
 
@@ -137,7 +137,7 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
   visited[id - 1] = 1;
 
-  int k = 0;
+  *k = 0;
 
   while(!cg_stack_is_empty(stack))
   {
@@ -145,36 +145,39 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
 
     SEXP node = cg_stack_top(stack);
 
-    SEXP inputs = PROTECT(cg_node_inputs(node));
+    SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
 
-    R_len_t m = XLENGTH(inputs);
-
-    for(int i = 0; i < m; i++)
+    if(TYPEOF(inputs) == VECSXP)
     {
-      SEXP input = VECTOR_ELT(inputs, i);
+      R_len_t m = XLENGTH(inputs);
 
-      if(TYPEOF(input) != ENVSXP)
+      for(int i = 0; i < m; i++)
       {
-        Rf_errorcall(R_NilValue, "node '%s' has an invalid input at index %d",
-                     cg_node_name(node), i + 1);
-      }
+        SEXP input = VECTOR_ELT(inputs, i);
 
-      int input_id = cg_node_id(input);
+        if(TYPEOF(input) != ENVSXP)
+        {
+          Rf_errorcall(R_NilValue, "node '%s' has an invalid input at index %d",
+                       cg_node_name(node), i + 1);
+        }
 
-      if(input_id < 1 || input_id > n)
-      {
-        Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", input_id);
-      }
+        int input_id = cg_node_id(input);
 
-      if(!visited[input_id - 1] && filter(input))
-      {
-        cg_stack_push(stack, input);
+        if(input_id < 1 || input_id > n)
+        {
+          Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", input_id);
+        }
 
-        visited[input_id - 1] = 1;
+        if(!visited[input_id - 1] && filter(input))
+        {
+          cg_stack_push(stack, input);
 
-        can_traverse = 1;
+          visited[input_id - 1] = 1;
 
-        break;
+          can_traverse = 1;
+
+          break;
+        }
       }
     }
 
@@ -182,25 +185,34 @@ void cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node)
     {
       cg_stack_pop(stack);
 
-      queue[k++] = node;
+      queue[(*k)++] = node;
     }
 
     UNPROTECT(1);
   }
 
-  for(int i = k - 1; i >= 0; i--)
-  {
-    exec(queue[i]);
-  }
-
   Free(visited);
 
   UNPROTECT(1);
+
+  return queue;
 }
 
 static inline int filter(SEXP node)
 {
   if(cg_node_type(node) == CGOPR)
+  {
+    return 1;
+  }
+
+  return 0;
+}
+
+static inline int backward_filter(SEXP node)
+{
+  cg_node_type_t type = cg_node_type(node);
+
+  if(type == CGOPR || type == CGPRM)
   {
     return 1;
   }
@@ -346,57 +358,24 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
     Rf_errorcall(R_NilValue, "argument 'index' must be NULL or a numeric scalar");
   }
 
-  SEXP nodes = PROTECT(cg_graph_nodes(graph));
+  int k = 0;
 
-  R_len_t n = XLENGTH(nodes);
+  SEXP *queue = cg_graph_reverse_dfs_from(graph, target, backward_filter, &k);
 
-  for(int i = 0; i < n; i++)
+  cg_node_fill_grad(target, index, 1);
+
+  for(int i = k - 2; i >= 0; i--)
   {
-    CG_SET(VECTOR_ELT(nodes, i), CG_GRAD_SYMBOL, R_NilValue);
+    cg_node_zero_grad(queue[i]);
   }
 
-  SEXP value = PROTECT(cg_node_value(target));
-
-  R_len_t m = XLENGTH(value);
-
-  if(!Rf_isNumeric(value))
+  for(int i = k - 1; i >= 0; i--)
   {
-    Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s' for node '%s'",
-                 Rf_type2char(TYPEOF(value)), cg_node_name(target));
-  }
-
-  SEXP grad = PROTECT(Rf_allocVector(REALSXP, m));
-
-  double *pg = REAL(grad);
-
-  if(!Rf_isNull(index))
-  {
-    int k = Rf_asInteger(index);
-
-    if(k < 1 || k > m)
+    if(cg_node_type(queue[i]) == CGOPR)
     {
-      Rf_errorcall(R_NilValue, "argument 'index' out of bounds");
-    }
-
-    memset(pg, 0, m * sizeof(double));
-
-    pg[k - 1] = 1;
-  }
-  else
-  {
-    for(int i = 0; i < m; i++)
-    {
-      pg[i] = 1;
+      cg_node_backward(queue[i]);
     }
   }
-
-  SHALLOW_DUPLICATE_ATTRIB(grad, value);
-
-  CG_SET(target, CG_GRAD_SYMBOL, grad);
-
-  cg_graph_reverse_dfs_from(graph, target, filter, cg_node_backward);
-
-  UNPROTECT(3);
 
   return R_NilValue;
 }
