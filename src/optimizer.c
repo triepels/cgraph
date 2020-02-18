@@ -66,6 +66,45 @@ extern inline void cg_optimizer_set_type(SEXP optimizer, const cg_optimizer_type
  * PRIVATE FUNCTIONS
  */
 
+static SEXP cg_allocate_buffer(SEXP parms)
+{
+  R_xlen_t n = XLENGTH(parms);
+
+  SEXP buffer = PROTECT(Rf_allocVector(VECSXP, n));
+
+  for(int i = 0; i < n; i++)
+  {
+    SEXP parm = VECTOR_ELT(parms, i);
+
+    if(!cg_is(parm, "cg_node"))
+    {
+      Rf_errorcall(R_NilValue, "argument 'parms' has an invalid parameter at index %d", i + 1);
+    }
+
+    SEXP value = PROTECT(cg_node_value(parm));
+
+    if(!Rf_isReal(value))
+    {
+      Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
+                   Rf_type2char(TYPEOF(value)), cg_node_name(parm));
+    }
+
+    SEXP state = PROTECT(Rf_duplicate(value));
+
+    memset(REAL(state), 0, XLENGTH(value) * sizeof(double));
+
+    SET_VECTOR_ELT(buffer, i, state);
+
+    UNPROTECT(2);
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(buffer, parms);
+
+  UNPROTECT(1);
+
+  return buffer;
+}
+
 static inline void cg_gd_step(SEXP optimizer)
 {
   SEXP parms = PROTECT(cg_optimizer_parms(optimizer));
@@ -575,41 +614,11 @@ SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma)
     Rf_errorcall(R_NilValue, "argument 'gamma' must be a real scalar");
   }
 
-  R_xlen_t n = XLENGTH(parms);
-
-  SEXP buffer = PROTECT(Rf_allocVector(VECSXP, n));
-
-  for(int i = 0; i < n; i++)
-  {
-    SEXP parm = VECTOR_ELT(parms, i);
-
-    if(!cg_is(parm, "cg_node"))
-    {
-      Rf_errorcall(R_NilValue, "argument 'parms' has an invalid parameter at index %d", i + 1);
-    }
-
-    SEXP value = PROTECT(cg_node_value(parm));
-
-    if(!Rf_isReal(value))
-    {
-      Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(value)), cg_node_name(parm));
-    }
-
-    SEXP state = PROTECT(Rf_duplicate(value));
-
-    memset(REAL(state), 0, XLENGTH(value) * sizeof(double));
-
-    SET_VECTOR_ELT(buffer, i, state);
-
-    UNPROTECT(2);
-  }
-
-  SHALLOW_DUPLICATE_ATTRIB(buffer, parms);
-
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
 
-  CG_SET(optimizer, CG_BUFFER0_SYMBOL, buffer);
+  SEXP buffer0 = PROTECT(cg_allocate_buffer(parms));
+
+  CG_SET(optimizer, CG_BUFFER0_SYMBOL, buffer0);
 
   CG_SET(optimizer, CG_GAMMA_SYMBOL, gamma);
 
@@ -641,41 +650,11 @@ SEXP cg_adagrad(SEXP parms, SEXP eta, SEXP eps)
     Rf_errorcall(R_NilValue, "argument 'eps' must be a real scalar");
   }
 
-  R_xlen_t n = XLENGTH(parms);
-
-  SEXP buffer = PROTECT(Rf_allocVector(VECSXP, n));
-
-  for(int i = 0; i < n; i++)
-  {
-    SEXP parm = VECTOR_ELT(parms, i);
-
-    if(!cg_is(parm, "cg_node"))
-    {
-      Rf_errorcall(R_NilValue, "argument 'parms' has an invalid parameter at index %d", i + 1);
-    }
-
-    SEXP value = PROTECT(cg_node_value(parm));
-
-    if(!Rf_isReal(value))
-    {
-      Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(value)), cg_node_name(parm));
-    }
-
-    SEXP state = PROTECT(Rf_duplicate(value));
-
-    memset(REAL(state), 0, XLENGTH(value) * sizeof(double));
-
-    SET_VECTOR_ELT(buffer, i, state);
-
-    UNPROTECT(2);
-  }
-
-  SHALLOW_DUPLICATE_ATTRIB(buffer, parms);
-
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
 
-  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer);
+  SEXP buffer1 = PROTECT(cg_allocate_buffer(parms));
+
+  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer1);
 
   CG_SET(optimizer, CG_EPS_SYMBOL, eps);
 
@@ -712,41 +691,11 @@ SEXP cg_rmsprop(SEXP parms, SEXP eta, SEXP gamma, SEXP eps)
     Rf_errorcall(R_NilValue, "argument 'eps' must be a real scalar");
   }
 
-  R_xlen_t n = XLENGTH(parms);
-
-  SEXP buffer = PROTECT(Rf_allocVector(VECSXP, n));
-
-  for(int i = 0; i < n; i++)
-  {
-    SEXP parm = VECTOR_ELT(parms, i);
-
-    if(!cg_is(parm, "cg_node"))
-    {
-      Rf_errorcall(R_NilValue, "argument 'parms' has an invalid parameter at index %d", i + 1);
-    }
-
-    SEXP value = PROTECT(cg_node_value(parm));
-
-    if(!Rf_isReal(value))
-    {
-      Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(value)), cg_node_name(parm));
-    }
-
-    SEXP state = PROTECT(Rf_duplicate(value));
-
-    memset(REAL(state), 0, XLENGTH(value) * sizeof(double));
-
-    SET_VECTOR_ELT(buffer, i, state);
-
-    UNPROTECT(2);
-  }
-
-  SHALLOW_DUPLICATE_ATTRIB(buffer, parms);
-
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
 
-  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer);
+  SEXP buffer1 = PROTECT(cg_allocate_buffer(parms));
+
+  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer1);
 
   CG_SET(optimizer, CG_EPS_SYMBOL, eps);
 
@@ -785,44 +734,11 @@ SEXP cg_adam(SEXP parms, SEXP eta, SEXP betas, SEXP eps)
     Rf_errorcall(R_NilValue, "argument 'eps' must be a real scalar");
   }
 
-  R_xlen_t n = XLENGTH(parms);
-
-  SEXP buffer0 = PROTECT(Rf_allocVector(VECSXP, n));
-  SEXP buffer1 = PROTECT(Rf_allocVector(VECSXP, n));
-
-  for(int i = 0; i < n; i++)
-  {
-    SEXP parm = VECTOR_ELT(parms, i);
-
-    if(!cg_is(parm, "cg_node"))
-    {
-      Rf_errorcall(R_NilValue, "argument 'parms' has an invalid parameter at index %d", i + 1);
-    }
-
-    SEXP value = PROTECT(cg_node_value(parm));
-
-    if(!Rf_isReal(value))
-    {
-      Rf_errorcall(R_NilValue, "cannot process value of type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(value)), cg_node_name(parm));
-    }
-
-    SEXP state0 = PROTECT(Rf_duplicate(value));
-    SEXP state1 = PROTECT(Rf_duplicate(value));
-
-    memset(REAL(state0), 0, XLENGTH(value) * sizeof(double));
-    memset(REAL(state1), 0, XLENGTH(value) * sizeof(double));
-
-    SET_VECTOR_ELT(buffer0, i, state0);
-    SET_VECTOR_ELT(buffer1, i, state1);
-
-    UNPROTECT(3);
-  }
-
-  SHALLOW_DUPLICATE_ATTRIB(buffer0, parms);
-  SHALLOW_DUPLICATE_ATTRIB(buffer1, parms);
-
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
+
+  SEXP buffer0 = PROTECT(cg_allocate_buffer(parms));
+
+  SEXP buffer1 = PROTECT(cg_allocate_buffer(parms));
 
   CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer1);
 
