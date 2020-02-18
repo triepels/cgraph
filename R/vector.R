@@ -675,11 +675,14 @@ cg_sin <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("sin", cg_function(
-  def = base::sin,
+  def = function(x, out)
+  {
+    .Call("cg_vector_sin", x, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      grad * cos(x)
+      .Call("cg_vector_sin_grad", x, grad, out, PACKAGE = "cgraph")
     }
   )
 ))

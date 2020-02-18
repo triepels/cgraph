@@ -45,6 +45,7 @@ SEXP CG_DEF_SYMBOL      = NULL;
 SEXP CG_EPS_SYMBOL      = NULL;
 SEXP CG_ETA_SYMBOL      = NULL;
 SEXP CG_FUN_SYMBOL      = NULL;
+SEXP CG_OUT_SYMBOL      = NULL;
 SEXP CG_GRAD_SYMBOL     = NULL;
 SEXP CG_NAME_SYMBOL     = NULL;
 SEXP CG_TYPE_SYMBOL     = NULL;
@@ -61,11 +62,142 @@ SEXP CG_INPUTS_SYMBOL   = NULL;
 SEXP CG_BUFFER0_SYMBOL  = NULL;
 SEXP CG_BUFFER1_SYMBOL  = NULL;
 
+SEXP cg_vector_sin(SEXP a1, SEXP out)
+{
+  if(!Rf_isNumeric(a1))
+  {
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+  }
+
+  SEXP a0;
+
+  R_len_t n = XLENGTH(a1);
+
+  if(!Rf_isReal(out) || XLENGTH(out) != n)
+  {
+    PROTECT(a0 = Rf_allocVector(REALSXP, n));
+  }
+  else
+  {
+    PROTECT(a0 = out);
+  }
+
+  double *p0 = REAL(a0);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+      {
+        p0[i] = sin(p1[i]);
+      }
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+      {
+        p0[i] = sin(p1[i]);
+      }
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
+SEXP cg_vector_sin_grad(SEXP a1, SEXP grad, SEXP out)
+{
+  if(!Rf_isNumeric(a1))
+  {
+    Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
+  }
+
+  if(!Rf_isReal(grad))
+  {
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a numeric vector or array");
+  }
+
+  if(!Rf_isReal(out))
+  {
+    Rf_errorcall(R_NilValue, "argument 'out' must be a numeric vector or array");
+  }
+
+  R_len_t n = XLENGTH(grad);
+
+  if(n != XLENGTH(a1))
+  {
+    Rf_errorcall(R_NilValue, "argument 'a1' and 'grad' have incompatible lengths");
+  }
+
+  SEXP a0;
+
+  if(n != XLENGTH(out))
+  {
+    PROTECT(a0 = Rf_allocVector(REALSXP, n));
+  }
+  else
+  {
+    PROTECT(a0 = out);
+  }
+
+  double *p0 = REAL(a0);
+  double *pg = REAL(grad);
+
+  switch(TYPEOF(a1))
+  {
+    case REALSXP :
+    {
+      double *p1 = REAL(a1);
+
+      for(int i = 0; i < n; i++)
+      {
+        p0[i] += pg[i] * cos(p1[i]);
+      }
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *p1 = INTEGER(a1);
+
+      for(int i = 0; i < n; i++)
+      {
+        p0[i] += pg[i] * cos(p1[i]);
+      }
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+
+  UNPROTECT(1);
+
+  return a0;
+}
+
 /*
  * LIBRARY INITIALIZATION
  */
 
 static const R_CallMethodDef CallEntries[] = {
+  // Vector
+  {"cg_vector_sin",         (DL_FUNC) &cg_vector_sin,         2},
+  {"cg_vector_sin_grad",    (DL_FUNC) &cg_vector_sin_grad,    3},
   // Node
   {"cg_constant",           (DL_FUNC) &cg_constant,           2},
   {"cg_parameter",          (DL_FUNC) &cg_parameter,          2},
@@ -109,6 +241,7 @@ void R_init_cgraph(DllInfo *dll)
   CG_EPS_SYMBOL       = Rf_install("eps");
   CG_ETA_SYMBOL       = Rf_install("eta");
   CG_FUN_SYMBOL       = Rf_install("fun");
+  CG_OUT_SYMBOL       = Rf_install("out");
   CG_GRAD_SYMBOL      = Rf_install("grad");
   CG_NAME_SYMBOL      = Rf_install("name");
   CG_TYPE_SYMBOL      = Rf_install("type");

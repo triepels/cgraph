@@ -153,7 +153,7 @@ void cg_node_forward(SEXP node)
 
   R_len_t n = XLENGTH(inputs);
 
-  SEXP args = PROTECT(Rf_allocVector(LISTSXP, n));
+  SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 1));
 
   SEXP arg = args;
 
@@ -176,6 +176,10 @@ void cg_node_forward(SEXP node)
     arg = CDR(arg);
   }
 
+  SETCAR(arg, cg_node_value(node));
+
+  SET_TAG(arg, CG_OUT_SYMBOL);
+
   SEXP function = PROTECT(cg_node_function(node));
 
   SEXP call = PROTECT(Rf_lcons(cg_function_def(function), args));
@@ -195,7 +199,7 @@ void cg_node_backward(SEXP node)
 
   R_len_t n = XLENGTH(inputs);
 
-  SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 2));
+  SEXP args = PROTECT(Rf_allocVector(LISTSXP, n + 3));
 
   SEXP arg = args;
 
@@ -295,35 +299,17 @@ void cg_node_backward(SEXP node)
                    Rf_type2char(TYPEOF(function_grad)), cg_node_name(node));
     }
 
+    SETCADDR(arg, cg_node_grad(input));
+
+    SET_TAG(CDDR(arg), CG_OUT_SYMBOL);
+
     SEXP call = PROTECT(Rf_lcons(function_grad, args));
 
     SEXP grad = PROTECT(Rf_eval(call, R_EmptyEnv));
 
-    if(!Rf_isReal(grad))
-    {
-      Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(grad)), cg_node_name(node));
-    }
+    CG_SET(input, CG_GRAD_SYMBOL, grad);
 
-    SEXP input_grad = PROTECT(cg_node_grad(input));
-
-    R_len_t l = XLENGTH(input_grad);
-
-    if(l != XLENGTH(grad))
-    {
-      Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
-                   l, XLENGTH(grad), cg_node_name(node));
-    }
-
-    double *pg = REAL(grad);
-    double *pi = REAL(input_grad);
-
-    for(int k = 0; k < l; k++)
-    {
-      pi[k] += pg[k];
-    }
-
-    UNPROTECT(3);
+    UNPROTECT(2);
   }
 
   UNPROTECT(6);
