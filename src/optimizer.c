@@ -193,6 +193,7 @@ static inline void cg_gd_momentum_step(SEXP optimizer)
     for(int i = 0; i < m; i++)
     {
       p0[i] = gamma * p0[i] + eta * pg[i];
+
       pv[i] -= p0[i];
     }
 
@@ -274,6 +275,7 @@ static inline void cg_adagrad_step(SEXP optimizer)
     for(int i = 0; i < m; i++)
     {
       p1[i] += pg[i] * pg[i];
+
       pv[i] -= eta / sqrt(p1[i] + eps) * pg[i];
     }
 
@@ -357,6 +359,7 @@ static inline void cg_rmsprop_step(SEXP optimizer)
     for(int i = 0; i < m; i++)
     {
       p1[i] = gamma * p1[i] + (1 - gamma) * pg[i] * pg[i];
+
       pv[i] -= eta / sqrt(p1[i] + eps) * pg[i];
     }
 
@@ -466,6 +469,7 @@ static inline void cg_adam_step(SEXP optimizer)
     {
       p0[i] = beta[0] * p0[i] + (1 - beta[0]) * pg[i];
       p1[i] = beta[1] * p1[i] + (1 - beta[1]) * pg[i] * pg[i];
+
       pv[i] -= eta / (sqrt(p1[i] / (1 - gamma[1])) + eps) * (p0[i] / (1 - gamma[0]));
     }
 
