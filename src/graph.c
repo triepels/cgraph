@@ -39,82 +39,7 @@ extern inline void cg_graph_set_eager(SEXP graph, const int eager);
  * PRIVATE FUNCTIONS
  */
 
-void cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), void (*exec)(SEXP node))
-{
-  SEXP nodes = PROTECT(cg_graph_nodes(graph));
-
-  int id = cg_node_id(target);
-
-  R_len_t n = XLENGTH(nodes);
-
-  if(id < 1 || id > n)
-  {
-    Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", id);
-  }
-
-  int *visited = Calloc(n, int);
-
-  cg_stack_t *stack = cg_stack_allocate(n);
-
-  cg_stack_push(stack, target);
-
-  visited[id - 1] = 1;
-
-  while(!cg_stack_is_empty(stack))
-  {
-    int can_traverse = 0;
-
-    SEXP node = cg_stack_top(stack);
-
-    SEXP inputs = PROTECT(cg_node_inputs(node));
-
-    R_len_t m = XLENGTH(inputs);
-
-    for(int i = 0; i < m; i++)
-    {
-      SEXP input = VECTOR_ELT(inputs, i);
-
-      if(TYPEOF(input) != ENVSXP)
-      {
-        Rf_errorcall(R_NilValue, "node '%s' has an invalid input at index %d",
-                     cg_node_name(node), i + 1);
-      }
-
-      int input_id = cg_node_id(input);
-
-      if(input_id < 1 || input_id > n)
-      {
-        Rf_errorcall(R_NilValue, "cannot retrieve node with id %d", input_id);
-      }
-
-      if(!visited[input_id - 1] && filter(input))
-      {
-        cg_stack_push(stack, input);
-
-        visited[input_id - 1] = 1;
-
-        can_traverse = 1;
-
-        break;
-      }
-    }
-
-    if(!can_traverse)
-    {
-      cg_stack_pop(stack);
-
-      exec(node);
-    }
-
-    UNPROTECT(1);
-  }
-
-  Free(visited);
-
-  UNPROTECT(1);
-}
-
-SEXP* cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), int *k)
+SEXP* cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), int *k)
 {
   SEXP nodes = PROTECT(cg_graph_nodes(graph));
 
@@ -198,7 +123,7 @@ SEXP* cg_graph_reverse_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node
   return queue;
 }
 
-static inline int filter(SEXP node)
+static inline int forward_filter(SEXP node)
 {
   if(cg_node_type(node) == CGOPR)
   {
@@ -331,7 +256,14 @@ SEXP cg_graph_forward(SEXP graph, SEXP target)
     Rf_errorcall(R_NilValue, "argument 'target' must be an operator node");
   }
 
-  cg_graph_dfs_from(graph, target, filter, cg_node_forward);
+  int k = 0;
+
+  SEXP *queue = cg_graph_dfs_from(graph, target, forward_filter, &k);
+
+  for(int i = 0; i < k; i++)
+  {
+    cg_node_forward(queue[i]);
+  }
 
   return R_NilValue;
 }
@@ -360,7 +292,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   int k = 0;
 
-  SEXP *queue = cg_graph_reverse_dfs_from(graph, target, backward_filter, &k);
+  SEXP *queue = cg_graph_dfs_from(graph, target, backward_filter, &k);
 
   cg_node_fill_grad(target, index, 1);
 
