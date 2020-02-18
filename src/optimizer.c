@@ -66,7 +66,7 @@ extern inline void cg_optimizer_set_type(SEXP optimizer, const cg_optimizer_type
  * PRIVATE FUNCTIONS
  */
 
-static SEXP cg_allocate_buffer(SEXP parms)
+static SEXP cg_buffer(SEXP parms)
 {
   R_xlen_t n = XLENGTH(parms);
 
@@ -616,9 +616,7 @@ SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma)
 
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
 
-  SEXP buffer0 = PROTECT(cg_allocate_buffer(parms));
-
-  CG_SET(optimizer, CG_BUFFER0_SYMBOL, buffer0);
+  CG_SET(optimizer, CG_BUFFER0_SYMBOL, cg_buffer(parms));
 
   CG_SET(optimizer, CG_GAMMA_SYMBOL, gamma);
 
@@ -628,7 +626,7 @@ SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma)
 
   CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGGDM));
 
-  UNPROTECT(2);
+  UNPROTECT(1);
 
   return optimizer;
 }
@@ -652,9 +650,7 @@ SEXP cg_adagrad(SEXP parms, SEXP eta, SEXP eps)
 
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
 
-  SEXP buffer1 = PROTECT(cg_allocate_buffer(parms));
-
-  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer1);
+  CG_SET(optimizer, CG_BUFFER1_SYMBOL, cg_buffer(parms));
 
   CG_SET(optimizer, CG_EPS_SYMBOL, eps);
 
@@ -664,7 +660,7 @@ SEXP cg_adagrad(SEXP parms, SEXP eta, SEXP eps)
 
   CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGADG));
 
-  UNPROTECT(2);
+  UNPROTECT(1);
 
   return optimizer;
 }
@@ -693,9 +689,7 @@ SEXP cg_rmsprop(SEXP parms, SEXP eta, SEXP gamma, SEXP eps)
 
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
 
-  SEXP buffer1 = PROTECT(cg_allocate_buffer(parms));
-
-  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer1);
+  CG_SET(optimizer, CG_BUFFER1_SYMBOL, cg_buffer(parms));
 
   CG_SET(optimizer, CG_EPS_SYMBOL, eps);
 
@@ -707,7 +701,7 @@ SEXP cg_rmsprop(SEXP parms, SEXP eta, SEXP gamma, SEXP eps)
 
   CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGRMS));
 
-  UNPROTECT(2);
+  UNPROTECT(1);
 
   return optimizer;
 }
@@ -736,13 +730,9 @@ SEXP cg_adam(SEXP parms, SEXP eta, SEXP betas, SEXP eps)
 
   SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
 
-  SEXP buffer0 = PROTECT(cg_allocate_buffer(parms));
+  CG_SET(optimizer, CG_BUFFER1_SYMBOL, cg_buffer(parms));
 
-  SEXP buffer1 = PROTECT(cg_allocate_buffer(parms));
-
-  CG_SET(optimizer, CG_BUFFER1_SYMBOL, buffer1);
-
-  CG_SET(optimizer, CG_BUFFER0_SYMBOL, buffer0);
+  CG_SET(optimizer, CG_BUFFER0_SYMBOL, cg_buffer(parms));
 
   CG_SET(optimizer, CG_EPS_SYMBOL, eps);
 
@@ -756,7 +746,7 @@ SEXP cg_adam(SEXP parms, SEXP eta, SEXP betas, SEXP eps)
 
   CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGADM));
 
-  UNPROTECT(3);
+  UNPROTECT(1);
 
   return optimizer;
 }
