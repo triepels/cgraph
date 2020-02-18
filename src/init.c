@@ -69,20 +69,18 @@ SEXP cg_vector_sin(SEXP a1, SEXP out)
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
   }
 
-  SEXP a0;
-
   R_len_t n = XLENGTH(a1);
 
   if(!Rf_isReal(out) || XLENGTH(out) != n)
   {
-    PROTECT(a0 = Rf_allocVector(REALSXP, n));
+    PROTECT(out = Rf_allocVector(REALSXP, n));
   }
   else
   {
-    PROTECT(a0 = out);
+    PROTECT(out);
   }
 
-  double *p0 = REAL(a0);
+  double *po = REAL(out);
 
   switch(TYPEOF(a1))
   {
@@ -92,7 +90,7 @@ SEXP cg_vector_sin(SEXP a1, SEXP out)
 
       for(int i = 0; i < n; i++)
       {
-        p0[i] = sin(p1[i]);
+        po[i] = sin(p1[i]);
       }
 
       break;
@@ -104,18 +102,18 @@ SEXP cg_vector_sin(SEXP a1, SEXP out)
 
       for(int i = 0; i < n; i++)
       {
-        p0[i] = sin(p1[i]);
+        po[i] = sin(p1[i]);
       }
 
       break;
     }
   }
 
-  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
+  SHALLOW_DUPLICATE_ATTRIB(out, a1);
 
   UNPROTECT(1);
 
-  return a0;
+  return out;
 }
 
 SEXP cg_vector_sin_grad(SEXP a1, SEXP grad, SEXP out)
@@ -135,25 +133,19 @@ SEXP cg_vector_sin_grad(SEXP a1, SEXP grad, SEXP out)
     Rf_errorcall(R_NilValue, "argument 'out' must be a numeric vector or array");
   }
 
-  R_len_t n = XLENGTH(grad);
+  R_len_t n = XLENGTH(a1);
 
-  if(n != XLENGTH(a1))
+  if(n != XLENGTH(grad))
   {
     Rf_errorcall(R_NilValue, "argument 'a1' and 'grad' have incompatible lengths");
   }
 
-  SEXP a0;
-
   if(n != XLENGTH(out))
   {
-    PROTECT(a0 = Rf_allocVector(REALSXP, n));
-  }
-  else
-  {
-    PROTECT(a0 = out);
+    Rf_errorcall(R_NilValue, "argument 'a1' and 'out' have incompatible lengths");
   }
 
-  double *p0 = REAL(a0);
+  double *po = REAL(out);
   double *pg = REAL(grad);
 
   switch(TYPEOF(a1))
@@ -164,7 +156,7 @@ SEXP cg_vector_sin_grad(SEXP a1, SEXP grad, SEXP out)
 
       for(int i = 0; i < n; i++)
       {
-        p0[i] += pg[i] * cos(p1[i]);
+        po[i] += pg[i] * cos(p1[i]);
       }
 
       break;
@@ -176,18 +168,14 @@ SEXP cg_vector_sin_grad(SEXP a1, SEXP grad, SEXP out)
 
       for(int i = 0; i < n; i++)
       {
-        p0[i] += pg[i] * cos(p1[i]);
+        po[i] += pg[i] * cos(p1[i]);
       }
 
       break;
     }
   }
 
-  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
-
-  UNPROTECT(1);
-
-  return a0;
+  return out;
 }
 
 /*
