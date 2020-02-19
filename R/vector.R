@@ -646,11 +646,14 @@ cg_abs <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("abs", cg_function(
-  def = base::abs,
+  def = function(x, out)
+  {
+    .Call("cg_vector_abs", x, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      grad * (x / value)
+      .Call("cg_vector_abs_grad", x, value, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
