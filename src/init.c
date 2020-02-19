@@ -94,6 +94,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"bsum",                  (DL_FUNC) &bsum,                  2},
   {"approx_gradient",       (DL_FUNC) &approx_gradient,       5},
   // Vector
+  {"cg_add_def",            (DL_FUNC) &cg_add_def,            3},
   {"cg_sin_def",            (DL_FUNC) &cg_sin_def,            2},
   {"cg_sin_grad",           (DL_FUNC) &cg_sin_grad,           3},
   {"cg_sigmoid_def",        (DL_FUNC) &cg_sigmoid_def,        2},

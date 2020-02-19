@@ -26,6 +26,8 @@ limitations under the License.
  * PUBLIC FUNCTIONS
  */
 
+SEXP cg_add_def(SEXP x, SEXP y, SEXP out);
+
 SEXP cg_sin_def(SEXP x, SEXP out);
 SEXP cg_sin_grad(SEXP x, SEXP grad, SEXP out);
 
