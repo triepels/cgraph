@@ -25,7 +25,7 @@ limitations under the License.
  * PUBLIC FUNCTIONS
  */
 
-SEXP sigmoid(SEXP x)
+SEXP cg_sin_def(SEXP x, SEXP out)
 {
   if(!Rf_isNumeric(x))
   {
@@ -34,7 +34,125 @@ SEXP sigmoid(SEXP x)
 
   R_len_t n = XLENGTH(x);
 
-  SEXP out = PROTECT(Rf_allocVector(REALSXP, n));
+  if(!Rf_isReal(out) || XLENGTH(out) != n)
+  {
+    PROTECT(out = Rf_allocVector(REALSXP, n));
+  }
+  else
+  {
+    PROTECT(out);
+  }
+
+  double *po = REAL(x);
+
+  switch(TYPEOF(x))
+  {
+    case REALSXP :
+    {
+      double *px = REAL(x);
+
+      for(int i = 0; i < n; i++)
+      {
+        po[i] = sin(px[i]);
+      }
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *px = INTEGER(x);
+
+      for(int i = 0; i < n; i++)
+      {
+        po[i] = sin(px[i]);
+      }
+
+      break;
+    }
+  }
+
+  SHALLOW_DUPLICATE_ATTRIB(out, x);
+
+  UNPROTECT(1);
+
+  return out;
+}
+
+SEXP cg_sin_grad(SEXP x, SEXP grad, SEXP out)
+{
+  if(!Rf_isNumeric(x))
+  {
+    Rf_errorcall(R_NilValue, "argument 'x' must be a numerical vector or array");
+  }
+
+  if(!Rf_isReal(grad))
+  {
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+  }
+
+  if(!Rf_isReal(out))
+  {
+    Rf_errorcall(R_NilValue, "argument 'out' must be a real vector or array");
+  }
+
+  R_len_t n = XLENGTH(x);
+
+  if(XLENGTH(grad) != n || XLENGTH(out) != n)
+  {
+    Rf_errorcall(R_NilValue, "argument 'a1', 'grad', and 'out' have incompatible lengths");
+  }
+
+  double *po = REAL(out);
+  double *pg = REAL(grad);
+
+  switch(TYPEOF(x))
+  {
+    case REALSXP :
+    {
+      double *px = REAL(x);
+
+      for(int i = 0; i < n; i++)
+      {
+        po[i] += pg[i] * cos(px[i]);
+      }
+
+      break;
+    }
+    case LGLSXP :
+    case INTSXP :
+    {
+      int *px = INTEGER(x);
+
+      for(int i = 0; i < n; i++)
+      {
+        po[i] += pg[i] * cos(px[i]);
+      }
+
+      break;
+    }
+  }
+
+  return out;
+}
+
+SEXP cg_sigmoid_def(SEXP x, SEXP out)
+{
+  if(!Rf_isNumeric(x))
+  {
+    Rf_errorcall(R_NilValue, "argument 'x' must be a numerical vector or array");
+  }
+
+  R_len_t n = XLENGTH(x);
+
+  if(!Rf_isReal(out) || XLENGTH(out) != n)
+  {
+    PROTECT(out = Rf_allocVector(REALSXP, n));
+  }
+  else
+  {
+    PROTECT(out);
+  }
 
   double *po = REAL(out);
 
@@ -78,6 +196,42 @@ SEXP sigmoid(SEXP x)
   SHALLOW_DUPLICATE_ATTRIB(out, x);
 
   UNPROTECT(1);
+
+  return out;
+}
+
+SEXP cg_sigmoid_grad(SEXP value, SEXP grad, SEXP out)
+{
+  if(!Rf_isReal(value))
+  {
+    Rf_errorcall(R_NilValue, "argument 'value' must be a real vector or array");
+  }
+
+  if(!Rf_isReal(grad))
+  {
+    Rf_errorcall(R_NilValue, "argument 'grad' must be a real vector or array");
+  }
+
+  if(!Rf_isReal(out))
+  {
+    Rf_errorcall(R_NilValue, "argument 'out' must be a real vector or array");
+  }
+
+  R_len_t n = XLENGTH(value);
+
+  if(XLENGTH(grad) != n || XLENGTH(out) != n)
+  {
+    Rf_errorcall(R_NilValue, "argument 'value', 'grad', and 'out' have incompatible lengths");
+  }
+
+  double *po = REAL(out);
+  double *pv = REAL(value);
+  double *pg = REAL(grad);
+
+  for(int i = 0; i < n; i++)
+  {
+    po[i] += pg[i] * pv[i] * (1 - pv[i]);
+  }
 
   return out;
 }

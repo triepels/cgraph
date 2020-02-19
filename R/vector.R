@@ -680,12 +680,12 @@ cg_sin <- function(x, name = NULL)
 delayedAssign("sin", cg_function(
   def = function(x, out)
   {
-    .Call("cg_vector_sin", x, out, PACKAGE = "cgraph")
+    .Call("cg_sin_def", x, out, PACKAGE = "cgraph")
   },
   grads = list(
     function(x, value, grad, out)
     {
-      .Call("cg_vector_sin_grad", x, grad, out, PACKAGE = "cgraph")
+      .Call("cg_sin_grad", x, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -1027,14 +1027,14 @@ cg_sigmoid <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("sigmoid", cg_function(
-  def = function(x)
+  def = function(x, out)
   {
-    .Call("sigmoid", x, PACKAGE = "cgraph")
+    .Call("cg_sigmoid_def", x, out, PACKAGE = "cgraph")
   },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      grad * value * (1 - value)
+      .Call("cg_sigmoid_grad", value, grad, out, PACKAGE = "cgraph")
     }
   )
 ))

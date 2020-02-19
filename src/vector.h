@@ -26,6 +26,10 @@ limitations under the License.
  * PUBLIC FUNCTIONS
  */
 
-SEXP sigmoid(SEXP x);
+SEXP cg_sin_def(SEXP x, SEXP out);
+SEXP cg_sin_grad(SEXP x, SEXP grad, SEXP out);
+
+SEXP cg_sigmoid_def(SEXP x, SEXP out);
+SEXP cg_sigmoid_grad(SEXP value, SEXP grad, SEXP out);
 
 #endif
