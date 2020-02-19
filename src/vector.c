@@ -100,11 +100,11 @@ SEXP cg_sin_grad(SEXP x, SEXP grad, SEXP out)
 
   if(XLENGTH(grad) != n || XLENGTH(out) != n)
   {
-    Rf_errorcall(R_NilValue, "argument 'a1', 'grad', and 'out' have incompatible lengths");
+    Rf_errorcall(R_NilValue, "argument 'x', 'grad', and 'out' have incompatible lengths");
   }
 
-  double *po = REAL(out);
   double *pg = REAL(grad);
+  double *po = REAL(out);
 
   switch(TYPEOF(x))
   {
@@ -224,9 +224,9 @@ SEXP cg_sigmoid_grad(SEXP value, SEXP grad, SEXP out)
     Rf_errorcall(R_NilValue, "argument 'value', 'grad', and 'out' have incompatible lengths");
   }
 
-  double *po = REAL(out);
   double *pv = REAL(value);
   double *pg = REAL(grad);
+  double *po = REAL(out);
 
   for(int i = 0; i < n; i++)
   {
