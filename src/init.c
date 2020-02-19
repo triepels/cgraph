@@ -69,18 +69,20 @@ SEXP cg_vector_sin(SEXP a1, SEXP out)
     Rf_errorcall(R_NilValue, "argument 'a1' must be a numerical vector or array");
   }
 
+  SEXP a0;
+
   R_len_t n = XLENGTH(a1);
 
   if(!Rf_isReal(out) || XLENGTH(out) != n)
   {
-    PROTECT(out = Rf_allocVector(REALSXP, n));
+    PROTECT(a0 = Rf_allocVector(REALSXP, n));
   }
   else
   {
-    PROTECT(out);
+    PROTECT(a0 = out);
   }
 
-  double *po = REAL(out);
+  double *po = REAL(a0);
 
   switch(TYPEOF(a1))
   {
@@ -109,11 +111,11 @@ SEXP cg_vector_sin(SEXP a1, SEXP out)
     }
   }
 
-  SHALLOW_DUPLICATE_ATTRIB(out, a1);
+  SHALLOW_DUPLICATE_ATTRIB(a0, a1);
 
   UNPROTECT(1);
 
-  return out;
+  return a0;
 }
 
 SEXP cg_vector_sin_grad(SEXP a1, SEXP grad, SEXP out)
@@ -128,11 +130,6 @@ SEXP cg_vector_sin_grad(SEXP a1, SEXP grad, SEXP out)
     Rf_errorcall(R_NilValue, "argument 'grad' must be a numeric vector or array");
   }
 
-  if(!Rf_isReal(out))
-  {
-    Rf_errorcall(R_NilValue, "argument 'out' must be a numeric vector or array");
-  }
-
   R_len_t n = XLENGTH(a1);
 
   if(n != XLENGTH(grad))
@@ -140,12 +137,18 @@ SEXP cg_vector_sin_grad(SEXP a1, SEXP grad, SEXP out)
     Rf_errorcall(R_NilValue, "argument 'a1' and 'grad' have incompatible lengths");
   }
 
-  if(n != XLENGTH(out))
+  SEXP a0;
+
+  if(!Rf_isReal(out) || XLENGTH(out) != n)
   {
-    Rf_errorcall(R_NilValue, "argument 'a1' and 'out' have incompatible lengths");
+    PROTECT(a0 = Rf_allocVector(REALSXP, n));
+  }
+  else
+  {
+    PROTECT(a0 = out);
   }
 
-  double *po = REAL(out);
+  double *po = REAL(a0);
   double *pg = REAL(grad);
 
   switch(TYPEOF(a1))
@@ -175,7 +178,9 @@ SEXP cg_vector_sin_grad(SEXP a1, SEXP grad, SEXP out)
     }
   }
 
-  return out;
+  UNPROTECT(1);
+
+  return a0;
 }
 
 /*
