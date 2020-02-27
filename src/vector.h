@@ -26,8 +26,39 @@ limitations under the License.
  * PUBLIC FUNCTIONS
  */
 
+SEXP cg_pos_def(SEXP x, SEXP out);
+SEXP cg_pos_grad(SEXP x, SEXP grad, SEXP out);
+SEXP cg_neg_def(SEXP x, SEXP out);
+SEXP cg_neg_grad(SEXP x, SEXP grad, SEXP out);
 SEXP cg_add_def(SEXP x, SEXP y, SEXP out);
-
+SEXP cg_sub_def(SEXP x, SEXP y, SEXP out);
+SEXP cg_mul_def(SEXP x, SEXP y, SEXP out);
+SEXP cg_mul_grad_x(SEXP x, SEXP y, SEXP grad, SEXP out);
+SEXP cg_mul_grad_y(SEXP x, SEXP y, SEXP grad, SEXP out);
+SEXP cg_div_def(SEXP x, SEXP y, SEXP out);
+SEXP cg_div_grad_x(SEXP x, SEXP y, SEXP grad, SEXP out);
+SEXP cg_div_grad_y(SEXP x, SEXP y, SEXP grad, SEXP out);
+SEXP cg_pow_def(SEXP x, SEXP y, SEXP out);
+SEXP cg_pow_grad_x(SEXP x, SEXP y, SEXP grad, SEXP out);
+SEXP cg_pow_grad_y(SEXP x, SEXP y, SEXP grad, SEXP out);
+SEXP cg_square_def(SEXP x, SEXP out);
+SEXP cg_square_grad(SEXP x, SEXP grad, SEXP out);
+SEXP cg_sqrt_def(SEXP x, SEXP out);
+SEXP cg_sqrt_grad(SEXP x, SEXP value, SEXP grad, SEXP out);
+SEXP cg_cbrt_def(SEXP x, SEXP out);
+SEXP cg_cbrt_grad(SEXP x, SEXP value, SEXP grad, SEXP out);
+SEXP cg_exp_def(SEXP x, SEXP out);
+SEXP cg_exp_grad(SEXP x, SEXP value, SEXP grad, SEXP out);
+SEXP cg_exp2_def(SEXP x, SEXP out);
+SEXP cg_exp2_grad(SEXP x, SEXP value, SEXP grad, SEXP out);
+SEXP cg_ln_def(SEXP x, SEXP out);
+SEXP cg_ln_grad(SEXP x, SEXP grad, SEXP out);
+SEXP cg_log2_def(SEXP x, SEXP out);
+SEXP cg_log2_grad(SEXP x, SEXP grad, SEXP out);
+SEXP cg_log10_def(SEXP x, SEXP out);
+SEXP cg_log10_grad(SEXP x, SEXP grad, SEXP out);
+SEXP cg_abs_def(SEXP x, SEXP out);
+SEXP cg_abs_grad(SEXP x, SEXP value, SEXP grad, SEXP out);
 SEXP cg_sin_def(SEXP x, SEXP out);
 SEXP cg_sin_grad(SEXP x, SEXP grad, SEXP out);
 

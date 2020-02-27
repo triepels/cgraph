@@ -113,11 +113,14 @@ cg_pos <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("pos", cg_function(
-  def = base::`+`,
+  def = function(x, out)
+  {
+    .Call("cg_pos_def", x, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      grad
+      .Call("cg_pos_grad", x, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -142,11 +145,14 @@ cg_neg <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("neg", cg_function(
-  def = base::`-`,
+  def = function(x, out)
+  {
+    .Call("cg_neg_def", x, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      -grad
+      .Call("cg_neg_grad", x, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -172,29 +178,18 @@ cg_add <- function(x, y, name = NULL)
 
 # Function definition
 delayedAssign("add", cg_function(
-  def = base::`+`,
+  def = function(x, y, out)
+  {
+    .Call("cg_add_def", x, y, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(x))
-      {
-        grad
-      }
-      else
-      {
-        bsum(grad, length(x))
-      }
+      .Call("cg_pos_grad", x, grad, out, PACKAGE = "cgraph")
     },
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(y))
-      {
-        grad
-      }
-      else
-      {
-        bsum(grad, length(y))
-      }
+      .Call("cg_pos_grad", y, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -234,29 +229,18 @@ cg_sub <- function(x, y, name = NULL)
 
 # Function definition
 delayedAssign("sub", cg_function(
-  def = base::`-`,
+  def = function(x, y, out)
+  {
+    .Call("cg_sub_def", x, y, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(x))
-      {
-        grad
-      }
-      else
-      {
-        bsum(grad, length(x))
-      }
+      .Call("cg_pos_grad", x, grad, out, PACKAGE = "cgraph")
     },
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(y))
-      {
-        -grad
-      }
-      else
-      {
-        bsum(-grad, length(y))
-      }
+      .Call("cg_neg_grad", y, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -296,29 +280,18 @@ cg_mul <- function(x, y, name = NULL)
 
 # Function definition
 delayedAssign("mul", cg_function(
-  def = base::`*`,
+  def = function(x, y, out)
+  {
+    .Call("cg_mul_def", x, y, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(x))
-      {
-        grad * y
-      }
-      else
-      {
-        bsum(grad * y, length(x))
-      }
+      .Call("cg_mul_grad_x", x, y, grad, out, PACKAGE = "cgraph")
     },
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(y))
-      {
-        grad * x
-      }
-      else
-      {
-        bsum(grad * x, length(y))
-      }
+      .Call("cg_mul_grad_y", x, y, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -351,29 +324,18 @@ cg_div <- function(x, y, name = NULL)
 
 # Function definition
 delayedAssign("div", cg_function(
-  def = base::`/`,
+  def = function(x, y, out)
+  {
+    .Call("cg_div_def", x, y, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(x))
-      {
-        grad / y
-      }
-      else
-      {
-        bsum(grad / y, length(x))
-      }
+      .Call("cg_div_grad_x", x, y, grad, out, PACKAGE = "cgraph")
     },
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(y))
-      {
-        -grad * x / y ^ 2
-      }
-      else
-      {
-        bsum(-grad * x / y ^ 2, length(y))
-      }
+      .Call("cg_div_grad_y", x, y, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -406,29 +368,18 @@ cg_pow <- function(x, y, name = NULL)
 
 # Function definition
 delayedAssign("pow", cg_function(
-  def = base::`^`,
+  def = function(x, y, out)
+  {
+    .Call("cg_pow_def", x, y, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(x))
-      {
-        grad * y * x ^ (y - 1)
-      }
-      else
-      {
-        bsum(grad * y * x ^ (y - 1), length(x))
-      }
+      .Call("cg_pow_grad_x", x, y, grad, out, PACKAGE = "cgraph")
     },
-    function(x, y, value, grad)
+    function(x, y, value, grad, out)
     {
-      if(is.array(y))
-      {
-        grad * x ^ y * log(x)
-      }
-      else
-      {
-        bsum(grad * x ^ y * log(x), length(y))
-      }
+      .Call("cg_pow_grad_y", x, y, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -462,21 +413,14 @@ cg_square <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("square", cg_function(
-  def = function(x)
+  def = function(x, out)
   {
-    x^2
+    .Call("cg_square_def", x, out, PACKAGE = "cgraph")
   },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      if(is.array(x))
-      {
-        2 * grad * x
-      }
-      else
-      {
-        bsum(2 * grad * x, length(x))
-      }
+      .Call("cg_square_grad", x, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -501,11 +445,44 @@ cg_sqrt <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("sqrt", cg_function(
-  def = base::sqrt,
+  def = function(x, out)
+  {
+    .Call("cg_sqrt_def", x, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      grad * 1 / (2 * value)
+      .Call("cg_sqrt_grad", x, value, grad, out, PACKAGE = "cgraph")
+    }
+  )
+))
+
+#' Cubic Root
+#'
+#' Calculate \code{x^(1/3)}.
+#'
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @author Ron Triepels
+#' @export
+cg_cbrt <- function(x, name = NULL)
+{
+  cg_operator(cbrt, list(x), name)
+}
+
+# Function definition
+delayedAssign("cbrt", cg_function(
+  def = function(x, out)
+  {
+    .Call("cg_cbrt_def", x, out, PACKAGE = "cgraph")
+  },
+  grads = list(
+    function(x, value, grad, out)
+    {
+      .Call("cg_cbrt_grad", x, value, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -530,11 +507,44 @@ cg_exp <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("exp", cg_function(
-  def = base::exp,
+  def = function(x, out)
+  {
+    .Call("cg_exp_def", x, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      grad * value
+      .Call("cg_exp_grad", x, value, grad, out, PACKAGE = "cgraph")
+    }
+  )
+))
+
+#' Base-2 Exponential Function
+#'
+#' Calculate \code{2^x}.
+#'
+#' @param x either a cg_node object or a numerical vector or array.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @author Ron Triepels
+#' @export
+cg_exp2 <- function(x, name = NULL)
+{
+  cg_operator(exp2, list(x), name)
+}
+
+# Function definition
+delayedAssign("exp2", cg_function(
+  def = function(x, out)
+  {
+    .Call("cg_exp2_def", x, out, PACKAGE = "cgraph")
+  },
+  grads = list(
+    function(x, value, grad, out)
+    {
+      .Call("cg_exp2_grad", x, value, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -559,11 +569,14 @@ cg_ln <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("ln", cg_function(
-  def = base::log,
+  def = function(x, out)
+  {
+    .Call("cg_ln_def", x, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      grad / x
+      .Call("cg_ln_grad", x, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -588,11 +601,14 @@ cg_log2 <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("log2", cg_function(
-  def = base::log2,
+  def = function(x, out)
+  {
+    .Call("cg_log2_def", x, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      grad / (x * log(2))
+      .Call("cg_log2_grad", x, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -617,11 +633,14 @@ cg_log10 <- function(x, name = NULL)
 
 # Function definition
 delayedAssign("log10", cg_function(
-  def = base::log10,
+  def = function(x, out)
+  {
+    .Call("cg_log10_def", x, out, PACKAGE = "cgraph")
+  },
   grads = list(
-    function(x, value, grad)
+    function(x, value, grad, out)
     {
-      grad / (x * log(10))
+      .Call("cg_log10_grad", x, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
@@ -648,12 +667,12 @@ cg_abs <- function(x, name = NULL)
 delayedAssign("abs", cg_function(
   def = function(x, out)
   {
-    .Call("cg_vector_abs", x, out, PACKAGE = "cgraph")
+    .Call("cg_abs_def", x, out, PACKAGE = "cgraph")
   },
   grads = list(
     function(x, value, grad, out)
     {
-      .Call("cg_vector_abs_grad", x, value, grad, out, PACKAGE = "cgraph")
+      .Call("cg_abs_grad", x, value, grad, out, PACKAGE = "cgraph")
     }
   )
 ))
