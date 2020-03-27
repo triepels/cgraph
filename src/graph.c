@@ -161,9 +161,7 @@ SEXP cg_graph_gen_name(SEXP graph)
   }
   else
   {
-    R_len_t n = XLENGTH(nodes);
-
-    sprintf(name, "v%d", n + 1);
+    sprintf(name, "v%d", (int)XLENGTH(nodes) + 1);
   }
 
   UNPROTECT(1);
