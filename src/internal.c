@@ -108,7 +108,7 @@ SEXP bsum(SEXP x, SEXP block_size)
 
   if(m < 0)
   {
-    Rf_errorcall(R_NilValue, "invalid block size");
+    Rf_errorcall(R_NilValue, "block size out of bounds");
   }
 
   SEXP out = PROTECT(Rf_allocVector(REALSXP, m));

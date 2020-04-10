@@ -311,7 +311,7 @@ void cg_node_backward(SEXP node)
 
     if(l != XLENGTH(grad))
     {
-      Rf_errorcall(R_NilValue, "cannot accumulate gradients of length %d and %d for node '%s'",
+      Rf_errorcall(R_NilValue, "cannot accumulate gradients of lengths %d and %d for node '%s'",
                    l, XLENGTH(grad), cg_node_name(node));
     }
 
