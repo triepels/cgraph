@@ -26,7 +26,7 @@ limitations under the License.
  * PUBLIC FUNCTIONS
  */
 
-SEXP copy(SEXP x, SEXP y, SEXP offset);
+SEXP copy(SEXP x, SEXP y, SEXP offset_x, SEXP offset_y, SEXP size);
 
 SEXP sigmoid(SEXP x);
 

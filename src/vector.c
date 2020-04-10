@@ -25,7 +25,7 @@ limitations under the License.
  * PUBLIC FUNCTIONS
  */
 
-SEXP copy(SEXP x, SEXP y, SEXP offset)
+SEXP copy(SEXP x, SEXP y, SEXP offset_x, SEXP offset_y, SEXP size)
 {
   if(!Rf_isNumeric(x))
   {
@@ -37,24 +37,38 @@ SEXP copy(SEXP x, SEXP y, SEXP offset)
     Rf_errorcall(R_NilValue, "argument 'y' must be a numerical vector or array");
   }
 
-  if(!Rf_isNumeric(offset) || XLENGTH(offset) != 1)
+  if(!Rf_isNumeric(offset_x) || XLENGTH(offset_x) != 1)
   {
-    Rf_errorcall(R_NilValue, "argument 'x' must be a numerical scalar");
+    Rf_errorcall(R_NilValue, "argument 'offset_x' must be a numerical scalar");
   }
 
-  R_len_t nx = XLENGTH(x);
-  R_len_t ny = XLENGTH(y);
-
-  if(nx > ny)
+  if(!Rf_isNumeric(offset_y) || XLENGTH(offset_y) != 1)
   {
-    Rf_errorcall(R_NilValue, "cannot copy %d elements to a vector of length %d", nx, ny);
+    Rf_errorcall(R_NilValue, "argument 'offset_y' must be a numerical scalar");
   }
 
-  int k = Rf_asInteger(offset);
-
-  if(k < 0 || k > ny - nx)
+  if(!Rf_isNumeric(size) || XLENGTH(size) != 1)
   {
-    Rf_errorcall(R_NilValue, "offset out of bounds");
+    Rf_errorcall(R_NilValue, "argument 'size' must be a numerical scalar");
+  }
+
+  R_len_t nx = XLENGTH(x), ny = XLENGTH(y);
+
+  int ox = Rf_asInteger(offset_x), oy = Rf_asInteger(offset_y), k = Rf_asInteger(size);
+
+  if(k < 0 || k > nx || k > ny)
+  {
+    Rf_errorcall(R_NilValue, "argument 'size' is out of bounds");
+  }
+
+  if(ox < 0 || ox > nx - k)
+  {
+    Rf_errorcall(R_NilValue, "argument 'offset_x' is out of bounds");
+  }
+
+  if(oy < 0 || oy > ny - k)
+  {
+    Rf_errorcall(R_NilValue, "argument 'offset_y' is out of bounds");
   }
 
   switch(TYPEOF(x))
@@ -69,7 +83,7 @@ SEXP copy(SEXP x, SEXP y, SEXP offset)
         {
           double *py = REAL(y);
 
-          memcpy(py + k, px, nx * sizeof(double));
+          memcpy(py + oy, px + ox, k * sizeof(double));
 
           break;
         }
@@ -78,9 +92,9 @@ SEXP copy(SEXP x, SEXP y, SEXP offset)
         {
           int *py = INTEGER(y);
 
-          for(int i = 0; i < nx; i++)
+          for(int i = 0; i < k; i++)
           {
-            py[k + i] = px[i];
+            py[oy + i] = px[ox + i];
           }
 
           break;
@@ -100,9 +114,9 @@ SEXP copy(SEXP x, SEXP y, SEXP offset)
         {
           double *py = REAL(y);
 
-          for(int i = 0; i < nx; i++)
+          for(int i = 0; i < k; i++)
           {
-            py[k + i] = px[i];
+            py[oy + i] = px[ox + i];
           }
 
           break;
@@ -112,7 +126,7 @@ SEXP copy(SEXP x, SEXP y, SEXP offset)
         {
           int *py = INTEGER(y);
 
-          memcpy(py + k, px, nx * sizeof(int));
+          memcpy(py + oy, px + ox, k * sizeof(int));
 
           break;
         }

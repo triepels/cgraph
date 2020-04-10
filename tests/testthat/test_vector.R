@@ -180,28 +180,28 @@ test_that("Vector 9",
   graph <- cg_graph()
 
   # Create parameters
-  a <- cg_parameter(0.2, name = "a")
-  b <- cg_parameter(0.4, name = "b")
+  a <- cg_parameter(matrix(c(0.2, 0.6), 1, 2), name = "a")
+  b <- cg_parameter(c(0.3, 0.9), name = "b")
 
   # Create constant
-  c <- cg_constant(rep(0, 4), name = "c")
+  c <- cg_constant(rep(0, 8), name = "c")
 
   # Create test expression
-  c <- cg_copy(b^2, cg_copy(a^2, c, offset = 1), offset = 3)
+  c <- cg_copy(b^2, cg_copy(a^2, c, offset_x = 0, offset_y = 2, size = 2), offset_y = 6, size = 2)
 
   # Perform backward pass
-  cg_graph_backward(graph, c, index = 2)
+  cg_graph_backward(graph, c, index = 3)
 
   # Check gradients
-  expect_equivalent(a$grad, approx_gradient(graph, c, a, index = 2), tolerance = 1e-4)
-  expect_equivalent(b$grad, approx_gradient(graph, c, b, index = 2), tolerance = 1e-4)
+  expect_equivalent(a$grad, approx_gradient(graph, c, a, index = 3), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, c, b, index = 3), tolerance = 1e-4)
 
   # Perform backward pass
-  cg_graph_backward(graph, c, index = 4)
+  cg_graph_backward(graph, c, index = 7)
 
   # Check gradients
-  expect_equivalent(a$grad, approx_gradient(graph, c, a, index = 4), tolerance = 1e-4)
-  expect_equivalent(b$grad, approx_gradient(graph, c, b, index = 4), tolerance = 1e-4)
+  expect_equivalent(a$grad, approx_gradient(graph, c, a, index = 7), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, c, b, index = 7), tolerance = 1e-4)
 })
 
 test_that("Vector 10",

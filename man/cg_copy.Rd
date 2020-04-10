@@ -4,14 +4,18 @@
 \alias{cg_copy}
 \title{Copy}
 \usage{
-cg_copy(x, y, offset = 0, name = NULL)
+cg_copy(x, y, offset_x = 0, offset_y = 0, size, name = NULL)
 }
 \arguments{
 \item{x}{either a cg_node object or a numerical vector or array, the source vector.}
 
 \item{y}{either a cg_node object or a numerical vector or array, the destination vector.}
 
-\item{offset}{a numerical scalar, the offset where \code{x} is copied into \code{y} (optional).}
+\item{offset_x}{either a cg_node object or a numerical scalar, the offset of \code{x} (optional).}
+
+\item{offset_y}{either a cg_node object or a numerical scalar, the offset of \code{y} (optional).}
+
+\item{size}{either a cg_node object or a numerical scalar, the number of elements that are copied from \code{x} to \code{y}.}
 
 \item{name}{character scalar, name of the operation (optional).}
 }
@@ -19,10 +23,12 @@ cg_copy(x, y, offset = 0, name = NULL)
 cg_operator object.
 }
 \description{
-Efficiently copy all elements of vector \code{x} into \code{y}.
+Efficiently copy elements of vector \code{x} to \code{y}.
 }
 \note{
-The value of \code{y} is modified in-place. Hence, be cautious that no other node depends on \code{y} as this may yield incorrect gradients when performing a backward pass. Rounding may take place if \code{x} does not match the datatype of \code{y}.
+The value of \code{y} is modified in-place. Hence, be cautious that no other node in the active graph depends on \code{y} as this may yield incorrect gradients when performing a backward pass. Rounding may take place if \code{x} does not match the datatype of \code{y}.
+
+This operator is only differentiable with respect to \code{x} and \code{y}. Any attempt to differentiate this operator with respect to \code{offset_x}, \code{offset_y}, or \code{size} will result in an error.
 }
 \examples{
 # Initialize a computational graph
@@ -35,7 +41,7 @@ a <- cg_parameter(1:4)
 b <- cg_constant(rep(0, 10))
 
 # Copy the elements of a into b
-c <- cg_copy(a, b, offset = 4)
+c <- cg_copy(a, b, offset_x = 2, offset_y = 4, size = 2)
 
 # The value of b is modified in-place and c holds a shallow copy of b's value
 b$value
