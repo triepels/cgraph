@@ -1003,6 +1003,60 @@ delayedAssign("atanh", cg_function(
   )
 ))
 
+#' Copy
+#'
+#' Efficiently copy all elements of vector \code{x} into \code{y}.
+#'
+#' @param x either a cg_node object or a numerical vector or array, the source vector.
+#' @param y either a cg_node object or a numerical vector or array, the destination vector.
+#' @param offset a numerical scalar, the offset where \code{x} is copied into \code{y} (optional).
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @note The value of \code{y} is modified in-place. Hence, be cautious that no other node depends on \code{y} as this may yield incorrect gradients when performing a backward pass. Rounding may take place if \code{x} does not match the datatype of \code{y}.
+#'
+#' @return cg_operator object.
+#'
+#' @examples # Initialize a computational graph
+#' graph <- cg_graph()
+#'
+#' # Create a parameter
+#' a <- cg_parameter(1:4)
+#'
+#' # Create a constant
+#' b <- cg_constant(rep(0, 10))
+#'
+#' # Copy the elements of a into b
+#' c <- cg_copy(a, b, offset = 4)
+#'
+#' # The value of b is modified in-place and c holds a shallow copy of b's value
+#' b$value
+#' c$value
+#'
+#' @author Ron Triepels
+#' @export
+cg_copy <- function(x, y, offset = 0, name = NULL)
+{
+  cg_operator(copy, list(x, y, offset), name)
+}
+
+# Function definition
+delayedAssign("copy", cg_function(
+  def = function(x, y, offset)
+  {
+    .Call("copy", x, y, offset, PACKAGE = "cgraph")
+  },
+  grads = list(
+    function(x, y, offset, value, grad)
+    {
+      grad[(offset + 1):(offset + length(x))]
+    },
+    function(x, y, offset, value, grad)
+    {
+      grad
+    }
+  )
+))
+
 #' Sigmoid
 #'
 #' Calculate \code{1 / (1 + exp(-x))}.

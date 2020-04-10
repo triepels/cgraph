@@ -25,6 +25,106 @@ limitations under the License.
  * PUBLIC FUNCTIONS
  */
 
+SEXP copy(SEXP x, SEXP y, SEXP offset)
+{
+  if(!Rf_isNumeric(x))
+  {
+    Rf_errorcall(R_NilValue, "argument 'x' must be a numerical vector or array");
+  }
+
+  if(!Rf_isNumeric(y))
+  {
+    Rf_errorcall(R_NilValue, "argument 'y' must be a numerical vector or array");
+  }
+
+  if(!Rf_isNumeric(offset) || XLENGTH(offset) != 1)
+  {
+    Rf_errorcall(R_NilValue, "argument 'x' must be a numerical scalar");
+  }
+
+  R_len_t nx = XLENGTH(x);
+  R_len_t ny = XLENGTH(y);
+
+  if(nx > ny)
+  {
+    Rf_errorcall(R_NilValue, "cannot copy %d elements to a vector of length %d", nx, ny);
+  }
+
+  int k = Rf_asInteger(offset);
+
+  if(k < 0 || k > ny - nx)
+  {
+    Rf_errorcall(R_NilValue, "offset out of bounds");
+  }
+
+  switch(TYPEOF(x))
+  {
+    case REALSXP :
+    {
+      double *px = REAL(x);
+
+      switch(TYPEOF(y))
+      {
+        case REALSXP :
+        {
+          double *py = REAL(y);
+
+          memcpy(py + k, px, nx * sizeof(double));
+
+          break;
+        }
+        case INTSXP :
+        case LGLSXP :
+        {
+          int *py = INTEGER(y);
+
+          for(int i = 0; i < nx; i++)
+          {
+            py[k + i] = px[i];
+          }
+
+          break;
+        }
+      }
+
+      break;
+    }
+    case INTSXP :
+    case LGLSXP :
+    {
+      int *px = INTEGER(x);
+
+      switch(TYPEOF(y))
+      {
+        case REALSXP :
+        {
+          double *py = REAL(y);
+
+          for(int i = 0; i < nx; i++)
+          {
+            py[k + i] = px[i];
+          }
+
+          break;
+        }
+        case INTSXP :
+        case LGLSXP :
+        {
+          int *py = INTEGER(y);
+
+          memcpy(py + k, px, nx * sizeof(int));
+
+          break;
+        }
+      }
+
+      break;
+    }
+  }
+
+  return y;
+}
+
 SEXP sigmoid(SEXP x)
 {
   if(!Rf_isNumeric(x))

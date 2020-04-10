@@ -93,6 +93,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"bsum",                  (DL_FUNC) &bsum,                  2},
   {"approx_gradient",       (DL_FUNC) &approx_gradient,       5},
   // Vector
+  {"copy",                  (DL_FUNC) &copy,                  3},
   {"sigmoid",               (DL_FUNC) &sigmoid,               1},
   {NULL,                    NULL,                             0}
 };

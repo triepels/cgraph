@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-context("Math")
+context("Vector")
 
-test_that("Math 1",
+test_that("Vector 1",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -34,7 +34,7 @@ test_that("Math 1",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Math 2",
+test_that("Vector 2",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -54,7 +54,7 @@ test_that("Math 2",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Math 3",
+test_that("Vector 3",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -74,7 +74,7 @@ test_that("Math 3",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Math 4",
+test_that("Vector 4",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -94,7 +94,7 @@ test_that("Math 4",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Math 5",
+test_that("Vector 5",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -114,7 +114,7 @@ test_that("Math 5",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Math 6",
+test_that("Vector 6",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -134,7 +134,7 @@ test_that("Math 6",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Math 7",
+test_that("Vector 7",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -154,7 +154,7 @@ test_that("Math 7",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Math 8",
+test_that("Vector 8",
 {
   # Initialize graph
   graph <- cg_graph()
@@ -174,7 +174,37 @@ test_that("Math 8",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Math 9",
+test_that("Vector 9",
+{
+  # Initialize graph
+  graph <- cg_graph()
+
+  # Create parameters
+  a <- cg_parameter(0.2, name = "a")
+  b <- cg_parameter(0.4, name = "b")
+
+  # Create constant
+  c <- cg_constant(rep(0, 4), name = "c")
+
+  # Create test expression
+  c <- cg_copy(b^2, cg_copy(a^2, c, offset = 1), offset = 3)
+
+  # Perform backward pass
+  cg_graph_backward(graph, c, index = 2)
+
+  # Check gradients
+  expect_equivalent(a$grad, approx_gradient(graph, c, a, index = 2), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, c, b, index = 2), tolerance = 1e-4)
+
+  # Perform backward pass
+  cg_graph_backward(graph, c, index = 4)
+
+  # Check gradients
+  expect_equivalent(a$grad, approx_gradient(graph, c, a, index = 4), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, c, b, index = 4), tolerance = 1e-4)
+})
+
+test_that("Vector 10",
 {
   # Initialize graph
   graph <- cg_graph()
