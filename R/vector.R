@@ -1027,66 +1027,6 @@ delayedAssign("atanh", cg_function(
   )
 ))
 
-#' Copy
-#'
-#' Efficiently copy elements of vector \code{x} to \code{y}.
-#'
-#' @param x either a cg_node object or a numerical vector or array, the source vector.
-#' @param y either a cg_node object or a numerical vector or array, the destination vector.
-#' @param offset_x either a cg_node object or a numerical scalar, the offset of \code{x} (optional).
-#' @param offset_y either a cg_node object or a numerical scalar, the offset of \code{y} (optional).
-#' @param size either a cg_node object or a numerical scalar, the number of elements that are copied from \code{x} to \code{y}.
-#' @param name character scalar, name of the operation (optional).
-#'
-#' @note The value of \code{y} is modified in-place. Hence, be cautious that no other node in the active graph depends on \code{y} as this may yield incorrect gradients when performing a backward pass. Rounding may take place if \code{x} does not match the datatype of \code{y}.
-#'
-#' This operator is only differentiable with respect to \code{x} and \code{y}. Any attempt to differentiate this operator with respect to \code{offset_x}, \code{offset_y}, or \code{size} will result in an error.
-#'
-#' @return cg_operator object.
-#'
-#' @examples # Initialize a computational graph
-#' graph <- cg_graph()
-#'
-#' # Create a parameter
-#' a <- cg_parameter(1:4)
-#'
-#' # Create a constant
-#' b <- cg_constant(rep(0, 10))
-#'
-#' # Copy the elements of a into b
-#' c <- cg_copy(a, b, offset_x = 2, offset_y = 4, size = 2)
-#'
-#' # The value of b is modified in-place and c holds a shallow copy of b's value
-#' b$value
-#' c$value
-#'
-#' @author Ron Triepels
-#' @export
-cg_copy <- function(x, y, offset_x = 0, offset_y = 0, size, name = NULL)
-{
-  cg_operator(copy, list(x, y, offset_x, offset_y, size), name)
-}
-
-# Function definition
-delayedAssign("copy", cg_function(
-  def = function(x, y, offset_x, offset_y, size)
-  {
-    .Call("copy", x, y, offset_x, offset_y, size, PACKAGE = "cgraph")
-  },
-  grads = list(
-    function(x, y, offset_x, offset_y, size, value, grad)
-    {
-      out <- grad[(offset_y + 1):(offset_y + size)]
-      dim(out) <- dim(x)
-      out
-    },
-    function(x, y, offset_x, offset_y, size, value, grad)
-    {
-      grad
-    }
-  )
-))
-
 #' Sigmoid
 #'
 #' Calculate \code{1 / (1 + exp(-x))}.
