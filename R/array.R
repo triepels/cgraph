@@ -12,6 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Multidimensional Arrays
+#'
+#' Create a multidimensional array.
+#'
+#' @param data either a cg_node object or a numerical vector.
+#' @param dim either a cg_node object or a numerical vector.
+#' @param dimnames either a cg_node object or a character vector.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#'
+#' @seealso \link[base:array]{array}
+#'
+#' @author Ron Triepels
+#' @export
+cg_array <- function(data = NA, dim = length(data), dimnames = NULL, name = NULL)
+{
+  cg_operator(array, list(data, dim, dimnames), name)
+}
+
+# Function definition
+delayedAssign("array", cg_function(def = base::array))
+
 #' Dimensions of an Array
 #'
 #' Calculate \code{dim(x)}.

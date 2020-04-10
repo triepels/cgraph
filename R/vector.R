@@ -12,18 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Length of an Object
+#' Vectors
 #'
-#' Calculate \code{length(x)}.
+#' Create a vector.
 #'
-#' @param x either a cg_node object or a numerical vector or array.
+#' @param mode either a cg_node object or a character scalar.
+#' @param length either a cg_node object or a numeric vector.
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object.
 #'
 #' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
 #'
-#' @seealso \link[base]{length}
+#' @seealso \link[base:vector]{vector}
+#'
+#' @author Ron Triepels
+#' @export
+cg_vector <- function(mode = "logical", length = 0L, name = NULL)
+{
+  cg_operator(vector, list(mode, length), name)
+}
+
+# Function definition
+delayedAssign("vector", cg_function(def = base::vector))
+
+#' Length of an Object
+#'
+#' Calculate \code{length(x)}.
+#'
+#' @param x either a cg_node object or an R object.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#'
+#' @seealso \link[base:length]{length}
 #'
 #' @author Ron Triepels
 #' @export
