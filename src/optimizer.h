@@ -29,7 +29,8 @@ limitations under the License.
  * ENUMERATIONS
  */
 
-typedef enum {
+typedef enum
+{
   CGSGD,  /* (Stochastic) Gradient Desecnt */
   CGGDM,  /* Gradient Descent with Momentum */
   CGNAG,  /* Nestrov Accelerated Gradient */
