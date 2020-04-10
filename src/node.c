@@ -238,7 +238,9 @@ void cg_node_backward(SEXP node)
   {
     SEXP input = VECTOR_ELT(inputs, i);
 
-    if(cg_node_type(input) == CGCST)
+    cg_node_type_t type = cg_node_type(input);
+
+    if(type == CGCST || type == CGIPT)
     {
       continue;
     }
