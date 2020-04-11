@@ -80,6 +80,46 @@ test_that("Subset 4",
   graph <- cg_graph()
 
   # Create parameters
+  a <- cg_constant(matrix(c(1,3,4,9), 2, 2), name = "a")
+  b <- cg_parameter(c(4,5), name = "b")
+
+  # Create test expressions
+  a[2,] <- b^2
+  c <- cg_sum(a)
+
+  # Perform backward pass
+  cg_graph_backward(graph, c)
+
+  # Check gradients
+  expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
+})
+
+test_that("Subset 5",
+{
+  # Initialize graph
+  graph <- cg_graph()
+
+  # Create parameters
+  a <- cg_constant(matrix(c(1,3,4,9), 2, 2), name = "a")
+  b <- cg_parameter(c(4,5), name = "b")
+
+  # Create test expressions
+  a[[2:3]] <- b^2
+  c <- cg_sum(a)
+
+  # Perform backward pass
+  cg_graph_backward(graph, c)
+
+  # Check gradients
+  expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
+})
+
+test_that("Subset 6",
+{
+  # Initialize graph
+  graph <- cg_graph()
+
+  # Create parameters
   a <- cg_parameter(1:24, name = "a")
   b <- cg_parameter(1:24, name = "b")
 
@@ -94,7 +134,7 @@ test_that("Subset 4",
   expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
 })
 
-test_that("Subset 5",
+test_that("Subset 7",
 {
   # Initialize graph
   graph <- cg_graph()

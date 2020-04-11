@@ -22,7 +22,7 @@ cg_operator object.
 Calculate \code{x[[i]] <- y}.
 }
 \note{
-This operator is not differentiable with respect to \code{i}. Any attempt to differentiate this operator with respect to this argument results in an error.
+This operator is not differentiable with respect to \code{x} and \code{i}. Any attempt to differentiate this operator with respect to this argument results in an error.
 }
 \seealso{
 \link[base:Extract]{subassign}
