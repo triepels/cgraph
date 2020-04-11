@@ -92,7 +92,7 @@ void cg_node_zero_grad(SEXP node)
   UNPROTECT(2);
 }
 
-void cg_node_fill_grad(SEXP node, SEXP index, const double x)
+void cg_node_init_grad(SEXP node, SEXP index)
 {
   SEXP value = PROTECT(cg_node_value(node));
 
@@ -117,7 +117,14 @@ void cg_node_fill_grad(SEXP node, SEXP index, const double x)
 
   double *pg = REAL(grad);
 
-  if(!Rf_isNull(index))
+  if(Rf_isNull(index))
+  {
+    for(int i = 0; i < n; i++)
+    {
+      pg[i] = 1;
+    }
+  }
+  else
   {
     int k = Rf_asInteger(index);
 
@@ -128,14 +135,7 @@ void cg_node_fill_grad(SEXP node, SEXP index, const double x)
 
     memset(pg, 0, n * sizeof(double));
 
-    pg[k - 1] = x;
-  }
-  else
-  {
-    for(int i = 0; i < n; i++)
-    {
-      pg[i] = x;
-    }
+    pg[k - 1] = 1;
   }
 
   SHALLOW_DUPLICATE_ATTRIB(grad, value);

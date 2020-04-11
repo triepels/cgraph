@@ -292,7 +292,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   SEXP *queue = cg_graph_dfs_from(graph, target, backward_filter, &k);
 
-  cg_node_fill_grad(target, index, 1);
+  cg_node_init_grad(target, index);
 
   for(int i = k - 2; i >= 0; i--)
   {

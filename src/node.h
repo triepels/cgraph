@@ -204,7 +204,7 @@ inline void cg_node_set_function(SEXP node, SEXP function)
 
 void cg_node_zero_grad(SEXP node);
 
-void cg_node_fill_grad(SEXP node, SEXP index, const double x);
+void cg_node_init_grad(SEXP node, SEXP index);
 
 void cg_node_forward(SEXP node);
 
