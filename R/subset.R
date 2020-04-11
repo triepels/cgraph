@@ -79,7 +79,7 @@ cg_subassign1 <- function(x, ..., y, name = NULL)
 delayedAssign("subassign1", cg_function(
   def = base::`[<-`,
   grads = list(
-    x = function(x, ..., y, value, grad) # Todo: check this gradient...
+    x = function(x, ..., y, value, grad)
     {
       grad
     },
@@ -164,7 +164,7 @@ cg_subassign2 <- function(x, i, y, name = NULL)
 delayedAssign("subassign2", cg_function(
   def = base::`[[<-`,
   grads = list(
-    x = function(x, i, y, value, grad) # Todo: check this gradient...
+    x = function(x, i, y, value, grad)
     {
       grad
     },
