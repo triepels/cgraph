@@ -64,7 +64,7 @@ delayedAssign("subset1", cg_function(
 #'
 #' @return cg_operator object.
 #'
-#' @note This operator is not differentiable with respect to \code{x} and the arguments provided to \code{...}. Any attempt to differentiate this operator with respect to these arguments results in an error.
+#' @note This operator is not differentiable with respect to the arguments provided to \code{...}. Any attempt to differentiate this operator with respect to these arguments results in an error.
 #'
 #' @seealso \link[base:Extract]{subassign}
 #'
@@ -79,6 +79,10 @@ cg_subassign1 <- function(x, ..., y, name = NULL)
 delayedAssign("subassign1", cg_function(
   def = base::`[<-`,
   grads = list(
+    x = function(x, ..., y, value, grad) # Todo: check this gradient...
+    {
+      grad
+    },
     y = function(x, ..., y, value, grad)
     {
       grad[...]
@@ -145,7 +149,7 @@ delayedAssign("subset2", cg_function(
 #'
 #' @return cg_operator object.
 #'
-#' @note This operator is not differentiable with respect to \code{x} and \code{i}. Any attempt to differentiate this operator with respect to this argument results in an error.
+#' @note This operator is not differentiable with respect to \code{i}. Any attempt to differentiate this operator with respect to this argument results in an error.
 #'
 #' @seealso \link[base:Extract]{subassign}
 #'
@@ -160,6 +164,10 @@ cg_subassign2 <- function(x, i, y, name = NULL)
 delayedAssign("subassign2", cg_function(
   def = base::`[[<-`,
   grads = list(
+    x = function(x, i, y, value, grad) # Todo: check this gradient...
+    {
+      grad
+    },
     y = function(x, i, y, value, grad)
     {
       grad[[...]]
