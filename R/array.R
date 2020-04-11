@@ -379,7 +379,9 @@ delayedAssign("colsums", cg_function(
   grads = list(
     function(x, value, grad)
     {
-      aperm(array(grad, rev(dim(x)))) #Todo: improve?
+      grad <- rep(grad, nrow(x))
+      dim(grad) <- rev(dim(x))
+      aperm.default(grad)
     }
   )
 ))
@@ -476,7 +478,9 @@ delayedAssign("colmeans", cg_function(
   grads = list(
     function(x, value, grad)
     {
-      1 / nrow(x) * aperm(array(grad, rev(dim(x)))) #Todo: improve?
+      grad <- rep(grad / nrow(x), nrow(x))
+      dim(grad) <- rev(dim(x))
+      aperm.default(grad)
     }
   )
 ))
