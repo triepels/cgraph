@@ -245,14 +245,9 @@ delayedAssign("linear", cg_function(
     },
     function(x, y, z, value, grad)
     {
-      if(is.array(z))
-      {
-        array(rowSums(grad), dim(z))
-      }
-      else
-      {
-        bsum(grad, length(z))
-      }
+      grad <- bsum(grad, length(z))
+      dim(grad) <- dim(z)
+      grad
     }
   )
 ))
@@ -285,14 +280,9 @@ delayedAssign("sum", cg_function(
   grads = list(
     function(x, value, grad)
     {
-      if(is.array(x))
-      {
-        array(grad, dim(x))
-      }
-      else
-      {
-        rep(grad, length(x))
-      }
+      grad <- rep(grad, length(x))
+      dim(grad) <- dim(x)
+      grad
     }
   )
 ))
@@ -356,7 +346,9 @@ delayedAssign("rowsums", cg_function(
   grads = list(
     function(x, value, grad)
     {
-      array(grad, dim(x))
+      grad <- rep(grad, nrow(x))
+      dim(grad) <- dim(x)
+      grad
     }
   )
 ))
@@ -387,7 +379,7 @@ delayedAssign("colsums", cg_function(
   grads = list(
     function(x, value, grad)
     {
-      aperm(array(grad, rev(dim(x))))
+      aperm(array(grad, rev(dim(x)))) #Todo: improve?
     }
   )
 ))
@@ -418,14 +410,9 @@ delayedAssign("mean", cg_function(
   grads = list(
     function(x, value, grad)
     {
-      if(is.array(x))
-      {
-        1 / length(x) * array(grad, dim(x))
-      }
-      else
-      {
-        1 / length(x) * rep(grad, length(x))
-      }
+      grad <- rep(grad / length(x), length(x))
+      dim(grad) <- dim(x)
+      grad
     }
   )
 ))
@@ -456,7 +443,9 @@ delayedAssign("rowmeans", cg_function(
   grads = list(
     function(x, value, grad)
     {
-      1 / prod(dim(x)[-1L]) * array(grad, dim(x))
+      grad <- rep(grad / prod(dim(x)[-1L]), nrow(x))
+      dim(grad) <- dim(x)
+      grad
     }
   )
 ))
@@ -487,7 +476,7 @@ delayedAssign("colmeans", cg_function(
   grads = list(
     function(x, value, grad)
     {
-      1 / nrow(x) * aperm(array(grad, rev(dim(x))))
+      1 / nrow(x) * aperm(array(grad, rev(dim(x)))) #Todo: improve?
     }
   )
 ))

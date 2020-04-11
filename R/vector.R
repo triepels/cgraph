@@ -85,14 +85,8 @@ delayedAssign("as_double", cg_function(
   grads = list(
     function(x, value, grad)
     {
-      if(is.array(x))
-      {
-        array(grad, dim(x))
-      }
-      else
-      {
-        grad
-      }
+      dim(grad) <- dim(x)
+      grad
     }
   )
 ))
