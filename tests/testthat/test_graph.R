@@ -101,6 +101,33 @@ test_that("Graph 5",
   # Initialize graph
   graph <- cg_graph()
 
+  # Create parameter
+  a <- cg_parameter(2, name = "a")
+
+  # Create input
+  b <- cg_input()
+
+  # Create test expression
+  c <- a ^ b
+
+  # Set value of b
+  b$value <- 4
+
+  # Perform forward pass
+  cg_graph_forward(graph, c)
+
+  # Perform backward pass
+  cg_graph_backward(graph, c)
+
+  # Check gradients
+  expect_equivalent(a$grad, approx_gradient(graph, c, a), tolerance = 1e-4)
+})
+
+test_that("Graph 6",
+{
+  # Initialize graph
+  graph <- cg_graph()
+
   # Create parameters
   a <- cg_parameter(2, name = "a")
 
