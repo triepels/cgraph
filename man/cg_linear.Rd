@@ -22,7 +22,7 @@ cg_operator object.
 Calculate \code{x \%*\% y + c(z)}.
 }
 \note{
-This function is equivalent to \code{cg_matmul(x, y) + cg_as_numeric(z)}.
+This function is deprecated and will be removed in the next major release. Please use function \link[cgraph:cg_linear1]{cg_linear1} instead.
 }
 \author{
 Ron Triepels

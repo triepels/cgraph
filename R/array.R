@@ -219,31 +219,134 @@ delayedAssign("tcrossprod", cg_function(
 #'
 #' @return cg_operator object.
 #'
-#' @note This function is equivalent to \code{cg_matmul(x, y) + cg_as_numeric(z)}.
+#' @note This function is deprecated and will be removed in the next major release. Please use function \link[cgraph:cg_linear1]{cg_linear1} instead.
 #'
 #' @author Ron Triepels
 #' @export
 cg_linear <- function(x, y, z, name = NULL)
 {
-  cg_operator(linear, list(x, y, z), name)
+  .Deprecated("cg_linear1")
+  cg_operator(linear1, list(x, y, z), name)
+}
+
+#' Linear Transformation
+#'
+#' Calculate \code{x1 \%*\% y1 + c(z)}.
+#'
+#' @param x1 either a cg_node object or a numerical matrix.
+#' @param y1 either a cg_node object or a numerical matrix.
+#' @param z either a cg_node object or a numerical vector (optional).
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @note This function is equivalent to \code{cg_matmul(x1, y1) + cg_as_numeric(z)} but shorter and more efficient.
+#'
+#' @author Ron Triepels
+#' @export
+cg_linear1 <- function(x1, y1, z = NULL, name = NULL)
+{
+  if(is.null(z))
+  {
+    cg_operator(linear1, list(x1, y1), name)
+  }
+  else
+  {
+    cg_operator(linear1, list(x1, y1, z), name)
+  }
 }
 
 # Function definition
-delayedAssign("linear", cg_function(
-  def = function(x, y, z)
+delayedAssign("linear1", cg_function(
+  def = function(x1, y1, z = NULL)
   {
-    x %*% y + c(z)
+    if(is.null(z))
+    {
+      x1 %*% y1
+    }
+    else
+    {
+      x1 %*% y1 + c(z)
+    }
   },
   grads = list(
-    function(x, y, z, value, grad)
+    function(x1, y1, z, value, grad)
     {
-      tcrossprod(grad, y)
+      tcrossprod(grad, y1)
     },
-    function(x, y, z, value, grad)
+    function(x1, y1, z, value, grad)
     {
-      crossprod(x, grad)
+      crossprod(x1, grad)
     },
-    function(x, y, z, value, grad)
+    function(x1, y1, z, value, grad)
+    {
+      grad <- bsum(grad, length(z))
+      dim(grad) <- dim(z)
+      grad
+    }
+  )
+))
+
+#' Linear Transformation
+#'
+#' Calculate \code{x1 \%*\% y1 + x2 \%*\% y2 + c(z)}.
+#'
+#' @param x1 either a cg_node object or a numerical matrix.
+#' @param y1 either a cg_node object or a numerical matrix.
+#' @param x2 either a cg_node object or a numerical matrix.
+#' @param y2 either a cg_node object or a numerical matrix.
+#' @param z either a cg_node object or a numerical vector (optional).
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @note This function is equivalent to \code{cg_matmul(x1, y1) + cg_matmul(x2, y2) + cg_as_numeric(z)} but shorter and more efficient.
+#'
+#' @author Ron Triepels
+#' @export
+cg_linear2 <- function(x1, y1, x2, y2, z = NULL, name = NULL)
+{
+  if(is.null(z))
+  {
+    cg_operator(linear2, list(x1, y1, x2, y2), name)
+  }
+  else
+  {
+    cg_operator(linear2, list(x1, y1, x2, y2, z), name)
+  }
+}
+
+# Function definition
+delayedAssign("linear2", cg_function(
+  def = function(x1, y1, x2, y2, z = NULL)
+  {
+    if(is.null(z))
+    {
+      x1 %*% y1 + x2 %*% y2
+    }
+    else
+    {
+      x1 %*% y1 + x2 %*% y2 + c(z)
+    }
+  },
+  grads = list(
+    function(x1, y1, x2, y2, z, value, grad)
+    {
+      tcrossprod(grad, y1)
+    },
+    function(x1, y1, x2, y2, z, value, grad)
+    {
+      crossprod(x1, grad)
+    },
+    function(x1, y1, x2, y2, z, value, grad)
+    {
+      tcrossprod(grad, y2)
+    },
+    function(x1, y1, x2, y2, z, value, grad)
+    {
+      crossprod(x2, grad)
+    },
+    function(x1, y1, x2, y2, z, value, grad)
     {
       grad <- bsum(grad, length(z))
       dim(grad) <- dim(z)

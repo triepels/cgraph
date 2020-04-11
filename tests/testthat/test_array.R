@@ -64,7 +64,7 @@ test_that("Array 3",
   b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
 
   # Create test expression
-  c <- cg_rowsums(cg_linear(a, b, cg_colsums(b)))
+  c <- cg_rowsums(cg_linear1(a, b, cg_colsums(b)))
 
   # Perform backward pass
   cg_graph_backward(graph, c, index = 1)
@@ -84,7 +84,7 @@ test_that("Array 4",
   b <- cg_parameter(matrix(2:5, 2, 2), name = "b")
 
   # Create test expression
-  c <- cg_rowmeans(cg_linear(a, b, cg_colmeans(b)))
+  c <- cg_rowmeans(cg_linear2(a, b, cg_t(a), cg_t(b), cg_colmeans(b)))
 
   # Perform backward pass
   cg_graph_backward(graph, c, index = 1)
