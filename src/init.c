@@ -29,6 +29,7 @@ limitations under the License.
 #include "function.h"
 #include "internal.h"
 #include "optimizer.h"
+#include "initializer.h"
 
 /*
  * SESSION DEFINITION
@@ -67,34 +68,41 @@ SEXP CG_BUFFER1_SYMBOL  = NULL;
 
 static const R_CallMethodDef CallEntries[] = {
   // Node
-  {"cg_constant",           (DL_FUNC) &cg_constant,           2},
-  {"cg_parameter",          (DL_FUNC) &cg_parameter,          2},
-  {"cg_input",              (DL_FUNC) &cg_input,              1},
-  {"cg_operator",           (DL_FUNC) &cg_operator,           3},
+  {"cg_constant",             (DL_FUNC) &cg_constant,             2},
+  {"cg_parameter",            (DL_FUNC) &cg_parameter,            2},
+  {"cg_input",                (DL_FUNC) &cg_input,                1},
+  {"cg_operator",             (DL_FUNC) &cg_operator,             3},
   // Graph
-  {"cg_graph",              (DL_FUNC) &cg_graph,              1},
-  {"cg_graph_get",          (DL_FUNC) &cg_graph_get,          2},
-  {"cg_graph_forward",      (DL_FUNC) &cg_graph_forward,      2},
-  {"cg_graph_backward",     (DL_FUNC) &cg_graph_backward,     3},
-  // Function
-  {"cg_function",           (DL_FUNC) &cg_function,           2},
-  // Optimizer
-  {"cg_gd",                 (DL_FUNC) &cg_gd,                 2},
-  {"cg_gd_momentum",        (DL_FUNC) &cg_gd_momentum,        3},
-  {"cg_adagrad",            (DL_FUNC) &cg_adagrad,            3},
-  {"cg_rmsprop",            (DL_FUNC) &cg_rmsprop,            4},
-  {"cg_adam",               (DL_FUNC) &cg_adam,               4},
-  {"cg_optimizer_step",     (DL_FUNC) &cg_optimizer_step,     1},
+  {"cg_graph",                (DL_FUNC) &cg_graph,                1},
+  {"cg_graph_get",            (DL_FUNC) &cg_graph_get,            2},
+  {"cg_graph_forward",        (DL_FUNC) &cg_graph_forward,        2},
+  {"cg_graph_backward",       (DL_FUNC) &cg_graph_backward,       3},
   // Session
-  {"cg_session_graph",      (DL_FUNC) &cg_session_graph,      0},
-  {"cg_session_set_graph",  (DL_FUNC) &cg_session_set_graph,  1},
+  {"cg_session_graph",        (DL_FUNC) &cg_session_graph,        0},
+  {"cg_session_set_graph",    (DL_FUNC) &cg_session_set_graph,    1},
+  // Function
+  {"cg_function",             (DL_FUNC) &cg_function,             2},
+  // Optimizer
+  {"cg_gd",                   (DL_FUNC) &cg_gd,                   2},
+  {"cg_gd_momentum",          (DL_FUNC) &cg_gd_momentum,          3},
+  {"cg_adagrad",              (DL_FUNC) &cg_adagrad,              3},
+  {"cg_rmsprop",              (DL_FUNC) &cg_rmsprop,              4},
+  {"cg_adam",                 (DL_FUNC) &cg_adam,                 4},
+  {"cg_optimizer_step",       (DL_FUNC) &cg_optimizer_step,       1},
+  // Initializer
+  {"cg_init_zeros",           (DL_FUNC) &cg_init_zeros,           2},
+  {"cg_init_ones",            (DL_FUNC) &cg_init_ones,            2},
+  {"cg_init_uniform",         (DL_FUNC) &cg_init_uniform,         4},
+  {"cg_init_gaussian",        (DL_FUNC) &cg_init_gaussian,        4},
+  {"cg_init_xavier_uniform",  (DL_FUNC) &cg_init_xavier_uniform,  2},
+  {"cg_init_xavier_gaussian", (DL_FUNC) &cg_init_xavier_gaussian, 2},
   // Internal
-  {"dots",                  (DL_FUNC) &dots,                  1},
-  {"bsum",                  (DL_FUNC) &bsum,                  2},
-  {"approx_gradient",       (DL_FUNC) &approx_gradient,       5},
+  {"dots",                    (DL_FUNC) &dots,                    1},
+  {"bsum",                    (DL_FUNC) &bsum,                    2},
+  {"approx_gradient",         (DL_FUNC) &approx_gradient,         5},
   // Vector
-  {"sigmoid",               (DL_FUNC) &sigmoid,               1},
-  {NULL,                    NULL,                             0}
+  {"sigmoid",                 (DL_FUNC) &sigmoid,                 1},
+  {NULL,                      NULL,                               0}
 };
 
 void R_init_cgraph(DllInfo *dll)
