@@ -17,7 +17,7 @@ cg_operator(fun, inputs, name = NULL)
 cg_node object.
 }
 \description{
-Add an operation node to the active graph.
+Add an operator to the active graph.
 }
 \note{
 Any objects that are supplied to argument \code{inputs} that are not cg_node objects are implicitly coerced to cg_constant objects.

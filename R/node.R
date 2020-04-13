@@ -14,7 +14,7 @@
 
 #' Add Constant
 #'
-#' Add a constant node to the active graph.
+#' Add a constant to the active graph.
 #'
 #' @param value R object, value of the node.
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
@@ -38,7 +38,7 @@ cg_constant <- function(value, name = NULL)
 
 #' Add Parameter
 #'
-#' Add a parameter node to the active graph.
+#' Add a parameter to the active graph.
 #'
 #' @param value numerical vector or array, value of the node.
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
@@ -62,7 +62,7 @@ cg_parameter <- function(value, name = NULL)
 
 #' Add Input
 #'
-#' Add an input node to the active graph.
+#' Add an input to the active graph.
 #'
 #' @param name character scalar, name of the node (optional). In case argument \code{name} is missing, the node is added to the graph under an automatically generated name.
 #'
@@ -88,7 +88,7 @@ cg_input <- function(name = NULL)
 
 #' Add Operator
 #'
-#' Add an operation node to the active graph.
+#' Add an operator to the active graph.
 #'
 #' @param fun cg_function object, function evaluated by the node.
 #' @param inputs list, the nodes that are consumed by the operation.
