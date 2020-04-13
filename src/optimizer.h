@@ -31,13 +31,13 @@ limitations under the License.
 
 typedef enum
 {
-  CGSGD,  /* (Stochastic) Gradient Desecnt */
-  CGGDM,  /* Gradient Descent with Momentum */
-  CGNAG,  /* Nestrov Accelerated Gradient */
-  CGADG,  /* Adagrad */
-  CGADD,  /* Adadelta */
-  CGRMS,  /* Root Mean Square Propagation */
-  CGADM   /* ADAM */
+  CGSGD = 0,  /* (Stochastic) Gradient Desecnt */
+  CGGDM = 1,  /* Gradient Descent with Momentum */
+  CGNAG = 2,  /* Nestrov Accelerated Gradient (not yet implemented) */
+  CGADG = 3,  /* Adagrad */
+  CGADD = 4,  /* Adadelta (not yet implemented) */
+  CGRMS = 5,  /* Root Mean Square Propagation */
+  CGADM = 6   /* ADAM */
 } cg_opt_type_t;
 
 /*

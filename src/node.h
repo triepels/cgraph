@@ -30,10 +30,10 @@ limitations under the License.
  */
 
 typedef enum {
-    CGCST,
-    CGPRM,
-    CGIPT,
-    CGOPR
+    CGCST = 0,
+    CGPRM = 1,
+    CGIPT = 2,
+    CGOPR = 3
 } cg_node_type_t;
 
 /*
