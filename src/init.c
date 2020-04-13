@@ -96,12 +96,12 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_init_gaussian",        (DL_FUNC) &cg_init_gaussian,        4},
   {"cg_init_xavier_uniform",  (DL_FUNC) &cg_init_xavier_uniform,  2},
   {"cg_init_xavier_gaussian", (DL_FUNC) &cg_init_xavier_gaussian, 2},
+  // Vector
+  {"sigmoid",                 (DL_FUNC) &sigmoid,                 1},
   // Internal
   {"dots",                    (DL_FUNC) &dots,                    1},
   {"bsum",                    (DL_FUNC) &bsum,                    2},
   {"approx_gradient",         (DL_FUNC) &approx_gradient,         5},
-  // Vector
-  {"sigmoid",                 (DL_FUNC) &sigmoid,                 1},
   {NULL,                      NULL,                               0}
 };
 
