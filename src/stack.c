@@ -31,9 +31,9 @@ extern inline int cg_stack_is_full(const cg_stack_t *stack);
 
 extern inline void cg_stack_push(cg_stack_t *stack, const SEXP x);
 
-extern inline SEXP cg_stack_top(const cg_stack_t *stack);
+extern inline SEXP cg_stack_peek(const cg_stack_t *stack);
 
-extern inline void cg_stack_pop(cg_stack_t *stack);
+extern inline SEXP cg_stack_pop(cg_stack_t *stack);
 
 /*
  * PUBLIC CONSTRUCTORS

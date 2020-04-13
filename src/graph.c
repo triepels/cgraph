@@ -68,7 +68,7 @@ SEXP* cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), int *
   {
     int can_traverse = 0;
 
-    SEXP node = cg_stack_top(stack);
+    SEXP node = cg_stack_peek(stack);
 
     SEXP inputs = PROTECT(CG_GET(node, CG_INPUTS_SYMBOL));
 
@@ -108,9 +108,7 @@ SEXP* cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), int *
 
     if(!can_traverse)
     {
-      cg_stack_pop(stack);
-
-      queue[(*k)++] = node;
+      queue[(*k)++] = cg_stack_pop(stack);
     }
 
     UNPROTECT(1);

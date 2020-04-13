@@ -62,7 +62,7 @@ inline void cg_stack_push(cg_stack_t *stack, const SEXP x)
   stack->data[++stack->top] = x;
 }
 
-inline SEXP cg_stack_top(const cg_stack_t *stack)
+inline SEXP cg_stack_peek(const cg_stack_t *stack)
 {
   if(cg_stack_is_empty(stack))
   {
@@ -72,14 +72,14 @@ inline SEXP cg_stack_top(const cg_stack_t *stack)
   return stack->data[stack->top];
 }
 
-inline void cg_stack_pop(cg_stack_t *stack)
+inline SEXP cg_stack_pop(cg_stack_t *stack)
 {
   if(cg_stack_is_empty(stack))
   {
     Rf_errorcall(R_NilValue, "unable to pop the top element because the stack is empty");
   }
 
-  stack->top--;
+  return stack->data[stack->top--];
 }
 
 /*
