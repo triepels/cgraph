@@ -283,7 +283,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
     Rf_errorcall(R_NilValue, "argument 'target' must be an operator node");
   }
 
-  if(!Rf_isNull(index) && (!Rf_isNumeric(index) || XLENGTH(index) < 1))
+  if(!Rf_isNull(index) && (!Rf_isNumeric(index) || XLENGTH(index) != 1))
   {
     Rf_errorcall(R_NilValue, "argument 'index' must be NULL or a numeric scalar");
   }
