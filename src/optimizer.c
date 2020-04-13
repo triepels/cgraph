@@ -26,41 +26,41 @@ limitations under the License.
  * INLINED GET/SET FUNCTIONS
  */
 
-extern inline SEXP cg_optimizer_buffer0(SEXP optimizer);
+extern inline SEXP cg_opt_buffer0(SEXP opt);
 
-extern inline void cg_optimizer_set_buffer0(SEXP optimizer, SEXP buffer);
+extern inline void cg_opt_set_buffer0(SEXP opt, SEXP buffer);
 
-extern inline SEXP cg_optimizer_buffer1(SEXP optimizer);
+extern inline SEXP cg_opt_buffer1(SEXP opt);
 
-extern inline void cg_optimizer_set_buffer1(SEXP optimizer, SEXP buffer);
+extern inline void cg_opt_set_buffer1(SEXP opt, SEXP buffer);
 
-extern inline SEXP cg_optimizer_parms(SEXP optimizer);
+extern inline SEXP cg_opt_parms(SEXP opt);
 
-extern inline void cg_optimizer_set_parms(SEXP optimizer, SEXP parms);
+extern inline void cg_opt_set_parms(SEXP opt, SEXP parms);
 
-extern inline double cg_optimizer_eps(SEXP optimizer);
+extern inline double cg_opt_eps(SEXP opt);
 
-extern inline void cg_optimizer_set_eps(SEXP optimizer, const double eps);
+extern inline void cg_opt_set_eps(SEXP opt, const double eps);
 
-extern inline double* cg_optimizer_betas(SEXP optimizer);
+extern inline double* cg_opt_betas(SEXP opt);
 
-extern inline void cg_optimizer_set_betas(SEXP optimizer, const double beta1, const double beta2);
+extern inline void cg_opt_set_betas(SEXP opt, const double beta1, const double beta2);
 
-extern inline double* cg_optimizer_gammas(SEXP optimizer);
+extern inline double* cg_opt_gammas(SEXP opt);
 
-extern inline void cg_optimizer_set_gammas(SEXP optimizer, const double gamma1, const double gamma2);
+extern inline void cg_opt_set_gammas(SEXP opt, const double gamma1, const double gamma2);
 
-extern inline double cg_optimizer_gamma(SEXP optimizer);
+extern inline double cg_opt_gamma(SEXP opt);
 
-extern inline void cg_optimizer_set_gamma(SEXP optimizer, const double gamma);
+extern inline void cg_opt_set_gamma(SEXP opt, const double gamma);
 
-extern inline double cg_optimizer_eta(SEXP optimizer);
+extern inline double cg_opt_eta(SEXP opt);
 
-extern inline void cg_optimizer_set_eta(SEXP optimizer, const double eta);
+extern inline void cg_opt_set_eta(SEXP opt, const double eta);
 
-extern inline cg_optimizer_type_t cg_optimizer_type(SEXP optimizer);
+extern inline cg_opt_type_t cg_opt_type(SEXP opt);
 
-extern inline void cg_optimizer_set_type(SEXP optimizer, const cg_optimizer_type_t type);
+extern inline void cg_opt_set_type(SEXP opt, const cg_opt_type_t type);
 
 /*
  * PRIVATE FUNCTIONS
@@ -105,11 +105,11 @@ static SEXP cg_buffer(SEXP parms)
   return buffer;
 }
 
-static inline void cg_gd_step(SEXP optimizer)
+static inline void cg_opt_gd_step(SEXP opt)
 {
-  SEXP parms = PROTECT(cg_optimizer_parms(optimizer));
+  SEXP parms = PROTECT(cg_opt_parms(opt));
 
-  const double eta = cg_optimizer_eta(optimizer);
+  const double eta = cg_opt_eta(opt);
 
   R_len_t n = XLENGTH(parms);
 
@@ -160,11 +160,11 @@ static inline void cg_gd_step(SEXP optimizer)
   UNPROTECT(1);
 }
 
-static inline void cg_gd_momentum_step(SEXP optimizer)
+static inline void cg_opt_gd_momentum_step(SEXP opt)
 {
-  SEXP parms = PROTECT(cg_optimizer_parms(optimizer));
+  SEXP parms = PROTECT(cg_opt_parms(opt));
 
-  SEXP buffer0 = PROTECT(cg_optimizer_buffer0(optimizer));
+  SEXP buffer0 = PROTECT(cg_opt_buffer0(opt));
 
   R_len_t n = XLENGTH(parms);
 
@@ -174,9 +174,9 @@ static inline void cg_gd_momentum_step(SEXP optimizer)
                  XLENGTH(buffer0));
   }
 
-  const double eta = cg_optimizer_eta(optimizer);
+  const double eta = cg_opt_eta(opt);
 
-  const double gamma = cg_optimizer_gamma(optimizer);
+  const double gamma = cg_opt_gamma(opt);
 
   for(int i = 0; i < n; i++)
   {
@@ -242,11 +242,11 @@ static inline void cg_gd_momentum_step(SEXP optimizer)
   UNPROTECT(2);
 }
 
-static inline void cg_adagrad_step(SEXP optimizer)
+static inline void cg_opt_adagrad_step(SEXP opt)
 {
-  SEXP parms = PROTECT(cg_optimizer_parms(optimizer));
+  SEXP parms = PROTECT(cg_opt_parms(opt));
 
-  SEXP buffer1 = PROTECT(cg_optimizer_buffer1(optimizer));
+  SEXP buffer1 = PROTECT(cg_opt_buffer1(opt));
 
   R_len_t n = XLENGTH(parms);
 
@@ -256,9 +256,9 @@ static inline void cg_adagrad_step(SEXP optimizer)
                  XLENGTH(buffer1));
   }
 
-  const double eta = cg_optimizer_eta(optimizer);
+  const double eta = cg_opt_eta(opt);
 
-  const double eps = cg_optimizer_eps(optimizer);
+  const double eps = cg_opt_eps(opt);
 
   for(int i = 0; i < n; i++)
   {
@@ -324,11 +324,11 @@ static inline void cg_adagrad_step(SEXP optimizer)
   UNPROTECT(2);
 }
 
-static inline void cg_rmsprop_step(SEXP optimizer)
+static inline void cg_opt_rmsprop_step(SEXP opt)
 {
-  SEXP parms = PROTECT(cg_optimizer_parms(optimizer));
+  SEXP parms = PROTECT(cg_opt_parms(opt));
 
-  SEXP buffer1 = PROTECT(cg_optimizer_buffer1(optimizer));
+  SEXP buffer1 = PROTECT(cg_opt_buffer1(opt));
 
   R_len_t n = XLENGTH(parms);
 
@@ -338,11 +338,11 @@ static inline void cg_rmsprop_step(SEXP optimizer)
                  XLENGTH(buffer1));
   }
 
-  const double eta = cg_optimizer_eta(optimizer);
+  const double eta = cg_opt_eta(opt);
 
-  const double gamma = cg_optimizer_gamma(optimizer);
+  const double gamma = cg_opt_gamma(opt);
 
-  const double eps = cg_optimizer_eps(optimizer);
+  const double eps = cg_opt_eps(opt);
 
   for(int i = 0; i < n; i++)
   {
@@ -408,11 +408,11 @@ static inline void cg_rmsprop_step(SEXP optimizer)
   UNPROTECT(2);
 }
 
-static inline void cg_adam_step(SEXP optimizer)
+static inline void cg_opt_adam_step(SEXP opt)
 {
-  SEXP parms = PROTECT(cg_optimizer_parms(optimizer));
+  SEXP parms = PROTECT(cg_opt_parms(opt));
 
-  SEXP buffer0 = PROTECT(cg_optimizer_buffer0(optimizer));
+  SEXP buffer0 = PROTECT(cg_opt_buffer0(opt));
 
   R_len_t n = XLENGTH(parms);
 
@@ -422,7 +422,7 @@ static inline void cg_adam_step(SEXP optimizer)
                  XLENGTH(buffer0));
   }
 
-  SEXP buffer1 = PROTECT(cg_optimizer_buffer1(optimizer));
+  SEXP buffer1 = PROTECT(cg_opt_buffer1(opt));
 
   if(n != XLENGTH(buffer1))
   {
@@ -430,13 +430,13 @@ static inline void cg_adam_step(SEXP optimizer)
                  XLENGTH(buffer1));
   }
 
-  const double eta = cg_optimizer_eta(optimizer);
+  const double eta = cg_opt_eta(opt);
 
-  const double *beta = cg_optimizer_betas(optimizer);
+  const double *beta = cg_opt_betas(opt);
 
-  const double eps = cg_optimizer_eps(optimizer);
+  const double eps = cg_opt_eps(opt);
 
-  double *gamma = cg_optimizer_gammas(optimizer);
+  double *gamma = cg_opt_gammas(opt);
 
   for(int i = 0; i < n; i++)
   {
@@ -525,29 +525,29 @@ static inline void cg_adam_step(SEXP optimizer)
  * PUBLIC FUNCTIONS
  */
 
-SEXP cg_optimizer_step(SEXP optimizer)
+SEXP cg_opt_step(SEXP opt)
 {
-  if(TYPEOF(optimizer) != ENVSXP)
+  if(TYPEOF(opt) != ENVSXP)
   {
-    Rf_errorcall(R_NilValue, "argument 'optimizer' must be a cg_optimizer object");
+    Rf_errorcall(R_NilValue, "argument 'opt' must be a cg_opt object");
   }
 
-  switch(cg_optimizer_type(optimizer))
+  switch(cg_opt_type(opt))
   {
     case CGSGD :
-      cg_gd_step(optimizer);
+      cg_opt_gd_step(opt);
       break;
     case CGGDM :
-      cg_gd_momentum_step(optimizer);
+      cg_opt_gd_momentum_step(opt);
       break;
     case CGADG :
-      cg_adagrad_step(optimizer);
+      cg_opt_adagrad_step(opt);
       break;
     case CGRMS :
-      cg_rmsprop_step(optimizer);
+      cg_opt_rmsprop_step(opt);
       break;
     case CGADM :
-      cg_adam_step(optimizer);
+      cg_opt_adam_step(opt);
       break;
     default :
       Rf_errorcall(R_NilValue, "optimizer is not yet implemented");
@@ -560,7 +560,7 @@ SEXP cg_optimizer_step(SEXP optimizer)
  * PUBLIC CONSTRUCTORS
  */
 
-SEXP cg_gd(SEXP parms, SEXP eta)
+SEXP cg_opt_gd(SEXP parms, SEXP eta)
 {
   if(TYPEOF(parms) != VECSXP)
   {
@@ -584,20 +584,20 @@ SEXP cg_gd(SEXP parms, SEXP eta)
     }
   }
 
-  SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
+  SEXP opt = PROTECT(cg_class("cg_opt"));
 
-  CG_SET(optimizer, CG_ETA_SYMBOL, eta);
+  CG_SET(opt, CG_ETA_SYMBOL, eta);
 
-  CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
+  CG_SET(opt, CG_PARMS_SYMBOL, parms);
 
-  CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGSGD));
+  CG_SET(opt, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGSGD));
 
   UNPROTECT(1);
 
-  return optimizer;
+  return opt;
 }
 
-SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma)
+SEXP cg_opt_gd_momentum(SEXP parms, SEXP eta, SEXP gamma)
 {
   if(TYPEOF(parms) != VECSXP)
   {
@@ -614,24 +614,24 @@ SEXP cg_gd_momentum(SEXP parms, SEXP eta, SEXP gamma)
     Rf_errorcall(R_NilValue, "argument 'gamma' must be a real scalar");
   }
 
-  SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
+  SEXP opt = PROTECT(cg_class("cg_opt"));
 
-  CG_SET(optimizer, CG_BUFFER0_SYMBOL, cg_buffer(parms));
+  CG_SET(opt, CG_BUFFER0_SYMBOL, cg_buffer(parms));
 
-  CG_SET(optimizer, CG_GAMMA_SYMBOL, gamma);
+  CG_SET(opt, CG_GAMMA_SYMBOL, gamma);
 
-  CG_SET(optimizer, CG_ETA_SYMBOL, eta);
+  CG_SET(opt, CG_ETA_SYMBOL, eta);
 
-  CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
+  CG_SET(opt, CG_PARMS_SYMBOL, parms);
 
-  CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGGDM));
+  CG_SET(opt, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGGDM));
 
   UNPROTECT(1);
 
-  return optimizer;
+  return opt;
 }
 
-SEXP cg_adagrad(SEXP parms, SEXP eta, SEXP eps)
+SEXP cg_opt_adagrad(SEXP parms, SEXP eta, SEXP eps)
 {
   if(TYPEOF(parms) != VECSXP)
   {
@@ -648,24 +648,24 @@ SEXP cg_adagrad(SEXP parms, SEXP eta, SEXP eps)
     Rf_errorcall(R_NilValue, "argument 'eps' must be a real scalar");
   }
 
-  SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
+  SEXP opt = PROTECT(cg_class("cg_opt"));
 
-  CG_SET(optimizer, CG_BUFFER1_SYMBOL, cg_buffer(parms));
+  CG_SET(opt, CG_BUFFER1_SYMBOL, cg_buffer(parms));
 
-  CG_SET(optimizer, CG_EPS_SYMBOL, eps);
+  CG_SET(opt, CG_EPS_SYMBOL, eps);
 
-  CG_SET(optimizer, CG_ETA_SYMBOL, eta);
+  CG_SET(opt, CG_ETA_SYMBOL, eta);
 
-  CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
+  CG_SET(opt, CG_PARMS_SYMBOL, parms);
 
-  CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGADG));
+  CG_SET(opt, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGADG));
 
   UNPROTECT(1);
 
-  return optimizer;
+  return opt;
 }
 
-SEXP cg_rmsprop(SEXP parms, SEXP eta, SEXP gamma, SEXP eps)
+SEXP cg_opt_rmsprop(SEXP parms, SEXP eta, SEXP gamma, SEXP eps)
 {
   if(TYPEOF(parms) != VECSXP)
   {
@@ -687,26 +687,26 @@ SEXP cg_rmsprop(SEXP parms, SEXP eta, SEXP gamma, SEXP eps)
     Rf_errorcall(R_NilValue, "argument 'eps' must be a real scalar");
   }
 
-  SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
+  SEXP opt = PROTECT(cg_class("cg_opt"));
 
-  CG_SET(optimizer, CG_BUFFER1_SYMBOL, cg_buffer(parms));
+  CG_SET(opt, CG_BUFFER1_SYMBOL, cg_buffer(parms));
 
-  CG_SET(optimizer, CG_EPS_SYMBOL, eps);
+  CG_SET(opt, CG_EPS_SYMBOL, eps);
 
-  CG_SET(optimizer, CG_GAMMA_SYMBOL, gamma);
+  CG_SET(opt, CG_GAMMA_SYMBOL, gamma);
 
-  CG_SET(optimizer, CG_ETA_SYMBOL, eta);
+  CG_SET(opt, CG_ETA_SYMBOL, eta);
 
-  CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
+  CG_SET(opt, CG_PARMS_SYMBOL, parms);
 
-  CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGRMS));
+  CG_SET(opt, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGRMS));
 
   UNPROTECT(1);
 
-  return optimizer;
+  return opt;
 }
 
-SEXP cg_adam(SEXP parms, SEXP eta, SEXP betas, SEXP eps)
+SEXP cg_opt_adam(SEXP parms, SEXP eta, SEXP betas, SEXP eps)
 {
   if(TYPEOF(parms) != VECSXP)
   {
@@ -728,25 +728,25 @@ SEXP cg_adam(SEXP parms, SEXP eta, SEXP betas, SEXP eps)
     Rf_errorcall(R_NilValue, "argument 'eps' must be a real scalar");
   }
 
-  SEXP optimizer = PROTECT(cg_class("cg_optimizer"));
+  SEXP opt = PROTECT(cg_class("cg_opt"));
 
-  CG_SET(optimizer, CG_BUFFER1_SYMBOL, cg_buffer(parms));
+  CG_SET(opt, CG_BUFFER1_SYMBOL, cg_buffer(parms));
 
-  CG_SET(optimizer, CG_BUFFER0_SYMBOL, cg_buffer(parms));
+  CG_SET(opt, CG_BUFFER0_SYMBOL, cg_buffer(parms));
 
-  CG_SET(optimizer, CG_EPS_SYMBOL, eps);
+  CG_SET(opt, CG_EPS_SYMBOL, eps);
 
-  CG_SET(optimizer, CG_GAMMAS_SYMBOL, Rf_duplicate(betas));
+  CG_SET(opt, CG_GAMMAS_SYMBOL, Rf_duplicate(betas));
 
-  CG_SET(optimizer, CG_BETAS_SYMBOL, betas);
+  CG_SET(opt, CG_BETAS_SYMBOL, betas);
 
-  CG_SET(optimizer, CG_ETA_SYMBOL, eta);
+  CG_SET(opt, CG_ETA_SYMBOL, eta);
 
-  CG_SET(optimizer, CG_PARMS_SYMBOL, parms);
+  CG_SET(opt, CG_PARMS_SYMBOL, parms);
 
-  CG_SET(optimizer, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGADM));
+  CG_SET(opt, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGADM));
 
   UNPROTECT(1);
 
-  return optimizer;
+  return opt;
 }

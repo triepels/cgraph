@@ -14,49 +14,49 @@
 
 #' @author Ron Triepels
 #' @export
-cg_gd <- function(parms = list(), eta = 0.05)
+cg_opt_gd <- function(parms = list(), eta = 0.05)
 {
-  .Call("cg_gd", parms, eta, PACKAGE = "cgraph")
+  .Call("cg_opt_gd", parms, eta, PACKAGE = "cgraph")
 }
 
 #' @author Ron Triepels
 #' @export
-cg_gd_momentum <- function(parms = list(), eta = 0.05, gamma = 0.9)
+cg_opt_gd_momentum <- function(parms = list(), eta = 0.05, gamma = 0.9)
 {
-  .Call("cg_gd_momentum", parms, eta, gamma, PACKAGE = "cgraph")
+  .Call("cg_opt_gd_momentum", parms, eta, gamma, PACKAGE = "cgraph")
 }
 
 #' @author Ron Triepels
 #' @export
-cg_adagrad <- function(parms = list(), eta = 1e-2, eps = 1e-8)
+cg_opt_adagrad <- function(parms = list(), eta = 1e-2, eps = 1e-8)
 {
-  .Call("cg_adagrad", parms, eta, eps, PACKAGE = "cgraph")
+  .Call("cg_opt_adagrad", parms, eta, eps, PACKAGE = "cgraph")
 }
 
 #' @author Ron Triepels
 #' @export
-cg_rmsprop <- function(parms = list(), eta = 1e-3, gamma = 0.9, eps = 1e-8)
+cg_opt_rmsprop <- function(parms = list(), eta = 1e-3, gamma = 0.9, eps = 1e-8)
 {
-  .Call("cg_rmsprop", parms, eta, gamma, eps, PACKAGE = "cgraph")
+  .Call("cg_opt_rmsprop", parms, eta, gamma, eps, PACKAGE = "cgraph")
 }
 
 #' @author Ron Triepels
 #' @export
-cg_adam <- function(parms = list(), eta = 1e-3, betas = c(0.9, 0.999), eps = 1e-8)
+cg_opt_adam <- function(parms = list(), eta = 1e-3, betas = c(0.9, 0.999), eps = 1e-8)
 {
-  .Call("cg_adam", parms, eta, betas, eps, PACKAGE = "cgraph")
+  .Call("cg_opt_adam", parms, eta, betas, eps, PACKAGE = "cgraph")
 }
 
 #' @author Ron Triepels
 #' @export
-cg_optimizer_step <- function(optimizer)
+cg_opt_step <- function(opt)
 {
-  invisible(.Call("cg_optimizer_step", optimizer, PACKAGE = "cgraph"))
+  invisible(.Call("cg_opt_step", opt, PACKAGE = "cgraph"))
 }
 
 #' @author Ron Triepels
 #' @export
-print.cg_optimizer <- function(x, ...)
+print.cg_opt <- function(x, ...)
 {
-  cat("<cg_optimizer>")
+  cat("<cg_opt>")
 }

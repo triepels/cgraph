@@ -83,12 +83,12 @@ static const R_CallMethodDef CallEntries[] = {
   // Function
   {"cg_function",             (DL_FUNC) &cg_function,             2},
   // Optimizer
-  {"cg_gd",                   (DL_FUNC) &cg_gd,                   2},
-  {"cg_gd_momentum",          (DL_FUNC) &cg_gd_momentum,          3},
-  {"cg_adagrad",              (DL_FUNC) &cg_adagrad,              3},
-  {"cg_rmsprop",              (DL_FUNC) &cg_rmsprop,              4},
-  {"cg_adam",                 (DL_FUNC) &cg_adam,                 4},
-  {"cg_optimizer_step",       (DL_FUNC) &cg_optimizer_step,       1},
+  {"cg_opt_gd",               (DL_FUNC) &cg_opt_gd,               2},
+  {"cg_opt_gd_momentum",      (DL_FUNC) &cg_opt_gd_momentum,      3},
+  {"cg_opt_adagrad",          (DL_FUNC) &cg_opt_adagrad,          3},
+  {"cg_opt_rmsprop",          (DL_FUNC) &cg_opt_rmsprop,          4},
+  {"cg_opt_adam",             (DL_FUNC) &cg_opt_adam,             4},
+  {"cg_opt_step",             (DL_FUNC) &cg_opt_step,             1},
   // Initializer
   {"cg_init_zeros",           (DL_FUNC) &cg_init_zeros,           2},
   {"cg_init_ones",            (DL_FUNC) &cg_init_ones,            2},
