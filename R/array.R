@@ -12,6 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Matrices
+#'
+#' Create a matrix.
+#'
+#' @param data either a cg_node object or a numerical vector.
+#' @param nrow either a cg_node object or a numerical scalar.
+#' @param ncol either a cg_node object or a numerical scalar.
+#' @param byrow either a cg_node object or a logical scalar.
+#' @param dimnames either a cg_node object or a character vector.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#'
+#' @seealso \link[base:matrix]{matrix}
+#'
+#' @author Ron Triepels
+#' @export
+cg_matrix <- function(data = NA, nrow = 1, ncol = 1, byrow = FALSE, dimnames = NULL, name = NULL)
+{
+  cg_operator(matrix, list(data, nrow, ncol, byrow, dimnames), name)
+}
+
+# Function definition
+delayedAssign("matrix", cg_function(def = base::matrix))
+
 #' Multidimensional Arrays
 #'
 #' Create a multidimensional array.
