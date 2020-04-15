@@ -24,6 +24,7 @@ limitations under the License.
 #include "class.h"
 #include "graph.h"
 #include "vector.h"
+#include "subset.h"
 #include "session.h"
 #include "symbols.h"
 #include "function.h"
@@ -98,6 +99,9 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_init_xavier_gaussian", (DL_FUNC) &cg_init_xavier_gaussian, 2},
   // Vector
   {"sigmoid",                 (DL_FUNC) &sigmoid,                 1},
+  // Subset
+  {"slice",                   (DL_FUNC) &slice,                   2},
+  {"slice_assign",            (DL_FUNC) &slice_assign,            3},
   // Internal
   {"dots",                    (DL_FUNC) &dots,                    1},
   {"bsum",                    (DL_FUNC) &bsum,                    2},

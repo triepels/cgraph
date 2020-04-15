@@ -181,3 +181,50 @@ delayedAssign("cg_fun_subassign2", cg_function(
 {
   cg_subassign1(x, i, y = value)
 }
+
+#' @author Ron Triepels
+#' @export
+cg_slice <- function(x, index, name = NULL)
+{
+  cg_operator(cg_fun_slice, list(x = x, index = index), name)
+}
+
+# Function definition
+delayedAssign("cg_fun_slice", cg_function(
+  def = function(x, index)
+  {
+    .Call("slice", x, index, PACKAGE = "cgraph")
+  },
+  grads = list(
+    x = function(x, index, value, grad)
+    {
+      x[] <- 0
+      .Call("slice_assign", x, index, grad, PACKAGE = "cgraph")
+    }
+  )
+))
+
+#' @author Ron Triepels
+#' @export
+`cg_slice<-` <- function(x, index, value, name = NULL)
+{
+  cg_slice_assign(x, index, value, name)
+}
+
+# Function definition
+delayedAssign("cg_fun_slice_assign", cg_function(
+  def = function(x, index, y)
+  {
+    .Call("slice_assign", x, index, y, PACKAGE = "cgraph")
+  },
+  grads = list(
+    x = function(x, index, y, value, grad)
+    {
+      grad
+    },
+    y = function(x, index, y, value, grad)
+    {
+      .Call("slice", grad, index, PACKAGE = "cgraph")
+    }
+  )
+))
