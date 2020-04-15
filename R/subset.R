@@ -94,7 +94,7 @@ delayedAssign("cg_fun_sub_assign1", cg_function(
 #' @author Ron Triepels
 `[<-.cg_node` <- function(x, ..., value)
 {
-  cg_subassign1(x, ..., y = value)
+  cg_sub_assign1(x, ..., y = value)
 }
 
 #' Subset
@@ -170,7 +170,7 @@ delayedAssign("cg_fun_sub_assign2", cg_function(
     },
     y = function(x, i, y, value, grad)
     {
-      grad[[...]]
+      grad[[i]]
     }
   )
 ))
@@ -179,7 +179,7 @@ delayedAssign("cg_fun_sub_assign2", cg_function(
 #' @author Ron Triepels
 `[[<-.cg_node` <- function(x, i, value)
 {
-  cg_subassign1(x, i, y = value)
+  cg_sub_assign2(x, i, y = value)
 }
 
 #' @author Ron Triepels
