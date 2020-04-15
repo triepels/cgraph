@@ -70,13 +70,13 @@ delayedAssign("cg_fun_subset1", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_sub_assign1 <- function(x, ..., y, name = NULL)
+cg_subassign1 <- function(x, ..., y, name = NULL)
 {
-  cg_operator(cg_fun_sub_assign1, c(x = x, dots(), y = y))
+  cg_operator(cg_fun_subassign1, c(x = x, dots(), y = y))
 }
 
 # Function definition
-delayedAssign("cg_fun_sub_assign1", cg_function(
+delayedAssign("cg_fun_subassign1", cg_function(
   def = base::`[<-`,
   grads = list(
     x = function(x, ..., y, value, grad)
@@ -94,7 +94,7 @@ delayedAssign("cg_fun_sub_assign1", cg_function(
 #' @author Ron Triepels
 `[<-.cg_node` <- function(x, ..., value)
 {
-  cg_sub_assign1(x, ..., y = value)
+  cg_subassign1(x, ..., y = value)
 }
 
 #' Subset
@@ -155,13 +155,13 @@ delayedAssign("cg_fun_subset2", cg_function(
 #'
 #' @author Ron Triepels
 #' @export
-cg_sub_assign2 <- function(x, i, y, name = NULL)
+cg_subassign2 <- function(x, i, y, name = NULL)
 {
-  cg_operator(cg_fun_sub_assign2, list(x = x, i = i, y = y))
+  cg_operator(cg_fun_subassign2, list(x = x, i = i, y = y))
 }
 
 # Function definition
-delayedAssign("cg_fun_sub_assign2", cg_function(
+delayedAssign("cg_fun_subassign2", cg_function(
   def = base::`[[<-`,
   grads = list(
     x = function(x, i, y, value, grad)
@@ -179,7 +179,7 @@ delayedAssign("cg_fun_sub_assign2", cg_function(
 #' @author Ron Triepels
 `[[<-.cg_node` <- function(x, i, value)
 {
-  cg_sub_assign2(x, i, y = value)
+  cg_subassign2(x, i, y = value)
 }
 
 #' @author Ron Triepels
