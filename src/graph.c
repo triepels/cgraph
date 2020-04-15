@@ -123,7 +123,9 @@ SEXP* cg_graph_dfs_from(SEXP graph, SEXP target, int (*filter)(SEXP node), int *
 
 static inline int forward_filter(SEXP node)
 {
-  if(cg_node_type(node) == CGOPR)
+  cg_node_type_t type = cg_node_type(node);
+
+  if(type == CGDOP || type == CGNOP)
   {
     return 1;
   }
@@ -135,7 +137,7 @@ static inline int backward_filter(SEXP node)
 {
   cg_node_type_t type = cg_node_type(node);
 
-  if(type == CGOPR || type == CGPRM)
+  if(type == CGDOP || type == CGPRM)
   {
     return 1;
   }
@@ -247,9 +249,11 @@ SEXP cg_graph_forward(SEXP graph, SEXP target)
     Rf_errorcall(R_NilValue, "argument 'target' must be a cg_node object");
   }
 
-  if(cg_node_type(target) != CGOPR)
+  cg_node_type_t type = cg_node_type(target);
+
+  if(type != CGDOP && type != CGNOP)
   {
-    Rf_errorcall(R_NilValue, "argument 'target' must be an operator node");
+    Rf_errorcall(R_NilValue, "argument 'target' must be an operator");
   }
 
   int k = 0;
@@ -276,9 +280,9 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
     Rf_errorcall(R_NilValue, "argument 'target' must be a cg_node object");
   }
 
-  if(cg_node_type(target) != CGOPR)
+  if(cg_node_type(target) != CGDOP)
   {
-    Rf_errorcall(R_NilValue, "argument 'target' must be an operator node");
+    Rf_errorcall(R_NilValue, "argument 'target' must be a differentiable operator");
   }
 
   if(!Rf_isNull(index) && (!Rf_isNumeric(index) || XLENGTH(index) != 1))
@@ -299,7 +303,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
   for(int i = k - 1; i >= 0; i--)
   {
-    if(cg_node_type(queue[i]) == CGOPR)
+    if(cg_node_type(queue[i]) == CGDOP)
     {
       cg_node_backward(queue[i]);
     }

@@ -30,10 +30,11 @@ limitations under the License.
  */
 
 typedef enum {
-    CGCST = 0,
-    CGPRM = 1,
-    CGIPT = 2,
-    CGOPR = 3
+    CGCST = 0, /* Constant */
+    CGPRM = 1, /* Parameter */
+    CGIPT = 2, /* Input */
+    CGDOP = 3, /* Differentiable Operator */
+    CGNOP = 4  /* Non-differentiable Operator */
 } cg_node_type_t;
 
 /*
