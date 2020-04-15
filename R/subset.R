@@ -81,6 +81,7 @@ delayedAssign("fun_subassign1", cg_function(
   grads = list(
     x = function(x, ..., y, value, grad)
     {
+      grad[...] <- 0
       grad
     },
     y = function(x, ..., y, value, grad)
@@ -166,6 +167,7 @@ delayedAssign("fun_subassign2", cg_function(
   grads = list(
     x = function(x, i, y, value, grad)
     {
+      grad[[i]] <- 0
       grad
     },
     y = function(x, i, y, value, grad)
@@ -220,7 +222,8 @@ delayedAssign("fun_slice_assign", cg_function(
   grads = list(
     x = function(x, index, y, value, grad)
     {
-      grad
+      y[] <- 0
+      .Call("slice_assign", grad, index, y, PACKAGE = "cgraph")
     },
     y = function(x, index, y, value, grad)
     {

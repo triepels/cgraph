@@ -128,18 +128,20 @@ SEXP slice_assign(SEXP x, SEXP index, SEXP y)
     Rf_errorcall(R_NilValue, "argument 'y' has incompatible dimensions");
   }
 
+  SEXP out = PROTECT(Rf_duplicate(x));
+
   switch(TYPEOF(x))
   {
     case REALSXP :
     {
-      memcpy(REAL(x) + c * (k - 1), REAL(y), c * sizeof(double));
+      memcpy(REAL(out) + c * (k - 1), REAL(y), c * sizeof(double));
 
       break;
     }
     case INTSXP :
     case LGLSXP :
     {
-      memcpy(INTEGER(x) + c * (k - 1), INTEGER(y), c * sizeof(int));
+      memcpy(INTEGER(out) + c * (k - 1), INTEGER(y), c * sizeof(int));
 
       break;
     }
@@ -150,7 +152,7 @@ SEXP slice_assign(SEXP x, SEXP index, SEXP y)
     }
   }
 
-  UNPROTECT(2);
+  UNPROTECT(3);
 
-  return x;
+  return out;
 }
