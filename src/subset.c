@@ -100,6 +100,11 @@ SEXP slice_assign(SEXP x, SEXP index, SEXP y)
     Rf_errorcall(R_NilValue, "argument 'y' must be a numerical matrix");
   }
 
+  if(TYPEOF(x) != TYPEOF(y))
+  {
+    Rf_errorcall(R_NilValue, "argument 'x' and 'y' have incompatible types");
+  }
+
   SEXP dim_x = PROTECT(Rf_getAttrib(x, R_DimSymbol));
 
   if(XLENGTH(dim_x) < 3)
@@ -127,68 +132,22 @@ SEXP slice_assign(SEXP x, SEXP index, SEXP y)
   {
     case REALSXP :
     {
-      double *po = REAL(x);
-
-      po += c * (k - 1);
-
-      switch(TYPEOF(y))
-      {
-        case REALSXP :
-        {
-          double *py = REAL(y);
-
-          memcpy(po, py, c * sizeof(double));
-
-          break;
-        }
-        case INTSXP :
-        case LGLSXP :
-        {
-          int *py = INTEGER(y);
-
-          for(int i = 0; i < c; i++)
-          {
-            po[i] = py[i];
-          }
-
-          break;
-        }
-      }
+      memcpy(REAL(x) + c * (k - 1), REAL(y), c * sizeof(double));
 
       break;
     }
     case INTSXP :
     case LGLSXP :
     {
-      int *po = INTEGER(x);
+      memcpy(INTEGER(x) + c * (k - 1), INTEGER(y), c * sizeof(int));
 
-      po += c * (k - 1);
-
-      switch(TYPEOF(y))
-      {
-        case REALSXP :
-        {
-          double *py = REAL(y);
-
-          for(int i = 0; i < c; i++)
-          {
-            po[i] = py[i];
-          }
-
-          break;
-        }
-        case INTSXP :
-        case LGLSXP :
-        {
-          int *py = INTEGER(y);
-
-          memcpy(po, py, c * sizeof(int));
-
-          break;
-        }
-      }
+      break;
     }
-
+    default :
+    {
+      Rf_errorcall(R_NilValue, "cannot slice assign object of type '%s'",
+                   Rf_type2char(TYPEOF(x)));
+    }
   }
 
   UNPROTECT(2);

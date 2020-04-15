@@ -80,13 +80,13 @@ test_that("Subset 4",
   graph <- cg_graph()
 
   # Create constant
-  x <- cg_constant(array(1:18, c(3, 3, 2)))
+  x <- cg_constant(array(0, c(3, 3, 2)))
 
   # Create parameters
   a <- cg_parameter(array(1:9, c(3, 3)))
   b <- cg_parameter(array(2:10, c(3, 3)))
 
-  # Modify a
+  # Modify x
   x[1:9] <- a^2
   x[10:18] <- b^2
 
@@ -147,13 +147,13 @@ test_that("Subset 7",
   graph <- cg_graph()
 
   # Create constant
-  x <- cg_constant(array(1:6, c(2, 1, 3)))
+  x <- cg_constant(array(0, c(2, 1, 3)))
 
   # Create parameters
   a <- cg_parameter(2)
   b <- cg_parameter(4)
 
-  # Modify a
+  # Modify x
   x[[2]] <- a^2
   x[[4]] <- b^2
 
@@ -178,7 +178,34 @@ test_that("Subset 8",
   b <- cg_parameter(array(2:25, c(2, 3, 4)), name = "b")
 
   # Create test expression
-  c <- cg_sum(cg_slice(a, 2) + cg_slice(b, 3))
+  c <- cg_sum(cg_slice(a, 2)^2 + cg_slice(b, 3)^3)
+
+  # Perform backward pass
+  cg_graph_backward(graph, c)
+
+  # Check gradients
+  expect_equivalent(a$grad, approx_gradient(graph, c, a), tolerance = 1e-4)
+  expect_equivalent(b$grad, approx_gradient(graph, c, b), tolerance = 1e-4)
+})
+
+test_that("Subset 9",
+{
+  # Initialize graph
+  graph <- cg_graph()
+
+  # Create constant
+  x <- cg_constant(array(0, c(2, 1, 3)))
+
+  # Create parameters
+  a <- cg_parameter(array(c(2,5), c(2, 1)))
+  b <- cg_parameter(array(c(4,3), c(2, 1)))
+
+  # Modify x
+  cg_slice(x, 1) <- a^2
+  cg_slice(x, 3) <- b^2
+
+  # Sum all elements of a
+  c <- cg_sum(x)
 
   # Perform backward pass
   cg_graph_backward(graph, c)
