@@ -206,9 +206,9 @@ delayedAssign("cg_fun_slice", cg_function(
 
 #' @author Ron Triepels
 #' @export
-`cg_slice<-` <- function(x, index, value, name = NULL)
+cg_slice_assign <- function(x, index, y, name = NULL)
 {
-  cg_slice_assign(x, index, value, name)
+  cg_operator(cg_fun_slice_assign, list(x = x, index = index, y = y), name)
 }
 
 # Function definition
@@ -228,3 +228,10 @@ delayedAssign("cg_fun_slice_assign", cg_function(
     }
   )
 ))
+
+#' @author Ron Triepels
+#' @export
+`cg_slice<-` <- function(x, index, value)
+{
+  cg_slice_assign(x, index, y = value)
+}
