@@ -30,11 +30,11 @@
 #' @export
 cg_subset1 <- function(x, ..., name = NULL)
 {
-  cg_operator(cg_fun_subset1, c(x = x, dots()))
+  cg_operator(fun_subset1, c(x = x, dots()))
 }
 
 # Function definition
-delayedAssign("cg_fun_subset1", cg_function(
+delayedAssign("fun_subset1", cg_function(
   def = base::`[`,
   grads = list(
     x = function(x, ..., drop = TRUE, value, grad)
@@ -72,11 +72,11 @@ delayedAssign("cg_fun_subset1", cg_function(
 #' @export
 cg_subassign1 <- function(x, ..., y, name = NULL)
 {
-  cg_operator(cg_fun_subassign1, c(x = x, dots(), y = y))
+  cg_operator(fun_subassign1, c(x = x, dots(), y = y))
 }
 
 # Function definition
-delayedAssign("cg_fun_subassign1", cg_function(
+delayedAssign("fun_subassign1", cg_function(
   def = base::`[<-`,
   grads = list(
     x = function(x, ..., y, value, grad)
@@ -115,11 +115,11 @@ delayedAssign("cg_fun_subassign1", cg_function(
 #' @export
 cg_subset2 <- function(x, ..., name = NULL)
 {
-  cg_operator(cg_fun_subset2, c(x = x, dots()))
+  cg_operator(fun_subset2, c(x = x, dots()))
 }
 
 # Function definition
-delayedAssign("cg_fun_subset2", cg_function(
+delayedAssign("fun_subset2", cg_function(
   def = base::`[[`,
   grads = list(
     x = function(x, ..., exact = TRUE, value, grad)
@@ -157,11 +157,11 @@ delayedAssign("cg_fun_subset2", cg_function(
 #' @export
 cg_subassign2 <- function(x, i, y, name = NULL)
 {
-  cg_operator(cg_fun_subassign2, list(x = x, i = i, y = y))
+  cg_operator(fun_subassign2, list(x = x, i = i, y = y))
 }
 
 # Function definition
-delayedAssign("cg_fun_subassign2", cg_function(
+delayedAssign("fun_subassign2", cg_function(
   def = base::`[[<-`,
   grads = list(
     x = function(x, i, y, value, grad)
@@ -186,11 +186,11 @@ delayedAssign("cg_fun_subassign2", cg_function(
 #' @export
 cg_slice <- function(x, index, name = NULL)
 {
-  cg_operator(cg_fun_slice, list(x = x, index = index), name)
+  cg_operator(fun_slice, list(x = x, index = index), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_slice", cg_function(
+delayedAssign("fun_slice", cg_function(
   def = function(x, index)
   {
     .Call("slice", x, index, PACKAGE = "cgraph")
@@ -208,11 +208,11 @@ delayedAssign("cg_fun_slice", cg_function(
 #' @export
 cg_slice_assign <- function(x, index, y, name = NULL)
 {
-  cg_operator(cg_fun_slice_assign, list(x = x, index = index, y = y), name)
+  cg_operator(fun_slice_assign, list(x = x, index = index, y = y), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_slice_assign", cg_function(
+delayedAssign("fun_slice_assign", cg_function(
   def = function(x, index, y)
   {
     .Call("slice_assign", x, index, y, PACKAGE = "cgraph")

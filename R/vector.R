@@ -30,11 +30,11 @@
 #' @export
 cg_vector <- function(mode = "logical", length = 0L, name = NULL)
 {
-  cg_operator(cg_fun_vector, list(mode, length), name)
+  cg_operator(fun_vector, list(mode, length), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_vector", cg_function(def = base::vector))
+delayedAssign("fun_vector", cg_function(def = base::vector))
 
 #' Length of an Object
 #'
@@ -53,11 +53,11 @@ delayedAssign("cg_fun_vector", cg_function(def = base::vector))
 #' @export
 cg_length <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_length, list(x), name)
+  cg_operator(fun_length, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_length", cg_function(def = base::length))
+delayedAssign("fun_length", cg_function(def = base::length))
 
 #' Combine Values into a Vector or List
 #'
@@ -76,11 +76,11 @@ delayedAssign("cg_fun_length", cg_function(def = base::length))
 #' @export
 cg_c <- function(..., name = NULL)
 {
-  cg_operator(cg_fun_c, dots(), name)
+  cg_operator(fun_c, dots(), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_c", cg_function(def = base::c))
+delayedAssign("fun_c", cg_function(def = base::c))
 
 #' Coerce to a Numerical Vector
 #'
@@ -99,11 +99,11 @@ delayedAssign("cg_fun_c", cg_function(def = base::c))
 #' @export
 cg_as_double <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_as_double, list(x), name)
+  cg_operator(fun_as_double, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_as_double", cg_function(
+delayedAssign("fun_as_double", cg_function(
   def = base::as.double,
   grads = list(
     function(x, value, grad)
@@ -131,7 +131,7 @@ delayedAssign("cg_fun_as_double", cg_function(
 #' @export
 cg_as_numeric <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_as_double, list(x), name)
+  cg_operator(fun_as_double, list(x), name)
 }
 
 #' Positive
@@ -149,11 +149,11 @@ cg_as_numeric <- function(x, name = NULL)
 #' @export
 cg_pos <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_pos, list(x), name)
+  cg_operator(fun_pos, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_pos", cg_function(
+delayedAssign("fun_pos", cg_function(
   def = base::`+`,
   grads = list(
     function(x, value, grad)
@@ -178,11 +178,11 @@ delayedAssign("cg_fun_pos", cg_function(
 #' @export
 cg_neg <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_neg, list(x), name)
+  cg_operator(fun_neg, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_neg", cg_function(
+delayedAssign("fun_neg", cg_function(
   def = base::`-`,
   grads = list(
     function(x, value, grad)
@@ -208,11 +208,11 @@ delayedAssign("cg_fun_neg", cg_function(
 #' @export
 cg_add <- function(x, y, name = NULL)
 {
-  cg_operator(cg_fun_add, list(x, y), name)
+  cg_operator(fun_add, list(x, y), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_add", cg_function(
+delayedAssign("fun_add", cg_function(
   def = base::`+`,
   grads = list(
     function(x, y, value, grad)
@@ -270,11 +270,11 @@ delayedAssign("cg_fun_add", cg_function(
 #' @export
 cg_sub <- function(x, y, name = NULL)
 {
-  cg_operator(cg_fun_sub, list(x, y), name)
+  cg_operator(fun_sub, list(x, y), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_sub", cg_function(
+delayedAssign("fun_sub", cg_function(
   def = base::`-`,
   grads = list(
     function(x, y, value, grad)
@@ -332,11 +332,11 @@ delayedAssign("cg_fun_sub", cg_function(
 #' @export
 cg_mul <- function(x, y, name = NULL)
 {
-  cg_operator(cg_fun_mul, list(x, y), name)
+  cg_operator(fun_mul, list(x, y), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_mul", cg_function(
+delayedAssign("fun_mul", cg_function(
   def = base::`*`,
   grads = list(
     function(x, y, value, grad)
@@ -387,11 +387,11 @@ delayedAssign("cg_fun_mul", cg_function(
 #' @export
 cg_div <- function(x, y, name = NULL)
 {
-  cg_operator(cg_fun_div, list(x, y), name)
+  cg_operator(fun_div, list(x, y), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_div", cg_function(
+delayedAssign("fun_div", cg_function(
   def = base::`/`,
   grads = list(
     function(x, y, value, grad)
@@ -442,11 +442,11 @@ delayedAssign("cg_fun_div", cg_function(
 #' @export
 cg_pow <- function(x, y, name = NULL)
 {
-  cg_operator(cg_fun_pow, list(x, y), name)
+  cg_operator(fun_pow, list(x, y), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_pow", cg_function(
+delayedAssign("fun_pow", cg_function(
   def = base::`^`,
   grads = list(
     function(x, y, value, grad)
@@ -498,11 +498,11 @@ delayedAssign("cg_fun_pow", cg_function(
 #' @export
 cg_square <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_square, list(x), name)
+  cg_operator(fun_square, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_square", cg_function(
+delayedAssign("fun_square", cg_function(
   def = function(x)
   {
     x^2
@@ -537,11 +537,11 @@ delayedAssign("cg_fun_square", cg_function(
 #' @export
 cg_sqrt <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_sqrt, list(x), name)
+  cg_operator(fun_sqrt, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_sqrt", cg_function(
+delayedAssign("fun_sqrt", cg_function(
   def = base::sqrt,
   grads = list(
     function(x, value, grad)
@@ -566,11 +566,11 @@ delayedAssign("cg_fun_sqrt", cg_function(
 #' @export
 cg_exp <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_exp, list(x), name)
+  cg_operator(fun_exp, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_exp", cg_function(
+delayedAssign("fun_exp", cg_function(
   def = base::exp,
   grads = list(
     function(x, value, grad)
@@ -595,11 +595,11 @@ delayedAssign("cg_fun_exp", cg_function(
 #' @export
 cg_ln <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_ln, list(x), name)
+  cg_operator(fun_ln, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_ln", cg_function(
+delayedAssign("fun_ln", cg_function(
   def = base::log,
   grads = list(
     function(x, value, grad)
@@ -624,11 +624,11 @@ delayedAssign("cg_fun_ln", cg_function(
 #' @export
 cg_log2 <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_log2, list(x), name)
+  cg_operator(fun_log2, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_log2", cg_function(
+delayedAssign("fun_log2", cg_function(
   def = base::log2,
   grads = list(
     function(x, value, grad)
@@ -653,11 +653,11 @@ delayedAssign("cg_fun_log2", cg_function(
 #' @export
 cg_log10 <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_log10, list(x), name)
+  cg_operator(fun_log10, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_log10", cg_function(
+delayedAssign("fun_log10", cg_function(
   def = base::log10,
   grads = list(
     function(x, value, grad)
@@ -682,11 +682,11 @@ delayedAssign("cg_fun_log10", cg_function(
 #' @export
 cg_abs <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_abs, list(x), name)
+  cg_operator(fun_abs, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_abs", cg_function(
+delayedAssign("fun_abs", cg_function(
   def = base::abs,
   grads = list(
     function(x, value, grad)
@@ -711,11 +711,11 @@ delayedAssign("cg_fun_abs", cg_function(
 #' @export
 cg_sin <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_sin, list(x), name)
+  cg_operator(fun_sin, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_sin", cg_function(
+delayedAssign("fun_sin", cg_function(
   def = base::sin,
   grads = list(
     function(x, value, grad)
@@ -740,11 +740,11 @@ delayedAssign("cg_fun_sin", cg_function(
 #' @export
 cg_cos <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_cos, list(x), name)
+  cg_operator(fun_cos, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_cos", cg_function(
+delayedAssign("fun_cos", cg_function(
   def = base::cos,
   grads = list(
     function(x, value, grad)
@@ -769,11 +769,11 @@ delayedAssign("cg_fun_cos", cg_function(
 #' @export
 cg_tan <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_tan, list(x), name)
+  cg_operator(fun_tan, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_tan", cg_function(
+delayedAssign("fun_tan", cg_function(
   def = base::tan,
   grads = list(
     function(x, value, grad)
@@ -798,11 +798,11 @@ delayedAssign("cg_fun_tan", cg_function(
 #' @export
 cg_sinh <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_sinh, list(x), name)
+  cg_operator(fun_sinh, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_sinh", cg_function(
+delayedAssign("fun_sinh", cg_function(
   def = base::sinh,
   grads = list(
     function(x, value, grad)
@@ -827,11 +827,11 @@ delayedAssign("cg_fun_sinh", cg_function(
 #' @export
 cg_cosh <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_cosh, list(x), name)
+  cg_operator(fun_cosh, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_cosh", cg_function(
+delayedAssign("fun_cosh", cg_function(
   def = base::cosh,
   grads = list(
     function(x, value, grad)
@@ -856,11 +856,11 @@ delayedAssign("cg_fun_cosh", cg_function(
 #' @export
 cg_tanh <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_tanh, list(x), name)
+  cg_operator(fun_tanh, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_tanh", cg_function(
+delayedAssign("fun_tanh", cg_function(
   def = base::tanh,
   grads = list(
     function(x, value, grad)
@@ -885,11 +885,11 @@ delayedAssign("cg_fun_tanh", cg_function(
 #' @export
 cg_asin <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_asin, list(x), name)
+  cg_operator(fun_asin, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_asin", cg_function(
+delayedAssign("fun_asin", cg_function(
   def = base::asin,
   grads = list(
     function(x, value, grad)
@@ -914,11 +914,11 @@ delayedAssign("cg_fun_asin", cg_function(
 #' @export
 cg_acos <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_acos, list(x), name)
+  cg_operator(fun_acos, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_acos", cg_function(
+delayedAssign("fun_acos", cg_function(
   def = base::acos,
   grads = list(
     function(x, value, grad)
@@ -943,11 +943,11 @@ delayedAssign("cg_fun_acos", cg_function(
 #' @export
 cg_atan <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_atan, list(x), name)
+  cg_operator(fun_atan, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_atan", cg_function(
+delayedAssign("fun_atan", cg_function(
   def = base::atan,
   grads = list(
     function(x, value, grad)
@@ -972,11 +972,11 @@ delayedAssign("cg_fun_atan", cg_function(
 #' @export
 cg_asinh <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_asinh, list(x), name)
+  cg_operator(fun_asinh, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_asinh", cg_function(
+delayedAssign("fun_asinh", cg_function(
   def = base::asinh,
   grads = list(
     function(x, value, grad)
@@ -1001,11 +1001,11 @@ delayedAssign("cg_fun_asinh", cg_function(
 #' @export
 cg_acosh <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_acosh, list(x), name)
+  cg_operator(fun_acosh, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_acosh", cg_function(
+delayedAssign("fun_acosh", cg_function(
   def = base::acosh,
   grads = list(
     function(x, value, grad)
@@ -1030,11 +1030,11 @@ delayedAssign("cg_fun_acosh", cg_function(
 #' @export
 cg_atanh <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_atanh, list(x), name)
+  cg_operator(fun_atanh, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_atanh", cg_function(
+delayedAssign("fun_atanh", cg_function(
   def = base::atanh,
   grads = list(
     function(x, value, grad)
@@ -1057,11 +1057,11 @@ delayedAssign("cg_fun_atanh", cg_function(
 #' @export
 cg_sigmoid <- function(x, name = NULL)
 {
-  cg_operator(cg_fun_sigmoid, list(x), name)
+  cg_operator(fun_sigmoid, list(x), name)
 }
 
 # Function definition
-delayedAssign("cg_fun_sigmoid", cg_function(
+delayedAssign("fun_sigmoid", cg_function(
   def = function(x)
   {
     .Call("sigmoid", x, PACKAGE = "cgraph")
