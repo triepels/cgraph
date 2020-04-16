@@ -28,7 +28,7 @@
 #'
 #' @author Ron Triepels
 #' @export
-cg_vector <- function(mode = "logical", length = 0L, name = NULL)
+cg_vector <- function(mode = "logical", length = 0, name = NULL)
 {
   cg_operator(.vector, list(mode, length), name)
 }
