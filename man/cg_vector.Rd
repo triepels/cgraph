@@ -4,7 +4,7 @@
 \alias{cg_vector}
 \title{Vectors}
 \usage{
-cg_vector(mode = "logical", length = 0L, name = NULL)
+cg_vector(mode = "logical", length = 0, name = NULL)
 }
 \arguments{
 \item{mode}{either a cg_node object or a character scalar.}
