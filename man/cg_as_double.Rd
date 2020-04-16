@@ -17,9 +17,6 @@ cg_operator object.
 \description{
 Coerce \code{x} to a one-dimensional numerical vector.
 }
-\note{
-This function is identical to \code{cg_as_numeric}.
-}
 \seealso{
 \link[base:double]{as.double}
 }

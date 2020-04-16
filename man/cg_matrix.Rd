@@ -33,7 +33,7 @@ cg_operator object.
 Create a matrix.
 }
 \note{
-This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+This is a non-differentiable operator.
 }
 \seealso{
 \link[base:matrix]{matrix}

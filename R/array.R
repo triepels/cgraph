@@ -25,7 +25,7 @@
 #'
 #' @return cg_operator object.
 #'
-#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#' @note This is a non-differentiable operator.
 #'
 #' @seealso \link[base:matrix]{matrix}
 #'
@@ -50,7 +50,7 @@ delayedAssign(".matrix", cg_function(def = base::matrix))
 #'
 #' @return cg_operator object.
 #'
-#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#' @note This is a non-differentiable operator.
 #'
 #' @seealso \link[base:array]{array}
 #'
@@ -73,7 +73,7 @@ delayedAssign(".array", cg_function(def = base::array))
 #'
 #' @return cg_operator object.
 #'
-#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#' @note This is a non-differentiable operator.
 #'
 #' @seealso \link[base:dim]{dim}
 #'
@@ -96,7 +96,7 @@ delayedAssign(".dim", cg_function(def = base::dim))
 #'
 #' @return cg_operator object.
 #'
-#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#' @note This is a non-differentiable operator.
 #'
 #' @seealso \link[base:nrow]{nrow}
 #'
@@ -119,7 +119,7 @@ delayedAssign(".nrow", cg_function(def = base::nrow))
 #'
 #' @return cg_operator object.
 #'
-#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#' @note This is a non-differentiable operator.
 #'
 #' @seealso \link[base:nrow]{ncol}
 #'

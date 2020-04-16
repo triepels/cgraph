@@ -22,7 +22,7 @@
 #'
 #' @return cg_operator object.
 #'
-#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#' @note This is a non-differentiable operator.
 #'
 #' @seealso \link[base:vector]{vector}
 #'
@@ -45,7 +45,7 @@ delayedAssign(".vector", cg_function(def = base::vector))
 #'
 #' @return cg_operator object.
 #'
-#' @note This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+#' @note This is a non-differentiable operator.
 #'
 #' @seealso \link[base:length]{length}
 #'
@@ -90,8 +90,6 @@ delayedAssign(".cg_fun_c", cg_function(def = base::c))
 #' @param name character scalar, name of the operation (optional).
 #'
 #' @return cg_operator object.
-#'
-#' @note This function is identical to \code{cg_as_numeric}.
 #'
 #' @seealso \link[base:double]{as.double}
 #'

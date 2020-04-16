@@ -18,7 +18,7 @@ cg_operator object.
 Calculate \code{nrow(x)}.
 }
 \note{
-This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+This is a non-differentiable operator.
 }
 \seealso{
 \link[base:nrow]{nrow}

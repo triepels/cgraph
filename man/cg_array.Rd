@@ -22,7 +22,7 @@ cg_operator object.
 Create a multidimensional array.
 }
 \note{
-This operator is not differentiable. Any attempt to differentiate this operator will result in an error.
+This is a non-differentiable operator.
 }
 \seealso{
 \link[base:array]{array}
