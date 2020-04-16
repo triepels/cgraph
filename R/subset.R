@@ -30,11 +30,11 @@
 #' @export
 cg_subset1 <- function(x, ..., name = NULL)
 {
-  cg_operator(subset1, c(x = x, dots()), name)
+  cg_operator(.subset1, c(x = x, dots()), name)
 }
 
 # Function definition
-delayedAssign("subset1", cg_function(
+delayedAssign(".subset1", cg_function(
   def = base::`[`,
   grads = list(
     x = function(x, ..., drop = TRUE, value, grad)
@@ -72,11 +72,11 @@ delayedAssign("subset1", cg_function(
 #' @export
 cg_subassign1 <- function(x, ..., y, name = NULL)
 {
-  cg_operator(subassign1, c(x = x, dots(), y = y), name)
+  cg_operator(.subassign1, c(x = x, dots(), y = y), name)
 }
 
 # Function definition
-delayedAssign("subassign1", cg_function(
+delayedAssign(".subassign1", cg_function(
   def = base::`[<-`,
   grads = list(
     x = function(x, ..., y, value, grad)
@@ -116,11 +116,11 @@ delayedAssign("subassign1", cg_function(
 #' @export
 cg_subset2 <- function(x, ..., name = NULL)
 {
-  cg_operator(subset2, c(x = x, dots()), name)
+  cg_operator(.subset2, c(x = x, dots()), name)
 }
 
 # Function definition
-delayedAssign("subset2", cg_function(
+delayedAssign(".subset2", cg_function(
   def = base::`[[`,
   grads = list(
     x = function(x, ..., exact = TRUE, value, grad)
@@ -158,11 +158,11 @@ delayedAssign("subset2", cg_function(
 #' @export
 cg_subassign2 <- function(x, i, y, name = NULL)
 {
-  cg_operator(subassign2, list(x = x, i = i, y = y), name)
+  cg_operator(.subassign2, list(x = x, i = i, y = y), name)
 }
 
 # Function definition
-delayedAssign("subassign2", cg_function(
+delayedAssign(".subassign2", cg_function(
   def = base::`[[<-`,
   grads = list(
     x = function(x, i, y, value, grad)
