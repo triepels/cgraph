@@ -240,7 +240,7 @@ void cg_node_backward(SEXP node)
 
     cg_node_type_t type = cg_node_type(input);
 
-    if(type == CGCST || type == CGIPT)
+    if(type == CGCST || type == CGIPT || type == CGNOP)
     {
       continue;
     }
@@ -486,6 +486,8 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   SEXP node = PROTECT(cg_class("cg_node"));
 
+  SEXP grads = PROTECT(cg_function_grads(function));
+
   if(Rf_isNull(name))
   {
     CG_SET(node, CG_NAME_SYMBOL, cg_graph_gen_name(graph));
@@ -503,7 +505,14 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   CG_SET(node, CG_INPUTS_SYMBOL, inputs);
 
-  CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGOPR));
+  if(XLENGTH(grads) > 0)
+  {
+    CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGDOP));
+  }
+  else
+  {
+    CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGNOP));
+  }
 
   CG_SET(node, CG_ID_SYMBOL, R_NilValue);
 
@@ -514,7 +523,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   cg_graph_add_node(graph, node);
 
-  UNPROTECT(2);
+  UNPROTECT(3);
 
   return node;
 }
