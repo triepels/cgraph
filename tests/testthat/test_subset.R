@@ -80,17 +80,17 @@ test_that("Subset 4",
   graph <- cg_graph()
 
   # Create constant
-  x <- cg_constant(array(1:18, c(3, 3, 2)))
+  x <- cg_constant(array(0, c(3, 3, 2)))
 
   # Create parameters
   a <- cg_parameter(array(1:9, c(3, 3)))
   b <- cg_parameter(array(2:10, c(3, 3)))
 
-  # Modify a
+  # Modify x
   x[1:9] <- a^2
   x[10:18] <- b^2
 
-  # Sum all elements of a
+  # Sum all elements of x
   c <- cg_sum(x)
 
   # Perform backward pass
@@ -127,11 +127,11 @@ test_that("Subset 6",
   graph <- cg_graph()
 
   # Create parameters
-  a <- cg_parameter(array(1:24, c(2,3,4)), name = "a")
-  b <- cg_parameter(array(1:24, c(4,3,2)), name = "b")
+  a <- cg_parameter(array(1:24, c(2, 3, 4)), name = "a")
+  b <- cg_parameter(array(1:24, c(4, 3, 2)), name = "b")
 
   # Create test expression
-  c <- a[[2,1,3]] + b[[3,1,1]]
+  c <- a[[2, 1, 3]] + b[[3, 1, 1]]
 
   # Perform backward pass
   cg_graph_backward(graph, c)
@@ -147,17 +147,17 @@ test_that("Subset 7",
   graph <- cg_graph()
 
   # Create constant
-  x <- cg_constant(array(1:18, c(3, 3, 2)))
+  x <- cg_constant(array(0, c(2, 1, 3)))
 
   # Create parameters
-  a <- cg_parameter(array(1:9, c(3, 3)))
-  b <- cg_parameter(array(2:10, c(3, 3)))
+  a <- cg_parameter(2)
+  b <- cg_parameter(4)
 
-  # Modify a
-  x[[1:9]] <- a^2
-  x[[10:18]] <- b^2
+  # Modify x
+  x[[2]] <- a^2
+  x[[4]] <- b^2
 
-  # Sum all elements of a
+  # Sum all elements of x
   c <- cg_sum(x)
 
   # Perform backward pass
