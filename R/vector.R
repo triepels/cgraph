@@ -59,6 +59,29 @@ cg_length <- function(x, name = NULL)
 # Function definition
 delayedAssign("length", cg_function(def = base::length))
 
+#' Combine Values into a Vector or List
+#'
+#' Calculate \code{c(...)}.
+#'
+#' @param ... either cg_node objects or R objects.
+#' @param name character scalar, name of the operation (optional).
+#'
+#' @return cg_operator object.
+#'
+#' @note This is a non-differentiable operator.
+#'
+#' @seealso \link[base:c]{c}
+#'
+#' @author Ron Triepels
+#' @export
+cg_c <- function(..., name = NULL)
+{
+  cg_operator(cg_fun_c, dots(), name)
+}
+
+# Function definition
+delayedAssign("cg_fun_c", cg_function(def = base::c))
+
 #' Coerce to a Numerical Vector
 #'
 #' Coerce \code{x} to a one-dimensional numerical vector.
