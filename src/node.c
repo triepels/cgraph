@@ -335,7 +335,7 @@ void cg_node_backward(SEXP node)
 
 SEXP cg_node_print(SEXP node)
 {
-  Rprintf("<cg_node %s>", cg_node_name_char(node));
+  Rprintf("<cg_node %s>\n", cg_node_name_char(node));
 
   return R_NilValue;
 }

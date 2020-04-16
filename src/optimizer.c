@@ -558,7 +558,7 @@ SEXP cg_optim_step(SEXP optim)
 
 SEXP cg_optim_print(SEXP optim)
 {
-  Rprintf("<cg_optim>");
+  Rprintf("<cg_optim>\n");
 
   return R_NilValue;
 }

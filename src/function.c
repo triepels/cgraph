@@ -39,7 +39,7 @@ extern inline void cg_function_set_grads(SEXP function, SEXP grads);
 
 SEXP cg_function_print(SEXP function)
 {
-  Rprintf("<cg_function>");
+  Rprintf("<cg_function>\n");
 
   return R_NilValue;
 }

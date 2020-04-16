@@ -294,7 +294,7 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
 
 SEXP cg_graph_print(SEXP graph)
 {
-  Rprintf("<cg_graph>");
+  Rprintf("<cg_graph>\n");
 
   return R_NilValue;
 }
