@@ -344,6 +344,30 @@ SEXP cg_constant(SEXP value, SEXP name)
     Rf_errorcall(R_NilValue, "argument 'name' must be NULL or a character scalar");
   }
 
+  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
+
+  if(TYPEOF(nodes) == VECSXP)
+  {
+    R_len_t n = XLENGTH(nodes);
+
+    for(int i = 0; i < n; i++)
+    {
+      SEXP node = VECTOR_ELT(nodes, i);
+
+      if(cg_node_type(node) != CGCST)
+      {
+        continue;
+      }
+
+      if(R_compute_identical(value, cg_node_value(node), 16))
+      {
+        UNPROTECT(2);
+
+        return node;
+      }
+    }
+  }
+
   SEXP node = PROTECT(cg_class("cg_node"));
 
   if(Rf_isNull(name))
@@ -365,7 +389,7 @@ SEXP cg_constant(SEXP value, SEXP name)
 
   cg_graph_add_node(graph, node);
 
-  UNPROTECT(2);
+  UNPROTECT(3);
 
   return node;
 }
