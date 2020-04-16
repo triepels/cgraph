@@ -76,11 +76,11 @@ delayedAssign(".length", cg_function(def = base::length))
 #' @export
 cg_c <- function(..., name = NULL)
 {
-  cg_operator(.cg_fun_c, dots(), name)
+  cg_operator(.c, dots(), name)
 }
 
 # Function definition
-delayedAssign(".cg_fun_c", cg_function(def = base::c))
+delayedAssign(".c", cg_function(def = base::c))
 
 #' Coerce to a Numerical Vector
 #'
