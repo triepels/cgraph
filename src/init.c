@@ -72,16 +72,19 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_parameter",            (DL_FUNC) &cg_parameter,            2},
   {"cg_input",                (DL_FUNC) &cg_input,                1},
   {"cg_operator",             (DL_FUNC) &cg_operator,             3},
+  {"cg_node_print",           (DL_FUNC) &cg_node_print,           1},
   // Graph
   {"cg_graph",                (DL_FUNC) &cg_graph,                1},
   {"cg_graph_get",            (DL_FUNC) &cg_graph_get,            2},
   {"cg_graph_forward",        (DL_FUNC) &cg_graph_forward,        2},
   {"cg_graph_backward",       (DL_FUNC) &cg_graph_backward,       3},
+  {"cg_graph_print",          (DL_FUNC) &cg_graph_print,          1},
   // Session
   {"cg_session_graph",        (DL_FUNC) &cg_session_graph,        0},
   {"cg_session_set_graph",    (DL_FUNC) &cg_session_set_graph,    1},
   // Function
   {"cg_function",             (DL_FUNC) &cg_function,             2},
+  {"cg_function_print",       (DL_FUNC) &cg_function_print,       1},
   // Optimizer
   {"cg_optim_gd",             (DL_FUNC) &cg_optim_gd,             2},
   {"cg_optim_gd_momentum",    (DL_FUNC) &cg_optim_gd_momentum,    3},
@@ -89,6 +92,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"cg_optim_rmsprop",        (DL_FUNC) &cg_optim_rmsprop,        4},
   {"cg_optim_adam",           (DL_FUNC) &cg_optim_adam,           4},
   {"cg_optim_step",           (DL_FUNC) &cg_optim_step,           1},
+  {"cg_optim_print",          (DL_FUNC) &cg_optim_print,          1},
   // Initializer
   {"cg_init_zeros",           (DL_FUNC) &cg_init_zeros,           2},
   {"cg_init_ones",            (DL_FUNC) &cg_init_ones,            2},

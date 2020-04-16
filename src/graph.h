@@ -68,8 +68,6 @@ inline void cg_graph_set_eager(SEXP graph, const int eager)
  * PUBLIC FUNCTIONS
  */
 
-SEXP cg_graph_gen_name(SEXP graph);
-
 SEXP cg_graph_get(SEXP graph, SEXP name);
 
 void cg_graph_add_node(SEXP graph, SEXP node);
@@ -77,6 +75,8 @@ void cg_graph_add_node(SEXP graph, SEXP node);
 SEXP cg_graph_forward(SEXP graph, SEXP target);
 
 SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index);
+
+SEXP cg_graph_print(SEXP graph);
 
 /*
  * PUBLIC CONSTRUCTORS

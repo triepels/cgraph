@@ -556,6 +556,13 @@ SEXP cg_optim_step(SEXP optim)
   return R_NilValue;
 }
 
+SEXP cg_optim_print(SEXP optim)
+{
+  Rprintf("<cg_optim>");
+
+  return R_NilValue;
+}
+
 /*
  * PUBLIC CONSTRUCTORS
  */

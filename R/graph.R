@@ -166,5 +166,5 @@ cg_graph_backward <- function(graph, target, index = NULL)
 #' @export
 print.cg_graph <- function(x, ...)
 {
-  cat("<cg_graph>\n")
+  invisible(.Call("cg_graph_print", x, PACKAGE = "cgraph"))
 }

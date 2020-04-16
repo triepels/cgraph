@@ -117,5 +117,5 @@ cg_optim_step <- function(optim)
 #' @export
 print.cg_optim <- function(x, ...)
 {
-  cat("<cg_optim>")
+  invisible(.Call("cg_optim_print", x, PACKAGE = "cgraph"))
 }

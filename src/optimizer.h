@@ -250,6 +250,8 @@ inline void cg_optim_set_type(SEXP optim, const cg_optim_type_t type)
 
 SEXP cg_optim_step(SEXP optim);
 
+SEXP cg_optim_print(SEXP optim);
+
 /*
  * PUBLIC CONSTRUCTORS
  */

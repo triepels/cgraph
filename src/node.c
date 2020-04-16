@@ -28,9 +28,11 @@ limitations under the License.
  * INLINED GET/SET FUNCTIONS
  */
 
-extern inline const char* cg_node_name(SEXP node);
+extern inline SEXP cg_node_name(SEXP node);
 
-extern inline void cg_node_set_name(SEXP node, const char *name);
+extern inline const char* cg_node_name_char(SEXP node);
+
+extern inline void cg_node_set_name(SEXP node, SEXP name);
 
 extern inline int cg_node_id(SEXP node);
 
@@ -67,7 +69,7 @@ void cg_node_zero_grad(SEXP node)
   if(!Rf_isNumeric(value))
   {
     Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s' for node '%s'",
-                 Rf_type2char(TYPEOF(value)), cg_node_name(node));
+                 Rf_type2char(TYPEOF(value)), cg_node_name_char(node));
   }
 
   SEXP grad;
@@ -99,7 +101,7 @@ void cg_node_init_grad(SEXP node, SEXP index)
   if(!Rf_isNumeric(value))
   {
     Rf_errorcall(R_NilValue, "cannot differentiate object of type '%s' for node '%s'",
-                 Rf_type2char(TYPEOF(value)), cg_node_name(node));
+                 Rf_type2char(TYPEOF(value)), cg_node_name_char(node));
   }
 
   SEXP grad;
@@ -252,7 +254,7 @@ void cg_node_backward(SEXP node)
       if(i >= m)
       {
         Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at input %d",
-                     cg_node_name(node), i + 1);
+                     cg_node_name_char(node), i + 1);
       }
 
       function_grad = VECTOR_ELT(function_grads, i);
@@ -264,7 +266,7 @@ void cg_node_backward(SEXP node)
       if(CHAR(input_tag)[0] == '\0')
       {
         Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at input %d",
-                     cg_node_name(node), i + 1);
+                     cg_node_name_char(node), i + 1);
       }
 
       int match = 0;
@@ -287,14 +289,14 @@ void cg_node_backward(SEXP node)
       if(!match)
       {
         Rf_errorcall(R_NilValue, "cannot differentiate node '%s' at input '%s'",
-                     cg_node_name(node), CHAR(input_tag));
+                     cg_node_name_char(node), CHAR(input_tag));
       }
     }
 
     if(!Rf_isFunction(function_grad))
     {
       Rf_errorcall(R_NilValue, "cannot process gradient function of type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(function_grad)), cg_node_name(node));
+                   Rf_type2char(TYPEOF(function_grad)), cg_node_name_char(node));
     }
 
     SEXP call = PROTECT(Rf_lcons(function_grad, args));
@@ -304,7 +306,7 @@ void cg_node_backward(SEXP node)
     if(!Rf_isReal(grad))
     {
       Rf_errorcall(R_NilValue, "cannot accumulate gradient of type '%s' for node '%s'",
-                   Rf_type2char(TYPEOF(grad)), cg_node_name(node));
+                   Rf_type2char(TYPEOF(grad)), cg_node_name_char(node));
     }
 
     SEXP input_grad = PROTECT(cg_node_grad(input));
@@ -314,7 +316,7 @@ void cg_node_backward(SEXP node)
     if(l != XLENGTH(grad))
     {
       Rf_errorcall(R_NilValue, "cannot accumulate gradients of lengths %d and %d for node '%s'",
-                   l, XLENGTH(grad), cg_node_name(node));
+                   l, XLENGTH(grad), cg_node_name_char(node));
     }
 
     double *pg = REAL(grad);
@@ -329,6 +331,13 @@ void cg_node_backward(SEXP node)
   }
 
   UNPROTECT(6);
+}
+
+SEXP cg_node_print(SEXP node)
+{
+  Rprintf("<cg_node %s>", cg_node_name_char(node));
+
+  return R_NilValue;
 }
 
 /*
@@ -354,7 +363,7 @@ SEXP cg_constant(SEXP value, SEXP name)
     {
       SEXP node = VECTOR_ELT(nodes, i);
 
-      if(cg_node_type(node) != CGCST)
+      if(cg_node_type(node) != CGCST || !Rf_isNull(cg_node_name(node)))
       {
         continue;
       }
@@ -370,14 +379,7 @@ SEXP cg_constant(SEXP value, SEXP name)
 
   SEXP node = PROTECT(cg_class("cg_node"));
 
-  if(Rf_isNull(name))
-  {
-    CG_SET(node, CG_NAME_SYMBOL, cg_graph_gen_name(graph));
-  }
-  else
-  {
-    CG_SET(node, CG_NAME_SYMBOL, name);
-  }
+  CG_SET(node, CG_NAME_SYMBOL, name);
 
   CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
@@ -405,14 +407,7 @@ SEXP cg_parameter(SEXP value, SEXP name)
 
   SEXP node = PROTECT(cg_class("cg_node"));
 
-  if(Rf_isNull(name))
-  {
-    CG_SET(node, CG_NAME_SYMBOL, cg_graph_gen_name(graph));
-  }
-  else
-  {
-    CG_SET(node, CG_NAME_SYMBOL, name);
-  }
+  CG_SET(node, CG_NAME_SYMBOL, name);
 
   CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
@@ -440,14 +435,7 @@ SEXP cg_input(SEXP name)
 
   SEXP node = PROTECT(cg_class("cg_node"));
 
-  if(Rf_isNull(name))
-  {
-    CG_SET(node, CG_NAME_SYMBOL, cg_graph_gen_name(graph));
-  }
-  else
-  {
-    CG_SET(node, CG_NAME_SYMBOL, name);
-  }
+  CG_SET(node, CG_NAME_SYMBOL, name);
 
   CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
@@ -493,14 +481,10 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
     if(cg_is(input, "cg_node"))
     {
-      SEXP value = PROTECT(cg_node_value(input));
-
-      if(Rf_isNull(value))
+      if(Rf_isNull(cg_node_value(input)))
       {
         can_eval = 0;
       }
-
-      UNPROTECT(1);
     }
     else
     {
@@ -508,18 +492,22 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
     }
   }
 
-  SEXP node = PROTECT(cg_class("cg_node"));
+  cg_node_type_t type;
 
   SEXP grads = PROTECT(cg_function_grads(function));
 
-  if(Rf_isNull(name))
+  if(XLENGTH(grads) > 0)
   {
-    CG_SET(node, CG_NAME_SYMBOL, cg_graph_gen_name(graph));
+    type = CGDOP;
   }
   else
   {
-    CG_SET(node, CG_NAME_SYMBOL, name);
+    type = CGNOP;
   }
+
+  SEXP node = PROTECT(cg_class("cg_node"));
+
+  CG_SET(node, CG_NAME_SYMBOL, name);
 
   CG_SET(node, CG_GRAD_SYMBOL, R_NilValue);
 
@@ -529,14 +517,7 @@ SEXP cg_operator(SEXP function, SEXP inputs, SEXP name)
 
   CG_SET(node, CG_INPUTS_SYMBOL, inputs);
 
-  if(XLENGTH(grads) > 0)
-  {
-    CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGDOP));
-  }
-  else
-  {
-    CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(CGNOP));
-  }
+  CG_SET(node, CG_TYPE_SYMBOL, Rf_ScalarInteger(type));
 
   CG_SET(node, CG_ID_SYMBOL, R_NilValue);
 

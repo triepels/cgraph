@@ -78,6 +78,12 @@ inline void cg_function_set_grads(SEXP function, SEXP grads)
 }
 
 /*
+ * PUBLIC FUNCTIONS
+ */
+
+SEXP cg_function_print(SEXP function);
+
+/*
  * PUBLIC CONSTRUCTORS
  */
 

@@ -41,28 +41,18 @@ typedef enum {
  * INLINED GET/SET FUNCTIONS
  */
 
-inline const char* cg_node_name(SEXP node)
+inline SEXP cg_node_name(SEXP node)
 {
     SEXP name = PROTECT(CG_GET(node, CG_NAME_SYMBOL));
 
-    if(!IS_SCALAR(name, STRSXP))
+    if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
     {
         Rf_errorcall(R_NilValue, "node has no name");
     }
 
     UNPROTECT(1);
 
-    return CHAR(STRING_ELT(name, 0));
-}
-
-inline void cg_node_set_name(SEXP node, const char *name)
-{
-    if(strcmp(name, "") == 0)
-    {
-        Rf_errorcall(R_NilValue, "argument 'name' must be a non-blank character scalar");
-    }
-
-    CG_SET(node, CG_NAME_SYMBOL, Rf_mkString(name));
+    return name;
 }
 
 inline int cg_node_id(SEXP node)
@@ -77,6 +67,36 @@ inline int cg_node_id(SEXP node)
     UNPROTECT(1);
 
     return INTEGER(id)[0];
+}
+
+inline const char* cg_node_name_char(SEXP node)
+{
+    SEXP name = PROTECT(CG_GET(node, CG_NAME_SYMBOL));
+
+    if(Rf_isNull(name))
+    {
+        char *name = R_alloc(1, 32 * sizeof(char));
+
+        sprintf(name, "v%d", cg_node_id(node));
+
+        UNPROTECT(1);
+
+        return name;
+    }
+
+    UNPROTECT(1);
+
+    return CHAR(STRING_ELT(name, 0));
+}
+
+inline void cg_node_set_name(SEXP node, SEXP name)
+{
+    if(!Rf_isNull(name) && !IS_SCALAR(name, STRSXP))
+    {
+        Rf_errorcall(R_NilValue, "argument 'name' must be a character scalar");
+    }
+
+    CG_SET(node, CG_NAME_SYMBOL, name);
 }
 
 inline void cg_node_set_id(SEXP node, const int id)
@@ -210,6 +230,8 @@ void cg_node_init_grad(SEXP node, SEXP index);
 void cg_node_forward(SEXP node);
 
 void cg_node_backward(SEXP node);
+
+SEXP cg_node_print(SEXP node);
 
 /*
  * PUBLIC CONSTRUCTORS

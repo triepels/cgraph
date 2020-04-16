@@ -34,6 +34,17 @@ extern inline SEXP cg_function_grads(SEXP function);
 extern inline void cg_function_set_grads(SEXP function, SEXP grads);
 
 /*
+ * PUBLIC FUNCTIONS
+ */
+
+SEXP cg_function_print(SEXP function)
+{
+  Rprintf("<cg_function>");
+
+  return R_NilValue;
+}
+
+/*
  * PUBLIC CONSTRUCTORS
  */
 

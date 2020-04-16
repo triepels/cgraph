@@ -58,10 +58,3 @@ cg_session_set_graph <- function(graph)
 {
   invisible(.Call("cg_session_set_graph", graph, PACKAGE = "cgraph"))
 }
-
-#' @author Ron Triepels
-#' @export
-print.cg_session <- function(x, ...)
-{
-  cat("<cg_session>")
-}

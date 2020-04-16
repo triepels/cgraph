@@ -149,26 +149,6 @@ static inline int backward_filter(SEXP node)
  * PUBLIC FUNCTIONS
  */
 
-SEXP cg_graph_gen_name(SEXP graph)
-{
-  char *name = R_alloc(1, 32 * sizeof(char));
-
-  SEXP nodes = PROTECT(CG_GET(graph, CG_NODES_SYMBOL));
-
-  if(TYPEOF(nodes) != VECSXP)
-  {
-    strcpy(name, "v1");
-  }
-  else
-  {
-    sprintf(name, "v%d", (int)XLENGTH(nodes) + 1);
-  }
-
-  UNPROTECT(1);
-
-  return Rf_mkString(name);
-}
-
 SEXP cg_graph_get(SEXP graph, SEXP name)
 {
   if(!cg_is(graph, "cg_graph"))
@@ -193,7 +173,7 @@ SEXP cg_graph_get(SEXP graph, SEXP name)
     {
       SEXP node = VECTOR_ELT(nodes, i);
 
-      if(strcmp(cg_node_name(node), pn) == 0)
+      if(strcmp(cg_node_name_char(node), pn) == 0)
       {
         UNPROTECT(1);
 
@@ -308,6 +288,13 @@ SEXP cg_graph_backward(SEXP graph, SEXP target, SEXP index)
       cg_node_backward(queue[i]);
     }
   }
+
+  return R_NilValue;
+}
+
+SEXP cg_graph_print(SEXP graph)
+{
+  Rprintf("<cg_graph>");
 
   return R_NilValue;
 }
