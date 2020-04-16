@@ -47,7 +47,7 @@ cg_optim_gd_momentum <- function(parms = list(), eta = 0.05, gamma = 0.9)
 
 #' Adaptive Gradient (AdaGrad)
 #'
-#' Initialize a AdaGrad optimizer.
+#' Initialize an AdaGrad optimizer.
 #'
 #' @param parms list of cg_node objects, the nodes to be optimzed.
 #' @param eta numeric scalar, learning rate.

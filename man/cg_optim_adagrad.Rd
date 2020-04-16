@@ -17,7 +17,7 @@ cg_optim_adagrad(parms = list(), eta = 0.01, eps = 1e-08)
 cg_optim object.
 }
 \description{
-Initialize a AdaGrad optimizer.
+Initialize an AdaGrad optimizer.
 }
 \author{
 Ron Triepels
