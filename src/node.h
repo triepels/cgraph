@@ -41,6 +41,30 @@ typedef enum {
  * INLINED GET/SET FUNCTIONS
  */
 
+inline int cg_node_id(SEXP node)
+{
+    SEXP id = PROTECT(CG_GET(node, CG_ID_SYMBOL));
+
+    if(!IS_SCALAR(id, INTSXP))
+    {
+        Rf_errorcall(R_NilValue, "node has no id");
+    }
+
+    UNPROTECT(1);
+
+    return INTEGER(id)[0];
+}
+
+inline void cg_node_set_id(SEXP node, const int id)
+{
+    if(id < 1)
+    {
+        Rf_errorcall(R_NilValue, "argument 'id' must be a positive integer");
+    }
+
+    CG_SET(node, CG_ID_SYMBOL, Rf_ScalarInteger(id));
+}
+
 inline SEXP cg_node_name(SEXP node)
 {
     SEXP name = PROTECT(CG_GET(node, CG_NAME_SYMBOL));
@@ -53,20 +77,6 @@ inline SEXP cg_node_name(SEXP node)
     UNPROTECT(1);
 
     return name;
-}
-
-inline int cg_node_id(SEXP node)
-{
-    SEXP id = PROTECT(CG_GET(node, CG_ID_SYMBOL));
-
-    if(!IS_SCALAR(id, INTSXP))
-    {
-        Rf_errorcall(R_NilValue, "node '%s' has no id", cg_node_name(node));
-    }
-
-    UNPROTECT(1);
-
-    return INTEGER(id)[0];
 }
 
 inline const char* cg_node_name_char(SEXP node)
@@ -97,16 +107,6 @@ inline void cg_node_set_name(SEXP node, SEXP name)
     }
 
     CG_SET(node, CG_NAME_SYMBOL, name);
-}
-
-inline void cg_node_set_id(SEXP node, const int id)
-{
-    if(id < 1)
-    {
-        Rf_errorcall(R_NilValue, "argument 'id' must be a positive integer");
-    }
-
-    CG_SET(node, CG_ID_SYMBOL, Rf_ScalarInteger(id));
 }
 
 inline cg_node_type_t cg_node_type(SEXP node)

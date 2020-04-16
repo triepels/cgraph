@@ -28,15 +28,15 @@ limitations under the License.
  * INLINED GET/SET FUNCTIONS
  */
 
+extern inline int cg_node_id(SEXP node);
+
+extern inline void cg_node_set_id(SEXP node, const int id);
+
 extern inline SEXP cg_node_name(SEXP node);
 
 extern inline const char* cg_node_name_char(SEXP node);
 
 extern inline void cg_node_set_name(SEXP node, SEXP name);
-
-extern inline int cg_node_id(SEXP node);
-
-extern inline void cg_node_set_id(SEXP node, const int id);
 
 extern inline cg_node_type_t cg_node_type(SEXP node);
 
